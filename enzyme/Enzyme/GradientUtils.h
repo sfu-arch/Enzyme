@@ -1000,37 +1000,79 @@ public:
       assert(arg->getParent() == oldFunc);
     }
 
-    ptr = invertPointerM(ptr, BuilderM);
-    if (!isOriginalBlock(*BuilderM.GetInsertBlock()))
-      ptr = lookupM(ptr, BuilderM);
+    if (mode == DerivativeMode::ForwardModeVector) {
+      Value *ptrs = invertPointerM(ptr, BuilderM);
+      Value *newvals = newval;
+      for (unsigned int i = 0; i < width; ++i) {
+        ptr = BuilderM.CreateExtractValue(ptrs, {i});
+        Value *newval = newvals->getType()->isVectorTy()
+                            ? BuilderM.CreateExtractElement(newvals, i)
+                            : BuilderM.CreateExtractValue(newvals, {i});
+        if (!isOriginalBlock(*BuilderM.GetInsertBlock()))
+          ptr = lookupM(ptr, BuilderM);
 
-    if (!mask) {
-      auto ts = BuilderM.CreateStore(newval, ptr);
-      if (align)
+        if (!mask) {
+          auto ts = BuilderM.CreateStore(newval, ptr);
+          if (align)
 #if LLVM_VERSION_MAJOR >= 10
-        ts->setAlignment(*align);
+            ts->setAlignment(*align);
 #else
-        ts->setAlignment(align);
+            ts->setAlignment(align);
 #endif
-      ts->setVolatile(isVolatile);
-      ts->setOrdering(ordering);
-      ts->setSyncScopeID(syncScope);
+          ts->setVolatile(isVolatile);
+          ts->setOrdering(ordering);
+          ts->setSyncScopeID(syncScope);
+        } else {
+          if (!isOriginalBlock(*BuilderM.GetInsertBlock()))
+            mask = lookupM(mask, BuilderM);
+          Type *tys[] = {newval->getType(), ptr->getType()};
+          auto F = Intrinsic::getDeclaration(oldFunc->getParent(),
+                                             Intrinsic::masked_store, tys);
+          assert(align);
+#if LLVM_VERSION_MAJOR >= 10
+          Value *alignv = ConstantInt::get(Type::getInt32Ty(ptr->getContext()),
+                                           align->value());
+#else
+          Value *alignv =
+              ConstantInt::get(Type::getInt32Ty(ptr->getContext()), align);
+#endif
+          Value *args[] = {newval, ptr, alignv, mask};
+          BuilderM.CreateCall(F, args)->setCallingConv(F->getCallingConv());
+        }
+      }
     } else {
+      ptr = invertPointerM(ptr, BuilderM);
       if (!isOriginalBlock(*BuilderM.GetInsertBlock()))
-        mask = lookupM(mask, BuilderM);
-      Type *tys[] = {newval->getType(), ptr->getType()};
-      auto F = Intrinsic::getDeclaration(oldFunc->getParent(),
-                                         Intrinsic::masked_store, tys);
-      assert(align);
+        ptr = lookupM(ptr, BuilderM);
+
+      if (!mask) {
+        auto ts = BuilderM.CreateStore(newval, ptr);
+        if (align)
 #if LLVM_VERSION_MAJOR >= 10
-      Value *alignv =
-          ConstantInt::get(Type::getInt32Ty(ptr->getContext()), align->value());
+          ts->setAlignment(*align);
 #else
-      Value *alignv =
-          ConstantInt::get(Type::getInt32Ty(ptr->getContext()), align);
+          ts->setAlignment(align);
 #endif
-      Value *args[] = {newval, ptr, alignv, mask};
-      BuilderM.CreateCall(F, args)->setCallingConv(F->getCallingConv());
+        ts->setVolatile(isVolatile);
+        ts->setOrdering(ordering);
+        ts->setSyncScopeID(syncScope);
+      } else {
+        if (!isOriginalBlock(*BuilderM.GetInsertBlock()))
+          mask = lookupM(mask, BuilderM);
+        Type *tys[] = {newval->getType(), ptr->getType()};
+        auto F = Intrinsic::getDeclaration(oldFunc->getParent(),
+                                           Intrinsic::masked_store, tys);
+        assert(align);
+#if LLVM_VERSION_MAJOR >= 10
+        Value *alignv = ConstantInt::get(Type::getInt32Ty(ptr->getContext()),
+                                         align->value());
+#else
+        Value *alignv =
+            ConstantInt::get(Type::getInt32Ty(ptr->getContext()), align);
+#endif
+        Value *args[] = {newval, ptr, alignv, mask};
+        BuilderM.CreateCall(F, args)->setCallingConv(F->getCallingConv());
+      }
     }
   }
 
@@ -1485,27 +1527,11 @@ public:
   static Type *getTypeForVectorMode(Type *ty, unsigned int width) {
     if (ty->isIntegerTy() || ty->isFloatingPointTy()) {
       return FixedVectorType::get(ty, width);
-    } else if (ty->isPointerTy()) {
-      PointerType *pty = dyn_cast<PointerType>(ty);
-      return PointerType::get(
-          getTypeForVectorMode(pty->getPointerElementType(), width),
-          pty->getAddressSpace());
-    } else if (ty->isVectorTy()) {
-      VectorType *vty = dyn_cast<VectorType>(ty);
+    } else if (VectorType *vty = dyn_cast<VectorType>(ty)) {
       ElementCount ec = vty->getElementCount() * width;
       return VectorType::get(vty->getElementType(), ec);
-    } else if (auto sty = dyn_cast<StructType>(ty)) {
-      SmallVector<Type *, 4> tys;
-      for (auto it = sty->subtype_begin(); it != ty->subtype_end(); it++) {
-        tys.push_back(getTypeForVectorMode(*it, width));
-      }
-      return StructType::get(ty->getContext(), tys);
-    } else if (auto aty = dyn_cast<ArrayType>(ty)) {
-      return ArrayType::get(getTypeForVectorMode(aty->getElementType(), width),
-                            aty->getNumElements());
     } else {
-      llvm::errs() << ty << "\n";
-      report_fatal_error("Cannot deduce type for vector mode");
+      return ArrayType::get(ty, width);
     }
   }
 };

@@ -15,7 +15,7 @@
 ; }
 
 
-%struct.Gradients = type { double, double, double }
+%struct.Gradients = type { double*, double*, double* }
 
 define void @addOneMem(double* nocapture %x) {
 entry:
@@ -25,28 +25,28 @@ entry:
   ret void
 }
 
-define void @test_derivative(double* %x, %struct.Gradients* %xp) {
+define void @test_derivative(double* %x, %struct.Gradients %xp) {
 entry:
-  call void (void (double*)*, ...) @__enzyme_fwdvectordiff(void (double*)* nonnull @addOneMem, double* %x, %struct.Gradients* %xp)
+  call void (void (double*)*, ...) @__enzyme_fwdvectordiff(void (double*)* nonnull @addOneMem, double* %x, %struct.Gradients %xp)
   ret void
 }
 
 declare void @__enzyme_fwdvectordiff(void (double*)*, ...)
 
 
-; CHECK: define {{(dso_local )?}}void @test_derivative(double* %x, %struct.Gradients* %xp)
+; CHECK: define {{(dso_local )?}}void @test_derivative(double* %x, %struct.Gradients %xp)
 ; CHECK-NEXT: entry:
-; CHECK-NEXT:   %0 = getelementptr inbounds %struct.Gradients, %struct.Gradients* %xp, i32 0, i32 0
-; CHECK-NEXT:   %1 = load double, double* %0, align 8
-; CHECK-NEXT:   %2 = getelementptr inbounds %struct.Gradients, %struct.Gradients* %xp, i32 0, i32 1
-; CHECK-NEXT:   %3 = load double, double* %2, align 8
-; CHECK-NEXT:   %4 = getelementptr inbounds %struct.Gradients, %struct.Gradients* %xp, i32 0, i32 2
-; CHECK-NEXT:   %5 = load double, double* %4, align 8
-; CHECK-NEXT:   %6 = load double, double* %x, align 8
-; CHECK-NEXT:   %add.i = fadd double %6, 1.000000e+00
+; CHECK-NEXT:   %0 = extractvalue %struct.Gradients %xp, 0
+; CHECK-NEXT:   %1 = extractvalue %struct.Gradients %xp, 1
+; CHECK-NEXT:   %2 = extractvalue %struct.Gradients %xp, 2
+; CHECK-NEXT:   %3 = load double, double* %x, align 8
+; CHECK-NEXT:  %4 = load double, double* %0, align 8
+; CHECK-NEXT:   %5 = load double, double* %1, align 8
+; CHECK-NEXT:   %6 = load double, double* %2, align 8
+; CHECK-NEXT:   %add.i = fadd double %3, 1.000000e+00
 ; CHECK-NEXT:   store double %add.i, double* %x, align 8
-; CHECK-NEXT:   store double %1, double* %0, align 8
-; CHECK-NEXT:   store double %3, double* %2, align 8
-; CHECK-NEXT:   store double %5, double* %4, align 8
+; CHECK-NEXT:   store double %4, double* %0, align 8
+; CHECK-NEXT:   store double %5, double* %1, align 8
+; CHECK-NEXT:   store double %6, double* %2, align 8
 ; CHECK-NEXT:   ret void
 ; CHECK-NEXT: }

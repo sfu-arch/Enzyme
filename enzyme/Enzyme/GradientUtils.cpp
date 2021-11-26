@@ -3164,8 +3164,8 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
       Value *b = getNewFromOriginal(arg->getOperand(1 + i));
       invertargs.push_back(b);
     }
-    auto shadow = bb.CreateGEP(invertPointerM(arg->getPointerOperand(), bb),
-                               invertargs, arg->getName() + "'ipg");
+    auto ip = invertPointerM(arg->getPointerOperand(), bb);
+    auto shadow = bb.CreateGEP(ip, invertargs, arg->getName() + "'ipg");
     if (auto gep = dyn_cast<GetElementPtrInst>(shadow))
       gep->setIsInBounds(arg->isInBounds());
     invertedPointers.insert(

@@ -595,8 +595,7 @@ public:
       if (isfloat) {
 
         switch (Mode) {
-        case DerivativeMode::ForwardMode:
-        case DerivativeMode::ForwardModeVector: {
+        case DerivativeMode::ForwardMode: {
           IRBuilder<> Builder2(&I);
           getForwardBuilder(Builder2);
 
@@ -630,6 +629,54 @@ public:
               diff = Builder2.CreateCall(F, args);
             }
             setDiffe(&I, diff, Builder2);
+          }
+          break;
+        }
+        case DerivativeMode::ForwardModeVector: {
+          IRBuilder<> Builder2(&I);
+          getForwardBuilder(Builder2);
+
+          if (!gutils->isConstantValue(&I)) {
+            if (!mask) {
+              Value *pointerArray =
+                  gutils->invertPointerM(I.getOperand(0), Builder2);
+              Value *diff =
+                  UndefValue::get(gutils->getTypeForVectorMode(I.getType()));
+              for (unsigned int i = 0; i < gutils->getWidth(); ++i) {
+                Value *ip = Builder2.CreateExtractValue(pointerArray, {i});
+
+                auto LI = Builder2.CreateLoad(ip);
+                if (alignment)
+#if LLVM_VERSION_MAJOR >= 10
+                  LI->setAlignment(*alignment);
+#else
+                  LI->setAlignment(alignment);
+#endif
+                if (diff->getType()->isVectorTy()) {
+                  diff = Builder2.CreateInsertElement(diff, LI, i);
+                } else {
+                  diff = Builder2.CreateInsertValue(diff, LI, {i});
+                }
+              }
+              setDiffe(&I, diff, Builder2);
+            } else {
+              Type *tys[] = {I.getType(), I.getOperand(0)->getType()};
+              auto F = Intrinsic::getDeclaration(gutils->oldFunc->getParent(),
+                                                 Intrinsic::masked_load, tys);
+#if LLVM_VERSION_MAJOR >= 10
+              Value *alignv =
+                  ConstantInt::get(Type::getInt32Ty(mask->getContext()),
+                                   alignment ? alignment->value() : 0);
+#else
+              Value *alignv = ConstantInt::get(
+                  Type::getInt32Ty(mask->getContext()), alignment);
+#endif
+              Value *args[] = {
+                  gutils->invertPointerM(I.getOperand(0), Builder2), alignv,
+                  mask, diffe(orig_maskInit, Builder2)};
+              Value *diff = Builder2.CreateCall(F, args);
+              setDiffe(&I, diff, Builder2);
+            }
           }
           break;
         }
@@ -1535,19 +1582,36 @@ public:
 
       Value *orig_aggregate = EVI.getAggregateOperand();
 
-      if (gutils->isConstantValue(orig_aggregate)) {
-        Type *diffeType =
-            Mode == DerivativeMode::ForwardModeVector
-                ? FixedVectorType::get(EVI.getType(), gutils->getWidth())
-                : EVI.getType();
-        Value *diffe = Constant::getNullValue(diffeType);
-        setDiffe(&EVI, diffe, Builder2);
+      Type *value_type = Mode == DerivativeMode::ForwardModeVector
+                             ? gutils->getTypeForVectorMode(EVI.getType())
+                             : EVI.getType();
+
+      Type *agg_type =
+          Mode == DerivativeMode::ForwardModeVector
+              ? gutils->getTypeForVectorMode(orig_aggregate->getType())
+              : orig_aggregate->getType();
+
+      Value *diffe_aggregate = gutils->isConstantValue(orig_aggregate)
+                                   ? Constant::getNullValue(agg_type)
+                                   : diffe(orig_aggregate, Builder2);
+
+      Value *diff = UndefValue::get(value_type);
+
+      if (Mode == DerivativeMode::ForwardModeVector) {
+        for (unsigned int i = 0; i < gutils->getWidth(); ++i) {
+          Value *agg = Builder2.CreateExtractValue(diffe_aggregate, {i});
+          Value *dval = Builder2.CreateExtractValue(agg, EVI.getIndices());
+          if (value_type->isVectorTy()) {
+            diff = Builder2.CreateInsertElement(diff, dval, i);
+          } else {
+            diff = Builder2.CreateInsertValue(diff, dval, {i});
+          }
+        }
       } else {
-        Value *diffe_aggregate = diffe(orig_aggregate, Builder2);
-        Value *diffe =
-            Builder2.CreateExtractValue(diffe_aggregate, EVI.getIndices());
-        setDiffe(&EVI, diffe, Builder2);
+        Builder2.CreateExtractValue(diffe_aggregate, EVI.getIndices());
       }
+
+      setDiffe(&EVI, diff, Builder2);
 
       return;
     }
@@ -1650,29 +1714,39 @@ public:
       IRBuilder<> Builder2(&IVI);
       getForwardBuilder(Builder2);
 
-      Value *orig_inserted = IVI.getInsertedValueOperand();
+      Value *orig_val = IVI.getInsertedValueOperand();
       Value *orig_agg = IVI.getAggregateOperand();
 
-      Type *insertedType =
-          Mode == DerivativeMode::ForwardModeVector
-              ? gutils->getTypeForVectorMode(orig_inserted->getType())
-              : orig_inserted->getType();
-      Type *diffeType = Mode == DerivativeMode::ForwardModeVector
-                            ? gutils->getTypeForVectorMode(orig_agg->getType())
-                            : orig_agg->getType();
+      Type *val_type = Mode == DerivativeMode::ForwardModeVector
+                           ? gutils->getTypeForVectorMode(orig_val->getType())
+                           : orig_val->getType();
 
-      Value *diff_inserted = gutils->isConstantValue(orig_inserted)
-                                 ? Constant::getNullValue(insertedType)
-                                 : diffe(orig_inserted, Builder2);
+      Type *agg_type = Mode == DerivativeMode::ForwardModeVector
+                           ? gutils->getTypeForVectorMode(orig_agg->getType())
+                           : orig_agg->getType();
 
-      Value *prediff = gutils->isConstantValue(orig_agg)
-                           ? ConstantAggregate::getNullValue(diffeType)
-                           : diffe(orig_agg, Builder2);
+      Value *diff_val = gutils->isConstantValue(orig_val)
+                            ? Constant::getNullValue(val_type)
+                            : diffe(orig_val, Builder2);
 
-      auto dindex =
-          Builder2.CreateInsertValue(prediff, diff_inserted, IVI.getIndices());
+      Value *diff_agg = gutils->isConstantValue(orig_agg)
+                            ? Constant::getNullValue(agg_type)
+                            : diffe(orig_agg, Builder2);
 
-      setDiffe(&IVI, dindex, Builder2);
+      Value *diff = UndefValue::get(agg_type);
+
+      if (Mode == DerivativeMode::ForwardModeVector) {
+        for (unsigned int i = 0; i < gutils->getWidth(); ++i) {
+          Value *dagg = Builder2.CreateExtractValue(diff_agg, {i});
+          Value *dval = Builder2.CreateExtractValue(diff_val, {i});
+          dagg = Builder2.CreateInsertValue(dagg, dval, IVI.getIndices());
+          diff = Builder2.CreateInsertValue(diff, dagg, {i});
+        }
+      } else {
+        diff = Builder2.CreateInsertValue(diff_agg, diff_val, IVI.getIndices());
+      }
+
+      setDiffe(&IVI, diff, Builder2);
 
       return;
     }
@@ -2413,32 +2487,20 @@ public:
       auto dsrc = gutils->invertPointerM(orig_src, Builder2);
 
       if (Mode == DerivativeMode::ForwardModeVector) {
-        TypeTree vd = TR.query(orig_dst).Data0().AtMost(size);
-        vd |= TR.query(orig_src).Data0().AtMost(size);
-
-        if (vd.Inner0().isPossibleFloat()) {
-          new_size = Builder2.CreateMul(
-              new_size,
-              ConstantInt::get(new_size->getType(), gutils->getWidth()));
-        } else if (looseTypeAnalysis) {
-          for (auto val : {orig_dst, orig_src}) {
-            if (auto CI = dyn_cast<CastInst>(val)) {
-              if (auto PT = dyn_cast<PointerType>(CI->getSrcTy())) {
-                if (!PT->isPointerTy()) {
-                  new_size = Builder2.CreateMul(
-                      new_size, ConstantInt::get(new_size->getType(),
-                                                 gutils->getWidth()));
-                }
-              }
-            }
-          }
+        for (unsigned int i = 0; i < gutils->getWidth(); ++i) {
+          auto dst = Builder2.CreateExtractValue(ddst, {i});
+          auto src = Builder2.CreateExtractValue(dsrc, {i});
+          auto call =
+              Builder2.CreateMemCpy(dst, dstAlign, src, srcAlign, new_size);
+          call->setAttributes(MTI.getAttributes());
+          call->setTailCallKind(MTI.getTailCallKind());
         }
+      } else {
+        auto call =
+            Builder2.CreateMemCpy(ddst, dstAlign, dsrc, srcAlign, new_size);
+        call->setAttributes(MTI.getAttributes());
+        call->setTailCallKind(MTI.getTailCallKind());
       }
-
-      auto call =
-          Builder2.CreateMemCpy(ddst, dstAlign, dsrc, srcAlign, new_size);
-      call->setAttributes(MTI.getAttributes());
-      call->setTailCallKind(MTI.getTailCallKind());
 
       return;
     }

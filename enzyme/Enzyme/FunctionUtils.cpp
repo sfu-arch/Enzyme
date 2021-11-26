@@ -1718,7 +1718,8 @@ Function *PreProcessCache::CloneFunctionWithReturns(
         constant_args[ii] == DIFFE_TYPE::DUP_NONEED) {
       hasPtrInput = true;
       ptrInputs[i] = (j + 1);
-      if (F->hasParamAttribute(ii, Attribute::NoCapture)) {
+      if (F->hasParamAttribute(ii, Attribute::NoCapture) &&
+          mode != DerivativeMode::ForwardModeVector) {
         NewF->addParamAttr(jj + 1, Attribute::NoCapture);
       }
 

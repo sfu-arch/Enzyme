@@ -59,3 +59,9 @@ If using this code in an academic setting, please cite the following:
 
 Julia bindings for Enzyme are available [here](https://github.com/wsmoses/Enzyme.jl)
 
+## Generating synthetic function
+To generate synthetic function you can use synthetic_function.py. The INPUT_COUNT field specifies the number of inputs. The OUTPUT_ARRAY specifies how many inputs each output depends on. For instance:
+
+    OUTPUT_ARRAY = [1, 2, 1, 3, 4]
+
+Means we have 5 outputs and output_0 depeneds on 1 input, and output_4 depends on 4 inputs. 

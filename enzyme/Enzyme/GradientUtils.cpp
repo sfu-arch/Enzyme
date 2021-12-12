@@ -2271,8 +2271,10 @@ bool GradientUtils::shouldRecompute(const Value *val,
 
   const Instruction *inst = cast<Instruction>(val);
 
-  if (TapesToPreventRecomputation.count(inst))
+  if (TapesToPreventRecomputation.count(inst)) {
+    errs() << "Using tape\n";
     return false;
+  }
 
   if (knownRecomputeHeuristic.find(inst) != knownRecomputeHeuristic.end()) {
     return knownRecomputeHeuristic[inst];

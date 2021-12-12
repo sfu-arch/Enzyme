@@ -149,7 +149,9 @@ configure_file(cmake/EnzymeConfig.cmake.in
 
 configure_file(cmake/EnzymeConfigVersion.cmake.in
      "${PROJECT_BINARY_DIR}/EnzymeConfigVersion.cmake" @ONLY)
-   
+
+configure_file(synthetic_function.py "${PROJECT_BINARY_DIR}" COPYONLY)
+
 install(FILES
      "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/EnzymeConfig.cmake"
      "${PROJECT_BINARY_DIR}/EnzymeConfigVersion.cmake"

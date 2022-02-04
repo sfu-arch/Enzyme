@@ -6,9 +6,9 @@
 #include <math.h>
 #include <inttypes.h>
 #include <string.h>
-#include <adept_source.h>
-#include <adept.h>
-using adept::adouble;
+// #include <adept_source.h>
+// #include <adept.h>
+// using adept::adouble;
 
 template<typename Return, typename... T>
 Return __enzyme_autodiff(T...);
@@ -24,10 +24,10 @@ void foobar(double* data, unsigned len) {
   ifft(data, len);
 }
 
-void afoobar(aVector& data, unsigned len) {
-  fft(data, len);
-  ifft(data, len);
-}
+// void afoobar(aVector& data, unsigned len) {
+//   fft(data, len);
+//   ifft(data, len);
+// }
 
 extern "C" {
   int enzyme_dupnoneed;
@@ -45,24 +45,24 @@ static double foobar_and_gradient(unsigned len) {
     return res;
 }
 
-static double afoobar_and_gradient(unsigned len) {
-    adept::Stack stack;
+// static double afoobar_and_gradient(unsigned len) {
+//     adept::Stack stack;
 
-    aVector x(2*len);
-    for(int i=0; i<2*len; i++) x(i) = 2.0;
-    stack.new_recording();
-    afoobar(x, len);
-    for(int i=0; i<2*len; i++)
-      x(i).set_gradient(1.0);
-    stack.compute_adjoint();
+//     aVector x(2*len);
+//     for(int i=0; i<2*len; i++) x(i) = 2.0;
+//     stack.new_recording();
+//     afoobar(x, len);
+//     for(int i=0; i<2*len; i++)
+//       x(i).set_gradient(1.0);
+//     stack.compute_adjoint();
 
-    double *dinp = new double[2*len];
-    for(int i=0; i<2*len; i++)
-      dinp[i] = x(i).get_gradient();
-    double res = dinp[0];
-    delete[] dinp;
-    return res;
-}
+//     double *dinp = new double[2*len];
+//     for(int i=0; i<2*len; i++)
+//       dinp[i] = x(i).get_gradient();
+//     double res = dinp[0];
+//     delete[] dinp;
+//     return res;
+// }
 
 
 static double tfoobar_and_gradient(unsigned len) {
@@ -77,89 +77,89 @@ static double tfoobar_and_gradient(unsigned len) {
     return res;
 }
 
-static void adept_sincos(double inp, unsigned len) {
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+// static void adept_sincos(double inp, unsigned len) {
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  double *x = new double[2*len];
-  for(int i=0; i<2*len; i++) x[i] = 2.0;
-  foobar(x, len);
-  double res = x[0];
+//   double *x = new double[2*len];
+//   for(int i=0; i<2*len; i++) x[i] = 2.0;
+//   foobar(x, len);
+//   double res = x[0];
 
-  gettimeofday(&end, NULL);
-  printf("Adept real %0.6f res=%f\n", tdiff(&start, &end), res);
-  delete[] x;
-  }
+//   gettimeofday(&end, NULL);
+//   printf("Adept real %0.6f res=%f\n", tdiff(&start, &end), res);
+//   delete[] x;
+//   }
 
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  adept::Stack stack;
+//   adept::Stack stack;
 
-  aVector x(2*len);
-  for(int i=0; i<2*len; i++) x[i] = 2.0;
- // stack.new_recording();
-  afoobar(x, len);
-  double res = x(0).value();
+//   aVector x(2*len);
+//   for(int i=0; i<2*len; i++) x[i] = 2.0;
+//  // stack.new_recording();
+//   afoobar(x, len);
+//   double res = x(0).value();
 
-  gettimeofday(&end, NULL);
-  printf("Adept forward %0.6f res=%f\n", tdiff(&start, &end), res);
-  }
+//   gettimeofday(&end, NULL);
+//   printf("Adept forward %0.6f res=%f\n", tdiff(&start, &end), res);
+//   }
 
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  double res2 = afoobar_and_gradient(len);
+//   double res2 = afoobar_and_gradient(len);
 
-  gettimeofday(&end, NULL);
-  printf("Adept combined %0.6f res'=%f\n", tdiff(&start, &end), res2);
-  }
-}
+//   gettimeofday(&end, NULL);
+//   printf("Adept combined %0.6f res'=%f\n", tdiff(&start, &end), res2);
+//   }
+// }
 
 
-static void tapenade_sincos(double inp, unsigned len) {
+// static void tapenade_sincos(double inp, unsigned len) {
 
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  double *x = new double[2*len];
-  for(int i=0; i<2*len; i++) x[i] = 2.0;
-  foobar(x, len);
-  double res = x[0];
+//   double *x = new double[2*len];
+//   for(int i=0; i<2*len; i++) x[i] = 2.0;
+//   foobar(x, len);
+//   double res = x[0];
 
-  gettimeofday(&end, NULL);
-  printf("Tapenade real %0.6f res=%f\n", tdiff(&start, &end), res);
-  delete[] x;
-  }
+//   gettimeofday(&end, NULL);
+//   printf("Tapenade real %0.6f res=%f\n", tdiff(&start, &end), res);
+//   delete[] x;
+//   }
 
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  double* x = new double[2*len];
-  for(int i=0; i<2*len; i++) x[i] = 2.0;
-  foobar(x, len);
-  double res = x[0];
+//   double* x = new double[2*len];
+//   for(int i=0; i<2*len; i++) x[i] = 2.0;
+//   foobar(x, len);
+//   double res = x[0];
 
-  gettimeofday(&end, NULL);
-  printf("Tapenade forward %0.6f res=%f\n", tdiff(&start, &end), res);
-  delete[] x;
-  }
+//   gettimeofday(&end, NULL);
+//   printf("Tapenade forward %0.6f res=%f\n", tdiff(&start, &end), res);
+//   delete[] x;
+//   }
 
-  {
-  struct timeval start, end;
-  gettimeofday(&start, NULL);
+//   {
+//   struct timeval start, end;
+//   gettimeofday(&start, NULL);
 
-  double res2 = tfoobar_and_gradient(len);
+//   double res2 = tfoobar_and_gradient(len);
 
-  gettimeofday(&end, NULL);
-  printf("Tapenade combined %0.6f res'=%f\n", tdiff(&start, &end), res2);
-  }
-}
+//   gettimeofday(&end, NULL);
+//   printf("Tapenade combined %0.6f res'=%f\n", tdiff(&start, &end), res2);
+//   }
+// }
 
 static void enzyme_sincos(double inp, unsigned len) {
 
@@ -230,8 +230,8 @@ int main(int argc, char** argv) {
 
   for(unsigned iters=max(1, N>>5); iters <= N; iters*=2) {
     printf("iters=%d\n", iters);
-    adept_sincos(inp, iters);
-    tapenade_sincos(inp, iters);
+    // adept_sincos(inp, iters);
+    // tapenade_sincos(inp, iters);
     enzyme_sincos(inp, iters);
   }
 }

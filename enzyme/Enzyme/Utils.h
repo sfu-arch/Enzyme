@@ -64,6 +64,8 @@ extern "C" {
 extern llvm::cl::opt<bool> EnzymePrintPerf;
 }
 
+uint32_t countForwardPassRegisters(llvm::Function *);
+
 extern std::map<std::string, std::function<llvm::Value *(
                                  llvm::IRBuilder<> &, llvm::CallInst *,
                                  llvm::ArrayRef<llvm::Value *>)>>
@@ -883,3 +885,4 @@ template <typename T> static inline llvm::Function *getFunctionFromCall(T *op) {
   return called;
 }
 #endif
+

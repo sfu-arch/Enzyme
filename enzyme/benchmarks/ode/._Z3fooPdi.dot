@@ -1,0 +1,13 @@
+digraph "CFG for '_Z3fooPdi' function" {
+	label="CFG for '_Z3fooPdi' function";
+
+	Node0x95a48a0 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#dedcdb70",label="{entry:\l  %0 = load double, double* %in_0, align 8, !tbaa !2\l  %mul = fmul fast double %0, 2.000000e+00\l  store double %mul, double* %in_0, align 8, !tbaa !2\l  %cmp15 = icmp sgt i32 %len, 1\l  br i1 %cmp15, label %for.body.preheader, label %for.cond.cleanup\l|{<s0>T|<s1>F}}"];
+	Node0x95a48a0:s0 -> Node0x95a5c80;
+	Node0x95a48a0:s1 -> Node0x95a5d20;
+	Node0x95a5c80 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#b9d0f970",label="{for.body.preheader:                               \l  %wide.trip.count = zext i32 %len to i64\l  br label %for.body\l}"];
+	Node0x95a5c80 -> Node0x95a5f70;
+	Node0x95a5d20 [shape=record,color="#3d50c3ff", style=filled, fillcolor="#dedcdb70",label="{for.cond.cleanup:                                 \l  ret void\l}"];
+	Node0x95a5f70 [shape=record,color="#b70d28ff", style=filled, fillcolor="#b70d2870",label="{for.body:                                         \l  %1 = phi double [ %mul, %for.body.preheader ], [ %mul4, %for.body ]\l  %indvars.iv = phi i64 [ 1, %for.body.preheader ], [ %indvars.iv.next,\l... %for.body ]\l  %arrayidx3 = getelementptr inbounds double, double* %in_0, i64 %indvars.iv\l  %2 = load double, double* %arrayidx3, align 8, !tbaa !2\l  %mul4 = fmul fast double %2, %1\l  store double %mul4, double* %arrayidx3, align 8, !tbaa !2\l  %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1\l  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count\l  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !6\l|{<s0>T|<s1>F}}"];
+	Node0x95a5f70:s0 -> Node0x95a5d20;
+	Node0x95a5f70:s1 -> Node0x95a5f70;
+}

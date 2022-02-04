@@ -620,3 +620,14 @@ Function *getOrInsertExponentialAllocator(Module &M, bool ZeroInit) {
   B.CreateRet(phi);
   return F;
 }
+
+uint32_t countForwardPassRegisters(llvm::Function *f) {
+  uint32_t count = 0;
+  for (auto &b: *f) {
+    for (auto &i: b) {
+      if (llvm::isa <llvm::BinaryOperator> (i))
+        count ++;
+    }
+  }
+  return count;
+}

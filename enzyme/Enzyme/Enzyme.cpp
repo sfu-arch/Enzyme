@@ -304,8 +304,12 @@ public:
   EnzymeLogic Logic;
   bool PostOpt;
   static char ID;
+  bool counted;
+  uint32_t registerCount;
   Enzyme(bool PostOpt = false) : ModulePass(ID), PostOpt(PostOpt) {
     PostOpt |= EnzymePostOpt;
+    counted = false;
+    registerCount = 0;
     // initializeLowerAutodiffIntrinsicPass(*PassRegistry::getPassRegistry());
   }
 
@@ -355,6 +359,11 @@ public:
       return false;
     }
     auto FT = cast<Function>(fn)->getFunctionType();
+    if (!counted) {
+      counted = true;
+      auto func = cast<Function>(fn);
+      errs() << "Number of required nodes inside the tape: " << countForwardPassRegisters(func) << "\n"; 
+    }
     assert(fn);
 
     bool sret = CI->paramHasAttr(0, Attribute::StructRet) ||

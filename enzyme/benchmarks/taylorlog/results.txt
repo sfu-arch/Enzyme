@@ -1,0 +1,12 @@
+adept
+0.565812 res=inf
+1.050952 res=inf
+1.116839 res'=0.000000
+tapenade
+tapenade 0.528639 res=inf
+tapenade 0.521556 res=inf
+tapendade 0.507651 res'=inf
+enzyme
+0.509289 res=inf
+0.512030 res=inf
+0.415301 res'=inf

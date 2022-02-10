@@ -20,9 +20,18 @@ InstruMemPass::InstruMemPass() : FunctionPass(ID) {} // InstruMemPass
 
 bool InstruMemPass::runOnFunction(Function &f)
 {
-    for (auto &BB : f)
-        for (auto &I : BB)
-            I.setMetadata("cost", MDNode::get(I.getContext(), MDString::get(I.getContext(), "0")));
+
+    for (auto &BB : f) {
+        for (auto &I : BB) {
+            auto &context = I.getContext();
+            if (BB.getName().contains("invert"))
+                I.setMetadata("mode", MDNode::get(context, MDString::get(context, "reverse")));
+            else
+                I.setMetadata("mode", MDNode::get(context, MDString::get(context, "forward")));
+
+            I.setMetadata("cost", MDNode::get(context, MDString::get(context, "0")));
+        }
+    }
     F = &f;
     visit(f);
     return true;
@@ -40,10 +49,6 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
     errs() << "BinaryOperator: " << maxCost + 1 << "\n";
 
 }
-
-
-
-
 
 char InstruMemPass::ID = 0;
 static RegisterPass<InstruMemPass> X("instrumem", "InstruMem Pass");

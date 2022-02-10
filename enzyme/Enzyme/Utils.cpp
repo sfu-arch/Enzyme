@@ -631,3 +631,31 @@ uint32_t countForwardPassRegisters(llvm::Function *f) {
   }
   return count;
 }
+
+void addDynamicRegisterCounter(llvm::Function *f) {
+  
+}
+
+void addInstCost(llvm::Function *f) {
+
+
+  // propagate the cost
+  for (auto &bb: *f) {
+    for (auto &I: bb) {
+      if (llvm::isa <llvm::BinaryOperator> (I)) {
+        auto op1 = I.getOperand(0);
+        auto op2 = I.getOperand(1);
+        // auto *N = I.getOperand(0)->getMetadata("cost");
+        // auto *S = dyn_cast<MDString>(N->getOperand(0));
+
+        // auto op1Cost = stoi(dyn_cast<MDString>(op1->getMetadata("cost")));
+        // auto op2Cost = stoi(dyn_cast<MDString>(op2->getMetadata("cost")));
+
+        // auto &Context = I.getContext();
+        // MDNode *N =
+        //     MDNode::get(Context, MDString::get(Context, t));
+        // I.setMetadata("cost", N);
+      }
+    }
+  }
+}

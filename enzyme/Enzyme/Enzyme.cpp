@@ -363,6 +363,7 @@ public:
       counted = true;
       auto func = cast<Function>(fn);
       errs() << "Number of required nodes inside the tape: " << countForwardPassRegisters(func) << "\n"; 
+      // addDynamicRegisterCounter();
     }
     assert(fn);
 
@@ -1630,4 +1631,5 @@ ModulePass *createEnzymePass(bool PostOpt) { return new Enzyme(PostOpt); }
 
 extern "C" void AddEnzymePass(LLVMPassManagerRef PM) {
   unwrap(PM)->add(createEnzymePass(/*PostOpt*/ false));
+  
 }

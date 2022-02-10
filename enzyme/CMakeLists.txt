@@ -12,10 +12,10 @@ set(ENZYME_VERSION
 
 
 SET(CMAKE_CXX_FLAGS "-Wall -fPIC -fno-rtti ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -ggdb")
-SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -ggdb -fPIC")
+SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -fPIC")
 
-SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -fno-omit-frame-pointer")
+SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -fno-omit-frame-pointer -fPIC")
 
 #SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -fno-omit-frame-pointer -fsanitize=address")
 #SET(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")

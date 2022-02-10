@@ -60,6 +60,11 @@
 #include "GradientUtils.h"
 #include "LibraryFuncs.h"
 #include "Utils.h"
+#include "CostAnalysis.h"
+#include "llvm/Transforms/Utils/Mem2Reg.h"
+
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/Transforms/IPO/PassManagerBuilder.h"
 
 #if LLVM_VERSION_MAJOR >= 14
 #define addAttribute addAttributeAtIndex
@@ -2372,7 +2377,6 @@ const AugmentedReturn &EnzymeLogic::CreateAugmentedPrimal(
   Function *tempFunc = gutils->newFunc;
   delete gutils;
   tempFunc->eraseFromParent();
-
   if (PostOpt)
     PPC.optimizeIntermediate(NewF);
   if (EnzymePrint)
@@ -3698,6 +3702,16 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
 
+
+  // for (auto &bb: *nf)
+  //       errs() << bb.getName() << "\n";
+  PassManagerBuilder Builder;
+  legacy::FunctionPassManager PM(nf->getParent());
+  PM.add(new instrumem::InstruMemPass());
+
+  // Builder.populateFunctionPassManager(PM);
+  PM.run(*nf);
+  // addInstCost(nf); 
   if (PostOpt)
     PPC.optimizeIntermediate(nf);
   if (EnzymePrint) {
@@ -3973,7 +3987,6 @@ Function *EnzymeLogic::CreateForwardDiff(
   PPC.AlwaysInline(nf);
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
-
   if (PostOpt)
     PPC.optimizeIntermediate(nf);
   if (EnzymePrint) {

@@ -63,8 +63,11 @@ extern "C" {
 /// Print additional debug info relevant to performance
 extern llvm::cl::opt<bool> EnzymePrintPerf;
 }
+void addInstCost(llvm::Function *f);
 
 uint32_t countForwardPassRegisters(llvm::Function *);
+
+void addDynamicRegisterCounter(llvm::Function *);
 
 extern std::map<std::string, std::function<llvm::Value *(
                                  llvm::IRBuilder<> &, llvm::CallInst *,

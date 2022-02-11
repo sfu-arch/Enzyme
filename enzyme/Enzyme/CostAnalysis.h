@@ -70,6 +70,7 @@ namespace instrumem
         void visitStoreInst(StoreInst &ins);
         void visitLoadInst(LoadInst &ins);
         void visitReturnInst(ReturnInst &ins);
+        void visitInstruction(Instruction &ins);
     };
 
 } // namespace instrumem

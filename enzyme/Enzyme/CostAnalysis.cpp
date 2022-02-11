@@ -24,10 +24,11 @@ bool InstruMemPass::runOnFunction(Function &f)
     for (auto &BB : f) {
         for (auto &I : BB) {
             auto &context = I.getContext();
-            if (I.getName().contains("'"))
+            if (I.getName().contains("'")) {
                 memOps[I.getName().str()] = std::make_pair(0, 0);
-
-            if (BB.getName().contains("invert") || I.getName().contains("'de")) {
+                I.setMetadata("tapeCost", MDNode::get(context, MDString::get(context, "0")));
+            }
+            if (BB.getName().contains("invert")) {
                 I.setMetadata("mode", MDNode::get(context, MDString::get(context, "reverse")));
                 I.setMetadata("tapeCost", MDNode::get(context, MDString::get(context, "0")));
             }
@@ -92,6 +93,15 @@ void InstruMemPass::visitLoadInst(LoadInst &ins) {
 
 void InstruMemPass::visitReturnInst(ReturnInst &ins) {
 }
+void InstruMemPass::visitInstruction(Instruction &ins) {
+    if (!isReverseNode(&ins))
+        return;
+    for (int i=0; i < ins.getNumOperands(); i++) {
+        if (isForwardNode(ins.getOperand(i)) || edges.count(ins.getOperand(i)->getName().str()))
+            errs() << "found forward\n" << *ins.getOperand(i) << "\n";
+        // errs() << "Operand: " << *ins.getOperand(i) << "\n";
+    }
+}
 
 bool InstruMemPass::isReverseNode(Value *V)
 {
@@ -112,6 +122,7 @@ bool InstruMemPass::isForwardNode(Value *V)
     auto *S = dyn_cast<MDString>(N->getOperand(0));
     return S->getString().str() == "forward";
 }
+
 
 char InstruMemPass::ID = 0;
 static RegisterPass<InstruMemPass> X("instrumem", "InstruMem Pass");

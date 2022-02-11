@@ -76,6 +76,8 @@ void InstruMemPass::visitStoreInst(StoreInst &ins) {
         memOps[ins.getOperand(1)->getName().str()].first = std::max(memOps[ins.getOperand(1)->getName().str()].first, getLevel(ins.getOperand(0)));
         memOps[ins.getOperand(1)->getName().str()].second = std::max(memOps[ins.getOperand(1)->getName().str()].second, getTapeCost(ins.getOperand(0)));
     }
+    
+    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[ins.getOperand(1)->getName().str()].first))));
 }
 
 void InstruMemPass::visitLoadInst(LoadInst &ins) {
@@ -88,19 +90,15 @@ void InstruMemPass::visitLoadInst(LoadInst &ins) {
     }
 }
 
-void InstruMemPass::visitReturnInst(ReturnInst &ins) {
-}
-
 void InstruMemPass::visitInstruction(Instruction &ins) {
     uint32_t maxLevel = 0;
-
     for (int i=0; i < ins.getNumOperands(); i++) {
         auto *op = ins.getOperand(i);
-        uint32_t level = getLevel(op);
+        uint32_t level = getLevel(op) + (int)(!isa<Constant>(op));
         if (level > maxLevel)
             maxLevel = level;
     }
-    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(maxLevel+1))));
+    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(maxLevel))));
 
     // if (!isReverseNode(&ins))
     //     return;
@@ -126,7 +124,6 @@ bool InstruMemPass::isForwardNode(Value *V)
     auto *S = dyn_cast<MDString>(N->getOperand(0));
     return S->getString().str() == "forward";
 }
-
 
 char InstruMemPass::ID = 0;
 static RegisterPass<InstruMemPass> X("instrumem", "InstruMem Pass");

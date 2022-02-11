@@ -34,7 +34,8 @@
 #include "llvm/Pass.h"
 
 #include "llvm/Transforms/Utils.h"
-#include "CostAnalysis.h"
+// #include "CostAnalysis.h"
+// #include "LifetimeAnalysis.h"
 
 using namespace llvm;
 #ifdef DEBUG_TYPE

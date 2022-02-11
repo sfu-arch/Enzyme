@@ -1,6 +1,6 @@
 
-#ifndef INSTRUMEM_H
-#define INSTRUMEM_H
+#ifndef LIFE_H
+#define LIFE_H
 
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
@@ -14,15 +14,14 @@
 
 using namespace llvm;
 
-namespace instrumem
+namespace life
 {
 
-    struct InstruMemPass : public llvm::FunctionPass,
-                           llvm::InstVisitor<InstruMemPass>
+    struct LifetimePass : public llvm::FunctionPass,
+                           llvm::InstVisitor<LifetimePass>
     {
     
     private:
-        const std::string pre = "__InstruMem_";
         std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
         std::set<std::string> edges;
 
@@ -49,15 +48,11 @@ namespace instrumem
             S = dyn_cast<MDString>(N->getOperand(0));
             return stoi(S->getString().str());
         }
-
-        bool isReverseNode(Value *V);
-        bool isForwardNode(Value *V);
-
     public:
         static char ID;
         llvm::Function *F = nullptr;
 
-        InstruMemPass();
+        LifetimePass();
 
         virtual void getAnalysisUsage(AnalysisUsage &AU) const override
         {
@@ -66,9 +61,6 @@ namespace instrumem
 
         bool runOnFunction(llvm::Function &f) override;
 
-        void visitBinaryOperator(BinaryOperator &ins);
-        void visitStoreInst(StoreInst &ins);
-        void visitLoadInst(LoadInst &ins);
         void visitInstruction(Instruction &ins);
     };
 

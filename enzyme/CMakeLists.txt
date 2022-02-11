@@ -11,11 +11,11 @@ set(ENZYME_VERSION
   ${ENZYME_MAJOR_VERSION}.${ENZYME_MINOR_VERSION}.${ENZYME_PATCH_VERSION})
 
 
-SET(CMAKE_CXX_FLAGS "-Wall -fPIC -fno-rtti ${CMAKE_CXX_FLAGS}")
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -ggdb -fPIC")
-SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -fPIC")
+SET(CMAKE_CXX_FLAGS "-Wall -fPIC -fno-rtti ${CMAKE_CXX_FLAGS} -W -Wno-undef")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g -ggdb -fPIC -W -Wno-undef")
+SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -fPIC -W -Wno-undef")
 
-SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -fno-omit-frame-pointer -fPIC")
+SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef")
 
 #SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g -fno-omit-frame-pointer -fsanitize=address")
 #SET(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
@@ -102,6 +102,7 @@ string(REPLACE "LLVM_ANALYSIS" "FAKELLVM_ANALYSIS" INPUT_TEXT "${INPUT_TEXT}")
 string(REPLACE "class SCEVExpander " "namespace fake {\n  class SCEVExpander " INPUT_TEXT "${INPUT_TEXT}")
 string(REPLACE "struct SCEVOperand " "namespace fake {\n  struct SCEVOperand " INPUT_TEXT "${INPUT_TEXT}")
 string(REPLACE "};\n}" "};\n}}" INPUT_TEXT "${INPUT_TEXT}")
+
 string(REPLACE "const SCEV* S;\n};\n" "const SCEV* S;\n};\n}\n" INPUT_TEXT "${INPUT_TEXT}")
 endif()
 

@@ -26,11 +26,11 @@ namespace instrumem
         std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
         std::set<std::string> edges;
 
-        uint32_t getCalcCost(Value *V) {
+        uint32_t getLevel(Value *V) {
             if (!isa<Instruction>(*V))
                 return 0;
             Instruction &I = cast<Instruction>(*V);
-            auto *N = I.getMetadata("calcCost");
+            auto *N = I.getMetadata("level");
             auto *S = dyn_cast<MDString>(N->getOperand(0));
             return stoi(S->getString().str());
         };

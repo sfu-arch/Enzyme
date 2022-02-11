@@ -35,7 +35,7 @@ bool InstruMemPass::runOnFunction(Function &f)
             else
                 I.setMetadata("mode", MDNode::get(context, MDString::get(context, "forward")));
             
-            I.setMetadata("calcCost", MDNode::get(context, MDString::get(context, "0")));
+            I.setMetadata("level", MDNode::get(context, MDString::get(context, "0")));
         }
     }
     F = &f;
@@ -51,8 +51,8 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
     auto op1 = ins.getOperand(0);
     auto op2 = ins.getOperand(1);
 
-    uint32_t op1_calc_cost = getCalcCost(op1);
-    uint32_t op2_calc_cost = getCalcCost(op2);
+    uint32_t op1_calc_cost = getLevel(op1);
+    uint32_t op2_calc_cost = getLevel(op2);
     uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
     
     if (isReverseNode(&ins)) {
@@ -70,13 +70,13 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
     }
     
     uint32_t maxCost = std::max(op1_calc_cost, op2_calc_cost);
-    ins.setMetadata("calcCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(maxCost+1))));
+    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(maxCost+1))));
 }
 
 void InstruMemPass::visitStoreInst(StoreInst &ins) {
     auto *op1 = ins.getOperand(0);
     if (isReverseNode(op1)) {
-        memOps[ins.getOperand(1)->getName().str()].first = getCalcCost(ins.getOperand(0));
+        memOps[ins.getOperand(1)->getName().str()].first = getLevel(ins.getOperand(0));
         memOps[ins.getOperand(1)->getName().str()].second = getTapeCost(ins.getOperand(0));
     }
 }
@@ -87,7 +87,7 @@ void InstruMemPass::visitLoadInst(LoadInst &ins) {
     auto *op1 = ins.getOperand(0);
     if (memOps.count(op1->getName().str())) {
         ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
-        ins.setMetadata("calcCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
+        ins.setMetadata("Level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
     }
 }
 

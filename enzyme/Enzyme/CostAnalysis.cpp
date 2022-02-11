@@ -24,7 +24,7 @@ bool InstruMemPass::runOnFunction(Function &f)
     for (auto &BB : f) {
         for (auto &I : BB) {
             auto &context = I.getContext();
-            if (I.getName().contains("'de"))
+            if (I.getName().contains("'"))
                 memOps[I.getName().str()] = std::make_pair(0, 0);
 
             if (BB.getName().contains("invert") || I.getName().contains("'de")) {
@@ -39,24 +39,31 @@ bool InstruMemPass::runOnFunction(Function &f)
     }
     F = &f;
     visit(f);
+
+    errs() << "Tape cost: " << edges.size() + memOps.size() << "\n";
+
     return true;
 }
 
-
 void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
-{
+{    
     auto op1 = ins.getOperand(0);
     auto op2 = ins.getOperand(1);
+
     uint32_t op1_calc_cost = getCalcCost(op1);
     uint32_t op2_calc_cost = getCalcCost(op2);
     uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
     
     if (isReverseNode(&ins)) {
+        // Check if it has an edge to forward pass
+        if (isForwardNode(op1))
+            edges.insert(op1->getName().str());
+        if (isForwardNode(op2)) 
+            edges.insert(op2->getName().str());
+
         uint32_t tapeCost = 0;
         op1_tape_cost = getTapeCost(op1);
         op2_tape_cost = getTapeCost(op2);
-        errs() << "op1_tape_cost: " << op1_tape_cost << "\n";
-        errs() << "op2_tape_cost: " << op2_tape_cost << "\n";
         tapeCost = op1_tape_cost + op2_tape_cost;
         ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(tapeCost))));
     }
@@ -72,6 +79,7 @@ void InstruMemPass::visitStoreInst(StoreInst &ins) {
         memOps[ins.getOperand(1)->getName().str()].second = getTapeCost(ins.getOperand(0));
     }
 }
+
 void InstruMemPass::visitLoadInst(LoadInst &ins) {
     if (!isReverseNode(&ins))
         return;
@@ -82,6 +90,9 @@ void InstruMemPass::visitLoadInst(LoadInst &ins) {
     }
 }
 
+void InstruMemPass::visitReturnInst(ReturnInst &ins) {
+}
+
 bool InstruMemPass::isReverseNode(Value *V)
 {
     if (!isa<Instruction>(*V))
@@ -90,6 +101,16 @@ bool InstruMemPass::isReverseNode(Value *V)
     auto *N = I.getMetadata("mode");
     auto *S = dyn_cast<MDString>(N->getOperand(0));
     return S->getString().str() == "reverse";
+}
+
+bool InstruMemPass::isForwardNode(Value *V)
+{
+    if (!isa<Instruction>(*V))
+        return false;
+    Instruction &I = cast<Instruction>(*V);
+    auto *N = I.getMetadata("mode");
+    auto *S = dyn_cast<MDString>(N->getOperand(0));
+    return S->getString().str() == "forward";
 }
 
 char InstruMemPass::ID = 0;

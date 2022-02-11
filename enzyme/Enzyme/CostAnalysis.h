@@ -10,7 +10,7 @@
 #include "llvm/Pass.h"
 #include "llvm/Support/raw_ostream.h"
 #include <map>
-
+#include <set>
 
 using namespace llvm;
 
@@ -24,6 +24,8 @@ namespace instrumem
     private:
         const std::string pre = "__InstruMem_";
         std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
+        std::set<std::string> edges;
+
         uint32_t getCalcCost(Value *V) {
             if (!isa<Instruction>(*V))
                 return 0;
@@ -49,6 +51,8 @@ namespace instrumem
         }
 
         bool isReverseNode(Value *V);
+        bool isForwardNode(Value *V);
+
     public:
         static char ID;
         llvm::Function *F = nullptr;
@@ -65,7 +69,7 @@ namespace instrumem
         void visitBinaryOperator(BinaryOperator &ins);
         void visitStoreInst(StoreInst &ins);
         void visitLoadInst(LoadInst &ins);
-
+        void visitReturnInst(ReturnInst &ins);
     };
 
 } // namespace instrumem

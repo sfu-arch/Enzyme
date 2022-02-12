@@ -100,9 +100,6 @@ void InstruMemPass::visitInstruction(Instruction &ins) {
     }
     ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(maxLevel))));
 
-    // if (!isReverseNode(&ins))
-    //     return;
-
 }
 
 bool InstruMemPass::isReverseNode(Value *V)

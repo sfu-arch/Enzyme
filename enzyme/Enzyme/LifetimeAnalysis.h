@@ -48,6 +48,15 @@ namespace life
             S = dyn_cast<MDString>(N->getOperand(0));
             return stoi(S->getString().str());
         }
+
+        uint32_t getCycle(Value *V) {
+            if (!isa<Instruction>(*V))
+                return 0;
+            Instruction &I = cast<Instruction>(*V);
+            auto *N = I.getMetadata("cycle");
+            auto *S = dyn_cast<MDString>(N->getOperand(0));
+            return stoi(S->getString().str());
+        };
     public:
         static char ID;
         llvm::Function *F = nullptr;

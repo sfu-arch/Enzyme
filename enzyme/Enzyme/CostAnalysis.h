@@ -35,6 +35,7 @@ namespace instrumem
             return stoi(S->getString().str());
         };
 
+
         uint32_t getTapeCost(Value *V) {
             if (!isa<Instruction>(*V))
                 return 0;

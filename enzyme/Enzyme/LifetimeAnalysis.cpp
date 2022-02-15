@@ -28,7 +28,7 @@ bool LifetimePass::runOnFunction(Function &f)
 void LifetimePass::visitInstruction(Instruction &ins) {
     uint32_t maxUsedLevel = getLevel(&ins);
     for (auto i: ins.users())
-        if (getLevel(i) > maxUsedLevel)
+        if (getCycle(i) > maxUsedLevel)
             maxUsedLevel = getLevel(i);
     uint32_t lifetime = maxUsedLevel - getLevel(&ins) + 1;
     ins.setMetadata("lifetime", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(lifetime))));

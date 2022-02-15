@@ -63,6 +63,7 @@
 #include "CostAnalysis.h"
 #include "LifetimeAnalysis.h"
 #include "OperationCounter.h"
+#include "Scheduler.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
@@ -3711,6 +3712,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   PassManagerBuilder Builder;
   legacy::FunctionPassManager PM(nf->getParent());
   PM.add(new instrumem::InstruMemPass());
+  PM.add(new instrumem::SchedulerPass());
   PM.add(new life::LifetimePass());
   PM.add(new instrumem::OPCounterPass());
 

@@ -36,9 +36,10 @@ namespace instrumem
         
         bool isDeriv(Value *I) {
             return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "deriv");
-
         }
-
+        bool isReverseOp(Value *I) {
+            return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "reverseOp");
+        }
     public:
         static char ID;
         llvm::Function *F = nullptr;
@@ -54,6 +55,8 @@ namespace instrumem
         void visitLoadInst(llvm::LoadInst &I);
         void visitAllocaInst(llvm::AllocaInst &I);
         void visitGetElementPtrInst(llvm::GetElementPtrInst &I);
+        void visitTruncInst(llvm::TruncInst &I);
+        void visitSExtInst(llvm::SExtInst &I);
 
 
 

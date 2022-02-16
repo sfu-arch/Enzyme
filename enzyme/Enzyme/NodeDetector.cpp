@@ -48,16 +48,33 @@ void NodeDetectorPass::visitAllocaInst(llvm::AllocaInst &I) {
 }
 
 void NodeDetectorPass::visitGetElementPtrInst(llvm::GetElementPtrInst &I) {
+    for (int i=0; i < I.getNumOperands(); i++)
+        if (isa<Instruction>(I.getOperand(i)) && hasMetadata((llvm::Instruction*)I.getOperand(i), "deriv"))
+            I.setMetadata("deriv", MDNode::get(I.getContext(), MDString::get(I.getContext(), "true")));
+}
+
+void NodeDetectorPass::visitTruncInst(llvm::TruncInst &I) {
     if (isa<Instruction>(I.getOperand(0)) && hasMetadata((llvm::Instruction*)I.getOperand(0), "deriv"))
         I.setMetadata("deriv", MDNode::get(I.getContext(), MDString::get(I.getContext(), "true")));
 }
 
+void NodeDetectorPass::visitSExtInst(llvm::SExtInst &I) {
+    if (isa<Instruction>(I.getOperand(0)) && hasMetadata((llvm::Instruction*)I.getOperand(0), "deriv"))
+        I.setMetadata("deriv", MDNode::get(I.getContext(), MDString::get(I.getContext(), "true")));
+    else
+        visitInstruction(I);
+}
+
 void NodeDetectorPass::visitInstruction(Instruction &ins) {
-    for (auto i = 0; i < ins.getNumOperands(); i++)
+    for (auto i = 0; i < ins.getNumOperands(); i++) {
         if (isDeriv(ins.getOperand(i))) {
             ins.setMetadata("reverseOp", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
             break;
         }
+        if (isReverseOp(ins.getOperand(i))) {
+            ins.setMetadata("reverseSuccessor", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
+        }
+    }
 }
 
 char NodeDetectorPass::ID = 1;

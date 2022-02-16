@@ -362,7 +362,7 @@ public:
     if (!counted) {
       counted = true;
       auto func = cast<Function>(fn);
-      errs() << "Number of required nodes inside the tape: " << countForwardPassRegisters(func) << "\n"; 
+      // errs() << "Number of required nodes inside the tape: " << countForwardPassRegisters(func) << "\n"; 
       // addDynamicRegisterCounter();
     }
     assert(fn);

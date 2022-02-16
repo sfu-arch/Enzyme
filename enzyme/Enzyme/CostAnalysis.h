@@ -71,6 +71,8 @@ namespace instrumem
         void visitStoreInst(StoreInst &ins);
         void visitLoadInst(LoadInst &ins);
         void visitInstruction(Instruction &ins);
+        void visitAllocaInst(AllocaInst &ins);
+
     };
 
 } // namespace instrumem

@@ -24,10 +24,10 @@ bool InstruMemPass::runOnFunction(Function &f)
     for (auto &BB : f) {
         for (auto &I : BB) {
             auto &context = I.getContext();
-            if (I.getName().contains("'")) 
+            if (isa<AllocaInst>(I)) 
                 memOps[I.getName().str()] = std::make_pair(0, 0);
 
-            if (BB.getName().contains("invert") || I.getName().contains("'")) {
+            if (BB.getName().contains("invert") || isa<AllocaInst>(I)) {
                 I.setMetadata("mode", MDNode::get(context, MDString::get(context, "reverse")));
                 I.setMetadata("tapeCost", MDNode::get(context, MDString::get(context, "0")));
             }
@@ -40,7 +40,8 @@ bool InstruMemPass::runOnFunction(Function &f)
     F = &f;
     visit(f);
 
-    errs() << "Tape cost: " << edges.size() + memOps.size() << "\n";
+    errs() << "Tape cost: " << edges.size() << "\n";
+    errs() << "Number of derivs: " << memOps.size() << "\n";
 
     return true;
 }
@@ -56,10 +57,7 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
     uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
     
         // Check if it has an edge to forward pass
-    if (isForwardNode(op1))
-        edges.insert(op1->getName().str());
-    if (isForwardNode(op2)) 
-        edges.insert(op2->getName().str());
+
 
     uint32_t tapeCost = 0;
     op1_tape_cost = getTapeCost(op1);
@@ -80,6 +78,19 @@ void InstruMemPass::visitStoreInst(StoreInst &ins) {
     ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[ins.getOperand(1)->getName().str()].first))));
 }
 
+void InstruMemPass::visitAllocaInst(AllocaInst &ins) {
+    if (!ins.getParent()->getName().contains("invert"))
+        for (auto i: ins.users()) {
+            if (!isForwardNode(i)) 
+                continue;
+            if (isa<LoadInst>(i) || (isa<StoreInst>(i) && !isa<Constant>(i->getOperand(0)))) {
+                ins.setMetadata("mode", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "forward")));
+                break;
+            }
+        }
+    visitInstruction(ins);
+}
+
 void InstruMemPass::visitLoadInst(LoadInst &ins) {
     if (!isReverseNode(&ins))
         return;
@@ -91,9 +102,20 @@ void InstruMemPass::visitLoadInst(LoadInst &ins) {
 }
 
 void InstruMemPass::visitInstruction(Instruction &ins) {
+    if (isForwardNode(&ins))
+        for (auto i: ins.users())
+            if (isReverseNode(i)) {
+                ins.setMetadata("taped", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
+                edges.insert(ins.getName().str());
+                break;
+            }
+
     uint32_t maxLevel = 0;
     for (int i=0; i < ins.getNumOperands(); i++) {
         auto *op = ins.getOperand(i);
+        if (isReverseNode(&ins) && isForwardNode(op))
+            edges.insert(op->getName().str());
+
         uint32_t level = getLevel(op) + (int)(!isa<Constant>(op));
         if (level > maxLevel)
             maxLevel = level;

@@ -11,14 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "Scheduler.h"
+#include "DerivScheduler.h"
 #include "llvm/IR/IRBuilder.h"
 
 using namespace instrumem;
 
-SchedulerPass::SchedulerPass() : FunctionPass(ID) {} // SchedulerPass
+DerivScheduler::DerivScheduler() : FunctionPass(ID) {} // DerivScheduler
 
-bool SchedulerPass::runOnFunction(Function &f)
+bool DerivScheduler::runOnFunction(Function &f)
 {
     errs() << "Scheduler ...\n";
     visit(f);
@@ -29,18 +29,17 @@ bool SchedulerPass::runOnFunction(Function &f)
     return true;
 }
 
-void SchedulerPass::visitBinaryOperator(BinaryOperator &ins) {
+void DerivScheduler::visitBinaryOperator(BinaryOperator &ins) {
     uint32_t cycle = getNextAvailableLevel(getLevel(&ins));
     ins.setMetadata("cycle", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(cycle))));
 
 }
 
-void SchedulerPass::visitInstruction(Instruction &ins) {
-    
+void DerivScheduler::visitInstruction(Instruction &ins) {
     ins.setMetadata("cycle", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(getLevel(&ins)))));
 
 }
 
-char SchedulerPass::ID = 1;
-static RegisterPass<SchedulerPass> X("schpass", "Scheduler Counter Pass");
+char DerivScheduler::ID = 1;
+static RegisterPass<DerivScheduler> X("dSchPass", "Deriv Scheduler Pass");
 

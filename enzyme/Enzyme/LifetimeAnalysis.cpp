@@ -26,12 +26,15 @@ bool LifetimePass::runOnFunction(Function &f)
 }
 
 void LifetimePass::visitInstruction(Instruction &ins) {
+    if (!ins.hasMetadata("taped"))
+        return;
     uint32_t maxUsedLevel = getLevel(&ins);
     for (auto i: ins.users())
         if (getCycle(i) > maxUsedLevel)
             maxUsedLevel = getLevel(i);
     uint32_t lifetime = maxUsedLevel - getLevel(&ins) + 1;
     ins.setMetadata("lifetime", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(lifetime))));
+    errs() << "Lifetime of " << ins << " is " << lifetime << "\n";
 
 }
 

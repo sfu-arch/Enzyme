@@ -14,7 +14,7 @@
 
 using namespace llvm;
 
-#define PARALLEL_LIMIT 4
+#define NODE_SIZE 158
 
 namespace instrumem
 {
@@ -25,21 +25,18 @@ namespace instrumem
     
     private:
 
-        uint32_t getLevel(Value *V) {
-            if (!isa<Instruction>(*V))
-                return 0;
-            Instruction &I = cast<Instruction>(*V);
-            auto *N = I.getMetadata("level");
-            auto *S = dyn_cast<MDString>(N->getOperand(0));
-            return stoi(S->getString().str());
-        };
-        
         bool isDeriv(Value *I) {
             return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "deriv");
         }
         bool isReverseOp(Value *I) {
             return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "reverseOp");
         }
+        
+        bool isDerivStore(Value *I) {
+            return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "derivStore");
+        }
+        void appendNode(Instruction* I, std::unordered_map<std::string, std::vector<std::string>> *nodeMap);
+        
     public:
         static char ID;
         llvm::Function *F = nullptr;
@@ -47,7 +44,7 @@ namespace instrumem
         NodeDetectorPass();
 
         bool runOnFunction(llvm::Function &f) override;
-        void visitStoreInst(llvm::StoreInst &I) {}
+        void visitStoreInst(llvm::StoreInst &I);
         void visitBitCastInst(BitCastInst &ins) {}
         void visitCallInst(CallInst &ins) {}
 

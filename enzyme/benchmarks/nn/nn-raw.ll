@@ -13891,567 +13891,567 @@ _ZL25neural_network_softmax_v2PKfPfi.exit:        ; preds = %for.body15.for.body
 ; Function Attrs: nounwind uwtable willreturn mustprogress
 define internal void @diffe_ZL28neural_network_hypothesis_v2PK14mnist_image_t_PK17neural_network_t_h(%struct.mnist_image_t_* nocapture readonly %image, %struct.neural_network_t_* nocapture readonly %network, %struct.neural_network_t_* nocapture %"network'", i8 zeroext %label, float %differeturn) #20 {
 entry:
-  %"iv'ac" = alloca i64, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"iv1'ac" = alloca i64, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"iv3'ac" = alloca i64, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"iv5'ac" = alloca i64, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"iv7'ac" = alloca i64, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"fneg'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"fneg'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de", align 4, !mode !327, !level !326, !cycle !326
-  %"add'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"add'de", align 4, !mode !327, !level !326, !cycle !326
-  %"mul'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"mul'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de9" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de9", align 4, !mode !327, !level !326, !cycle !326
-  %"div'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"div'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de10" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de10", align 4, !mode !327, !level !326, !cycle !326
-  %"'de13" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de13", align 4, !mode !327, !level !326, !cycle !326
-  %"max.1.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"max.1.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de14" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de14", align 4, !mode !327, !level !326, !cycle !326
-  %"max.05.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"max.05.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de15" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de15", align 4, !mode !327, !level !326, !cycle !326
-  %"sub.i34'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"sub.i34'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de16" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de16", align 4, !mode !327, !level !326, !cycle !326
-  %"add.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"add.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de17" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de17", align 4, !mode !327, !level !326, !cycle !326
-  %"add.i35'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"add.i35'de", align 4, !mode !327, !level !326, !cycle !326
-  %"max.1.i!manual_lcssa_cache" = alloca float*, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"sub.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"sub.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %".pre.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %".pre.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de19" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de19", align 4, !mode !327, !level !326, !cycle !326
-  %"max.1.i!manual_lcssa21_cache" = alloca float*, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"add.i!manual_lcssa_cache" = alloca float*, align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"'de27" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de27", align 4, !mode !327, !level !326, !cycle !326
-  %"sub18.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"sub18.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %".pre12.i'de" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %".pre12.i'de", align 4, !mode !327, !level !326, !cycle !326
-  %"'de28" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de28", align 4, !mode !327, !level !326, !cycle !326
-  %"'de29" = alloca float, align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de29", align 4, !mode !327, !level !326, !cycle !326
-  %"activations'ipa" = alloca [10 x float], align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store [10 x float] zeroinitializer, [10 x float]* %"activations'ipa", align 16, !mode !327, !level !326, !cycle !326
-  %activations = alloca [10 x float], align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"activations2'ipa" = alloca [10 x float], align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store [10 x float] zeroinitializer, [10 x float]* %"activations2'ipa", align 16, !mode !327, !level !326, !cycle !326
-  %activations2 = alloca [10 x float], align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %0 = bitcast [10 x float]* %activations to i8*, !mode !327, !level !328, !cycle !328
-  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 dereferenceable(40) %0, i8 0, i64 40, i1 false), !mode !327, !level !329, !cycle !329
-  br label %for.body, !mode !327, !level !328, !cycle !328
+  %"iv'ac" = alloca i64, align 8, !deriv !325
+  %"iv1'ac" = alloca i64, align 8, !deriv !325
+  %"iv3'ac" = alloca i64, align 8, !deriv !325
+  %"iv5'ac" = alloca i64, align 8, !deriv !325
+  %"iv7'ac" = alloca i64, align 8, !deriv !325
+  %"fneg'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"fneg'de", align 4
+  %"'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de", align 4
+  %"add'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"add'de", align 4
+  %"mul'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"mul'de", align 4
+  %"'de9" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de9", align 4
+  %"div'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"div'de", align 4
+  %"'de10" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de10", align 4
+  %"'de13" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de13", align 4
+  %"max.1.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"max.1.i'de", align 4
+  %"'de14" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de14", align 4
+  %"max.05.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"max.05.i'de", align 4
+  %"'de15" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de15", align 4
+  %"sub.i34'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"sub.i34'de", align 4
+  %"'de16" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de16", align 4
+  %"add.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"add.i'de", align 4
+  %"'de17" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de17", align 4
+  %"add.i35'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"add.i35'de", align 4
+  %"max.1.i!manual_lcssa_cache" = alloca float*, align 8, !deriv !325
+  %"sub.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"sub.i'de", align 4
+  %".pre.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %".pre.i'de", align 4
+  %"'de19" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de19", align 4
+  %"max.1.i!manual_lcssa21_cache" = alloca float*, align 8, !deriv !325
+  %"add.i!manual_lcssa_cache" = alloca float*, align 8, !deriv !325
+  %"'de27" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de27", align 4
+  %"sub18.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"sub18.i'de", align 4
+  %".pre12.i'de" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %".pre12.i'de", align 4
+  %"'de28" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de28", align 4
+  %"'de29" = alloca float, align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de29", align 4
+  %"activations'ipa" = alloca [10 x float], align 16, !deriv !325
+  store [10 x float] zeroinitializer, [10 x float]* %"activations'ipa", align 16
+  %activations = alloca [10 x float], align 16, !deriv !325
+  %"activations2'ipa" = alloca [10 x float], align 16, !deriv !325
+  store [10 x float] zeroinitializer, [10 x float]* %"activations2'ipa", align 16
+  %activations2 = alloca [10 x float], align 16, !deriv !325
+  %0 = bitcast [10 x float]* %activations to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 dereferenceable(40) %0, i8 0, i64 40, i1 false)
+  br label %for.body
 
 for.body:                                         ; preds = %for.inc14, %entry
-  %iv = phi i64 [ %iv.next, %for.inc14 ], [ 0, %entry ], !mode !327, !level !328, !cycle !328
-  %iv.next = add nuw nsw i64 %iv, 1, !mode !327, !level !329, !cycle !329
-  %"arrayidx'ipg" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 0, i64 %iv, !mode !327, !level !329, !cycle !329
-  %arrayidx = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %network, i64 0, i32 0, i64 %iv, !mode !327, !level !329, !cycle !329
-  %1 = load float, float* %arrayidx, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %"arrayidx2'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv, !mode !327, !level !329, !cycle !329
-  %arrayidx2 = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv, !mode !327, !level !329, !cycle !329
-  store float %1, float* %arrayidx2, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  br label %for.body5, !mode !327, !level !328, !cycle !328
+  %iv = phi i64 [ %iv.next, %for.inc14 ], [ 0, %entry ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %"arrayidx'ipg" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 0, i64 %iv
+  %arrayidx = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %network, i64 0, i32 0, i64 %iv
+  %1 = load float, float* %arrayidx, align 4, !tbaa !153
+  %"arrayidx2'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv, !deriv !325
+  %arrayidx2 = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv, !deriv !325
+  store float %1, float* %arrayidx2, align 4, !tbaa !153, !derivStore !325
+  br label %for.body5
 
 for.body5:                                        ; preds = %for.body5, %for.body
-  %iv1 = phi i64 [ %iv.next2, %for.body5 ], [ 0, %for.body ], !mode !327, !level !328, !cycle !328
-  %2 = phi float [ %1, %for.body ], [ %add, %for.body5 ], !mode !327, !level !328, !cycle !328
-  %iv.next2 = add nuw nsw i64 %iv1, 1, !mode !327, !level !329, !cycle !329
-  %"arrayidx9'ipg" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 1, i64 %iv, i64 %iv1, !mode !327, !level !329, !cycle !329
-  %arrayidx9 = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %network, i64 0, i32 1, i64 %iv, i64 %iv1, !mode !327, !level !329, !cycle !329
-  %3 = load float, float* %arrayidx9, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %arrayidx11 = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %image, i64 0, i32 0, i64 %iv1, !mode !327, !level !329, !cycle !329
-  %4 = load i8, i8* %arrayidx11, align 1, !tbaa !12, !invariant.group !330, !mode !327, !level !326, !cycle !326
-  %conv = uitofp i8 %4 to float, !mode !327, !level !328, !cycle !328
-  %div = fmul fast float %3, 0x3F70101020000000, !mode !327, !level !328, !cycle !328
-  %mul = fmul fast float %div, %conv, !mode !327, !level !329, !cycle !329
-  %add = fadd fast float %mul, %2, !mode !327, !level !331, !cycle !331
-  %exitcond.not = icmp eq i64 %iv.next2, 784, !mode !327, !level !331, !cycle !331
-  br i1 %exitcond.not, label %for.inc14, label %for.body5, !llvm.loop !278, !mode !327, !level !332, !cycle !332
+  %iv1 = phi i64 [ %iv.next2, %for.body5 ], [ 0, %for.body ]
+  %2 = phi float [ %1, %for.body ], [ %add, %for.body5 ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %"arrayidx9'ipg" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 1, i64 %iv, i64 %iv1
+  %arrayidx9 = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %network, i64 0, i32 1, i64 %iv, i64 %iv1
+  %3 = load float, float* %arrayidx9, align 4, !tbaa !153
+  %arrayidx11 = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %image, i64 0, i32 0, i64 %iv1
+  %4 = load i8, i8* %arrayidx11, align 1, !tbaa !12, !invariant.group !326
+  %conv = uitofp i8 %4 to float
+  %div = fmul fast float %3, 0x3F70101020000000
+  %mul = fmul fast float %div, %conv
+  %add = fadd fast float %mul, %2
+  %exitcond.not = icmp eq i64 %iv.next2, 784
+  br i1 %exitcond.not, label %for.inc14, label %for.body5, !llvm.loop !278
 
 for.inc14:                                        ; preds = %for.body5
-  store float %add, float* %arrayidx2, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %exitcond42.not = icmp eq i64 %iv.next, 10, !mode !327, !level !331, !cycle !331
-  br i1 %exitcond42.not, label %for.end16, label %for.body, !llvm.loop !279, !mode !327, !level !332, !cycle !332
+  store float %add, float* %arrayidx2, align 4, !tbaa !153, !derivStore !325
+  %exitcond42.not = icmp eq i64 %iv.next, 10
+  br i1 %exitcond42.not, label %for.end16, label %for.body, !llvm.loop !279
 
 for.end16:                                        ; preds = %for.inc14
-  %5 = bitcast [10 x float]* %activations2 to i8*, !mode !327, !level !328, !cycle !328
-  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 dereferenceable(40) %5, i8 0, i64 40, i1 false), !mode !327, !level !329, !cycle !329
-  %"arraydecay'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 0, !mode !327, !level !328, !taped !333, !cycle !328, !lifetime !328
-  %arraydecay = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 0, !mode !327, !level !328, !cycle !328
-  %6 = load float, float* %arraydecay, align 16, !tbaa !153, !mode !327, !level !326, !cycle !326
-  br label %for.body.i, !mode !327, !level !328, !cycle !328
+  %5 = bitcast [10 x float]* %activations2 to i8*
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 16 dereferenceable(40) %5, i8 0, i64 40, i1 false)
+  %"arraydecay'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 0, !deriv !325
+  %arraydecay = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 0, !deriv !325
+  %6 = load float, float* %arraydecay, align 16, !tbaa !153, !deriv !325
+  br label %for.body.i
 
 for.body.i:                                       ; preds = %for.body.i, %for.end16
-  %7 = phi i64 [ 0, %for.end16 ], [ %9, %for.body.i ], !mode !327, !level !328, !cycle !328
-  %iv3 = phi i64 [ %iv.next4, %for.body.i ], [ 0, %for.end16 ], !mode !327, !level !328, !cycle !328
-  %max.05.i = phi float [ %6, %for.end16 ], [ %max.1.i, %for.body.i ], !mode !327, !level !328, !cycle !328
-  %iv.next4 = add nuw nsw i64 %iv3, 1, !mode !327, !level !329, !cycle !329
-  %"arrayidx1.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next4, !mode !327, !level !331, !cycle !331
-  %arrayidx1.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next4, !mode !327, !level !331, !cycle !331
-  %8 = load float, float* %arrayidx1.i, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %cmp2.i = fcmp fast ogt float %8, %max.05.i, !mode !327, !level !329, !cycle !329
-  %9 = select i1 %cmp2.i, i64 %iv.next4, i64 %7, !mode !327, !level !331, !taped !333, !cycle !331, !lifetime !329
-  %max.1.i = select i1 %cmp2.i, float %8, float %max.05.i, !mode !327, !level !331, !cycle !331
-  %indvars.iv.next10.i = add nuw nsw i64 %iv.next4, 1, !mode !327, !level !331, !cycle !331
-  %exitcond11.not.i = icmp eq i64 %indvars.iv.next10.i, 10, !mode !327, !level !332, !cycle !332
-  br i1 %exitcond11.not.i, label %for.body7.i.preheader, label %for.body.i, !llvm.loop !280, !mode !327, !level !334, !cycle !334
+  %7 = phi i64 [ 0, %for.end16 ], [ %9, %for.body.i ]
+  %iv3 = phi i64 [ %iv.next4, %for.body.i ], [ 0, %for.end16 ]
+  %max.05.i = phi float [ %6, %for.end16 ], [ %max.1.i, %for.body.i ], !reverseOp !325
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %"arrayidx1.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next4, !deriv !325
+  %arrayidx1.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next4, !deriv !325
+  %8 = load float, float* %arrayidx1.i, align 4, !tbaa !153, !deriv !325
+  %cmp2.i = fcmp fast ogt float %8, %max.05.i, !reverseOp !325
+  %9 = select i1 %cmp2.i, i64 %iv.next4, i64 %7, !reverseSuccessor !325
+  %max.1.i = select i1 %cmp2.i, float %8, float %max.05.i, !reverseOp !325, !reverseSuccessor !325
+  %indvars.iv.next10.i = add nuw nsw i64 %iv.next4, 1
+  %exitcond11.not.i = icmp eq i64 %indvars.iv.next10.i, 10
+  br i1 %exitcond11.not.i, label %for.body7.i.preheader, label %for.body.i, !llvm.loop !280
 
 for.body7.i.preheader:                            ; preds = %for.body.i
-  %sub.i34 = fsub fast float %6, %max.1.i, !mode !327, !level !332, !taped !333, !cycle !332, !lifetime !329
-  %10 = tail call fast float @llvm.exp.f32(float %sub.i34) #34, !mode !327, !level !334, !cycle !334
-  %malloccall = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36), !mode !327, !level !326, !cycle !326
-  %"max.1.i!manual_lcssa_malloccache" = bitcast i8* %malloccall to float*, !mode !327, !level !328, !cycle !328
-  store float* %"max.1.i!manual_lcssa_malloccache", float** %"max.1.i!manual_lcssa_cache", align 4, !invariant.group !335, !mode !327, !level !326, !cycle !326
-  br label %for.body7.for.body7_crit_edge.i, !mode !327, !level !328, !cycle !328
+  %sub.i34 = fsub fast float %6, %max.1.i, !reverseOp !325
+  %10 = tail call fast float @llvm.exp.f32(float %sub.i34) #34
+  %malloccall = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36)
+  %"max.1.i!manual_lcssa_malloccache" = bitcast i8* %malloccall to float*
+  store float* %"max.1.i!manual_lcssa_malloccache", float** %"max.1.i!manual_lcssa_cache", align 4, !invariant.group !327, !derivStore !325
+  br label %for.body7.for.body7_crit_edge.i
 
 for.body15.i.preheader:                           ; preds = %for.body7.for.body7_crit_edge.i
-  %11 = fdiv fast float %10, %add.i, !mode !327, !level !336, !taped !333, !cycle !336, !lifetime !332
-  %"arrayidx21.i32'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 0, !mode !327, !level !328, !taped !333, !cycle !328, !lifetime !328
-  %arrayidx21.i32 = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 0, !mode !327, !level !328, !cycle !328
-  store float %11, float* %arrayidx21.i32, align 16, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %malloccall22 = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36), !mode !327, !level !326, !cycle !326
-  %"max.1.i!manual_lcssa21_malloccache" = bitcast i8* %malloccall22 to float*, !mode !327, !level !328, !cycle !328
-  store float* %"max.1.i!manual_lcssa21_malloccache", float** %"max.1.i!manual_lcssa21_cache", align 4, !invariant.group !337, !mode !327, !level !326, !cycle !326
-  %malloccall24 = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36), !mode !327, !level !326, !cycle !326
-  %"add.i!manual_lcssa_malloccache" = bitcast i8* %malloccall24 to float*, !mode !327, !level !328, !cycle !328
-  store float* %"add.i!manual_lcssa_malloccache", float** %"add.i!manual_lcssa_cache", align 4, !invariant.group !338, !mode !327, !level !326, !cycle !326
-  br label %for.body15.for.body15_crit_edge.i, !mode !327, !level !328, !cycle !328
+  %11 = fdiv fast float %10, %add.i
+  %"arrayidx21.i32'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 0, !deriv !325
+  %arrayidx21.i32 = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 0, !deriv !325
+  store float %11, float* %arrayidx21.i32, align 16, !tbaa !153, !derivStore !325
+  %malloccall22 = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36)
+  %"max.1.i!manual_lcssa21_malloccache" = bitcast i8* %malloccall22 to float*
+  store float* %"max.1.i!manual_lcssa21_malloccache", float** %"max.1.i!manual_lcssa21_cache", align 4, !invariant.group !328, !derivStore !325
+  %malloccall24 = tail call noalias nonnull dereferenceable(36) dereferenceable_or_null(36) i8* @malloc(i64 36)
+  %"add.i!manual_lcssa_malloccache" = bitcast i8* %malloccall24 to float*
+  store float* %"add.i!manual_lcssa_malloccache", float** %"add.i!manual_lcssa_cache", align 4, !invariant.group !329, !derivStore !325
+  br label %for.body15.for.body15_crit_edge.i
 
 for.body7.for.body7_crit_edge.i:                  ; preds = %for.body7.for.body7_crit_edge.i, %for.body7.i.preheader
-  %"max.1.i!manual_lcssa" = phi float [ %max.1.i, %for.body7.for.body7_crit_edge.i ], [ %max.1.i, %for.body7.i.preheader ], !mode !327, !level !332, !cycle !332
-  %iv5 = phi i64 [ %iv.next6, %for.body7.for.body7_crit_edge.i ], [ 0, %for.body7.i.preheader ], !mode !327, !level !328, !cycle !328
-  %add.i35 = phi float [ %10, %for.body7.i.preheader ], [ %add.i, %for.body7.for.body7_crit_edge.i ], !mode !327, !level !336, !cycle !336
-  %12 = load float*, float** %"max.1.i!manual_lcssa_cache", align 8, !dereferenceable !339, !invariant.group !335, !mode !327, !level !326, !cycle !326
-  %13 = getelementptr inbounds float, float* %12, i64 %iv5, !mode !327, !level !329, !cycle !329
-  store float %"max.1.i!manual_lcssa", float* %13, align 4, !invariant.group !340, !mode !327, !level !326, !cycle !326
-  %iv.next6 = add nuw nsw i64 %iv5, 1, !mode !327, !level !329, !cycle !329
-  %"arrayidx9.phi.trans.insert.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next6, !mode !327, !level !331, !cycle !331
-  %arrayidx9.phi.trans.insert.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next6, !mode !327, !level !331, !cycle !331
-  %.pre.i = load float, float* %arrayidx9.phi.trans.insert.i, align 4, !tbaa !153, !invariant.group !341, !mode !327, !level !326, !cycle !326
-  %sub.i = fsub fast float %.pre.i, %max.1.i, !mode !327, !level !332, !cycle !332
-  %14 = tail call fast float @llvm.exp.f32(float %sub.i) #34, !mode !327, !level !334, !cycle !334
-  %add.i = fadd fast float %14, %add.i35, !mode !327, !level !342, !taped !333, !cycle !342, !lifetime !329
-  %indvars.iv.next7.i = add nuw nsw i64 %iv.next6, 1, !mode !327, !level !331, !cycle !331
-  %exitcond8.not.i = icmp eq i64 %indvars.iv.next7.i, 10, !mode !327, !level !332, !cycle !332
-  br i1 %exitcond8.not.i, label %for.body15.i.preheader, label %for.body7.for.body7_crit_edge.i, !llvm.loop !281, !mode !327, !level !334, !cycle !334
+  %"max.1.i!manual_lcssa" = phi float [ %max.1.i, %for.body7.for.body7_crit_edge.i ], [ %max.1.i, %for.body7.i.preheader ], !reverseSuccessor !325
+  %iv5 = phi i64 [ %iv.next6, %for.body7.for.body7_crit_edge.i ], [ 0, %for.body7.i.preheader ]
+  %add.i35 = phi float [ %10, %for.body7.i.preheader ], [ %add.i, %for.body7.for.body7_crit_edge.i ]
+  %12 = load float*, float** %"max.1.i!manual_lcssa_cache", align 8, !dereferenceable !330, !invariant.group !327, !deriv !325
+  %13 = getelementptr inbounds float, float* %12, i64 %iv5, !deriv !325
+  store float %"max.1.i!manual_lcssa", float* %13, align 4, !invariant.group !331, !derivStore !325
+  %iv.next6 = add nuw nsw i64 %iv5, 1
+  %"arrayidx9.phi.trans.insert.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next6, !deriv !325
+  %arrayidx9.phi.trans.insert.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next6, !deriv !325
+  %.pre.i = load float, float* %arrayidx9.phi.trans.insert.i, align 4, !tbaa !153, !invariant.group !332, !deriv !325
+  %sub.i = fsub fast float %.pre.i, %max.1.i, !reverseOp !325
+  %14 = tail call fast float @llvm.exp.f32(float %sub.i) #34
+  %add.i = fadd fast float %14, %add.i35
+  %indvars.iv.next7.i = add nuw nsw i64 %iv.next6, 1
+  %exitcond8.not.i = icmp eq i64 %indvars.iv.next7.i, 10
+  br i1 %exitcond8.not.i, label %for.body15.i.preheader, label %for.body7.for.body7_crit_edge.i, !llvm.loop !281
 
 for.body15.for.body15_crit_edge.i:                ; preds = %for.body15.for.body15_crit_edge.i, %for.body15.i.preheader
-  %"add.i!manual_lcssa" = phi float [ %add.i, %for.body15.for.body15_crit_edge.i ], [ %add.i, %for.body15.i.preheader ], !mode !327, !level !343, !cycle !343
-  %"max.1.i!manual_lcssa21" = phi float [ %max.1.i, %for.body15.for.body15_crit_edge.i ], [ %max.1.i, %for.body15.i.preheader ], !mode !327, !level !332, !cycle !332
-  %iv7 = phi i64 [ %iv.next8, %for.body15.for.body15_crit_edge.i ], [ 0, %for.body15.i.preheader ], !mode !327, !level !328, !cycle !328
-  %iv.next8 = add nuw nsw i64 %iv7, 1, !mode !327, !level !329, !cycle !329
-  %"arrayidx17.phi.trans.insert.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next8, !mode !327, !level !331, !cycle !331
-  %arrayidx17.phi.trans.insert.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next8, !mode !327, !level !331, !cycle !331
-  %.pre12.i = load float, float* %arrayidx17.phi.trans.insert.i, align 4, !tbaa !153, !invariant.group !344, !mode !327, !level !326, !cycle !326
-  %sub18.i = fsub fast float %.pre12.i, %max.1.i, !mode !327, !level !332, !cycle !332
-  %15 = tail call fast float @llvm.exp.f32(float %sub18.i) #34, !mode !327, !level !334, !cycle !334
-  %16 = fdiv fast float %15, %add.i, !mode !327, !level !343, !cycle !343
-  %"arrayidx21.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %iv.next8, !mode !327, !level !331, !cycle !331
-  %arrayidx21.i = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 %iv.next8, !mode !327, !level !331, !cycle !331
-  store float %16, float* %arrayidx21.i, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %17 = load float*, float** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !339, !invariant.group !338, !mode !327, !level !326, !cycle !326
-  %18 = getelementptr inbounds float, float* %17, i64 %iv7, !mode !327, !level !329, !cycle !329
-  store float %"add.i!manual_lcssa", float* %18, align 4, !invariant.group !345, !mode !327, !level !326, !cycle !326
-  %19 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 8, !dereferenceable !339, !invariant.group !337, !mode !327, !level !326, !cycle !326
-  %20 = getelementptr inbounds float, float* %19, i64 %iv7, !mode !327, !level !329, !cycle !329
-  store float %"max.1.i!manual_lcssa21", float* %20, align 4, !invariant.group !346, !mode !327, !level !326, !cycle !326
-  %indvars.iv.next.i = add nuw nsw i64 %iv.next8, 1, !mode !327, !level !331, !cycle !331
-  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 10, !mode !327, !level !332, !cycle !332
-  br i1 %exitcond.not.i, label %_ZL25neural_network_softmax_v2PKfPfi.exit, label %for.body15.for.body15_crit_edge.i, !llvm.loop !282, !mode !327, !level !334, !cycle !334
+  %"add.i!manual_lcssa" = phi float [ %add.i, %for.body15.for.body15_crit_edge.i ], [ %add.i, %for.body15.i.preheader ]
+  %"max.1.i!manual_lcssa21" = phi float [ %max.1.i, %for.body15.for.body15_crit_edge.i ], [ %max.1.i, %for.body15.i.preheader ], !reverseSuccessor !325
+  %iv7 = phi i64 [ %iv.next8, %for.body15.for.body15_crit_edge.i ], [ 0, %for.body15.i.preheader ]
+  %iv.next8 = add nuw nsw i64 %iv7, 1
+  %"arrayidx17.phi.trans.insert.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next8, !deriv !325
+  %arrayidx17.phi.trans.insert.i = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next8, !deriv !325
+  %.pre12.i = load float, float* %arrayidx17.phi.trans.insert.i, align 4, !tbaa !153, !invariant.group !333, !deriv !325
+  %sub18.i = fsub fast float %.pre12.i, %max.1.i, !reverseOp !325
+  %15 = tail call fast float @llvm.exp.f32(float %sub18.i) #34
+  %16 = fdiv fast float %15, %add.i
+  %"arrayidx21.i'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %iv.next8, !deriv !325
+  %arrayidx21.i = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 %iv.next8, !deriv !325
+  store float %16, float* %arrayidx21.i, align 4, !tbaa !153, !derivStore !325
+  %17 = load float*, float** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !330, !invariant.group !329, !deriv !325
+  %18 = getelementptr inbounds float, float* %17, i64 %iv7, !deriv !325
+  store float %"add.i!manual_lcssa", float* %18, align 4, !invariant.group !334, !derivStore !325
+  %19 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 8, !dereferenceable !330, !invariant.group !328, !deriv !325
+  %20 = getelementptr inbounds float, float* %19, i64 %iv7, !deriv !325
+  store float %"max.1.i!manual_lcssa21", float* %20, align 4, !invariant.group !335, !derivStore !325
+  %indvars.iv.next.i = add nuw nsw i64 %iv.next8, 1
+  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 10
+  br i1 %exitcond.not.i, label %_ZL25neural_network_softmax_v2PKfPfi.exit, label %for.body15.for.body15_crit_edge.i, !llvm.loop !282
 
 _ZL25neural_network_softmax_v2PKfPfi.exit:        ; preds = %for.body15.for.body15_crit_edge.i
-  %idxprom18 = zext i8 %label to i64, !mode !327, !level !328, !cycle !328
-  %"arrayidx19'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %idxprom18, !mode !327, !level !329, !taped !333, !cycle !329, !lifetime !332
-  %arrayidx19 = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 %idxprom18, !mode !327, !level !329, !cycle !329
-  %21 = load float, float* %arrayidx19, align 4, !tbaa !153, !mode !327, !level !326, !cycle !326
-  %22 = tail call fast float @llvm.log.f32(float %21) #34, !mode !327, !level !328, !cycle !328
-  br label %invert_ZL25neural_network_softmax_v2PKfPfi.exit, !mode !327, !level !328, !cycle !328
+  %idxprom18 = zext i8 %label to i64
+  %"arrayidx19'ipg" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %idxprom18, !deriv !325
+  %arrayidx19 = getelementptr inbounds [10 x float], [10 x float]* %activations2, i64 0, i64 %idxprom18, !deriv !325
+  %21 = load float, float* %arrayidx19, align 4, !tbaa !153, !deriv !325
+  %22 = tail call fast float @llvm.log.f32(float %21) #34
+  br label %invert_ZL25neural_network_softmax_v2PKfPfi.exit
 
 invertentry:                                      ; preds = %invertfor.body
-  ret void, !mode !325, !tapeCost !326, !level !326, !cycle !326
+  ret void
 
 invertfor.body:                                   ; preds = %invertfor.body5
-  %23 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"arrayidx2'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %23, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %24 = load float, float* %"arrayidx2'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %25 = load float, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %26 = fadd fast float %25, %24, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  store float %26, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %27 = load float, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  store float 0.000000e+00, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %28 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 0, i64 %28, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %29 = load float, float* %"arrayidx'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %30 = fadd fast float %29, %27, !mode !325, !tapeCost !326, !level !329, !cycle !332
-  store float %30, float* %"arrayidx'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %31 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %32 = icmp eq i64 %31, 0, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %33 = xor i1 %32, true, !mode !325, !tapeCost !326, !level !329, !cycle !334
-  br i1 %32, label %invertentry, label %incinvertfor.body, !mode !325, !tapeCost !326, !level !329, !cycle !329
+  %23 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %"arrayidx2'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %23, !deriv !325
+  %24 = load float, float* %"arrayidx2'ipg_unwrap", align 4, !deriv !325
+  store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap", align 4
+  %25 = load float, float* %"'de", align 4, !deriv !325
+  %26 = fadd fast float %25, %24, !reverseOp !325
+  store float %26, float* %"'de", align 4, !derivStore !325
+  %27 = load float, float* %"'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de", align 4
+  %28 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 0, i64 %28, !deriv !325
+  %29 = load float, float* %"arrayidx'ipg_unwrap", align 4, !deriv !325
+  %30 = fadd fast float %29, %27, !reverseOp !325
+  store float %30, float* %"arrayidx'ipg_unwrap", align 4, !derivStore !325
+  %31 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %32 = icmp eq i64 %31, 0, !reverseOp !325
+  %33 = xor i1 %32, true, !reverseSuccessor !325
+  br i1 %32, label %invertentry, label %incinvertfor.body, !reverseSuccessor !325
 
 incinvertfor.body:                                ; preds = %invertfor.body
-  %34 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %35 = add nsw i64 %34, -1, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  store i64 %35, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.inc14, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %34 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %35 = add nsw i64 %34, -1, !reverseOp !325
+  store i64 %35, i64* %"iv'ac", align 8, !derivStore !325
+  br label %invertfor.inc14
 
 invertfor.body5:                                  ; preds = %mergeinvertfor.body5_for.inc14, %incinvertfor.body5
-  %36 = load float, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %37 = load float, float* %"mul'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %38 = fadd fast float %37, %36, !mode !325, !tapeCost !326, !level !328, !cycle !334
-  store float %38, float* %"mul'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %39 = load float, float* %"'de9", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %40 = fadd fast float %39, %36, !mode !325, !tapeCost !326, !level !328, !cycle !334
-  store float %40, float* %"'de9", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %41 = load float, float* %"mul'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %42 = load i64, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %43 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %arrayidx11_unwrap = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %image, i64 0, i32 0, i64 %42, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %_unwrap = load i8, i8* %arrayidx11_unwrap, align 1, !tbaa !12, !invariant.group !330, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %conv_unwrap = uitofp i8 %_unwrap to float, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %m0diffediv = fmul fast float %41, %conv_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !336
-  store float 0.000000e+00, float* %"mul'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %44 = load float, float* %"div'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %45 = fadd fast float %44, %m0diffediv, !mode !325, !tapeCost !326, !level !331, !cycle !336
-  store float %45, float* %"div'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %46 = load float, float* %"div'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %m0diffe = fmul fast float %46, 0x3F70101020000000, !mode !325, !tapeCost !326, !level !332, !cycle !336
-  store float 0.000000e+00, float* %"div'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %47 = load float, float* %"'de10", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %48 = fadd fast float %47, %m0diffe, !mode !325, !tapeCost !326, !level !334, !cycle !342
-  store float %48, float* %"'de10", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %49 = load float, float* %"'de10", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  store float 0.000000e+00, float* %"'de10", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %50 = load i64, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %51 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %"arrayidx9'ipg_unwrap" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 1, i64 %51, i64 %50, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %52 = load float, float* %"arrayidx9'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %53 = fadd fast float %52, %49, !mode !325, !tapeCost !326, !level !336, !cycle !342
-  store float %53, float* %"arrayidx9'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !336, !cycle !336
-  %54 = load float, float* %"'de9", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  store float 0.000000e+00, float* %"'de9", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %55 = load i64, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %56 = icmp eq i64 %55, 0, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %57 = xor i1 %56, true, !mode !325, !tapeCost !326, !level !329, !cycle !342
-  %58 = select fast i1 %57, float %54, float 0.000000e+00, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %59 = load float, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %60 = fadd fast float %59, %54, !mode !325, !tapeCost !326, !level !329, !cycle !343
-  %61 = select fast i1 %56, float %59, float %60, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  store float %61, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %62 = select fast i1 %56, float %54, float 0.000000e+00, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %63 = load float, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %64 = fadd fast float %63, %54, !mode !325, !tapeCost !326, !level !329, !cycle !343
-  %65 = select fast i1 %56, float %64, float %63, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  store float %65, float* %"'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  br i1 %56, label %invertfor.body, label %incinvertfor.body5, !mode !325, !tapeCost !326, !level !329, !cycle !329
+  %36 = load float, float* %"add'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %"add'de", align 4
+  %37 = load float, float* %"mul'de", align 4, !deriv !325
+  %38 = fadd fast float %37, %36, !reverseOp !325
+  store float %38, float* %"mul'de", align 4, !derivStore !325
+  %39 = load float, float* %"'de9", align 4, !deriv !325
+  %40 = fadd fast float %39, %36, !reverseOp !325
+  store float %40, float* %"'de9", align 4, !derivStore !325
+  %41 = load float, float* %"mul'de", align 4, !deriv !325
+  %42 = load i64, i64* %"iv1'ac", align 8, !deriv !325
+  %43 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %arrayidx11_unwrap = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %image, i64 0, i32 0, i64 %42, !deriv !325
+  %_unwrap = load i8, i8* %arrayidx11_unwrap, align 1, !tbaa !12, !invariant.group !326, !deriv !325
+  %conv_unwrap = uitofp i8 %_unwrap to float, !reverseOp !325
+  %m0diffediv = fmul fast float %41, %conv_unwrap, !reverseOp !325
+  store float 0.000000e+00, float* %"mul'de", align 4
+  %44 = load float, float* %"div'de", align 4, !deriv !325
+  %45 = fadd fast float %44, %m0diffediv, !reverseOp !325
+  store float %45, float* %"div'de", align 4, !derivStore !325
+  %46 = load float, float* %"div'de", align 4, !deriv !325
+  %m0diffe = fmul fast float %46, 0x3F70101020000000, !reverseOp !325
+  store float 0.000000e+00, float* %"div'de", align 4
+  %47 = load float, float* %"'de10", align 4, !deriv !325
+  %48 = fadd fast float %47, %m0diffe, !reverseOp !325
+  store float %48, float* %"'de10", align 4, !derivStore !325
+  %49 = load float, float* %"'de10", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de10", align 4
+  %50 = load i64, i64* %"iv1'ac", align 8, !deriv !325
+  %51 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %"arrayidx9'ipg_unwrap" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %"network'", i64 0, i32 1, i64 %51, i64 %50, !deriv !325
+  %52 = load float, float* %"arrayidx9'ipg_unwrap", align 4, !deriv !325
+  %53 = fadd fast float %52, %49, !reverseOp !325
+  store float %53, float* %"arrayidx9'ipg_unwrap", align 4, !derivStore !325
+  %54 = load float, float* %"'de9", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de9", align 4
+  %55 = load i64, i64* %"iv1'ac", align 8, !deriv !325
+  %56 = icmp eq i64 %55, 0, !reverseOp !325
+  %57 = xor i1 %56, true, !reverseSuccessor !325
+  %58 = select fast i1 %57, float %54, float 0.000000e+00, !reverseOp !325
+  %59 = load float, float* %"add'de", align 4, !deriv !325
+  %60 = fadd fast float %59, %54, !reverseOp !325
+  %61 = select fast i1 %56, float %59, float %60, !reverseOp !325, !reverseSuccessor !325
+  store float %61, float* %"add'de", align 4, !derivStore !325
+  %62 = select fast i1 %56, float %54, float 0.000000e+00, !reverseOp !325, !reverseSuccessor !325
+  %63 = load float, float* %"'de", align 4, !deriv !325
+  %64 = fadd fast float %63, %54, !reverseOp !325
+  %65 = select fast i1 %56, float %64, float %63, !reverseOp !325, !reverseSuccessor !325
+  store float %65, float* %"'de", align 4, !derivStore !325
+  br i1 %56, label %invertfor.body, label %incinvertfor.body5, !reverseSuccessor !325
 
 incinvertfor.body5:                               ; preds = %invertfor.body5
-  %66 = load i64, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %67 = add nsw i64 %66, -1, !mode !325, !tapeCost !326, !level !328, !cycle !343
-  store i64 %67, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body5, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %66 = load i64, i64* %"iv1'ac", align 8, !deriv !325
+  %67 = add nsw i64 %66, -1, !reverseOp !325
+  store i64 %67, i64* %"iv1'ac", align 8, !derivStore !325
+  br label %invertfor.body5
 
 invertfor.inc14:                                  ; preds = %mergeinvertfor.body_for.end16, %incinvertfor.body
-  %68 = load i64, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %"arrayidx2'ipg_unwrap12" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %68, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %69 = load float, float* %"arrayidx2'ipg_unwrap12", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap12", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %70 = load float, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !331, !cycle !331
-  %71 = fadd fast float %70, %69, !mode !325, !tapeCost !326, !level !332, !cycle !343
-  store float %71, float* %"add'de", align 4, !mode !325, !tapeCost !326, !level !332, !cycle !332
-  br label %mergeinvertfor.body5_for.inc14, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %68 = load i64, i64* %"iv'ac", align 8, !deriv !325
+  %"arrayidx2'ipg_unwrap12" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %68, !deriv !325
+  %69 = load float, float* %"arrayidx2'ipg_unwrap12", align 4, !deriv !325
+  store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap12", align 4
+  %70 = load float, float* %"add'de", align 4, !deriv !325
+  %71 = fadd fast float %70, %69, !reverseOp !325
+  store float %71, float* %"add'de", align 4, !derivStore !325
+  br label %mergeinvertfor.body5_for.inc14
 
 mergeinvertfor.body5_for.inc14:                   ; preds = %invertfor.inc14
-  store i64 783, i64* %"iv1'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body5, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store i64 783, i64* %"iv1'ac", align 8
+  br label %invertfor.body5
 
 invertfor.end16:                                  ; preds = %invertfor.body.i
-  %72 = load float, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %73 = load float, float* %"arraydecay'ipg", align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %74 = fadd fast float %73, %72, !mode !325, !tapeCost !326, !level !328, !cycle !347
-  store float %74, float* %"arraydecay'ipg", align 16, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %mergeinvertfor.body_for.end16, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %72 = load float, float* %"'de13", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de13", align 4
+  %73 = load float, float* %"arraydecay'ipg", align 16, !deriv !325
+  %74 = fadd fast float %73, %72, !reverseOp !325
+  store float %74, float* %"arraydecay'ipg", align 16, !derivStore !325
+  br label %mergeinvertfor.body_for.end16
 
 mergeinvertfor.body_for.end16:                    ; preds = %invertfor.end16
-  store i64 9, i64* %"iv'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.inc14, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store i64 9, i64* %"iv'ac", align 8
+  br label %invertfor.inc14
 
 invertfor.body.i:                                 ; preds = %mergeinvertfor.body.i_for.body7.i.preheader, %incinvertfor.body.i
-  %75 = load i64, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %iv.next4_unwrap = add nuw nsw i64 %75, 1, !mode !325, !tapeCost !326, !level !328, !cycle !347
-  %76 = load float, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %77 = icmp eq i64 %9, %iv.next4_unwrap, !mode !325, !tapeCost !326, !level !332, !cycle !332
-  %78 = select fast i1 %77, float %76, float 0.000000e+00, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %79 = load float, float* %"'de14", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %80 = fadd fast float %79, %76, !mode !325, !tapeCost !326, !level !328, !cycle !347
-  %81 = select fast i1 %77, float %80, float %79, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  store float %81, float* %"'de14", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %82 = load float, float* %"'de14", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  store float 0.000000e+00, float* %"'de14", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %83 = load i64, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"arrayidx1.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next4_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %84 = load float, float* %"arrayidx1.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %85 = fadd fast float %84, %82, !mode !325, !tapeCost !326, !level !336, !cycle !347
-  store float %85, float* %"arrayidx1.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !336, !cycle !336
-  %86 = load float, float* %"max.05.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %87 = load i64, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %88 = icmp eq i64 %87, 0, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %89 = xor i1 %88, true, !mode !325, !tapeCost !326, !level !329, !cycle !348
-  %90 = load float, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %91 = select fast i1 %88, float 0.000000e+00, float %90, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  store float %91, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %92 = icmp eq i64 %9, 0, !mode !325, !tapeCost !326, !level !332, !cycle !332
-  %93 = select fast i1 %92, float %90, float 0.000000e+00, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %94 = select fast i1 %88, float %93, float 0.000000e+00, !mode !325, !tapeCost !326, !level !336, !cycle !336
-  %95 = load float, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %96 = fadd fast float %95, %93, !mode !325, !tapeCost !326, !level !336, !cycle !348
-  %97 = select fast i1 %88, float %96, float %95, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  store float %97, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  br i1 %88, label %invertfor.end16, label %incinvertfor.body.i, !mode !325, !tapeCost !326, !level !329, !cycle !329
+  %75 = load i64, i64* %"iv3'ac", align 8, !deriv !325
+  %iv.next4_unwrap = add nuw nsw i64 %75, 1, !reverseOp !325
+  %76 = load float, float* %"max.1.i'de", align 4, !deriv !325
+  %77 = icmp eq i64 %9, %iv.next4_unwrap, !reverseSuccessor !325
+  %78 = select fast i1 %77, float %76, float 0.000000e+00, !reverseOp !325
+  %79 = load float, float* %"'de14", align 4, !deriv !325
+  %80 = fadd fast float %79, %76, !reverseOp !325
+  %81 = select fast i1 %77, float %80, float %79, !reverseOp !325, !reverseSuccessor !325
+  store float %81, float* %"'de14", align 4, !derivStore !325
+  %82 = load float, float* %"'de14", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de14", align 4
+  %83 = load i64, i64* %"iv3'ac", align 8, !deriv !325
+  %"arrayidx1.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next4_unwrap, !deriv !325
+  %84 = load float, float* %"arrayidx1.i'ipg_unwrap", align 4, !deriv !325
+  %85 = fadd fast float %84, %82, !reverseOp !325
+  store float %85, float* %"arrayidx1.i'ipg_unwrap", align 4, !derivStore !325
+  %86 = load float, float* %"max.05.i'de", align 4, !deriv !325
+  %87 = load i64, i64* %"iv3'ac", align 8, !deriv !325
+  %88 = icmp eq i64 %87, 0, !reverseOp !325
+  %89 = xor i1 %88, true, !reverseSuccessor !325
+  %90 = load float, float* %"max.1.i'de", align 4, !deriv !325
+  %91 = select fast i1 %88, float 0.000000e+00, float %90, !reverseOp !325, !reverseSuccessor !325
+  store float %91, float* %"max.1.i'de", align 4, !derivStore !325
+  %92 = icmp eq i64 %9, 0
+  %93 = select fast i1 %92, float %90, float 0.000000e+00, !reverseOp !325
+  %94 = select fast i1 %88, float %93, float 0.000000e+00, !reverseSuccessor !325
+  %95 = load float, float* %"'de13", align 4, !deriv !325
+  %96 = fadd fast float %95, %93, !reverseOp !325
+  %97 = select fast i1 %88, float %96, float %95, !reverseOp !325, !reverseSuccessor !325
+  store float %97, float* %"'de13", align 4, !derivStore !325
+  br i1 %88, label %invertfor.end16, label %incinvertfor.body.i, !reverseSuccessor !325
 
 incinvertfor.body.i:                              ; preds = %invertfor.body.i
-  %98 = load i64, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %99 = add nsw i64 %98, -1, !mode !325, !tapeCost !326, !level !328, !cycle !348
-  store i64 %99, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %98 = load i64, i64* %"iv3'ac", align 8, !deriv !325
+  %99 = add nsw i64 %98, -1, !reverseOp !325
+  store i64 %99, i64* %"iv3'ac", align 8, !derivStore !325
+  br label %invertfor.body.i
 
 invertfor.body7.i.preheader:                      ; preds = %invertfor.body7.for.body7_crit_edge.i
-  %100 = load float, float* %"'de15", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"'de15", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %101 = call fast float @llvm.exp.f32(float %sub.i34), !mode !325, !tapeCost !326, !level !334, !cycle !334
-  %102 = fmul fast float %100, %101, !mode !325, !tapeCost !326, !level !336, !cycle !348
-  %103 = load float, float* %"sub.i34'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %104 = fadd fast float %103, %102, !mode !325, !tapeCost !326, !level !342, !cycle !349
-  store float %104, float* %"sub.i34'de", align 4, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  %105 = load float, float* %"sub.i34'de", align 4, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  %106 = fneg fast float %105, !mode !325, !tapeCost !326, !level !343, !cycle !343
-  store float 0.000000e+00, float* %"sub.i34'de", align 4, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  %107 = load float, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !342, !cycle !342
-  %108 = fadd fast float %107, %105, !mode !325, !tapeCost !326, !level !343, !cycle !349
-  store float %108, float* %"'de13", align 4, !mode !325, !tapeCost !326, !level !343, !cycle !343
-  %109 = load float, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %110 = fadd fast float %109, %106, !mode !325, !tapeCost !326, !level !347, !cycle !349
-  store float %110, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !347, !cycle !347
-  %111 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %forfree = load float*, float** %"max.1.i!manual_lcssa_cache", align 4, !dereferenceable !350, !invariant.group !335, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %112 = bitcast float* %forfree to i8*, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  tail call void @free(i8* nonnull %112), !mode !325, !tapeCost !326, !level !329, !cycle !329
-  br label %mergeinvertfor.body.i_for.body7.i.preheader, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %100 = load float, float* %"'de15", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de15", align 4
+  %101 = call fast float @llvm.exp.f32(float %sub.i34)
+  %102 = fmul fast float %100, %101, !reverseOp !325
+  %103 = load float, float* %"sub.i34'de", align 4, !deriv !325
+  %104 = fadd fast float %103, %102, !reverseOp !325
+  store float %104, float* %"sub.i34'de", align 4, !derivStore !325
+  %105 = load float, float* %"sub.i34'de", align 4, !deriv !325
+  %106 = fneg fast float %105, !reverseOp !325
+  store float 0.000000e+00, float* %"sub.i34'de", align 4
+  %107 = load float, float* %"'de13", align 4, !deriv !325
+  %108 = fadd fast float %107, %105, !reverseOp !325
+  store float %108, float* %"'de13", align 4, !derivStore !325
+  %109 = load float, float* %"max.1.i'de", align 4, !deriv !325
+  %110 = fadd fast float %109, %106, !reverseOp !325
+  store float %110, float* %"max.1.i'de", align 4, !derivStore !325
+  %111 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %forfree = load float*, float** %"max.1.i!manual_lcssa_cache", align 4, !dereferenceable !336, !invariant.group !327, !deriv !325
+  %112 = bitcast float* %forfree to i8*
+  tail call void @free(i8* nonnull %112)
+  br label %mergeinvertfor.body.i_for.body7.i.preheader
 
 mergeinvertfor.body.i_for.body7.i.preheader:      ; preds = %invertfor.body7.i.preheader
-  store i64 8, i64* %"iv3'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store i64 8, i64* %"iv3'ac", align 8
+  br label %invertfor.body.i
 
 invertfor.body15.i.preheader:                     ; preds = %invertfor.body15.for.body15_crit_edge.i
-  %113 = load float, float* %"arrayidx21.i32'ipg", align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"arrayidx21.i32'ipg", align 16, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %114 = load float, float* %"'de16", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %115 = fadd fast float %114, %113, !mode !325, !tapeCost !326, !level !328, !cycle !349
-  store float %115, float* %"'de16", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %116 = load float, float* %"'de16", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %d0diffe = fdiv fast float %116, %add.i, !mode !325, !tapeCost !328, !level !343, !cycle !351
-  %117 = fdiv fast float %116, %add.i, !mode !325, !tapeCost !328, !level !343, !cycle !351
-  %118 = fmul fast float %11, %117, !mode !325, !tapeCost !329, !level !347, !cycle !351
-  %119 = fneg fast float %118, !mode !325, !tapeCost !326, !level !348, !cycle !348
-  store float 0.000000e+00, float* %"'de16", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %120 = load float, float* %"'de15", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %121 = fadd fast float %120, %d0diffe, !mode !325, !tapeCost !328, !level !347, !cycle !351
-  store float %121, float* %"'de15", align 4, !mode !325, !tapeCost !326, !level !347, !cycle !347
-  %122 = load float, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %123 = fadd fast float %122, %119, !mode !325, !tapeCost !326, !level !349, !cycle !352
-  store float %123, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  %124 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %forfree23 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 4, !dereferenceable !350, !invariant.group !337, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %125 = bitcast float* %forfree23 to i8*, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  tail call void @free(i8* nonnull %125), !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %126 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %forfree25 = load float*, float** %"add.i!manual_lcssa_cache", align 4, !dereferenceable !350, !invariant.group !338, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %127 = bitcast float* %forfree25 to i8*, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  tail call void @free(i8* nonnull %127), !mode !325, !tapeCost !326, !level !329, !cycle !329
-  br label %mergeinvertfor.body7.for.body7_crit_edge.i_for.body15.i.preheader, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %113 = load float, float* %"arrayidx21.i32'ipg", align 16, !deriv !325
+  store float 0.000000e+00, float* %"arrayidx21.i32'ipg", align 16
+  %114 = load float, float* %"'de16", align 4, !deriv !325
+  %115 = fadd fast float %114, %113, !reverseOp !325
+  store float %115, float* %"'de16", align 4, !derivStore !325
+  %116 = load float, float* %"'de16", align 4, !deriv !325
+  %d0diffe = fdiv fast float %116, %add.i, !reverseOp !325
+  %117 = fdiv fast float %116, %add.i, !reverseOp !325
+  %118 = fmul fast float %11, %117, !reverseSuccessor !325
+  %119 = fneg fast float %118
+  store float 0.000000e+00, float* %"'de16", align 4
+  %120 = load float, float* %"'de15", align 4, !deriv !325
+  %121 = fadd fast float %120, %d0diffe, !reverseOp !325
+  store float %121, float* %"'de15", align 4, !derivStore !325
+  %122 = load float, float* %"add.i'de", align 4, !deriv !325
+  %123 = fadd fast float %122, %119, !reverseOp !325
+  store float %123, float* %"add.i'de", align 4, !derivStore !325
+  %124 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %forfree23 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 4, !dereferenceable !336, !invariant.group !328, !deriv !325
+  %125 = bitcast float* %forfree23 to i8*
+  tail call void @free(i8* nonnull %125)
+  %126 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %forfree25 = load float*, float** %"add.i!manual_lcssa_cache", align 4, !dereferenceable !336, !invariant.group !329, !deriv !325
+  %127 = bitcast float* %forfree25 to i8*
+  tail call void @free(i8* nonnull %127)
+  br label %mergeinvertfor.body7.for.body7_crit_edge.i_for.body15.i.preheader
 
 mergeinvertfor.body7.for.body7_crit_edge.i_for.body15.i.preheader: ; preds = %invertfor.body15.i.preheader
-  store i64 8, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  br label %invertfor.body7.for.body7_crit_edge.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store i64 8, i64* %"iv5'ac", align 8
+  br label %invertfor.body7.for.body7_crit_edge.i
 
 invertfor.body7.for.body7_crit_edge.i:            ; preds = %incinvertfor.body7.for.body7_crit_edge.i, %mergeinvertfor.body7.for.body7_crit_edge.i_for.body15.i.preheader
-  %128 = load float, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  store float 0.000000e+00, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  %129 = load float, float* %"'de17", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %130 = fadd fast float %129, %128, !mode !325, !tapeCost !326, !level !351, !cycle !352
-  store float %130, float* %"'de17", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %131 = load float, float* %"add.i35'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %132 = fadd fast float %131, %128, !mode !325, !tapeCost !326, !level !351, !cycle !352
-  store float %132, float* %"add.i35'de", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %133 = load float, float* %"'de17", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  store float 0.000000e+00, float* %"'de17", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %134 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %iv.next6_unwrap = add nuw nsw i64 %134, 1, !mode !325, !tapeCost !326, !level !328, !cycle !352
-  %arrayidx9.phi.trans.insert.i_unwrap = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next6_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %.pre.i_unwrap = load float, float* %arrayidx9.phi.trans.insert.i_unwrap, align 4, !tbaa !153, !invariant.group !341, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %135 = load float*, float** %"max.1.i!manual_lcssa_cache", align 8, !dereferenceable !339, !invariant.group !335, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %136 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %137 = getelementptr inbounds float, float* %135, i64 %136, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %138 = load float, float* %137, align 4, !invariant.group !340, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %sub.i_unwrap = fsub fast float %.pre.i_unwrap, %138, !mode !325, !tapeCost !326, !level !328, !cycle !353
-  %139 = call fast float @llvm.exp.f32(float %sub.i_unwrap), !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %140 = fmul fast float %133, %139, !mode !325, !tapeCost !326, !level !352, !cycle !353
-  %141 = load float, float* %"sub.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %142 = fadd fast float %141, %140, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  store float %142, float* %"sub.i'de", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  %143 = load float, float* %"sub.i'de", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  %144 = fneg fast float %143, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  store float 0.000000e+00, float* %"sub.i'de", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  %145 = load float, float* %".pre.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %146 = fadd fast float %145, %143, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  store float %146, float* %".pre.i'de", align 4, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  %147 = load float, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !347, !cycle !347
-  %148 = fadd fast float %147, %144, !mode !325, !tapeCost !326, !level !355, !cycle !355
-  store float %148, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !355, !cycle !355
-  %149 = load float, float* %".pre.i'de", align 4, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  store float 0.000000e+00, float* %".pre.i'de", align 4, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  %150 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"arrayidx9.phi.trans.insert.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next6_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %151 = load float, float* %"arrayidx9.phi.trans.insert.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %152 = fadd fast float %151, %149, !mode !325, !tapeCost !326, !level !355, !cycle !355
-  store float %152, float* %"arrayidx9.phi.trans.insert.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !355, !cycle !355
-  %153 = load float, float* %"add.i35'de", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  store float 0.000000e+00, float* %"add.i35'de", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %154 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %155 = icmp eq i64 %154, 0, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %156 = xor i1 %155, true, !mode !325, !tapeCost !326, !level !329, !cycle !353
-  %157 = select fast i1 %156, float %153, float 0.000000e+00, !mode !325, !tapeCost !326, !level !352, !cycle !352
-  %158 = load float, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  %159 = fadd fast float %158, %153, !mode !325, !tapeCost !326, !level !352, !cycle !354
-  %160 = select fast i1 %155, float %158, float %159, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  store float %160, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  %161 = select fast i1 %155, float %153, float 0.000000e+00, !mode !325, !tapeCost !326, !level !352, !cycle !352
-  %162 = load float, float* %"'de15", align 4, !mode !325, !tapeCost !328, !level !347, !cycle !347
-  %163 = fadd fast float %162, %153, !mode !325, !tapeCost !328, !level !352, !cycle !354
-  %164 = select fast i1 %155, float %163, float %162, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  store float %164, float* %"'de15", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  br i1 %155, label %invertfor.body7.i.preheader, label %incinvertfor.body7.for.body7_crit_edge.i, !mode !325, !tapeCost !326, !level !329, !cycle !329
+  %128 = load float, float* %"add.i'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %"add.i'de", align 4
+  %129 = load float, float* %"'de17", align 4, !deriv !325
+  %130 = fadd fast float %129, %128, !reverseOp !325
+  store float %130, float* %"'de17", align 4, !derivStore !325
+  %131 = load float, float* %"add.i35'de", align 4, !deriv !325
+  %132 = fadd fast float %131, %128, !reverseOp !325
+  store float %132, float* %"add.i35'de", align 4, !derivStore !325
+  %133 = load float, float* %"'de17", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de17", align 4
+  %134 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %iv.next6_unwrap = add nuw nsw i64 %134, 1, !reverseOp !325
+  %arrayidx9.phi.trans.insert.i_unwrap = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next6_unwrap, !deriv !325
+  %.pre.i_unwrap = load float, float* %arrayidx9.phi.trans.insert.i_unwrap, align 4, !tbaa !153, !invariant.group !332, !deriv !325
+  %135 = load float*, float** %"max.1.i!manual_lcssa_cache", align 8, !dereferenceable !330, !invariant.group !327, !deriv !325
+  %136 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %137 = getelementptr inbounds float, float* %135, i64 %136, !deriv !325
+  %138 = load float, float* %137, align 4, !invariant.group !331, !deriv !325
+  %sub.i_unwrap = fsub fast float %.pre.i_unwrap, %138, !reverseOp !325
+  %139 = call fast float @llvm.exp.f32(float %sub.i_unwrap)
+  %140 = fmul fast float %133, %139, !reverseOp !325
+  %141 = load float, float* %"sub.i'de", align 4, !deriv !325
+  %142 = fadd fast float %141, %140, !reverseOp !325
+  store float %142, float* %"sub.i'de", align 4, !derivStore !325
+  %143 = load float, float* %"sub.i'de", align 4, !deriv !325
+  %144 = fneg fast float %143, !reverseOp !325
+  store float 0.000000e+00, float* %"sub.i'de", align 4
+  %145 = load float, float* %".pre.i'de", align 4, !deriv !325
+  %146 = fadd fast float %145, %143, !reverseOp !325
+  store float %146, float* %".pre.i'de", align 4, !derivStore !325
+  %147 = load float, float* %"max.1.i'de", align 4, !deriv !325
+  %148 = fadd fast float %147, %144, !reverseOp !325
+  store float %148, float* %"max.1.i'de", align 4, !derivStore !325
+  %149 = load float, float* %".pre.i'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %".pre.i'de", align 4
+  %150 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %"arrayidx9.phi.trans.insert.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next6_unwrap, !deriv !325
+  %151 = load float, float* %"arrayidx9.phi.trans.insert.i'ipg_unwrap", align 4, !deriv !325
+  %152 = fadd fast float %151, %149, !reverseOp !325
+  store float %152, float* %"arrayidx9.phi.trans.insert.i'ipg_unwrap", align 4, !derivStore !325
+  %153 = load float, float* %"add.i35'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %"add.i35'de", align 4
+  %154 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %155 = icmp eq i64 %154, 0, !reverseOp !325
+  %156 = xor i1 %155, true, !reverseSuccessor !325
+  %157 = select fast i1 %156, float %153, float 0.000000e+00, !reverseOp !325
+  %158 = load float, float* %"add.i'de", align 4, !deriv !325
+  %159 = fadd fast float %158, %153, !reverseOp !325
+  %160 = select fast i1 %155, float %158, float %159, !reverseOp !325, !reverseSuccessor !325
+  store float %160, float* %"add.i'de", align 4, !derivStore !325
+  %161 = select fast i1 %155, float %153, float 0.000000e+00, !reverseOp !325, !reverseSuccessor !325
+  %162 = load float, float* %"'de15", align 4, !deriv !325
+  %163 = fadd fast float %162, %153, !reverseOp !325
+  %164 = select fast i1 %155, float %163, float %162, !reverseOp !325, !reverseSuccessor !325
+  store float %164, float* %"'de15", align 4, !derivStore !325
+  br i1 %155, label %invertfor.body7.i.preheader, label %incinvertfor.body7.for.body7_crit_edge.i, !reverseSuccessor !325
 
 incinvertfor.body7.for.body7_crit_edge.i:         ; preds = %invertfor.body7.for.body7_crit_edge.i
-  %165 = load i64, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %166 = add nsw i64 %165, -1, !mode !325, !tapeCost !326, !level !328, !cycle !354
-  store i64 %166, i64* %"iv5'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body7.for.body7_crit_edge.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %165 = load i64, i64* %"iv5'ac", align 8, !deriv !325
+  %166 = add nsw i64 %165, -1, !reverseOp !325
+  store i64 %166, i64* %"iv5'ac", align 8, !derivStore !325
+  br label %invertfor.body7.for.body7_crit_edge.i
 
 invertfor.body15.for.body15_crit_edge.i:          ; preds = %mergeinvertfor.body15.for.body15_crit_edge.i__ZL25neural_network_softmax_v2PKfPfi.exit, %incinvertfor.body15.for.body15_crit_edge.i
-  %167 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %iv.next8_unwrap = add nuw nsw i64 %167, 1, !mode !325, !tapeCost !326, !level !328, !cycle !355
-  %"arrayidx21.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %iv.next8_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %168 = load float, float* %"arrayidx21.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  store float 0.000000e+00, float* %"arrayidx21.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %169 = load float, float* %"'de19", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %170 = fadd fast float %169, %168, !mode !325, !tapeCost !326, !level !328, !cycle !355
-  store float %170, float* %"'de19", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %171 = load float, float* %"'de19", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %d0diffe20 = fdiv fast float %171, %add.i, !mode !325, !tapeCost !328, !level !343, !cycle !356
-  %172 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %arrayidx17.phi.trans.insert.i_unwrap = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next8_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %.pre12.i_unwrap = load float, float* %arrayidx17.phi.trans.insert.i_unwrap, align 4, !tbaa !153, !invariant.group !344, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %173 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 8, !dereferenceable !339, !invariant.group !337, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %174 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %175 = getelementptr inbounds float, float* %173, i64 %174, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %176 = load float, float* %175, align 4, !invariant.group !346, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %sub18.i_unwrap = fsub fast float %.pre12.i_unwrap, %176, !mode !325, !tapeCost !326, !level !328, !cycle !356
-  %177 = tail call fast float @llvm.exp.f32(float %sub18.i_unwrap) #34, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %178 = load float*, float** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !339, !invariant.group !338, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %179 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %180 = getelementptr inbounds float, float* %178, i64 %179, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %181 = load float, float* %180, align 4, !invariant.group !345, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %_unwrap26 = fdiv fast float %177, %181, !mode !325, !tapeCost !326, !level !331, !cycle !356
-  %182 = fdiv fast float %171, %add.i, !mode !325, !tapeCost !328, !level !343, !cycle !356
-  %183 = fmul fast float %_unwrap26, %182, !mode !325, !tapeCost !328, !level !347, !cycle !357
-  %184 = fneg fast float %183, !mode !325, !tapeCost !326, !level !348, !cycle !348
-  store float 0.000000e+00, float* %"'de19", align 4, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %185 = load float, float* %"'de27", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %186 = fadd fast float %185, %d0diffe20, !mode !325, !tapeCost !328, !level !347, !cycle !357
-  store float %186, float* %"'de27", align 4, !mode !325, !tapeCost !326, !level !347, !cycle !347
-  %187 = load float, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !353, !cycle !353
-  %188 = fadd fast float %187, %184, !mode !325, !tapeCost !326, !level !354, !cycle !357
-  store float %188, float* %"add.i'de", align 4, !mode !325, !tapeCost !326, !level !354, !cycle !354
-  %189 = load float, float* %"'de27", align 4, !mode !325, !tapeCost !328, !level !347, !cycle !347
-  store float 0.000000e+00, float* %"'de27", align 4, !mode !325, !tapeCost !326, !level !347, !cycle !347
-  %190 = call fast float @llvm.exp.f32(float %sub18.i_unwrap), !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %191 = fmul fast float %189, %190, !mode !325, !tapeCost !328, !level !348, !cycle !357
-  %192 = load float, float* %"sub18.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %193 = fadd fast float %192, %191, !mode !325, !tapeCost !328, !level !349, !cycle !358
-  store float %193, float* %"sub18.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  %194 = load float, float* %"sub18.i'de", align 4, !mode !325, !tapeCost !328, !level !349, !cycle !349
-  %195 = fneg fast float %194, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  store float 0.000000e+00, float* %"sub18.i'de", align 4, !mode !325, !tapeCost !326, !level !349, !cycle !349
-  %196 = load float, float* %".pre12.i'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %197 = fadd fast float %196, %194, !mode !325, !tapeCost !328, !level !351, !cycle !358
-  store float %197, float* %".pre12.i'de", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %198 = load float, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !355, !cycle !355
-  %199 = fadd fast float %198, %195, !mode !325, !tapeCost !326, !level !356, !cycle !358
-  store float %199, float* %"max.1.i'de", align 4, !mode !325, !tapeCost !326, !level !356, !cycle !356
-  %200 = load float, float* %".pre12.i'de", align 4, !mode !325, !tapeCost !328, !level !351, !cycle !351
-  store float 0.000000e+00, float* %".pre12.i'de", align 4, !mode !325, !tapeCost !326, !level !351, !cycle !351
-  %201 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %"arrayidx17.phi.trans.insert.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next8_unwrap, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %202 = load float, float* %"arrayidx17.phi.trans.insert.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %203 = fadd fast float %202, %200, !mode !325, !tapeCost !328, !level !352, !cycle !358
-  store float %203, float* %"arrayidx17.phi.trans.insert.i'ipg_unwrap", align 4, !mode !325, !tapeCost !326, !level !352, !cycle !352
-  %204 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %205 = icmp eq i64 %204, 0, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  %206 = xor i1 %205, true, !mode !325, !tapeCost !326, !level !329, !cycle !359
-  br i1 %205, label %invertfor.body15.i.preheader, label %incinvertfor.body15.for.body15_crit_edge.i, !mode !325, !tapeCost !326, !level !329, !cycle !329
+  %167 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %iv.next8_unwrap = add nuw nsw i64 %167, 1, !reverseOp !325
+  %"arrayidx21.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa", i64 0, i64 %iv.next8_unwrap, !deriv !325
+  %168 = load float, float* %"arrayidx21.i'ipg_unwrap", align 4, !deriv !325
+  store float 0.000000e+00, float* %"arrayidx21.i'ipg_unwrap", align 4
+  %169 = load float, float* %"'de19", align 4, !deriv !325
+  %170 = fadd fast float %169, %168, !reverseOp !325
+  store float %170, float* %"'de19", align 4, !derivStore !325
+  %171 = load float, float* %"'de19", align 4, !deriv !325
+  %d0diffe20 = fdiv fast float %171, %add.i, !reverseOp !325
+  %172 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %arrayidx17.phi.trans.insert.i_unwrap = getelementptr inbounds [10 x float], [10 x float]* %activations, i64 0, i64 %iv.next8_unwrap, !deriv !325
+  %.pre12.i_unwrap = load float, float* %arrayidx17.phi.trans.insert.i_unwrap, align 4, !tbaa !153, !invariant.group !333, !deriv !325
+  %173 = load float*, float** %"max.1.i!manual_lcssa21_cache", align 8, !dereferenceable !330, !invariant.group !328, !deriv !325
+  %174 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %175 = getelementptr inbounds float, float* %173, i64 %174, !deriv !325
+  %176 = load float, float* %175, align 4, !invariant.group !335, !deriv !325
+  %sub18.i_unwrap = fsub fast float %.pre12.i_unwrap, %176, !reverseOp !325
+  %177 = tail call fast float @llvm.exp.f32(float %sub18.i_unwrap) #34
+  %178 = load float*, float** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !330, !invariant.group !329, !deriv !325
+  %179 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %180 = getelementptr inbounds float, float* %178, i64 %179, !deriv !325
+  %181 = load float, float* %180, align 4, !invariant.group !334, !deriv !325
+  %_unwrap26 = fdiv fast float %177, %181, !reverseOp !325
+  %182 = fdiv fast float %171, %add.i, !reverseOp !325
+  %183 = fmul fast float %_unwrap26, %182, !reverseSuccessor !325
+  %184 = fneg fast float %183
+  store float 0.000000e+00, float* %"'de19", align 4
+  %185 = load float, float* %"'de27", align 4, !deriv !325
+  %186 = fadd fast float %185, %d0diffe20, !reverseOp !325
+  store float %186, float* %"'de27", align 4, !derivStore !325
+  %187 = load float, float* %"add.i'de", align 4, !deriv !325
+  %188 = fadd fast float %187, %184, !reverseOp !325
+  store float %188, float* %"add.i'de", align 4, !derivStore !325
+  %189 = load float, float* %"'de27", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de27", align 4
+  %190 = call fast float @llvm.exp.f32(float %sub18.i_unwrap)
+  %191 = fmul fast float %189, %190, !reverseOp !325
+  %192 = load float, float* %"sub18.i'de", align 4, !deriv !325
+  %193 = fadd fast float %192, %191, !reverseOp !325
+  store float %193, float* %"sub18.i'de", align 4, !derivStore !325
+  %194 = load float, float* %"sub18.i'de", align 4, !deriv !325
+  %195 = fneg fast float %194, !reverseOp !325
+  store float 0.000000e+00, float* %"sub18.i'de", align 4
+  %196 = load float, float* %".pre12.i'de", align 4, !deriv !325
+  %197 = fadd fast float %196, %194, !reverseOp !325
+  store float %197, float* %".pre12.i'de", align 4, !derivStore !325
+  %198 = load float, float* %"max.1.i'de", align 4, !deriv !325
+  %199 = fadd fast float %198, %195, !reverseOp !325
+  store float %199, float* %"max.1.i'de", align 4, !derivStore !325
+  %200 = load float, float* %".pre12.i'de", align 4, !deriv !325
+  store float 0.000000e+00, float* %".pre12.i'de", align 4
+  %201 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %"arrayidx17.phi.trans.insert.i'ipg_unwrap" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa", i64 0, i64 %iv.next8_unwrap, !deriv !325
+  %202 = load float, float* %"arrayidx17.phi.trans.insert.i'ipg_unwrap", align 4, !deriv !325
+  %203 = fadd fast float %202, %200, !reverseOp !325
+  store float %203, float* %"arrayidx17.phi.trans.insert.i'ipg_unwrap", align 4, !derivStore !325
+  %204 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %205 = icmp eq i64 %204, 0, !reverseOp !325
+  %206 = xor i1 %205, true, !reverseSuccessor !325
+  br i1 %205, label %invertfor.body15.i.preheader, label %incinvertfor.body15.for.body15_crit_edge.i, !reverseSuccessor !325
 
 incinvertfor.body15.for.body15_crit_edge.i:       ; preds = %invertfor.body15.for.body15_crit_edge.i
-  %207 = load i64, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %208 = add nsw i64 %207, -1, !mode !325, !tapeCost !326, !level !328, !cycle !359
-  store i64 %208, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body15.for.body15_crit_edge.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  %207 = load i64, i64* %"iv7'ac", align 8, !deriv !325
+  %208 = add nsw i64 %207, -1, !reverseOp !325
+  store i64 %208, i64* %"iv7'ac", align 8, !derivStore !325
+  br label %invertfor.body15.for.body15_crit_edge.i
 
 invert_ZL25neural_network_softmax_v2PKfPfi.exit:  ; preds = %_ZL25neural_network_softmax_v2PKfPfi.exit
-  store float %differeturn, float* %"fneg'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %209 = load float, float* %"fneg'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %210 = fneg fast float %209, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  store float 0.000000e+00, float* %"fneg'de", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %211 = load float, float* %"'de28", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %212 = fadd fast float %211, %210, !mode !325, !tapeCost !326, !level !329, !cycle !359
-  store float %212, float* %"'de28", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %213 = load float, float* %"'de28", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  store float 0.000000e+00, float* %"'de28", align 4, !mode !325, !tapeCost !326, !level !329, !cycle !329
-  %214 = fdiv fast float %213, %21, !mode !325, !tapeCost !328, !level !331, !cycle !359
-  %215 = load float, float* %"'de29", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %216 = fadd fast float %215, %214, !mode !325, !tapeCost !328, !level !332, !cycle !360
-  store float %216, float* %"'de29", align 4, !mode !325, !tapeCost !326, !level !332, !cycle !332
-  %217 = load float, float* %"'de29", align 4, !mode !325, !tapeCost !328, !level !332, !cycle !332
-  store float 0.000000e+00, float* %"'de29", align 4, !mode !325, !tapeCost !326, !level !332, !cycle !332
-  %218 = load float, float* %"arrayidx19'ipg", align 4, !mode !325, !tapeCost !326, !level !326, !cycle !326
-  %219 = fadd fast float %218, %217, !mode !325, !tapeCost !328, !level !334, !cycle !360
-  store float %219, float* %"arrayidx19'ipg", align 4, !mode !325, !tapeCost !326, !level !334, !cycle !334
-  br label %mergeinvertfor.body15.for.body15_crit_edge.i__ZL25neural_network_softmax_v2PKfPfi.exit, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store float %differeturn, float* %"fneg'de", align 4, !derivStore !325
+  %209 = load float, float* %"fneg'de", align 4, !deriv !325
+  %210 = fneg fast float %209, !reverseOp !325
+  store float 0.000000e+00, float* %"fneg'de", align 4
+  %211 = load float, float* %"'de28", align 4, !deriv !325
+  %212 = fadd fast float %211, %210, !reverseOp !325
+  store float %212, float* %"'de28", align 4, !derivStore !325
+  %213 = load float, float* %"'de28", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de28", align 4
+  %214 = fdiv fast float %213, %21, !reverseOp !325
+  %215 = load float, float* %"'de29", align 4, !deriv !325
+  %216 = fadd fast float %215, %214, !reverseOp !325
+  store float %216, float* %"'de29", align 4, !derivStore !325
+  %217 = load float, float* %"'de29", align 4, !deriv !325
+  store float 0.000000e+00, float* %"'de29", align 4
+  %218 = load float, float* %"arrayidx19'ipg", align 4, !deriv !325
+  %219 = fadd fast float %218, %217, !reverseOp !325
+  store float %219, float* %"arrayidx19'ipg", align 4, !derivStore !325
+  br label %mergeinvertfor.body15.for.body15_crit_edge.i__ZL25neural_network_softmax_v2PKfPfi.exit
 
 mergeinvertfor.body15.for.body15_crit_edge.i__ZL25neural_network_softmax_v2PKfPfi.exit: ; preds = %invert_ZL25neural_network_softmax_v2PKfPfi.exit
-  store i64 8, i64* %"iv7'ac", align 8, !mode !325, !tapeCost !326, !level !328, !cycle !328
-  br label %invertfor.body15.for.body15_crit_edge.i, !mode !325, !tapeCost !326, !level !328, !cycle !328
+  store i64 8, i64* %"iv7'ac", align 8
+  br label %invertfor.body15.for.body15_crit_edge.i
 }
 
 attributes #0 = { "denormal-fp-math"="preserve-sign,preserve-sign" "denormal-fp-math-f32"="ieee,ieee" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="true" "no-nans-fp-math"="true" "no-signed-zeros-fp-math"="true" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" "unsafe-fp-math"="true" "use-soft-float"="false" }
@@ -14824,39 +14824,15 @@ attributes #40 = { cold }
 !322 = !{!323, !5, i64 0}
 !323 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_15ActiveReferenceIfEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
 !324 = !{!323, !5, i64 8}
-!325 = !{!"reverse"}
-!326 = !{!"0"}
-!327 = !{!"forward"}
-!328 = !{!"1"}
-!329 = !{!"2"}
-!330 = distinct !{}
-!331 = !{!"3"}
-!332 = !{!"4"}
-!333 = !{!"true"}
-!334 = !{!"5"}
+!325 = !{!"true"}
+!326 = distinct !{}
+!327 = distinct !{}
+!328 = distinct !{}
+!329 = distinct !{}
+!330 = !{i64 8}
+!331 = distinct !{}
+!332 = distinct !{}
+!333 = distinct !{}
+!334 = distinct !{}
 !335 = distinct !{}
-!336 = !{!"6"}
-!337 = distinct !{}
-!338 = distinct !{}
-!339 = !{i64 8}
-!340 = distinct !{}
-!341 = distinct !{}
-!342 = !{!"7"}
-!343 = !{!"8"}
-!344 = distinct !{}
-!345 = distinct !{}
-!346 = distinct !{}
-!347 = !{!"9"}
-!348 = !{!"10"}
-!349 = !{!"11"}
-!350 = !{i64 4}
-!351 = !{!"12"}
-!352 = !{!"13"}
-!353 = !{!"14"}
-!354 = !{!"15"}
-!355 = !{!"16"}
-!356 = !{!"17"}
-!357 = !{!"18"}
-!358 = !{!"19"}
-!359 = !{!"20"}
-!360 = !{!"21"}
+!336 = !{i64 4}

@@ -20,11 +20,20 @@ namespace instrumem
     struct InstruMemPass : public llvm::FunctionPass,
                            llvm::InstVisitor<InstruMemPass>
     {
-    
-    private:
-        const std::string pre = "__InstruMem_";
-        std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
-        std::set<std::string> edges;
+    public:
+        static char ID;
+        llvm::Function *F = nullptr;
+
+        InstruMemPass();
+
+        bool runOnFunction(llvm::Function &f) override;
+
+        void visitBinaryOperator(BinaryOperator &ins);
+        void visitStoreInst(StoreInst &ins);
+        void visitLoadInst(LoadInst &ins);
+        void visitInstruction(Instruction &ins);
+        void visitAllocaInst(AllocaInst &ins);
+        void visitGetElementPtrInst(GetElementPtrInst &ins);
 
         uint32_t getLevel(Value *V) {
             if (!isa<Instruction>(*V))
@@ -34,7 +43,6 @@ namespace instrumem
             auto *S = dyn_cast<MDString>(N->getOperand(0));
             return stoi(S->getString().str());
         };
-
 
         uint32_t getTapeCost(Value *V) {
             if (!isa<Instruction>(*V))
@@ -53,25 +61,10 @@ namespace instrumem
 
         bool isReverseNode(Value *V);
         bool isForwardNode(Value *V);
-
-    public:
-        static char ID;
-        llvm::Function *F = nullptr;
-
-        InstruMemPass();
-
-        virtual void getAnalysisUsage(AnalysisUsage &AU) const override
-        {
-            // AU.addRequired<helpers::LabelUID>();
-        }
-
-        bool runOnFunction(llvm::Function &f) override;
-
-        void visitBinaryOperator(BinaryOperator &ins);
-        void visitStoreInst(StoreInst &ins);
-        void visitLoadInst(LoadInst &ins);
-        void visitInstruction(Instruction &ins);
-        void visitAllocaInst(AllocaInst &ins);
+    
+    private:
+        const std::string pre = "__InstruMem_";
+        std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
 
     };
 

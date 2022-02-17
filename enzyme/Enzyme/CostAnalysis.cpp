@@ -20,6 +20,8 @@ InstruMemPass::InstruMemPass() : FunctionPass(ID) {} // InstruMemPass
 
 bool InstruMemPass::runOnFunction(Function &f)
 {
+    for (auto &arg: f.args()) 
+        memOps[arg.getName().str()] = std::make_pair(0, 0);
 
     for (auto &BB : f) {
         for (auto &I : BB) {
@@ -40,7 +42,6 @@ bool InstruMemPass::runOnFunction(Function &f)
     F = &f;
     visit(f);
 
-    errs() << "Tape cost: " << edges.size() << "\n";
     errs() << "Number of derivs: " << memOps.size() << "\n";
 
     return true;
@@ -49,16 +50,12 @@ bool InstruMemPass::runOnFunction(Function &f)
 void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
 {    
     visitInstruction(ins);
-    if (!isReverseNode(&ins)) 
-        return;
+
     auto op1 = ins.getOperand(0);
     auto op2 = ins.getOperand(1);
 
     uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
     
-        // Check if it has an edge to forward pass
-
-
     uint32_t tapeCost = 0;
     op1_tape_cost = getTapeCost(op1);
     op2_tape_cost = getTapeCost(op2);
@@ -70,12 +67,11 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
 void InstruMemPass::visitStoreInst(StoreInst &ins) {
 
     auto *op1 = ins.getOperand(0);
-    if (isReverseNode(op1)) {
-        memOps[ins.getOperand(1)->getName().str()].first = std::max(memOps[ins.getOperand(1)->getName().str()].first, getLevel(ins.getOperand(0)));
-        memOps[ins.getOperand(1)->getName().str()].second = std::max(memOps[ins.getOperand(1)->getName().str()].second, getTapeCost(ins.getOperand(0)));
-    }
+    memOps[ins.getOperand(1)->getName().str()].first = std::max(memOps[ins.getOperand(1)->getName().str()].first, getLevel(ins.getOperand(0)));
+    memOps[ins.getOperand(1)->getName().str()].second = std::max(memOps[ins.getOperand(1)->getName().str()].second, getTapeCost(ins.getOperand(0)));
     
-    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[ins.getOperand(1)->getName().str()].first))));
+    ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(getLevel(ins.getOperand(0))))));
+    // errs() << "Store: " << ins.getOperand(1)->getName() << ": " << std::to_string(memOps[ins.getOperand(1)->getName().str()].first) << "\n";
 }
 
 void InstruMemPass::visitAllocaInst(AllocaInst &ins) {
@@ -91,32 +87,32 @@ void InstruMemPass::visitAllocaInst(AllocaInst &ins) {
     visitInstruction(ins);
 }
 
-void InstruMemPass::visitLoadInst(LoadInst &ins) {
-    if (!isReverseNode(&ins))
-        return;
+void InstruMemPass::visitGetElementPtrInst(GetElementPtrInst &ins) {
     auto *op1 = ins.getOperand(0);
     if (memOps.count(op1->getName().str())) {
         ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
         ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
+        // errs() << "Load: " << ins.getOperand(0)->getName() << ": " << std::to_string(memOps[op1->getName().str()].first) << "\n";
+    }
+    else   
+        visitInstruction(ins);
+}
+
+void InstruMemPass::visitLoadInst(LoadInst &ins) {
+    auto *op1 = ins.getOperand(0);
+    if (memOps.count(op1->getName().str())) {
+        ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
+        ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
+        // errs() << "Load: " << ins.getOperand(0)->getName() << ": " << std::to_string(memOps[op1->getName().str()].first) << "\n";
     }
 }
 
 void InstruMemPass::visitInstruction(Instruction &ins) {
-    if (isForwardNode(&ins))
-        for (auto i: ins.users())
-            if (isReverseNode(i)) {
-                ins.setMetadata("taped", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
-                edges.insert(ins.getName().str());
-                break;
-            }
-
     uint32_t maxLevel = 0;
     for (int i=0; i < ins.getNumOperands(); i++) {
         auto *op = ins.getOperand(i);
-        if (isReverseNode(&ins) && isForwardNode(op))
-            edges.insert(op->getName().str());
 
-        uint32_t level = getLevel(op) + (int)(!isa<Constant>(op));
+        uint32_t level = getLevel(op) + static_cast<int>(!isa<Constant>(op));
         if (level > maxLevel)
             maxLevel = level;
     }

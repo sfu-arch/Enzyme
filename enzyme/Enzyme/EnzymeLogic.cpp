@@ -3713,7 +3713,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   PassManagerBuilder Builder;
   legacy::FunctionPassManager PM(nf->getParent());
   PM.add(new instrumem::NodeDetectorPass());
-  // PM.add(new instrumem::InstruMemPass());
+  PM.add(new instrumem::InstruMemPass());
   // PM.add(new instrumem::SchedulerPass());
   // PM.add(new life::LifetimePass());
   // PM.add(new instrumem::OPCounterPass());

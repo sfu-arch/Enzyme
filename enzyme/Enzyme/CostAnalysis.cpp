@@ -31,7 +31,7 @@ bool InstruMemPass::runOnFunction(Function &f)
 
             if (BB.getName().contains("invert") || isa<AllocaInst>(I)) {
                 I.setMetadata("mode", MDNode::get(context, MDString::get(context, "reverse")));
-                I.setMetadata("tapeCost", MDNode::get(context, MDString::get(context, "0")));
+                // I.setMetadata("tapeCost", MDNode::get(context, MDString::get(context, "0")));
             }
             else
                 I.setMetadata("mode", MDNode::get(context, MDString::get(context, "forward")));
@@ -51,16 +51,16 @@ void InstruMemPass::visitBinaryOperator(BinaryOperator &ins)
 {    
     visitInstruction(ins);
 
-    auto op1 = ins.getOperand(0);
-    auto op2 = ins.getOperand(1);
+    // auto op1 = ins.getOperand(0);
+    // auto op2 = ins.getOperand(1);
 
-    uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
+    // uint32_t op1_tape_cost = 0, op2_tape_cost = 0;
     
-    uint32_t tapeCost = 0;
-    op1_tape_cost = getTapeCost(op1);
-    op2_tape_cost = getTapeCost(op2);
-    tapeCost = op1_tape_cost + op2_tape_cost;
-    ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(tapeCost))));
+    // uint32_t tapeCost = 0;
+    // op1_tape_cost = getTapeCost(op1);
+    // op2_tape_cost = getTapeCost(op2);
+    // tapeCost = op1_tape_cost + op2_tape_cost;
+    // ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(tapeCost))));
     
 }
 
@@ -68,7 +68,7 @@ void InstruMemPass::visitStoreInst(StoreInst &ins) {
 
     auto *op1 = ins.getOperand(0);
     memOps[ins.getOperand(1)->getName().str()].first = std::max(memOps[ins.getOperand(1)->getName().str()].first, getLevel(ins.getOperand(0)));
-    memOps[ins.getOperand(1)->getName().str()].second = std::max(memOps[ins.getOperand(1)->getName().str()].second, getTapeCost(ins.getOperand(0)));
+    // memOps[ins.getOperand(1)->getName().str()].second = std::max(memOps[ins.getOperand(1)->getName().str()].second, getTapeCost(ins.getOperand(0)));
     
     ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(getLevel(ins.getOperand(0))))));
     // errs() << "Store: " << ins.getOperand(1)->getName() << ": " << std::to_string(memOps[ins.getOperand(1)->getName().str()].first) << "\n";
@@ -90,7 +90,7 @@ void InstruMemPass::visitAllocaInst(AllocaInst &ins) {
 void InstruMemPass::visitGetElementPtrInst(GetElementPtrInst &ins) {
     auto *op1 = ins.getOperand(0);
     if (memOps.count(op1->getName().str())) {
-        ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
+        // ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
         ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
         // errs() << "Load: " << ins.getOperand(0)->getName() << ": " << std::to_string(memOps[op1->getName().str()].first) << "\n";
     }
@@ -101,7 +101,7 @@ void InstruMemPass::visitGetElementPtrInst(GetElementPtrInst &ins) {
 void InstruMemPass::visitLoadInst(LoadInst &ins) {
     auto *op1 = ins.getOperand(0);
     if (memOps.count(op1->getName().str())) {
-        ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
+        // ins.setMetadata("tapeCost", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].second))));
         ins.setMetadata("level", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), std::to_string(memOps[op1->getName().str()].first))));
         // errs() << "Load: " << ins.getOperand(0)->getName() << ": " << std::to_string(memOps[op1->getName().str()].first) << "\n";
     }

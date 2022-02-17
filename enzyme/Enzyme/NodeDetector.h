@@ -2,6 +2,8 @@
 #ifndef NODE_DETECTOR_H
 #define NODE_DETECTOR_H
 
+#include <set>
+
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/InstVisitor.h"
@@ -22,24 +24,12 @@ namespace instrumem
     struct NodeDetectorPass : public llvm::FunctionPass,
                            llvm::InstVisitor<NodeDetectorPass>
     {
-    
-    private:
 
-        bool isDeriv(Value *I) {
-            return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "deriv");
-        }
-        bool isReverseOp(Value *I) {
-            return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "reverseOp");
-        }
-        
-        bool isDerivStore(Value *I) {
-            return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "derivStore");
-        }
-        void appendNode(Instruction* I, std::unordered_map<std::string, std::vector<std::string>> *nodeMap);
-        
+    private:
+        llvm::Function *F = nullptr;
+        std::set<Value*> funcArgs;
     public:
         static char ID;
-        llvm::Function *F = nullptr;
 
         NodeDetectorPass();
 
@@ -55,8 +45,23 @@ namespace instrumem
         void visitTruncInst(llvm::TruncInst &I);
         void visitSExtInst(llvm::SExtInst &I);
 
+        bool isDeriv(Value *I) { return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "deriv");}
+        bool isReverseOp(Value *I) { return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "reverseOp");}
+        bool isDerivStore(Value *I) {return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "derivStore");}
+        bool isReverseSuccessor(Value *I) { return isa<Instruction>(I) && hasMetadata((llvm::Instruction*)I, "reverseSuccessor");}
+        
 
+        uint32_t getLevel(Value *V) {
+            if (!isa<Instruction>(*V))
+                return 0;
+            Instruction &I = cast<Instruction>(*V);
+            auto *N = I.getMetadata("level");
+            auto *S = dyn_cast<MDString>(N->getOperand(0));
+            return stoi(S->getString().str());
+        };
 
+        void appendNode(Instruction* I, std::map<Value*, std::vector<Value* >> *nodeMap);
+        void logNodes(std::map<Value*, std::vector<Value*> > nodeMap);
     };
 
 } // namespace instrumem

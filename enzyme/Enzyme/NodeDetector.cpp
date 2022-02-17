@@ -11,7 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <unordered_map>
+#include <map>
 
 #include "llvm/IR/IRBuilder.h"
 
@@ -22,50 +22,69 @@ using namespace instrumem;
 
 NodeDetectorPass::NodeDetectorPass() : FunctionPass(ID) {} // NodeDetectorPass
 
-void NodeDetectorPass::appendNode(Instruction* I, std::unordered_map<std::string, std::vector<std::string> > *nodeMap) {
+void NodeDetectorPass::appendNode(Instruction* I, std::map<Value*, std::vector<Value*> > *nodeMap) {
     int derivIndex = 0;
-    std::string nodeName = "";
     for (int i = 0; i < I->getNumOperands(); i++)
         if (isDeriv(I->getOperand(i))) { 
             derivIndex = i;
             break;
         }
-    nodeName = I->getOperand(derivIndex)->getNameOrAsOperand();
-    if (!nodeMap->count(nodeName)) {
-        (*nodeMap)[nodeName] = {};
-    }
+
+    auto op = I->getOperand(derivIndex);
+    if (!nodeMap->count(op))
+        (*nodeMap)[op] = {};
     
     for (int i = 0; i < I->getNumOperands(); i++)
-        if (i != derivIndex) {
-            // errs() << "Node: " << I->getOperand(derivIndex)->getNameOrAsOperand() << " | " << *I->getOperand(i) << "\n";
-            (*nodeMap)[nodeName].push_back(I->getOperand(i)->getNameOrAsOperand());
-        }
-    
+        if (i != derivIndex)
+            (*nodeMap)[op].push_back(I->getOperand(i));
+}
 
+void NodeDetectorPass::logNodes(std::map<Value*, std::vector<Value*> > nodeMap) {
+    errs() << "Nodes: \n";
+
+    for (auto &node : nodeMap) {
+        errs() << node.first->getNameOrAsOperand();
+        uint32_t nodeCost = getLevel(node.first);
+        for (auto &op : node.second)
+            errs() << "\n\tsrc: " << op->getNameOrAsOperand() << ", cost: " << getLevel(op);
+        errs() << "\n";
+    }
+}
+
+bool isMultOrDiv(Instruction* I) {
+    if (!isa<BinaryOperator>(I)) 
+        return false;   
+    return (I->getOpcode() == 18 || I->getOpcode() == 21);
 }
 
 bool NodeDetectorPass::runOnFunction(Function &f)
 {
-    std::unordered_map<std::string, std::vector<std::string>> nodeMap;
+    for (auto &arg: f.args()) 
+        funcArgs.insert(&arg);
+
+    std::map<Value*, std::vector<Value*> > nodeMap;
     errs() << "NodeDetector ...\n";
     visit(f);
     for (auto &BB : f)
         for (auto &I : BB) 
-            if (isReverseOp(&I)) {
+            if (isReverseOp(&I) && isMultOrDiv(&I)) {
                 bool flag = false;
                 for (auto U : I.users())
                     if (isDerivStore(U)) {
                         flag = true;
                         break;
                     }
-                if (!flag) // It's a node
+                if (!flag) { // It's a node
                     appendNode(&I, &nodeMap);
+                }
             }
 
     errs() << "node count: " << nodeMap.size() << "\tTape size: " << ((nodeMap.size() * NODE_SIZE ) >> 3) << " Bytes" << "\n";
-
+    logNodes(nodeMap);
     return true;
 }
+
+
 
 void NodeDetectorPass::visitStoreInst(llvm::StoreInst &I) {
     if (isDeriv(I.getOperand(1)) && !isa<Constant>(I.getOperand(0)))
@@ -73,7 +92,8 @@ void NodeDetectorPass::visitStoreInst(llvm::StoreInst &I) {
 }
 
 void NodeDetectorPass::visitLoadInst(llvm::LoadInst &I) {
- if (isa<Instruction>(I.getOperand(0)) && hasMetadata((llvm::Instruction*)I.getOperand(0), "deriv"))
+ if ((isa<Instruction>(I.getOperand(0)) && hasMetadata((llvm::Instruction*)I.getOperand(0), "deriv"))
+    || funcArgs.count(I.getOperand(0)))
         I.setMetadata("deriv", MDNode::get(I.getContext(), MDString::get(I.getContext(), "true")));
 }
 
@@ -106,9 +126,9 @@ void NodeDetectorPass::visitInstruction(Instruction &ins) {
             ins.setMetadata("reverseOp", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
             break;
         }
-        if (isReverseOp(ins.getOperand(i))) {
+
+        if (isReverseOp(ins.getOperand(i)) || isReverseSuccessor(ins.getOperand(i)))
             ins.setMetadata("reverseSuccessor", MDNode::get(ins.getContext(), MDString::get(ins.getContext(), "true")));
-        }
     }
 }
 

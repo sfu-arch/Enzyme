@@ -26,9 +26,24 @@ class Graph {
             child->parents.insert(this);
             child->level = std::max(level + 1, child->level);
         }
+
+        void PushToTape() {
+            for (auto child: children) {
+                child->PropagateCost(cost, 0);
+            }
+            cost = 0;
+        }
+
         void UpdateChildCost() {
             for (auto child : children)
                 child->cost += cost + 1;
+        }
+
+        void PropagateCost(int parent_old_cost, int parent_new_cost) {
+            int prev_cost = cost;
+            cost += parent_new_cost - parent_old_cost;
+            for (auto child : children)
+                child->PropagateCost(prev_cost, cost);
         }
         int level;
         int cost;
@@ -44,12 +59,21 @@ class Graph {
         void AddNode(Value *v) { nodes[v] = new Node(v); }
         Node* operator[] (Value *v) { return nodes[v]; }
         
+        
+
         std::map<Value*, Node*> operator() () { return nodes; }
         std::map<Value*, int> GetLevels() { 
             std::map<Value*, int> levels;
             for (auto it = nodes.begin(); it != nodes.end(); it++)
                 levels[it->first] = it->second->level;
             return levels;
+        }
+
+        int GetTotalCost() {
+            int cost = 0;
+            for (auto i : nodes)
+                cost += i.second->cost;
+            return cost;
         }
     private:
         std::map<Value*, Node*> nodes;

@@ -67,7 +67,17 @@ bool BFSPass::runOnFunction(Function &f)
 
     for (auto i: g())
         errs() << *i.first << ": " << i.second->cost << "\n";
+    errs() << "Total cost: " << g.GetTotalCost() << "\n";
 
+    for (auto i: g()) {
+        i.second->PushToTape();
+        break;
+    }
+
+    for (auto i: g())
+        errs() << *i.first << ": " << i.second->cost << "\n";
+
+    errs() << "Total cost: " << g.GetTotalCost() << "\n";
     return true;
 }
 

@@ -61,6 +61,10 @@ include(AddLLVM)
 
 add_definitions(${LLVM_DEFINITIONS})
 include_directories(${LLVM_INCLUDE_DIRS})
+# include_directories("${ENZYME_SOURCE_DIR}/include")
+
+
+
 message("LLVM_INSTALL_PREFIX: ${LLVM_INSTALL_PREFIX}")
 message("LLVM_INCLUDE_DIRS: ${LLVM_INCLUDE_DIRS}")
 message("found llvm definitions " ${LLVM_DEFINITIONS})

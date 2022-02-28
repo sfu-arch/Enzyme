@@ -65,6 +65,7 @@
 #include "OperationCounter.h"
 #include "Scheduler.h"
 #include "NodeDetector.h"
+#include "BFSPass.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
@@ -3712,8 +3713,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //       errs() << bb.getName() << "\n";
   PassManagerBuilder Builder;
   legacy::FunctionPassManager PM(nf->getParent());
-  PM.add(new instrumem::InstruMemPass());
-  PM.add(new instrumem::NodeDetectorPass());
+  // PM.add(new instrumem::InstruMemPass());
+  // PM.add(new instrumem::NodeDetectorPass());
+  PM.add(new instrumem::BFSPass());
   // PM.add(new instrumem::SchedulerPass());
   // PM.add(new life::LifetimePass());
   // PM.add(new instrumem::OPCounterPass());

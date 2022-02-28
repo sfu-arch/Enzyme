@@ -34,6 +34,12 @@ class Graph {
             cost = 0;
         }
 
+        void UndoPushToTape(int prev_cost) {
+            cost = prev_cost;
+            for (auto child: children) {
+                child->PropagateCost(0, cost);
+            }
+        }
         void UpdateChildCost() {
             for (auto child : children)
                 child->cost += cost + 1;
@@ -58,8 +64,6 @@ class Graph {
         
         void AddNode(Value *v) { nodes[v] = new Node(v); }
         Node* operator[] (Value *v) { return nodes[v]; }
-        
-        
 
         std::map<Value*, Node*> operator() () { return nodes; }
         std::map<Value*, int> GetLevels() { 

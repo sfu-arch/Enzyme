@@ -65,19 +65,13 @@ bool BFSPass::runOnFunction(Function &f)
     for (auto &it: vec) 
         g()[it.first]->UpdateChildCost();
 
-    for (auto i: g())
-        errs() << *i.first << ": " << i.second->cost << "\n";
-    errs() << "Total cost: " << g.GetTotalCost() << "\n";
-
+    int total_cost = g.GetTotalCost();
     for (auto i: g()) {
+        int prev_cost = i.second->cost;
         i.second->PushToTape();
-        break;
+        errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
+        i.second->UndoPushToTape(prev_cost);
     }
-
-    for (auto i: g())
-        errs() << *i.first << ": " << i.second->cost << "\n";
-
-    errs() << "Total cost: " << g.GetTotalCost() << "\n";
     return true;
 }
 

@@ -18,24 +18,7 @@ using namespace instrumem;
 
 BFSPass::BFSPass() : FunctionPass(ID) {} // BFSPass
 
-bool isValidInstruction(Instruction *inst) {
-    return isa<LoadInst>(inst) || isa<StoreInst>(inst) || isa<BinaryOperator>(inst) 
-    || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst);
-}
-
-std::vector<std::pair<Value*, int>> SortMap(std::map<Value*, int> &map) {
-    std::vector<std::pair<Value*, int>> vec;
-    for (auto &it : map)
-        vec.push_back(std::make_pair(it.first, it.second));
-
-    std::sort(vec.begin(), vec.end(), [](std::pair<Value*, int> &a, std::pair<Value*, int> &b) {
-        return a.second < b.second;
-    });
-    return vec;
-}
-
-bool BFSPass::runOnFunction(Function &f)
-{
+bool BFSPass::runOnFunction(Function &f) {
     for (auto &arg: f.args())
         args[static_cast<Value*>(&arg)] = std::vector<Value*>();
 
@@ -63,7 +46,7 @@ bool BFSPass::runOnFunction(Function &f)
     auto levels = g.GetLevels();
     std::vector<std::pair<Value*, int>> vec = SortMap(levels);
     for (auto &it: vec) 
-        g()[it.first]->UpdateChildCost();
+        g()[it.first]->AssignChildCost();
 
     int total_cost = g.GetTotalCost();
     for (auto i: g()) {
@@ -73,6 +56,86 @@ bool BFSPass::runOnFunction(Function &f)
         i.second->UndoPushToTape(prev_cost);
     }
     return true;
+}
+
+std::map<Value*, int> Graph::GetLevels() { 
+    std::map<Value*, int> levels;
+    for (auto it = nodes.begin(); it != nodes.end(); it++)
+        levels[it->first] = it->second->level;
+    return levels;
+}
+
+int Graph::GetTotalCost() {
+    int cost = 0;
+    for (auto i : nodes)
+        cost += i.second->cost;
+    return cost;
+}
+
+void Graph::Node::AddChild(Node *child) {
+    children.insert(child);
+    child->parents.insert(this);
+    child->level = std::max(level + 1, child->level);
+}
+
+int Graph::Node::GetInstructionCost(Value *inst) {
+    if (!isa<Instruction>(inst))
+        return 1;
+    if (isa<LoadInst>(inst))
+        return 50;
+    if (isa<StoreInst>(inst))
+        return 1;
+    if (isa<BinaryOperator>(inst))
+        return 1;
+    if (isa<UnaryOperator>(inst))
+        return 1;
+    if (isa<GetElementPtrInst>(inst))
+        return 1;
+    if (isa<AllocaInst>(inst))
+        return 1;
+    return 0;
+}
+
+void Graph::Node::PushToTape() {
+    for (auto child: children) {
+        child->PropagateCost(cost, 0);
+    }
+    cost = 0;
+}
+
+void Graph::Node::UndoPushToTape(int prev_cost) {
+    cost = prev_cost;
+    for (auto child: children) {
+        child->PropagateCost(0, cost);
+    }
+}
+
+void Graph::Node::AssignChildCost() {
+    for (auto child : children)
+        child->cost += cost + GetInstructionCost(value);
+}
+
+void Graph::Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
+    int prev_cost = cost;
+    cost += parent_new_cost - parent_old_cost;
+    for (auto child : children)
+        child->PropagateCost(prev_cost, cost);
+}
+
+bool instrumem::isValidInstruction(Instruction *inst) {
+    return isa<LoadInst>(inst) || isa<StoreInst>(inst) || isa<BinaryOperator>(inst) 
+    || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst);
+}
+
+std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &map) {
+    std::vector<std::pair<Value*, int>> vec;
+    for (auto &it : map)
+        vec.push_back(std::make_pair(it.first, it.second));
+
+    std::sort(vec.begin(), vec.end(), [](std::pair<Value*, int> &a, std::pair<Value*, int> &b) {
+        return a.second < b.second;
+    });
+    return vec;
 }
 
 char BFSPass::ID = 0;

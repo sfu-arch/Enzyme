@@ -920,7 +920,7 @@ void run(float (*fn)(mnist_dataset_t*, neural_network_t*, float)) {
     struct timeval start, end;
     gettimeofday(&start, NULL);
     
-    for (i = 0; i < STEPS; i++) {
+    for (i = 0; i < 1; i++) {
         // Initialise a new batch
         mnist_batch(train_dataset, &batch, 100, i % batches);
 

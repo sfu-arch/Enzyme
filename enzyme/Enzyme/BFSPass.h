@@ -30,7 +30,7 @@ class Graph {
         void UndoPushToTape(int prev_cost);
         void AssignChildCost();
         void PropagateCost(int parent_old_cost, int parent_new_cost);
-
+    
         int level;
         int cost;
     private:
@@ -49,7 +49,8 @@ class Graph {
         std::map<Value*, int> GetLevels();
 
         int GetTotalCost();
-        
+        bool contains(Value *v) { return nodes.find(v) != nodes.end(); }
+
     private:
         std::map<Value*, Node*> nodes;
     
@@ -61,9 +62,10 @@ struct BFSPass : public llvm::FunctionPass,
         static char ID;
         BFSPass();
         bool runOnFunction(llvm::Function &f) override;
-
+        void visitInstruction(Instruction &I);
     private:
         std::map<llvm::Value*, std::vector<llvm::Value*>> args;
+        Graph g;
 
 };
 

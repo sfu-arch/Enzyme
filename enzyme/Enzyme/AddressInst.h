@@ -27,7 +27,6 @@ struct AddressInstPass : public FunctionPass,
         void visitStoreInst(StoreInst &inst);
 
         void callPrintf(Instruction *I, char *format, std::vector<Value *> args);
-
 };
 
 } // namespace instrumem

@@ -11194,95 +11194,77 @@ for.inc11.i:                                      ; preds = %for.body3.i
   br i1 %exitcond26.not.i, label %_Z29neural_network_random_weightsP17neural_network_t_.exit, label %for.body.i, !llvm.loop !156
 
 _Z29neural_network_random_weightsP17neural_network_t_.exit: ; preds = %for.inc11.i
-  %size = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 2
-  %6 = load i32, i32* %size, align 8, !tbaa !152
-  %div = udiv i32 %6, 100
-  %7 = bitcast %struct.timeval* %start to i8*
+  %6 = bitcast %struct.timeval* %start to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #34
+  %7 = bitcast %struct.timeval* %end to i8*
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #34
-  %8 = bitcast %struct.timeval* %end to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %8) #34
   %call2 = call i32 @gettimeofday(%struct.timeval* nonnull %start, i8* null) #34
+  %size1.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 2
+  %8 = load i32, i32* %size1.i, align 8, !tbaa !152
+  %cmp.not.i.not = icmp eq i32 %8, 0
+  br i1 %cmp.not.i.not, label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit, label %if.end.i
+
+if.end.i:                                         ; preds = %_Z29neural_network_random_weightsP17neural_network_t_.exit
   %images.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 0
-  %images2.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 0
-  %labels.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
-  %labels5.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 1
-  %size6.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
-  br label %for.body
-
-for.body:                                         ; preds = %_Z29neural_network_random_weightsP17neural_network_t_.exit, %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
-  %i.036 = phi i32 [ 0, %_Z29neural_network_random_weightsP17neural_network_t_.exit ], [ %inc, %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit ]
-  %rem = urem i32 %i.036, %div
-  %mul.i = mul nuw nsw i32 %rem, 100
-  %cmp.not.i = icmp ugt i32 %6, %mul.i
-  br i1 %cmp.not.i, label %if.end.i, label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
-
-if.end.i:                                         ; preds = %for.body
   %9 = load %struct.mnist_image_t_*, %struct.mnist_image_t_** %images.i, align 8, !tbaa !149
-  %idxprom.i35 = zext i32 %mul.i to i64
-  %arrayidx.i27 = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %9, i64 %idxprom.i35
-  store %struct.mnist_image_t_* %arrayidx.i27, %struct.mnist_image_t_** %images2.i, align 8, !tbaa !149
+  %images2.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 0
+  store %struct.mnist_image_t_* %9, %struct.mnist_image_t_** %images2.i, align 8, !tbaa !149
+  %labels.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
   %10 = load i8*, i8** %labels.i, align 8, !tbaa !151
-  %arrayidx4.i = getelementptr inbounds i8, i8* %10, i64 %idxprom.i35
-  store i8* %arrayidx4.i, i8** %labels5.i, align 8, !tbaa !151
-  store i32 100, i32* %size6.i, align 8, !tbaa !152
-  %add.i = add nuw nsw i32 %mul.i, 100
-  %cmp9.i = icmp ugt i32 %add.i, %6
-  br i1 %cmp9.i, label %if.then10.i, label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
-
-if.then10.i:                                      ; preds = %if.end.i
-  %sub.i = sub i32 %6, %mul.i
-  store i32 %sub.i, i32* %size6.i, align 8, !tbaa !152
+  %labels5.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 1
+  store i8* %10, i8** %labels5.i, align 8, !tbaa !151
+  %size6.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
+  %cmp9.i = icmp ult i32 %8, 100
+  %spec.store.select = select i1 %cmp9.i, i32 %8, i32 100
+  store i32 %spec.store.select, i32* %size6.i, align 8
   br label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
 
-_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit:     ; preds = %for.body, %if.end.i, %if.then10.i
+_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit:     ; preds = %if.end.i, %_Z29neural_network_random_weightsP17neural_network_t_.exit
   %call4 = call fast float %fn(%struct.mnist_dataset_t_* nonnull %batch, %struct.neural_network_t_* nonnull %network, float 5.000000e-01)
   %call5 = call fast float @_Z18calculate_accuracyP16mnist_dataset_t_P17neural_network_t_(%struct.mnist_dataset_t_* %call1, %struct.neural_network_t_* nonnull %network)
-  %11 = load i32, i32* %size6.i, align 8, !tbaa !152
+  %size6 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
+  %11 = load i32, i32* %size6, align 8, !tbaa !152
   %conv = uitofp i32 %11 to float
   %div7 = fdiv fast float %call4, %conv
   %conv8 = fpext float %div7 to double
   %conv9 = fpext float %call5 to double
-  %call10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([45 x i8], [45 x i8]* @.str.100, i64 0, i64 0), i32 %i.036, double %conv8, double %conv9)
-  %inc = add nuw nsw i32 %i.036, 1
-  %exitcond.not = icmp eq i32 %inc, 1000
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !277
-
-for.end:                                          ; preds = %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
+  %call10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([45 x i8], [45 x i8]* @.str.100, i64 0, i64 0), i32 0, double %conv8, double %conv9)
   %call11 = call i32 @gettimeofday(%struct.timeval* nonnull %end, i8* null) #34
   %tv_sec.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end, i64 0, i32 0
   %12 = load i64, i64* %tv_sec.i, align 8, !tbaa !274
   %tv_sec1.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start, i64 0, i32 0
   %13 = load i64, i64* %tv_sec1.i, align 8, !tbaa !274
-  %sub.i28 = sub nsw i64 %12, %13
-  %conv.i29 = sitofp i64 %sub.i28 to double
+  %sub.i = sub nsw i64 %12, %13
+  %conv.i27 = sitofp i64 %sub.i to double
   %tv_usec.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end, i64 0, i32 1
   %14 = load i64, i64* %tv_usec.i, align 8, !tbaa !276
   %tv_usec2.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start, i64 0, i32 1
   %15 = load i64, i64* %tv_usec2.i, align 8, !tbaa !276
   %sub3.i = sub nsw i64 %14, %15
   %conv4.i = sitofp i64 %sub3.i to double
-  %mul.i30 = fmul fast double %conv4.i, 0x3EB0C6F7A0B5ED8D
-  %add.i31 = fadd fast double %mul.i30, %conv.i29
-  %conv5.i32 = fptrunc double %add.i31 to float
-  %conv13 = fpext float %conv5.i32 to double
+  %mul.i = fmul fast double %conv4.i, 0x3EB0C6F7A0B5ED8D
+  %add.i = fadd fast double %mul.i, %conv.i27
+  %conv5.i28 = fptrunc double %add.i to float
+  %conv13 = fpext float %conv5.i28 to double
   %call14 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([7 x i8], [7 x i8]* @.str.101, i64 0, i64 0), double %conv13)
   %16 = bitcast %struct.mnist_dataset_t_* %call to i8**
   %17 = load i8*, i8** %16, align 8, !tbaa !149
   call void @free(i8* %17) #34
-  %18 = load i8*, i8** %labels.i, align 8, !tbaa !151
+  %labels.i30 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
+  %18 = load i8*, i8** %labels.i30, align 8, !tbaa !151
   call void @free(i8* %18) #34
   %19 = bitcast %struct.mnist_dataset_t_* %call to i8*
   call void @free(i8* %19) #34
   %20 = bitcast %struct.mnist_dataset_t_* %call1 to i8**
   %21 = load i8*, i8** %20, align 8, !tbaa !149
   call void @free(i8* %21) #34
-  %labels.i33 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call1, i64 0, i32 1
-  %22 = load i8*, i8** %labels.i33, align 8, !tbaa !151
+  %labels.i29 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call1, i64 0, i32 1
+  %22 = load i8*, i8** %labels.i29, align 8, !tbaa !151
   call void @free(i8* %22) #34
   %23 = bitcast %struct.mnist_dataset_t_* %call1 to i8*
   call void @free(i8* %23) #34
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %8) #34
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #34
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #34
   call void @llvm.lifetime.end.p0i8(i64 31400, i8* nonnull %1) #34
   call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %0) #34
   ret void
@@ -11542,13 +11524,13 @@ for.body5:                                        ; preds = %for.body, %for.body
   %add = fadd fast float %mul, %2
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 784
-  br i1 %exitcond.not, label %for.inc14, label %for.body5, !llvm.loop !278
+  br i1 %exitcond.not, label %for.inc14, label %for.body5, !llvm.loop !277
 
 for.inc14:                                        ; preds = %for.body5
   store float %add, float* %arrayidx2, align 4, !tbaa !153
   %indvars.iv.next41 = add nuw nsw i64 %indvars.iv40, 1
   %exitcond42.not = icmp eq i64 %indvars.iv.next41, 10
-  br i1 %exitcond42.not, label %for.end16, label %for.body, !llvm.loop !279
+  br i1 %exitcond42.not, label %for.end16, label %for.body, !llvm.loop !278
 
 for.end16:                                        ; preds = %for.inc14
   %5 = bitcast [10 x float]* %activations2 to i8*
@@ -11567,7 +11549,7 @@ for.body.i:                                       ; preds = %for.body.i, %for.en
   %max.1.i = select i1 %cmp2.i, float %7, float %max.05.i
   %indvars.iv.next10.i = add nuw nsw i64 %indvars.iv9.i, 1
   %exitcond11.not.i = icmp eq i64 %indvars.iv.next10.i, 10
-  br i1 %exitcond11.not.i, label %for.body7.i.preheader, label %for.body.i, !llvm.loop !280
+  br i1 %exitcond11.not.i, label %for.body7.i.preheader, label %for.body.i, !llvm.loop !279
 
 for.body7.i.preheader:                            ; preds = %for.body.i
   %sub.i34 = fsub fast float %6, %max.1.i
@@ -11590,7 +11572,7 @@ for.body7.for.body7_crit_edge.i:                  ; preds = %for.body7.i.prehead
   %add.i = fadd fast float %10, %add.i35
   %indvars.iv.next7.i = add nuw nsw i64 %indvars.iv.next7.i36, 1
   %exitcond8.not.i = icmp eq i64 %indvars.iv.next7.i, 10
-  br i1 %exitcond8.not.i, label %for.body15.i.preheader, label %for.body7.for.body7_crit_edge.i, !llvm.loop !281
+  br i1 %exitcond8.not.i, label %for.body15.i.preheader, label %for.body7.for.body7_crit_edge.i, !llvm.loop !280
 
 for.body15.for.body15_crit_edge.i:                ; preds = %for.body15.i.preheader, %for.body15.for.body15_crit_edge.i
   %indvars.iv.next.i33 = phi i64 [ 1, %for.body15.i.preheader ], [ %indvars.iv.next.i, %for.body15.for.body15_crit_edge.i ]
@@ -11603,7 +11585,7 @@ for.body15.for.body15_crit_edge.i:                ; preds = %for.body15.i.prehea
   store float %12, float* %arrayidx21.i, align 4, !tbaa !153
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.next.i33, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 10
-  br i1 %exitcond.not.i, label %_ZL25neural_network_softmax_v2PKfPfi.exit, label %for.body15.for.body15_crit_edge.i, !llvm.loop !282
+  br i1 %exitcond.not.i, label %_ZL25neural_network_softmax_v2PKfPfi.exit, label %for.body15.for.body15_crit_edge.i, !llvm.loop !281
 
 _ZL25neural_network_softmax_v2PKfPfi.exit:        ; preds = %for.body15.for.body15_crit_edge.i
   %idxprom18 = zext i8 %label to i64
@@ -11794,7 +11776,7 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi1EEEvv.exit: ; preds 
   %20 = phi %"class.adept::internal::StackStorageOrig"* [ %16, %_ZN5adept5Stack17register_gradientEv.exit ], [ %19, %if.then.i.i ]
   %21 = phi %"class.adept::Stack"* [ %15, %_ZN5adept5Stack17register_gradientEv.exit ], [ %.pre7, %if.then.i.i ]
   %arg.i.i5.i = bitcast %"struct.adept::Expression.46"* %rhs to %"class.adept::ActiveReference"**
-  %22 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %arg.i.i5.i, align 8, !tbaa !283
+  %22 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %arg.i.i5.i, align 8, !tbaa !282
   %val_.i.i.i6.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %22, i64 0, i32 0
   %23 = load float*, float** %val_.i.i.i6.i, align 8, !tbaa !191
   %24 = load float, float* %23, align 4, !tbaa !153
@@ -11903,7 +11885,7 @@ if.then.i:                                        ; preds = %invoke.cont
   %5 = bitcast i8* %add.ptr.i to %"class.std::basic_ios"*
   %_M_streambuf_state.i.i.i = getelementptr inbounds i8, i8* %add.ptr.i, i64 32
   %6 = bitcast i8* %_M_streambuf_state.i.i.i to i32*
-  %7 = load i32, i32* %6, align 8, !tbaa !285
+  %7 = load i32, i32* %6, align 8, !tbaa !284
   %or.i.i.i = or i32 %7, 1
   invoke void @_ZNSt9basic_iosIcSt11char_traitsIcEE5clearESt12_Ios_Iostate(%"class.std::basic_ios"* nonnull dereferenceable(264) %5, i32 %or.i.i.i)
           to label %invoke.cont1 unwind label %lpad
@@ -12150,7 +12132,7 @@ _ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit: ; preds = %entry.if.end_
   %end_plus_one.i = getelementptr inbounds %"struct.adept::internal::Statement", %"struct.adept::internal::Statement"* %22, i64 %idxprom.i, i32 1
   store i32 %23, i32* %end_plus_one.i, align 4, !tbaa !45
   %exitcond.not = icmp eq i64 %indvars.iv.next, 10
-  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !291
+  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !290
 
 do.end:                                           ; preds = %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit
   ret void
@@ -12331,17 +12313,17 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.50"* %rhs to %"class.adept::ActiveReference"**
-  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !292
+  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !291
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %7, i64 0, i32 0
   %8 = load float*, float** %val_.i.i.i.i, align 8, !tbaa !191
   %9 = load float, float* %8, align 4, !tbaa !153
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.50", %"struct.adept::Expression.50"* %rhs, i64 8
   %10 = bitcast %"struct.adept::Expression.50"* %right.i.i.i to %"struct.adept::internal::BinaryOpScalarRight"**
-  %11 = load %"struct.adept::internal::BinaryOpScalarRight"*, %"struct.adept::internal::BinaryOpScalarRight"** %10, align 8, !tbaa !294
+  %11 = load %"struct.adept::internal::BinaryOpScalarRight"*, %"struct.adept::internal::BinaryOpScalarRight"** %10, align 8, !tbaa !293
   %left.i.i.i.i5.i = getelementptr inbounds %"struct.adept::internal::BinaryOpScalarRight", %"struct.adept::internal::BinaryOpScalarRight"* %11, i64 0, i32 0
-  %12 = load %"class.adept::ActiveConstReference"*, %"class.adept::ActiveConstReference"** %left.i.i.i.i5.i, align 16, !tbaa !295
+  %12 = load %"class.adept::ActiveConstReference"*, %"class.adept::ActiveConstReference"** %left.i.i.i.i5.i, align 16, !tbaa !294
   %val_.i.i.i.i.i.i = getelementptr inbounds %"class.adept::ActiveConstReference", %"class.adept::ActiveConstReference"* %12, i64 0, i32 0
-  %13 = load float*, float** %val_.i.i.i.i.i.i, align 8, !tbaa !298
+  %13 = load float*, float** %val_.i.i.i.i.i.i, align 8, !tbaa !297
   %14 = load float, float* %13, align 4, !tbaa !153
   %value_.i.i.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOpScalarRight", %"struct.adept::internal::BinaryOpScalarRight"* %11, i64 0, i32 1, i32 0, i32 0, i64 0
   %15 = load float, float* %value_.i.i.i.i.i.i, align 16, !tbaa !12
@@ -12632,7 +12614,7 @@ for.body:                                         ; preds = %for.body.lr.ph, %fo
   %indvars.iv.next34 = add nsw i64 %indvars.iv33, 1
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !299
+  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !298
 
 eh.resume:                                        ; preds = %if.then.i.i, %ehcleanup.thread42, %cleanup.action
   %.pn27 = phi { i8*, i32 } [ %.pn28, %cleanup.action ], [ %35, %if.then.i.i ], [ %35, %ehcleanup.thread42 ]
@@ -12908,7 +12890,7 @@ for.body:                                         ; preds = %for.body.lr.ph, %fo
   %indvars.iv.next82 = add nsw i64 %indvars.iv81, 1
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !300
+  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !299
 
 eh.resume:                                        ; preds = %if.then.i.i, %if.then.i.i55, %ehcleanup18.thread100, %ehcleanup.thread90, %cleanup.action23, %cleanup.action
   %.pn38.pn = phi { i8*, i32 } [ %.pn3877, %cleanup.action23 ], [ %.pn74, %cleanup.action ], [ %17, %if.then.i.i55 ], [ %39, %if.then.i.i ], [ %17, %ehcleanup.thread90 ], [ %39, %ehcleanup18.thread100 ]
@@ -12993,7 +12975,7 @@ invoke.cont:                                      ; preds = %if.then5
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %5 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %6 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !9, !alias.scope !301
+  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !9, !alias.scope !300
   %_M_p.i.i30.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 0, i32 0
   %7 = load i8*, i8** %_M_p.i.i30.i.i, align 8, !tbaa !11
   %8 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2
@@ -13008,18 +12990,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i28.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %7, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !301
+  store i8* %7, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !300
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2, i32 0
   %9 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !12
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !301
+  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !300
   br label %invoke.cont8
 
 invoke.cont8:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i27.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 1
   %10 = load i64, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !301
+  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !300
   %11 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i57 to %union.anon**
   store %union.anon* %8, %union.anon** %11, align 8, !tbaa !11
   store i64 0, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
@@ -13085,7 +13067,7 @@ cleanup.action:                                   ; preds = %if.then.i.i64, %ehc
 
 if.else:                                          ; preds = %for.body.critedge
   %cmp16 = icmp eq i32 %1, 0
-  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !304
+  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !303
 
 _ZN5adept5ArrayILi1EdLb0EE5clearEv.exit:          ; preds = %if.else
   %data_.i = getelementptr inbounds %"class.adept::Array.28", %"class.adept::Array.28"* %this, i64 0, i32 0
@@ -13104,13 +13086,13 @@ for.end:                                          ; preds = %if.else
   %call32 = tail call noalias nonnull dereferenceable(24) i8* @_Znwm(i64 24) #38
   %n_.i = getelementptr inbounds i8, i8* %call32, i64 8
   %19 = bitcast i8* %n_.i to i32*
-  store i32 %1, i32* %19, align 8, !tbaa !305
+  store i32 %1, i32* %19, align 8, !tbaa !304
   %n_links_.i = getelementptr inbounds i8, i8* %call32, i64 12
   %20 = bitcast i8* %n_links_.i to i32*
-  store i32 1, i32* %20, align 4, !tbaa !307
+  store i32 1, i32* %20, align 4, !tbaa !306
   %gradient_index_.i = getelementptr inbounds i8, i8* %call32, i64 16
   %21 = bitcast i8* %gradient_index_.i to i32*
-  store i32 -1, i32* %21, align 8, !tbaa !308
+  store i32 -1, i32* %21, align 8, !tbaa !307
   %22 = bitcast double** %result.i.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %22) #34
   %23 = bitcast double** %result.i.i to i8**
@@ -13134,7 +13116,7 @@ invoke.cont34:                                    ; preds = %for.end
   %25 = load double*, double** %result.i.i, align 8, !tbaa !26
   call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %22) #34
   %data_.i67 = bitcast i8* %call32 to double**
-  store double* %25, double** %data_.i67, align 8, !tbaa !309
+  store double* %25, double** %data_.i67, align 8, !tbaa !308
   %26 = load i32, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !46
   %inc.i = add nsw i32 %26, 1
   store i32 %inc.i, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !46
@@ -13167,7 +13149,7 @@ entry:
   %ref.tmp = alloca %"class.std::__cxx11::basic_string", align 8
   %ref.tmp2 = alloca %"class.std::__cxx11::basic_string", align 8
   %n_links_ = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 2
-  %0 = load i32, i32* %n_links_, align 4, !tbaa !307
+  %0 = load i32, i32* %n_links_, align 4, !tbaa !306
   %cmp = icmp eq i32 %0, 0
   br i1 %cmp, label %if.then, label %if.else
 
@@ -13188,7 +13170,7 @@ invoke.cont:                                      ; preds = %if.then
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %4 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %5 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !9, !alias.scope !310
+  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !9, !alias.scope !309
   %_M_p.i.i30.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 0, i32 0
   %6 = load i8*, i8** %_M_p.i.i30.i.i, align 8, !tbaa !11
   %7 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2
@@ -13203,18 +13185,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i28.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %6, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !310
+  store i8* %6, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !309
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2, i32 0
   %8 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !12
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !310
+  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !309
   br label %invoke.cont4
 
 invoke.cont4:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i27.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 1
   %9 = load i64, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !310
+  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !309
   %10 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i17 to %union.anon**
   store %union.anon* %7, %union.anon** %10, align 8, !tbaa !11
   store i64 0, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
@@ -13280,16 +13262,16 @@ cleanup.action:                                   ; preds = %if.then.i.i24, %ehc
 
 if.else:                                          ; preds = %entry
   %dec = add nsw i32 %0, -1
-  store i32 %dec, i32* %n_links_, align 4, !tbaa !307
+  store i32 %dec, i32* %n_links_, align 4, !tbaa !306
   %cmp11.not = icmp eq i32 %dec, 0
   br i1 %cmp11.not, label %delete.notnull, label %if.end13
 
 delete.notnull:                                   ; preds = %if.else
   %17 = bitcast %"class.adept::Storage.14"* %this to i8**
-  %18 = load i8*, i8** %17, align 8, !tbaa !309
+  %18 = load i8*, i8** %17, align 8, !tbaa !308
   tail call void @free(i8* %18) #34
   %gradient_index_.i = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 3
-  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !308
+  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !307
   %cmp.i = icmp sgt i32 %19, -1
   br i1 %cmp.i, label %if.then.i, label %_ZN5adept7StorageIdED2Ev.exit
 
@@ -13351,12 +13333,12 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.58"* %rhs to %"class.adept::Active"**
-  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %left.i.i.i, align 8, !tbaa !313
+  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %left.i.i.i, align 8, !tbaa !312
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %7, i64 0, i32 0
   %8 = load double, double* %val_.i.i.i.i, align 8, !tbaa !160
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.58", %"struct.adept::Expression.58"* %rhs, i64 8
   %9 = bitcast %"struct.adept::Expression.58"* %right.i.i.i to %"class.adept::ActiveReference"**
-  %10 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %9, align 8, !tbaa !315
+  %10 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %9, align 8, !tbaa !314
   %val_.i7.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %10, i64 0, i32 0
   %11 = load float*, float** %val_.i7.i.i.i, align 8, !tbaa !191
   %12 = load float, float* %11, align 4, !tbaa !153
@@ -13470,13 +13452,13 @@ do.body:                                          ; preds = %if.then.i14, %entry
 for.body:                                         ; preds = %do.body, %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit
   %indvars.iv = phi i64 [ 0, %do.body ], [ %indvars.iv.next, %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit ]
   %3 = load %"class.adept::Stack"*, %"class.adept::Stack"** @_ZN5adept21_stack_current_threadE, align 8, !tbaa !26
-  %4 = load %"struct.adept::internal::BinaryOperation.60"*, %"struct.adept::internal::BinaryOperation.60"** %arg.i8.i, align 8, !tbaa !316
+  %4 = load %"struct.adept::internal::BinaryOperation.60"*, %"struct.adept::internal::BinaryOperation.60"** %arg.i8.i, align 8, !tbaa !315
   %left.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOperation.60", %"struct.adept::internal::BinaryOperation.60"* %4, i64 0, i32 0
-  %5 = load %"class.adept::FixedArray"*, %"class.adept::FixedArray"** %left.i.i.i.i, align 8, !tbaa !318
+  %5 = load %"class.adept::FixedArray"*, %"class.adept::FixedArray"** %left.i.i.i.i, align 8, !tbaa !317
   %arrayidx.i.i.i.i10.i = getelementptr inbounds %"class.adept::FixedArray", %"class.adept::FixedArray"* %5, i64 0, i32 1, i64 %indvars.iv
   %6 = load float, float* %arrayidx.i.i.i.i10.i, align 4, !tbaa !153
   %right.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOperation.60", %"struct.adept::internal::BinaryOperation.60"* %4, i64 0, i32 1
-  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %right.i.i.i.i, align 8, !tbaa !320
+  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %right.i.i.i.i, align 8, !tbaa !319
   %val_.i.i.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %7, i64 0, i32 0
   %8 = load double, double* %val_.i.i.i.i.i, align 8, !tbaa !160
   %div.i.i.i.i.i = fdiv fast double 1.000000e+00, %8
@@ -13570,7 +13552,7 @@ _ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit: ; preds = %entry.if.end_
   %end_plus_one.i = getelementptr inbounds %"struct.adept::internal::Statement", %"struct.adept::internal::Statement"* %27, i64 %idxprom.i, i32 1
   store i32 %28, i32* %end_plus_one.i, align 4, !tbaa !45
   %exitcond.not = icmp eq i64 %indvars.iv.next, 10
-  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !321
+  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !320
 
 do.end:                                           ; preds = %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit
   ret void
@@ -13599,13 +13581,13 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.63"* %rhs to %"class.adept::ActiveReference"**
-  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !322
+  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !321
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %7, i64 0, i32 0
   %8 = load float*, float** %val_.i.i.i.i, align 8, !tbaa !191
   %9 = load float, float* %8, align 4, !tbaa !153
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.63", %"struct.adept::Expression.63"* %rhs, i64 8
   %10 = bitcast %"struct.adept::Expression.63"* %right.i.i.i to %"class.adept::Active"**
-  %11 = load %"class.adept::Active"*, %"class.adept::Active"** %10, align 8, !tbaa !324
+  %11 = load %"class.adept::Active"*, %"class.adept::Active"** %10, align 8, !tbaa !323
   %val_.i12.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %11, i64 0, i32 0
   %12 = load double, double* %val_.i12.i.i.i, align 8, !tbaa !160
   %div.i.i.i.i = fdiv fast double 1.000000e+00, %12
@@ -14103,46 +14085,45 @@ attributes #40 = { cold }
 !279 = distinct !{!279, !31, !32}
 !280 = distinct !{!280, !31, !32}
 !281 = distinct !{!281, !31, !32}
-!282 = distinct !{!282, !31, !32}
-!283 = !{!284, !5, i64 0}
-!284 = !{!"_ZTSN5adept8internal14UnaryOperationIfNS0_3LogENS_15ActiveReferenceIfEEEE", !5, i64 0}
-!285 = !{!286, !288, i64 32}
-!286 = !{!"_ZTSSt8ios_base", !8, i64 8, !8, i64 16, !287, i64 24, !288, i64 28, !288, i64 32, !5, i64 40, !289, i64 48, !6, i64 64, !24, i64 192, !5, i64 200, !290, i64 208}
-!287 = !{!"_ZTSSt13_Ios_Fmtflags", !6, i64 0}
-!288 = !{!"_ZTSSt12_Ios_Iostate", !6, i64 0}
-!289 = !{!"_ZTSNSt8ios_base6_WordsE", !5, i64 0, !8, i64 8}
-!290 = !{!"_ZTSSt6locale", !5, i64 0}
-!291 = distinct !{!291, !31, !32}
-!292 = !{!293, !5, i64 0}
-!293 = !{!"_ZTSN5adept8internal15BinaryOperationIfNS_15ActiveReferenceIfEENS0_3AddENS0_19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEEEE", !5, i64 0, !5, i64 8}
-!294 = !{!293, !5, i64 8}
-!295 = !{!296, !5, i64 0}
-!296 = !{!"_ZTSN5adept8internal19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEE", !5, i64 0, !297, i64 16}
-!297 = !{!"_ZTSN5adept8internal6PacketIfEE", !6, i64 0}
-!298 = !{!235, !5, i64 0}
+!282 = !{!283, !5, i64 0}
+!283 = !{!"_ZTSN5adept8internal14UnaryOperationIfNS0_3LogENS_15ActiveReferenceIfEEEE", !5, i64 0}
+!284 = !{!285, !287, i64 32}
+!285 = !{!"_ZTSSt8ios_base", !8, i64 8, !8, i64 16, !286, i64 24, !287, i64 28, !287, i64 32, !5, i64 40, !288, i64 48, !6, i64 64, !24, i64 192, !5, i64 200, !289, i64 208}
+!286 = !{!"_ZTSSt13_Ios_Fmtflags", !6, i64 0}
+!287 = !{!"_ZTSSt12_Ios_Iostate", !6, i64 0}
+!288 = !{!"_ZTSNSt8ios_base6_WordsE", !5, i64 0, !8, i64 8}
+!289 = !{!"_ZTSSt6locale", !5, i64 0}
+!290 = distinct !{!290, !31, !32}
+!291 = !{!292, !5, i64 0}
+!292 = !{!"_ZTSN5adept8internal15BinaryOperationIfNS_15ActiveReferenceIfEENS0_3AddENS0_19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEEEE", !5, i64 0, !5, i64 8}
+!293 = !{!292, !5, i64 8}
+!294 = !{!295, !5, i64 0}
+!295 = !{!"_ZTSN5adept8internal19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEE", !5, i64 0, !296, i64 16}
+!296 = !{!"_ZTSN5adept8internal6PacketIfEE", !6, i64 0}
+!297 = !{!235, !5, i64 0}
+!298 = distinct !{!298, !31, !32}
 !299 = distinct !{!299, !31, !32}
-!300 = distinct !{!300, !31, !32}
-!301 = !{!302}
-!302 = distinct !{!302, !303, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!303 = distinct !{!303, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!304 = distinct !{!304, !31, !32}
-!305 = !{!306, !24, i64 8}
-!306 = !{!"_ZTSN5adept7StorageIdEE", !5, i64 0, !24, i64 8, !24, i64 12, !24, i64 16}
-!307 = !{!306, !24, i64 12}
-!308 = !{!306, !24, i64 16}
-!309 = !{!306, !5, i64 0}
-!310 = !{!311}
-!311 = distinct !{!311, !312, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!312 = distinct !{!312, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!313 = !{!314, !5, i64 0}
-!314 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_6ActiveIdEENS0_3AddENS_15ActiveReferenceIfEEEE", !5, i64 0, !5, i64 8}
-!315 = !{!314, !5, i64 8}
-!316 = !{!317, !5, i64 0}
-!317 = !{!"_ZTSN5adept8internal7NoAliasIdNS0_15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEEEE", !5, i64 0}
-!318 = !{!319, !5, i64 0}
-!319 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
-!320 = !{!319, !5, i64 8}
-!321 = distinct !{!321, !31, !32}
-!322 = !{!323, !5, i64 0}
-!323 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_15ActiveReferenceIfEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
-!324 = !{!323, !5, i64 8}
+!300 = !{!301}
+!301 = distinct !{!301, !302, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!302 = distinct !{!302, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!303 = distinct !{!303, !31, !32}
+!304 = !{!305, !24, i64 8}
+!305 = !{!"_ZTSN5adept7StorageIdEE", !5, i64 0, !24, i64 8, !24, i64 12, !24, i64 16}
+!306 = !{!305, !24, i64 12}
+!307 = !{!305, !24, i64 16}
+!308 = !{!305, !5, i64 0}
+!309 = !{!310}
+!310 = distinct !{!310, !311, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!311 = distinct !{!311, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!312 = !{!313, !5, i64 0}
+!313 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_6ActiveIdEENS0_3AddENS_15ActiveReferenceIfEEEE", !5, i64 0, !5, i64 8}
+!314 = !{!313, !5, i64 8}
+!315 = !{!316, !5, i64 0}
+!316 = !{!"_ZTSN5adept8internal7NoAliasIdNS0_15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEEEE", !5, i64 0}
+!317 = !{!318, !5, i64 0}
+!318 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
+!319 = !{!318, !5, i64 8}
+!320 = distinct !{!320, !31, !32}
+!321 = !{!322, !5, i64 0}
+!322 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_15ActiveReferenceIfEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
+!323 = !{!322, !5, i64 8}

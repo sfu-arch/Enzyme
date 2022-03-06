@@ -659,3 +659,29 @@ void addInstCost(llvm::Function *f) {
     }
   }
 }
+
+// This function calls the printf before the given instruction.
+// HOW TO USE:
+//     std::vector<Value*> args = {arg0, arg1, arg2, ...};
+//     CallPrintf(call_before, format, args);
+// 
+void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args) {
+    auto &m = *I->getModule();
+    auto &context = m.getContext();
+
+    PointerType *PrintfArgTy = PointerType::getUnqual(Type::getInt8Ty(context));
+    FunctionType *PrintfTy = FunctionType::get(IntegerType::getInt32Ty(context), PrintfArgTy, /*IsVarArgs=*/true);
+    FunctionCallee Printf = m.getOrInsertFunction("printf", PrintfTy);
+
+    llvm::Constant *ResultFormatStr = llvm::ConstantDataArray::getString(context, format);
+
+    Constant *ResultFormatStrVar =
+        m.getOrInsertGlobal("ResultFormatStrIR", ResultFormatStr->getType());
+    dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
+
+    Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "");
+    ResultHeaderStrPtr->insertAfter(I);
+    std::vector<Value *> print_args = {ResultHeaderStrPtr};
+    print_args.insert(print_args.end(), args.begin(), args.end());
+    CallInst::Create(Printf, print_args, "", ResultHeaderStrPtr->getNextNode());
+}

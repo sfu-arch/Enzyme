@@ -20,11 +20,13 @@ bool AddressInstPass::runOnFunction(Function &f) {
 }
 
 void AddressInstPass::visitLoadInst(LoadInst &inst) {
-    callPrintf(&inst, "load %x\n", {inst.getOperand(0)});
+    if (!inst.getParent()->getName().contains("invert"))
+        callPrintf(&inst, "load %x\n", {inst.getOperand(0)});
 }
 
 void AddressInstPass::visitStoreInst(StoreInst &inst) {
-    callPrintf(&inst, "store %x\n", {inst.getPointerOperand()});
+    if (!inst.getParent()->getName().contains("invert"))
+        callPrintf(&inst, "store %x\n", {inst.getPointerOperand()});
 }
 // This function calls the printf before the given instruction.
 // HOW TO USE:

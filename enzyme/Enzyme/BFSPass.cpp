@@ -22,7 +22,6 @@ bool BFSPass::runOnFunction(Function &f) {
     for (auto &arg: f.args())
         args[static_cast<Value*>(&arg)] = std::vector<Value*>();
 
-    Graph g;
     g.AddNode(f.getArg(0));
     
     std::vector<Value*> bfs_stack;
@@ -55,7 +54,14 @@ bool BFSPass::runOnFunction(Function &f) {
         errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
         i.second->UndoPushToTape(prev_cost);
     }
+    visit(&f);
     return true;
+}
+void BFSPass::visitInstruction(Instruction &I) {
+    if (!isValidInstruction(&I))
+        return;
+    if (g.contains(&I))
+        I.setMetadata("node", MDNode::get(I.getContext(), MDString::get(I.getContext(), "true")));
 }
 
 std::map<Value*, int> Graph::GetLevels() { 
@@ -82,7 +88,7 @@ int Graph::Node::GetInstructionCost(Value *inst) {
     if (!isa<Instruction>(inst))
         return 1;
     if (isa<LoadInst>(inst))
-        return 50;
+        return 5;
     if (isa<StoreInst>(inst))
         return 1;
     if (isa<BinaryOperator>(inst))

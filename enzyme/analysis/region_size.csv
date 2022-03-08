@@ -1,0 +1,4 @@
+benchmark, mode, region_inst_count, register_count, tape_entry_count, entry_size, total_mem
+nn, big_region, 1568000, 1568000, 1, 3 * 8byte (3 addresses) + 8byte (region_id) + 8byte(parents id), 1568000 regs * 8bytes + 40 byte
+nn, small_region, 1, 2, 1568000, 2 * register_id(1byte) + 8byte (region_id) + 8/16 byte(parent id), 1568000 * 26 bytes (40MB)
+nn, naive_region, 256, 256 (8bytes), 6125, 4 * 8 bytes + region_id, 8/16bytes (parent_id), 6125 * 34 bytes + 256 regs (200KB)

@@ -19,8 +19,7 @@ namespace instrumem
 bool isValidInstruction(Instruction *inst);
 std::vector<std::pair<Value*, int>> SortMap(std::map<Value*, int> &map);
 
-class Graph {
-    class Node {
+class Node {
     public:
         Node(Value *v) : value(v), level(0), cost(0) {}
         void AddChild(Node *child);
@@ -30,7 +29,10 @@ class Graph {
         void UndoPushToTape(int prev_cost);
         void AssignChildCost();
         void PropagateCost(int parent_old_cost, int parent_new_cost);
-    
+        
+        Value* GetValue() { return value; }
+
+        bool visited = false;
         int level;
         int cost;
     private:
@@ -38,7 +40,9 @@ class Graph {
 
         std::set<Node *> children;
         std::set<Node *> parents;
-    };
+};
+
+class Graph {
     public:
         Graph() {}
         
@@ -47,7 +51,8 @@ class Graph {
 
         std::map<Value*, Node*> operator() () { return nodes; }
         std::map<Value*, int> GetLevels();
-
+        void PrintLevels();
+        
         int GetTotalCost();
         bool contains(Value *v) { return nodes.find(v) != nodes.end(); }
 

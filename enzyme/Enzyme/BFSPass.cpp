@@ -12,7 +12,11 @@
 //===----------------------------------------------------------------------===//
 
 #include "BFSPass.h"
+#include "Utils.h"
+
 #include "llvm/IR/IRBuilder.h"
+
+#define REGION_COUNT 3
 
 using namespace instrumem;
 
@@ -35,11 +39,14 @@ bool BFSPass::runOnFunction(Function &f) {
                     continue;
                 if (!g().count(I))
                     g.AddNode(I);
-
+                if (g[I]->visited)
+                    continue;
                 g[curr]->AddChild(g[I]);
                 bfs_stack.push_back(I);
             }
         }
+        g[curr]->visited = true;
+
     }
 
     auto levels = g.GetLevels();
@@ -47,12 +54,22 @@ bool BFSPass::runOnFunction(Function &f) {
     for (auto &it: vec) 
         g()[it.first]->AssignChildCost();
 
-    int total_cost = g.GetTotalCost();
-    for (auto i: g()) {
-        int prev_cost = i.second->cost;
-        i.second->PushToTape();
-        errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
-        i.second->UndoPushToTape(prev_cost);
+    for (int j = 0; j < REGION_COUNT; j++) {
+        int total_cost = g.GetTotalCost();
+        int min_cost = total_cost;
+        Node* min_node = nullptr;
+        for (auto i: g()) {
+            int prev_cost = i.second->cost;
+            i.second->PushToTape();
+            errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
+            if (g.GetTotalCost() < min_cost) {
+                min_cost = g.GetTotalCost();
+                min_node = i.second;
+            }
+            i.second->UndoPushToTape(prev_cost);
+        }
+        errs() << "Decided to push " << *min_node->GetValue() << "\n";
+        min_node->PushToTape();
     }
     visit(&f);
     return true;
@@ -71,6 +88,14 @@ std::map<Value*, int> Graph::GetLevels() {
     return levels;
 }
 
+void Graph::PrintLevels() {
+    // for (auto it = nodes.begin(); it != nodes.end(); it++)
+    //     if (isa<llvm::Instruction>(it->first))
+    //         CallPrintf((llvm::Instruction*)it->first, "Level: %d", {it->second->level});
+        // errs() << it->first->getName() << ": " << it->second->level << "\n";
+    // CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args);
+}
+
 int Graph::GetTotalCost() {
     int cost = 0;
     for (auto i : nodes)
@@ -78,13 +103,13 @@ int Graph::GetTotalCost() {
     return cost;
 }
 
-void Graph::Node::AddChild(Node *child) {
+void Node::AddChild(Node *child) {
     children.insert(child);
     child->parents.insert(this);
     child->level = std::max(level + 1, child->level);
 }
 
-int Graph::Node::GetInstructionCost(Value *inst) {
+int Node::GetInstructionCost(Value *inst) {
     if (!isa<Instruction>(inst))
         return 1;
     if (isa<LoadInst>(inst))
@@ -96,41 +121,49 @@ int Graph::Node::GetInstructionCost(Value *inst) {
     if (isa<UnaryOperator>(inst))
         return 1;
     if (isa<GetElementPtrInst>(inst))
-        return 1;
+        return 2;
     if (isa<AllocaInst>(inst))
+        return 1;
+    if (isa<CastInst>(inst))
+        return 1;
+    if (isa<PHINode>(inst))
         return 1;
     return 0;
 }
 
-void Graph::Node::PushToTape() {
+void Node::PushToTape() {
     for (auto child: children) {
         child->PropagateCost(cost, 0);
     }
     cost = 0;
 }
 
-void Graph::Node::UndoPushToTape(int prev_cost) {
+void Node::UndoPushToTape(int prev_cost) {
     cost = prev_cost;
     for (auto child: children) {
         child->PropagateCost(0, cost);
     }
 }
 
-void Graph::Node::AssignChildCost() {
+void Node::AssignChildCost() {
     for (auto child : children)
         child->cost += cost + GetInstructionCost(value);
 }
 
-void Graph::Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
+void Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
+    if (cost == 0) // Node is already on the tape
+        return;
     int prev_cost = cost;
     cost += parent_new_cost - parent_old_cost;
+
     for (auto child : children)
         child->PropagateCost(prev_cost, cost);
 }
 
 bool instrumem::isValidInstruction(Instruction *inst) {
     return isa<LoadInst>(inst) || isa<StoreInst>(inst) || isa<BinaryOperator>(inst) 
-    || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst);
+    || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst) || 
+    isa<CastInst>(inst) || isa<PHINode>(inst);
 }
 
 std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &map) {

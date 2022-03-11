@@ -11,6 +11,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+
 #include "BFSPass.h"
 #include "Utils.h"
 
@@ -23,13 +24,13 @@ using namespace instrumem;
 BFSPass::BFSPass() : FunctionPass(ID) {} // BFSPass
 
 bool BFSPass::runOnFunction(Function &f) {
-    for (auto &arg: f.args())
-        args[static_cast<Value*>(&arg)] = std::vector<Value*>();
-
-    g.AddNode(f.getArg(0));
-    
     std::vector<Value*> bfs_stack;
-    bfs_stack.push_back(f.getArg(0));
+    for (auto &arg: f.args()) {
+        args[static_cast<Value*>(&arg)] = std::vector<Value*>();
+        g.AddNode(static_cast<Value*>(&arg));
+        bfs_stack.push_back(&arg);
+    }
+    
     while (!bfs_stack.empty()) {
         auto curr = bfs_stack.front();
         bfs_stack.erase(bfs_stack.begin());
@@ -54,26 +55,46 @@ bool BFSPass::runOnFunction(Function &f) {
     for (auto &it: vec) 
         g()[it.first]->AssignChildCost();
 
-    for (int j = 0; j < REGION_COUNT; j++) {
-        int total_cost = g.GetTotalCost();
-        int min_cost = total_cost;
-        Node* min_node = nullptr;
-        for (auto i: g()) {
-            int prev_cost = i.second->cost;
-            i.second->PushToTape();
-            errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
-            if (g.GetTotalCost() < min_cost) {
-                min_cost = g.GetTotalCost();
-                min_node = i.second;
-            }
-            i.second->UndoPushToTape(prev_cost);
-        }
-        errs() << "Decided to push " << *min_node->GetValue() << "\n";
-        min_node->PushToTape();
-    }
+    // for (int j = 0; j < REGION_COUNT; j++) {
+    //     int total_cost = g.GetTotalCost();
+    //     int min_cost = total_cost;
+    //     Node* min_node = nullptr;
+    //     for (auto i: g()) {
+    //         int prev_cost = i.second->cost;
+    //         i.second->PushToTape();
+    //         errs() << "Pushing " << *i.first << " changes the total cost from " << total_cost << " to " << g.GetTotalCost() << "\n";
+    //         if (g.GetTotalCost() < min_cost) {
+    //             min_cost = g.GetTotalCost();
+    //             min_node = i.second;
+    //         }
+    //         i.second->UndoPushToTape(prev_cost);
+    //     }
+    //     if (min_node) {
+    //         errs() << "Decided to push " << *min_node->GetValue() << "\n";
+    //         min_node->PushToTape();
+    //     }
+    // }
     visit(&f);
+    myfile.open ("forward.dot");
+    myfile << "digraph G {\n";
+    g.DumpForward(myfile);
+    myfile << "}\n";
+    myfile.close();
+
+    myfile.open ("forward_and_reverse.dot");
+    myfile << "digraph G {\n";
+    myfile << "\tsubgraph Forward {\n";
+    g.DumpForward(myfile);
+    myfile << "\t}\n";
+    myfile << "\tsubgraph Reverse {\n";
+    g.DumpReverse(myfile);
+    myfile << "\t}\n";
+    myfile << "}\n";
+    myfile.close();
+
     return true;
 }
+
 void BFSPass::visitInstruction(Instruction &I) {
     if (!isValidInstruction(&I))
         return;
@@ -161,7 +182,7 @@ void Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
 }
 
 bool instrumem::isValidInstruction(Instruction *inst) {
-    return isa<LoadInst>(inst) || isa<StoreInst>(inst) || isa<BinaryOperator>(inst) 
+    return isa<LoadInst>(inst)  || isa<BinaryOperator>(inst) 
     || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst) || 
     isa<CastInst>(inst) || isa<PHINode>(inst);
 }
@@ -175,6 +196,37 @@ std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &ma
         return a.second < b.second;
     });
     return vec;
+}
+
+void Node::DumpForward(std::ofstream &myfile) {
+ 
+    if (value->getName().contains("'"))
+        return;
+
+    for (auto child : children) {
+        myfile << "\t\t\"" << value->getNameOrAsOperand()  << '"' << " -> " << '"' << child->value->getNameOrAsOperand()  << '"' <<  "\n";
+
+    }
+}
+
+void Node::DumpReverse(std::ofstream &myfile) {
+    if (value->getName().contains("'"))
+        return;
+    for (auto parent : parents) {
+        myfile << "\t\t\"g" << value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
+        myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
+
+    }
+}
+
+void Graph::DumpForward(std::ofstream &myfile) {
+    for (auto i: nodes)
+        i.second->DumpForward(myfile);
+}
+
+void Graph::DumpReverse(std::ofstream &myfile) {
+    for (auto i: nodes)
+        i.second->DumpReverse(myfile);
 }
 
 char BFSPass::ID = 0;

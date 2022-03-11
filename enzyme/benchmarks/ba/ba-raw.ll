@@ -23083,7 +23083,7 @@ entry:
   store double 0.000000e+00, double* %"mul'de", align 8
   %"'de" = alloca double, align 8
   store double 0.000000e+00, double* %"'de", align 8
-  %0 = load double, double* %w, align 8, !tbaa !68
+  %0 = load double, double* %w, align 8, !tbaa !68, !node !362
   br label %invertentry
 
 invertentry:                                      ; preds = %entry
@@ -23277,31 +23277,31 @@ project.exit:
   %Xcam.i = alloca [3 x double], align 16
   tail call void @llvm.experimental.noalias.scope.decl(metadata !103)
   tail call void @llvm.experimental.noalias.scope.decl(metadata !106)
-  %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 3
-  %arrayidx.i = getelementptr inbounds double, double* %cam, i64 3
-  %0 = load double, double* %X, align 8, !tbaa !68, !alias.scope !106, !noalias !110
-  %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %sub.i = fsub fast double %0, %1
+  %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 3, !node !362
+  %arrayidx.i = getelementptr inbounds double, double* %cam, i64 3, !node !362
+  %0 = load double, double* %X, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
+  %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %sub.i = fsub fast double %0, %1, !node !362
   %"arrayidx3.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 0
   %arrayidx3.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 0
   store double %sub.i, double* %arrayidx3.i, align 16, !tbaa !68, !noalias !108
-  %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"X'", i64 1
-  %arrayidx4.i = getelementptr inbounds double, double* %X, i64 1
-  %2 = load double, double* %arrayidx4.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110
-  %"arrayidx5.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 4
-  %arrayidx5.i = getelementptr inbounds double, double* %cam, i64 4
-  %3 = load double, double* %arrayidx5.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %sub6.i = fsub fast double %2, %3
+  %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"X'", i64 1, !node !362
+  %arrayidx4.i = getelementptr inbounds double, double* %X, i64 1, !node !362
+  %2 = load double, double* %arrayidx4.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
+  %"arrayidx5.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 4, !node !362
+  %arrayidx5.i = getelementptr inbounds double, double* %cam, i64 4, !node !362
+  %3 = load double, double* %arrayidx5.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %sub6.i = fsub fast double %2, %3, !node !362
   %"arrayidx7.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 1
   %arrayidx7.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 1
   store double %sub6.i, double* %arrayidx7.i, align 8, !tbaa !68, !noalias !108
-  %"arrayidx8.i'ipg" = getelementptr inbounds double, double* %"X'", i64 2
-  %arrayidx8.i = getelementptr inbounds double, double* %X, i64 2
-  %4 = load double, double* %arrayidx8.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110
-  %"arrayidx9.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 5
-  %arrayidx9.i = getelementptr inbounds double, double* %cam, i64 5
-  %5 = load double, double* %arrayidx9.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %sub10.i = fsub fast double %4, %5
+  %"arrayidx8.i'ipg" = getelementptr inbounds double, double* %"X'", i64 2, !node !362
+  %arrayidx8.i = getelementptr inbounds double, double* %X, i64 2, !node !362
+  %4 = load double, double* %arrayidx8.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
+  %"arrayidx9.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 5, !node !362
+  %arrayidx9.i = getelementptr inbounds double, double* %cam, i64 5, !node !362
+  %5 = load double, double* %arrayidx9.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %sub10.i = fsub fast double %4, %5, !node !362
   %"arrayidx11.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 2
   %arrayidx11.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 2
   store double %sub10.i, double* %arrayidx11.i, align 16, !tbaa !68, !noalias !108
@@ -23320,37 +23320,37 @@ project.exit:
   %mul.i.i.i11 = fmul fast double %div.i, %div.i
   %mul.i.i.i = fmul fast double %div19.i, %div19.i
   %add.i.i.i = fadd fast double %mul.i.i.i11, %mul.i.i.i
-  %"arrayidx21.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 9
-  %arrayidx21.i = getelementptr inbounds double, double* %cam, i64 9
-  %9 = load double, double* %arrayidx21.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %"arrayidx1.i.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 10
-  %arrayidx1.i.i = getelementptr inbounds double, double* %cam, i64 10
-  %10 = load double, double* %arrayidx1.i.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %mul3.i.i = fmul fast double %10, %add.i.i.i
-  %reass.add.i.i = fadd fast double %mul3.i.i, %9
-  %reass.mul.i.i = fmul fast double %reass.add.i.i, %add.i.i.i
-  %add4.i.i = fadd fast double %reass.mul.i.i, 1.000000e+00
-  %"arrayidx23.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 6
-  %arrayidx23.i = getelementptr inbounds double, double* %cam, i64 6
-  %11 = load double, double* %arrayidx23.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %mul6.i.i = fmul fast double %add4.i.i, %11
-  %mul.i = fmul fast double %mul6.i.i, %div.i
-  %"arrayidx24.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 7
-  %arrayidx24.i = getelementptr inbounds double, double* %cam, i64 7
-  %12 = load double, double* %arrayidx24.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %add.i = fadd fast double %mul.i, %12
-  %mul28.i = fmul fast double %mul6.i.i, %div19.i
-  %"arrayidx29.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 8
-  %arrayidx29.i = getelementptr inbounds double, double* %cam, i64 8
-  %13 = load double, double* %arrayidx29.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111
-  %add30.i = fadd fast double %mul28.i, %13
-  %14 = load double, double* %w, align 8, !tbaa !68
-  %15 = load double, double* %feat, align 8, !tbaa !68
-  %sub = fsub fast double %add.i, %15
-  %arrayidx4 = getelementptr inbounds double, double* %feat, i64 1
-  %16 = load double, double* %arrayidx4, align 8, !tbaa !68
-  %sub5 = fsub fast double %add30.i, %16
-  %"arrayidx7'ipg" = getelementptr inbounds double, double* %"err'", i64 1
+  %"arrayidx21.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 9, !node !362
+  %arrayidx21.i = getelementptr inbounds double, double* %cam, i64 9, !node !362
+  %9 = load double, double* %arrayidx21.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %"arrayidx1.i.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 10, !node !362
+  %arrayidx1.i.i = getelementptr inbounds double, double* %cam, i64 10, !node !362
+  %10 = load double, double* %arrayidx1.i.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %mul3.i.i = fmul fast double %10, %add.i.i.i, !node !362
+  %reass.add.i.i = fadd fast double %mul3.i.i, %9, !node !362
+  %reass.mul.i.i = fmul fast double %reass.add.i.i, %add.i.i.i, !node !362
+  %add4.i.i = fadd fast double %reass.mul.i.i, 1.000000e+00, !node !362
+  %"arrayidx23.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 6, !node !362
+  %arrayidx23.i = getelementptr inbounds double, double* %cam, i64 6, !node !362
+  %11 = load double, double* %arrayidx23.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %mul6.i.i = fmul fast double %add4.i.i, %11, !node !362
+  %mul.i = fmul fast double %mul6.i.i, %div.i, !node !362
+  %"arrayidx24.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 7, !node !362
+  %arrayidx24.i = getelementptr inbounds double, double* %cam, i64 7, !node !362
+  %12 = load double, double* %arrayidx24.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %add.i = fadd fast double %mul.i, %12, !node !362
+  %mul28.i = fmul fast double %mul6.i.i, %div19.i, !node !362
+  %"arrayidx29.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 8, !node !362
+  %arrayidx29.i = getelementptr inbounds double, double* %cam, i64 8, !node !362
+  %13 = load double, double* %arrayidx29.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
+  %add30.i = fadd fast double %mul28.i, %13, !node !362
+  %14 = load double, double* %w, align 8, !tbaa !68, !node !362
+  %15 = load double, double* %feat, align 8, !tbaa !68, !node !362
+  %sub = fsub fast double %add.i, %15, !node !362
+  %arrayidx4 = getelementptr inbounds double, double* %feat, i64 1, !node !362
+  %16 = load double, double* %arrayidx4, align 8, !tbaa !68, !node !362
+  %sub5 = fsub fast double %add30.i, %16, !node !362
+  %"arrayidx7'ipg" = getelementptr inbounds double, double* %"err'", i64 1, !node !362
   br label %invertproject.exit
 
 invertproject.exit:                               ; preds = %project.exit
@@ -23649,11 +23649,11 @@ invertproject.exit:                               ; preds = %project.exit
 ; Function Attrs: nofree nounwind uwtable mustprogress
 define dso_local void @preprocess_rodrigues_rotate_point(double* noalias nocapture readonly %rot, double* noalias nocapture readonly %pt, double* noalias nocapture %rotatedPt) local_unnamed_addr #15 {
 entry:
-  %malloccall1 = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !362
+  %malloccall1 = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !363
   %w_cross_pt = bitcast i8* %malloccall1 to [3 x double]*
-  %malloccall = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !362
+  %malloccall = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !363
   %w = bitcast i8* %malloccall to [3 x double]*
-  %malloccall2 = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !362
+  %malloccall2 = tail call noalias i8* @malloc(i64 24), !enzyme_fromstack !363
   %rot_cross_pt = bitcast i8* %malloccall2 to [3 x double]*
   br label %for.body.i
 
@@ -23830,7 +23830,7 @@ entry:
   %"iv5'ac" = alloca i64, align 8
   %1 = alloca i8, i64 24, align 1
   %add.i_cache = alloca double*, align 8
-  %malloccall1 = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24), !enzyme_fromstack !362
+  %malloccall1 = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24), !enzyme_fromstack !363
   %2 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, double* }, { i8*, i8*, i8*, i8*, i8*, double* }* %0, i32 0, i32 4
   store i8* %malloccall1, i8** %2, align 8
   %"malloccall1'mi" = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24)
@@ -23838,7 +23838,7 @@ entry:
   store i8* %"malloccall1'mi", i8** %3, align 8
   call void @llvm.memset.p0i8.i64(i8* nonnull dereferenceable(24) dereferenceable_or_null(24) %"malloccall1'mi", i8 0, i64 24, i1 false)
   %w_cross_pt = bitcast i8* %malloccall1 to [3 x double]*
-  %malloccall = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24), !enzyme_fromstack !362
+  %malloccall = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24), !enzyme_fromstack !363
   %4 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, double* }, { i8*, i8*, i8*, i8*, i8*, double* }* %0, i32 0, i32 2
   store i8* %malloccall, i8** %4, align 8
   %"malloccall'mi" = tail call noalias nonnull dereferenceable(24) dereferenceable_or_null(24) i8* @malloc(i64 24)
@@ -23855,7 +23855,7 @@ entry:
   %add.i_malloccache = bitcast i8* %malloccall9 to double*
   %7 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, double* }, { i8*, i8*, i8*, i8*, i8*, double* }* %0, i32 0, i32 5
   store double* %add.i_malloccache, double** %7, align 8
-  store double* %add.i_malloccache, double** %add.i_cache, align 8, !invariant.group !363
+  store double* %add.i_malloccache, double** %add.i_cache, align 8, !invariant.group !364
   br label %for.body.i
 
 for.body.i:                                       ; preds = %for.body.i, %entry
@@ -23866,9 +23866,9 @@ for.body.i:                                       ; preds = %for.body.i, %entry
   %8 = load double, double* %arrayidx.i, align 8, !tbaa !68
   %mul.i = fmul fast double %8, %8
   %add.i = fadd fast double %mul.i, %res.012.i
-  %9 = load double*, double** %add.i_cache, align 8, !dereferenceable !364, !invariant.group !363
+  %9 = load double*, double** %add.i_cache, align 8, !dereferenceable !365, !invariant.group !364
   %10 = getelementptr inbounds double, double* %9, i64 %iv
-  store double %add.i, double* %10, align 8, !invariant.group !365
+  store double %add.i, double* %10, align 8, !invariant.group !366
   %exitcond.not.i = icmp eq i64 %iv.next, 3
   br i1 %exitcond.not.i, label %sqsum.exit, label %for.body.i, !llvm.loop !99
 
@@ -24162,12 +24162,12 @@ entry:
 for.body.i:                                       ; preds = %for.body.i, %entry
   %iv = phi i64 [ %iv.next, %for.body.i ], [ 0, %entry ]
   %iv.next = add nuw nsw i64 %iv, 1
-  %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv
-  %arrayidx.i = getelementptr inbounds double, double* %rot, i64 %iv
-  %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !invariant.group !366
-  %2 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !364, !invariant.group !367
+  %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv, !node !362
+  %arrayidx.i = getelementptr inbounds double, double* %rot, i64 %iv, !node !362
+  %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !invariant.group !367, !node !362
+  %2 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !365, !invariant.group !368
   %3 = getelementptr inbounds double, double* %2, i64 %iv
-  %add.i = load double, double* %3, align 8, !invariant.group !368
+  %add.i = load double, double* %3, align 8, !invariant.group !369
   %exitcond.not.i = icmp eq i64 %iv.next, 3
   br i1 %exitcond.not.i, label %sqsum.exit, label %for.body.i, !llvm.loop !99
 
@@ -24177,7 +24177,7 @@ sqsum.exit:                                       ; preds = %for.body.i
 
 if.then:                                          ; preds = %sqsum.exit
   %"add.i!manual_lcssa" = phi double [ %add.i, %sqsum.exit ]
-  store double %"add.i!manual_lcssa", double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !369
+  store double %"add.i!manual_lcssa", double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %4 = tail call fast double @llvm.sqrt.f64(double %add.i)
   %5 = tail call fast double @llvm.cos.f64(double %4)
   br label %for.body
@@ -24185,10 +24185,10 @@ if.then:                                          ; preds = %sqsum.exit
 for.body:                                         ; preds = %for.body, %if.then
   %iv1 = phi i64 [ %iv.next2, %for.body ], [ 0, %if.then ]
   %iv.next2 = add nuw nsw i64 %iv1, 1
-  %"arrayidx'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv1
-  %arrayidx = getelementptr inbounds double, double* %rot, i64 %iv1
-  %6 = load double, double* %arrayidx, align 8, !tbaa !68, !invariant.group !370
-  %7 = fdiv fast double %6, %4
+  %"arrayidx'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv1, !node !362
+  %arrayidx = getelementptr inbounds double, double* %rot, i64 %iv1, !node !362
+  %6 = load double, double* %arrayidx, align 8, !tbaa !68, !invariant.group !371, !node !362
+  %7 = fdiv fast double %6, %4, !node !362
   %"arrayidx3'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv1
   %exitcond105.not = icmp eq i64 %iv.next2, 3
   br i1 %exitcond105.not, label %for.end, label %for.body, !llvm.loop !100
@@ -24200,45 +24200,45 @@ for.end:                                          ; preds = %for.body
   %"arraydecay4'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 0
   %"arrayidx.i85'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 1
   %arrayidx.i85 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
-  %9 = load double, double* %arrayidx.i85, align 8, !tbaa !68, !invariant.group !371
-  %"arrayidx1.i86'ipg" = getelementptr inbounds double, double* %"pt'", i64 2
-  %arrayidx1.i86 = getelementptr inbounds double, double* %pt, i64 2
-  %10 = load double, double* %arrayidx1.i86, align 8, !tbaa !68, !invariant.group !372
-  %mul.i87 = fmul fast double %10, %9
+  %9 = load double, double* %arrayidx.i85, align 8, !tbaa !68, !invariant.group !372
+  %"arrayidx1.i86'ipg" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
+  %arrayidx1.i86 = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %10 = load double, double* %arrayidx1.i86, align 8, !tbaa !68, !invariant.group !373, !node !362
+  %mul.i87 = fmul fast double %10, %9, !node !362
   %"arrayidx2.i88'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 2
   %arrayidx2.i88 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
-  %11 = load double, double* %arrayidx2.i88, align 16, !tbaa !68, !invariant.group !373
-  %"arrayidx3.i89'ipg" = getelementptr inbounds double, double* %"pt'", i64 1
-  %arrayidx3.i89 = getelementptr inbounds double, double* %pt, i64 1
-  %12 = load double, double* %arrayidx3.i89, align 8, !tbaa !68, !invariant.group !374
-  %mul4.i90 = fmul fast double %12, %11
-  %sub.i91 = fsub fast double %mul.i87, %mul4.i90
-  %13 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !375
-  %14 = load double, double* %arraydecay, align 16, !tbaa !68, !invariant.group !376
+  %11 = load double, double* %arrayidx2.i88, align 16, !tbaa !68, !invariant.group !374
+  %"arrayidx3.i89'ipg" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
+  %arrayidx3.i89 = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %12 = load double, double* %arrayidx3.i89, align 8, !tbaa !68, !invariant.group !375, !node !362
+  %mul4.i90 = fmul fast double %12, %11, !node !362
+  %sub.i91 = fsub fast double %mul.i87, %mul4.i90, !node !362
+  %13 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
+  %14 = load double, double* %arraydecay, align 16, !tbaa !68, !invariant.group !377
   %"arrayidx13.i95'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 1
   %"arrayidx21.i99'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 2
-  %mul7 = fmul fast double %14, %13
-  %mul10 = fmul fast double %9, %12
-  %add = fadd fast double %mul10, %mul7
-  %mul13 = fmul fast double %11, %10
-  %add14 = fadd fast double %add, %mul13
+  %mul7 = fmul fast double %14, %13, !node !362
+  %mul10 = fmul fast double %9, %12, !node !362
+  %add = fadd fast double %mul10, %mul7, !node !362
+  %mul13 = fmul fast double %11, %10, !node !362
+  %add14 = fadd fast double %add, %mul13, !node !362
   %sub = fsub fast double 1.000000e+00, %5
-  %mul15 = fmul fast double %add14, %sub
+  %mul15 = fmul fast double %add14, %sub, !node !362
   br label %for.body18.for.body18_crit_edge
 
 for.body18.for.body18_crit_edge:                  ; preds = %for.body18.for.body18_crit_edge, %for.end
   %iv3 = phi i64 [ %iv.next4, %for.body18.for.body18_crit_edge ], [ 0, %for.end ]
   %iv.next4 = add nuw nsw i64 %iv3, 1
-  %"arrayidx20.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4
-  %arrayidx20.phi.trans.insert = getelementptr inbounds double, double* %pt, i64 %iv.next4
-  %.pre110 = load double, double* %arrayidx20.phi.trans.insert, align 8, !tbaa !68, !invariant.group !377
+  %"arrayidx20.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4, !node !362
+  %arrayidx20.phi.trans.insert = getelementptr inbounds double, double* %pt, i64 %iv.next4, !node !362
+  %.pre110 = load double, double* %arrayidx20.phi.trans.insert, align 8, !tbaa !68, !invariant.group !378, !node !362
   %"arrayidx23.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 %iv.next4
   %arrayidx23.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %w_cross_pt, i64 0, i64 %iv.next4
-  %.pre111 = load double, double* %arrayidx23.phi.trans.insert, align 8, !tbaa !68, !invariant.group !378
+  %.pre111 = load double, double* %arrayidx23.phi.trans.insert, align 8, !tbaa !68, !invariant.group !379
   %"arrayidx27.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv.next4
   %arrayidx27.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 %iv.next4
-  %.pre112 = load double, double* %arrayidx27.phi.trans.insert, align 8, !tbaa !68, !invariant.group !379
-  %"arrayidx31'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4
+  %.pre112 = load double, double* %arrayidx27.phi.trans.insert, align 8, !tbaa !68, !invariant.group !380
+  %"arrayidx31'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4, !node !362
   %indvars.iv.next = add nuw nsw i64 %iv.next4, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
   br i1 %exitcond.not, label %for.end34, label %for.body18.for.body18_crit_edge, !llvm.loop !101
@@ -24248,20 +24248,20 @@ for.end34:                                        ; preds = %for.body18.for.body
 
 if.else:                                          ; preds = %sqsum.exit
   %"arraydecay35'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 0
-  %"arrayidx.i83'ipg" = getelementptr inbounds double, double* %"rot'", i64 1
-  %arrayidx.i83 = getelementptr inbounds double, double* %rot, i64 1
-  %15 = load double, double* %arrayidx.i83, align 8, !tbaa !68, !invariant.group !380
-  %"arrayidx1.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 2
-  %arrayidx1.i = getelementptr inbounds double, double* %pt, i64 2
-  %16 = load double, double* %arrayidx1.i, align 8, !tbaa !68, !invariant.group !381
-  %"arrayidx2.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 2
-  %arrayidx2.i = getelementptr inbounds double, double* %rot, i64 2
-  %17 = load double, double* %arrayidx2.i, align 8, !tbaa !68, !invariant.group !382
-  %"arrayidx3.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 1
-  %arrayidx3.i = getelementptr inbounds double, double* %pt, i64 1
-  %18 = load double, double* %arrayidx3.i, align 8, !tbaa !68, !invariant.group !383
-  %19 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !384
-  %20 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !385
+  %"arrayidx.i83'ipg" = getelementptr inbounds double, double* %"rot'", i64 1, !node !362
+  %arrayidx.i83 = getelementptr inbounds double, double* %rot, i64 1, !node !362
+  %15 = load double, double* %arrayidx.i83, align 8, !tbaa !68, !invariant.group !381, !node !362
+  %"arrayidx1.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
+  %arrayidx1.i = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %16 = load double, double* %arrayidx1.i, align 8, !tbaa !68, !invariant.group !382, !node !362
+  %"arrayidx2.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 2, !node !362
+  %arrayidx2.i = getelementptr inbounds double, double* %rot, i64 2, !node !362
+  %17 = load double, double* %arrayidx2.i, align 8, !tbaa !68, !invariant.group !383, !node !362
+  %"arrayidx3.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
+  %arrayidx3.i = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %18 = load double, double* %arrayidx3.i, align 8, !tbaa !68, !invariant.group !384, !node !362
+  %19 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385, !node !362
+  %20 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386, !node !362
   %"arrayidx13.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 1
   %"arrayidx21.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 2
   br label %for.body38.for.body38_crit_edge
@@ -24269,9 +24269,9 @@ if.else:                                          ; preds = %sqsum.exit
 for.body38.for.body38_crit_edge:                  ; preds = %for.body38.for.body38_crit_edge, %if.else
   %iv5 = phi i64 [ %iv.next6, %for.body38.for.body38_crit_edge ], [ 0, %if.else ]
   %iv.next6 = add nuw nsw i64 %iv5, 1
-  %"arrayidx40.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6
+  %"arrayidx40.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6, !node !362
   %"arrayidx42.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 %iv.next6
-  %"arrayidx45'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6
+  %"arrayidx45'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6, !node !362
   %indvars.iv.next107 = add nuw nsw i64 %iv.next6, 1
   %exitcond108.not = icmp eq i64 %indvars.iv.next107, 3
   br i1 %exitcond108.not, label %for.end48, label %for.body38.for.body38_crit_edge, !llvm.loop !102
@@ -24289,7 +24289,7 @@ invertentry:                                      ; preds = %invertfor.body.i
   tail call void @free(i8* nonnull %"malloccall1'mi")
   tail call void @free(i8* %malloccall1)
   %21 = load i64, i64* %"iv'ac", align 8
-  %forfree = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !364, !invariant.group !367
+  %forfree = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !365, !invariant.group !368
   %22 = bitcast double* %forfree to i8*
   tail call void @free(i8* nonnull %22)
   ret void
@@ -24306,7 +24306,7 @@ invertfor.body.i:                                 ; preds = %mergeinvertfor.body
   %28 = load double, double* %"mul.i'de", align 8
   %29 = load i64, i64* %"iv'ac", align 8
   %arrayidx.i_unwrap = getelementptr inbounds double, double* %rot, i64 %29
-  %_unwrap = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !68, !invariant.group !366
+  %_unwrap = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !68, !invariant.group !367
   %m0diffe = fmul fast double %28, %_unwrap
   %m1diffe = fmul fast double %28, %_unwrap
   store double 0.000000e+00, double* %"mul.i'de", align 8
@@ -24351,7 +24351,7 @@ mergeinvertfor.body.i_sqsum.exit:                 ; preds = %invertsqsum.exit
 invertif.then:                                    ; preds = %invertfor.body
   %48 = load double, double* %"'de7", align 8
   store double 0.000000e+00, double* %"'de7", align 8
-  %49 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !369
+  %49 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %50 = tail call fast double @llvm.sqrt.f64(double %49)
   %51 = call fast double @llvm.sin.f64(double %50)
   %52 = fneg fast double %51
@@ -24382,12 +24382,12 @@ invertfor.body:                                   ; preds = %mergeinvertfor.body
   store double %68, double* %"'de10", align 8
   %69 = load double, double* %"'de10", align 8
   %70 = load i64, i64* %"iv1'ac", align 8
-  %71 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !369
+  %71 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %72 = tail call fast double @llvm.sqrt.f64(double %71)
   %d0diffe = fdiv fast double %69, %72
   %73 = load i64, i64* %"iv1'ac", align 8
   %arrayidx_unwrap = getelementptr inbounds double, double* %rot, i64 %73
-  %_unwrap11 = load double, double* %arrayidx_unwrap, align 8, !tbaa !68, !invariant.group !370
+  %_unwrap11 = load double, double* %arrayidx_unwrap, align 8, !tbaa !68, !invariant.group !371
   %_unwrap12 = fdiv fast double %_unwrap11, %72
   %74 = fdiv fast double %69, %72
   %75 = fmul fast double %_unwrap12, %74
@@ -24433,23 +24433,23 @@ invertfor.end:                                    ; preds = %invertfor.body18.fo
   store double %97, double* %"mul28116'de", align 8
   %98 = load double, double* %"mul28116'de", align 8
   %arraydecay_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
-  %_unwrap14 = load double, double* %arraydecay_unwrap, align 16, !tbaa !68, !invariant.group !376
+  %_unwrap14 = load double, double* %arraydecay_unwrap, align 16, !tbaa !68, !invariant.group !377
   %m0diffemul15 = fmul fast double %98, %_unwrap14
   %arrayidx.i85_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
-  %_unwrap15 = load double, double* %arrayidx.i85_unwrap, align 8, !tbaa !68, !invariant.group !371
+  %_unwrap15 = load double, double* %arrayidx.i85_unwrap, align 8, !tbaa !68, !invariant.group !372
   %arrayidx3.i89_unwrap = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap16 = load double, double* %arrayidx3.i89_unwrap, align 8, !tbaa !68, !invariant.group !374
+  %_unwrap16 = load double, double* %arrayidx3.i89_unwrap, align 8, !tbaa !68, !invariant.group !375
   %mul10_unwrap = fmul fast double %_unwrap15, %_unwrap16
-  %_unwrap17 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !375
+  %_unwrap17 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376
   %mul7_unwrap = fmul fast double %_unwrap14, %_unwrap17
   %add_unwrap = fadd fast double %mul10_unwrap, %mul7_unwrap
   %arrayidx2.i88_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
-  %_unwrap18 = load double, double* %arrayidx2.i88_unwrap, align 16, !tbaa !68, !invariant.group !373
+  %_unwrap18 = load double, double* %arrayidx2.i88_unwrap, align 16, !tbaa !68, !invariant.group !374
   %arrayidx1.i86_unwrap = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap19 = load double, double* %arrayidx1.i86_unwrap, align 8, !tbaa !68, !invariant.group !372
+  %_unwrap19 = load double, double* %arrayidx1.i86_unwrap, align 8, !tbaa !68, !invariant.group !373
   %mul13_unwrap = fmul fast double %_unwrap18, %_unwrap19
   %add14_unwrap = fadd fast double %add_unwrap, %mul13_unwrap
-  %99 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !369
+  %99 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %100 = tail call fast double @llvm.sqrt.f64(double %99)
   %101 = tail call fast double @llvm.cos.f64(double %100)
   %sub_unwrap = fsub fast double 1.000000e+00, %101
@@ -24729,26 +24729,26 @@ invertfor.body18.for.body18_crit_edge:            ; preds = %mergeinvertfor.body
   %245 = load double, double* %"mul28'de", align 8
   %246 = load i64, i64* %"iv3'ac", align 8
   %arrayidx27.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 %iv.next4_unwrap
-  %.pre112_unwrap = load double, double* %arrayidx27.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !379
+  %.pre112_unwrap = load double, double* %arrayidx27.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !380
   %m0diffemul1549 = fmul fast double %245, %.pre112_unwrap
   %247 = load i64, i64* %"iv3'ac", align 8
   %arrayidx.i85_unwrap50 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
-  %_unwrap51 = load double, double* %arrayidx.i85_unwrap50, align 8, !tbaa !68, !invariant.group !371
+  %_unwrap51 = load double, double* %arrayidx.i85_unwrap50, align 8, !tbaa !68, !invariant.group !372
   %arrayidx3.i89_unwrap52 = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap53 = load double, double* %arrayidx3.i89_unwrap52, align 8, !tbaa !68, !invariant.group !374
+  %_unwrap53 = load double, double* %arrayidx3.i89_unwrap52, align 8, !tbaa !68, !invariant.group !375
   %mul10_unwrap54 = fmul fast double %_unwrap51, %_unwrap53
   %arraydecay_unwrap55 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
-  %_unwrap56 = load double, double* %arraydecay_unwrap55, align 16, !tbaa !68, !invariant.group !376
-  %_unwrap57 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !375
+  %_unwrap56 = load double, double* %arraydecay_unwrap55, align 16, !tbaa !68, !invariant.group !377
+  %_unwrap57 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376
   %mul7_unwrap58 = fmul fast double %_unwrap56, %_unwrap57
   %add_unwrap59 = fadd fast double %mul10_unwrap54, %mul7_unwrap58
   %arrayidx2.i88_unwrap60 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
-  %_unwrap61 = load double, double* %arrayidx2.i88_unwrap60, align 16, !tbaa !68, !invariant.group !373
+  %_unwrap61 = load double, double* %arrayidx2.i88_unwrap60, align 16, !tbaa !68, !invariant.group !374
   %arrayidx1.i86_unwrap62 = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap63 = load double, double* %arrayidx1.i86_unwrap62, align 8, !tbaa !68, !invariant.group !372
+  %_unwrap63 = load double, double* %arrayidx1.i86_unwrap62, align 8, !tbaa !68, !invariant.group !373
   %mul13_unwrap64 = fmul fast double %_unwrap61, %_unwrap63
   %add14_unwrap65 = fadd fast double %add_unwrap59, %mul13_unwrap64
-  %248 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !369
+  %248 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %249 = tail call fast double @llvm.sqrt.f64(double %248)
   %250 = tail call fast double @llvm.cos.f64(double %249)
   %sub_unwrap66 = fsub fast double 1.000000e+00, %250
@@ -24775,7 +24775,7 @@ invertfor.body18.for.body18_crit_edge:            ; preds = %mergeinvertfor.body
   %m0diffe.pre111 = fmul fast double %260, %262
   %263 = load i64, i64* %"iv3'ac", align 8
   %arrayidx23.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w_cross_pt, i64 0, i64 %iv.next4_unwrap
-  %.pre111_unwrap = load double, double* %arrayidx23.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !378
+  %.pre111_unwrap = load double, double* %arrayidx23.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !379
   %m1diffe68 = fmul fast double %260, %.pre111_unwrap
   store double 0.000000e+00, double* %"mul24'de", align 8
   %264 = load double, double* %".pre111'de", align 8
@@ -24788,7 +24788,7 @@ invertfor.body18.for.body18_crit_edge:            ; preds = %mergeinvertfor.body
   %m0diffe.pre110 = fmul fast double %268, %250
   %269 = load i64, i64* %"iv3'ac", align 8
   %arrayidx20.phi.trans.insert_unwrap = getelementptr inbounds double, double* %pt, i64 %iv.next4_unwrap
-  %.pre110_unwrap = load double, double* %arrayidx20.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !377
+  %.pre110_unwrap = load double, double* %arrayidx20.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !378
   %m1diffe69 = fmul fast double %268, %.pre110_unwrap
   store double 0.000000e+00, double* %"mul21'de", align 8
   %270 = load double, double* %".pre110'de", align 8
@@ -24867,9 +24867,9 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   store double %307, double* %"mul19.i'de", align 8
   %308 = load double, double* %"mul19.i'de", align 8
   %arrayidx.i83_unwrap = getelementptr inbounds double, double* %rot, i64 1
-  %_unwrap71 = load double, double* %arrayidx.i83_unwrap, align 8, !tbaa !68, !invariant.group !380
+  %_unwrap71 = load double, double* %arrayidx.i83_unwrap, align 8, !tbaa !68, !invariant.group !381
   %m0diffe72 = fmul fast double %308, %_unwrap71
-  %_unwrap73 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !384
+  %_unwrap73 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385
   %m1diffe74 = fmul fast double %308, %_unwrap73
   store double 0.000000e+00, double* %"mul19.i'de", align 8
   %309 = load double, double* %"'de70", align 8
@@ -24880,9 +24880,9 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   store double %312, double* %"'de75", align 8
   %313 = load double, double* %"mul16.i'de", align 8
   %arrayidx3.i_unwrap = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap76 = load double, double* %arrayidx3.i_unwrap, align 8, !tbaa !68, !invariant.group !383
+  %_unwrap76 = load double, double* %arrayidx3.i_unwrap, align 8, !tbaa !68, !invariant.group !384
   %m0diffe77 = fmul fast double %313, %_unwrap76
-  %_unwrap78 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !385
+  %_unwrap78 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386
   %m1diffe79 = fmul fast double %313, %_unwrap78
   store double 0.000000e+00, double* %"mul16.i'de", align 8
   %314 = load double, double* %"'de80", align 8
@@ -24908,7 +24908,7 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   store double %326, double* %"mul11.i'de", align 8
   %327 = load double, double* %"mul11.i'de", align 8
   %arrayidx1.i_unwrap = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap82 = load double, double* %arrayidx1.i_unwrap, align 8, !tbaa !68, !invariant.group !381
+  %_unwrap82 = load double, double* %arrayidx1.i_unwrap, align 8, !tbaa !68, !invariant.group !382
   %m0diffe83 = fmul fast double %327, %_unwrap82
   %m1diffe84 = fmul fast double %327, %_unwrap78
   store double 0.000000e+00, double* %"mul11.i'de", align 8
@@ -24925,7 +24925,7 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   store double %334, double* %"rot'", align 8
   %335 = load double, double* %"mul8.i'de", align 8
   %arrayidx2.i_unwrap = getelementptr inbounds double, double* %rot, i64 2
-  %_unwrap86 = load double, double* %arrayidx2.i_unwrap, align 8, !tbaa !68, !invariant.group !382
+  %_unwrap86 = load double, double* %arrayidx2.i_unwrap, align 8, !tbaa !68, !invariant.group !383
   %m0diffe87 = fmul fast double %335, %_unwrap86
   %m1diffe88 = fmul fast double %335, %_unwrap73
   store double 0.000000e+00, double* %"mul8.i'de", align 8
@@ -25462,10 +25462,10 @@ attributes #41 = { builtin allocsize(0) }
 !359 = !{!4, i64 4, !"_ZTSN5adept8internal6PacketIiEE", !50, i64 0, i64 4}
 !360 = !{!361, !16, i64 8, i64 8}
 !361 = !{!4, i64 16, !"_ZTSN5adept8internal18BinaryOpScalarLeftIdiNS0_8SubtractENS0_15BinaryOperationIdNS_6ActiveIdEENS0_8MultiplyES5_EEEE", !359, i64 0, i64 4, !16, i64 8, i64 8}
-!362 = !{}
-!363 = distinct !{}
-!364 = !{i64 8}
-!365 = distinct !{}
+!362 = !{!"true"}
+!363 = !{}
+!364 = distinct !{}
+!365 = !{i64 8}
 !366 = distinct !{}
 !367 = distinct !{}
 !368 = distinct !{}
@@ -25486,3 +25486,4 @@ attributes #41 = { builtin allocsize(0) }
 !383 = distinct !{}
 !384 = distinct !{}
 !385 = distinct !{}
+!386 = distinct !{}

@@ -452,10 +452,8 @@ static float neural_network_hypothesis_v2(const mnist_image_t * image, const neu
 {
     float activations[MNIST_LABELS] = {0};
     int i, j;
-
     for (i = 0; i < MNIST_LABELS; i++) {
         activations[i] = network->b[i];
-
         for (j = 0; j < MNIST_IMAGE_SIZE; j++) {
             activations[i] += network->W[i][j] * PIXEL_SCALE(image->pixels[j]);
         }

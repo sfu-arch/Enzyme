@@ -2,6 +2,11 @@
 #ifndef BFS_H
 #define BFS_H
 
+#include <map>
+#include <set>
+#include <iostream>
+#include <fstream>
+
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/InstVisitor.h"
@@ -9,8 +14,6 @@
 #include "llvm/IR/Module.h"
 #include "llvm/Pass.h"
 #include "llvm/Support/raw_ostream.h"
-#include <map>
-#include <set>
 
 using namespace llvm;
 
@@ -30,6 +33,9 @@ class Node {
         void AssignChildCost();
         void PropagateCost(int parent_old_cost, int parent_new_cost);
         
+        void DumpForward(std::ofstream &myfile);
+        void DumpReverse(std::ofstream &myfile);
+
         Value* GetValue() { return value; }
 
         bool visited = false;
@@ -51,10 +57,13 @@ class Graph {
 
         std::map<Value*, Node*> operator() () { return nodes; }
         std::map<Value*, int> GetLevels();
-        void PrintLevels();
         
         int GetTotalCost();
         bool contains(Value *v) { return nodes.find(v) != nodes.end(); }
+
+        void DumpForward(std::ofstream &myfile);
+        void DumpReverse(std::ofstream &myfile);
+        void PrintLevels();
 
     private:
         std::map<Value*, Node*> nodes;
@@ -68,6 +77,8 @@ struct BFSPass : public llvm::FunctionPass,
         BFSPass();
         bool runOnFunction(llvm::Function &f) override;
         void visitInstruction(Instruction &I);
+
+        std::ofstream myfile;
     private:
         std::map<llvm::Value*, std::vector<llvm::Value*>> args;
         Graph g;

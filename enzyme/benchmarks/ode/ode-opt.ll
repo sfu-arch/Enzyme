@@ -41,10 +41,10 @@ entry:
   store double 0.000000e+00, double* %"in_1'de", align 8
   %"in_0'de" = alloca double, align 8
   store double 0.000000e+00, double* %"in_0'de", align 8
-  %mul = fmul fast double %in_0, %in_0
-  %0 = fmul fast double %in_1, %in_1
-  %1 = fmul fast double %0, %0
-  %mul4 = fmul fast double %1, %mul
+  %mul = fmul fast double %in_0, %in_0, !node !2
+  %0 = fmul fast double %in_1, %in_1, !node !2
+  %1 = fmul fast double %0, %0, !node !2
+  %mul4 = fmul fast double %1, %mul, !node !2
   %.fca.0.insert = insertvalue { double, double } undef, double %mul4, 0
   br label %invertentry
 
@@ -149,3 +149,4 @@ attributes #2 = { norecurse nounwind uwtable mustprogress "denormal-fp-math"="pr
 
 !0 = !{!"clang version 12.0.1 (https://github.com/llvm/llvm-project.git fed41342a82f5a3a9201819a82bf7a48313e296b)"}
 !1 = !{i32 1, !"wchar_size", i32 4}
+!2 = !{!"true"}

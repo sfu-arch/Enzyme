@@ -3719,7 +3719,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // PM.add(new instrumem::NodeDetectorPass());
   PM.add(new instrumem::BFSPass());
   // PM.add(new instrumem::AddressInstPass());
-  PM.add(new instrumem::ForwardNodeInstPass());
+  // PM.add(new instrumem::ForwardNodeInstPass());
   // PM.add(new instrumem::SchedulerPass());
   // PM.add(new life::LifetimePass());
   // PM.add(new instrumem::OPCounterPass());

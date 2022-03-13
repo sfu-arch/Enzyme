@@ -38,12 +38,15 @@ bool BFSPass::runOnFunction(Function &f) {
             if (auto *I = dyn_cast<Instruction>(i)) {
                 if (I->getParent()->getName().contains("invert") || !isValidInstruction(I)) 
                     continue;
-                if (!g().count(I))
-                    g.AddNode(I);
-                if (g[I]->visited)
+                Value *child = I;
+                if (isa<StoreInst>(I)) 
+                    child = dyn_cast<StoreInst>(I)->getPointerOperand();
+                if (!g().count(child))
+                    g.AddNode(child);
+                if (g[child]->visited)
                     continue;
-                g[curr]->AddChild(g[I]);
-                bfs_stack.push_back(I);
+                g[curr]->AddChild(g[child]);
+                bfs_stack.push_back(child);
             }
         }
         g[curr]->visited = true;
@@ -149,7 +152,7 @@ int Node::GetInstructionCost(Value *inst) {
         return 1;
     if (isa<PHINode>(inst))
         return 1;
-    return 0;
+    return 1;
 }
 
 void Node::PushToTape() {
@@ -184,7 +187,7 @@ void Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
 bool instrumem::isValidInstruction(Instruction *inst) {
     return isa<LoadInst>(inst)  || isa<BinaryOperator>(inst) 
     || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst) || 
-    isa<CastInst>(inst) || isa<PHINode>(inst);
+    isa<CastInst>(inst) || isa<PHINode>(inst) || isa<CallInst>(inst) || isa<StoreInst>(inst);
 }
 
 std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &map) {

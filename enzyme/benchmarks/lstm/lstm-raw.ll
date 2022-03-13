@@ -468,7 +468,6 @@ $_ZTVN5adept21gradient_out_of_rangeE = comdat any
 @_ZTVN5adept21gradient_out_of_rangeE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept21gradient_out_of_rangeE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::gradient_out_of_range"*)* @_ZN5adept21gradient_out_of_rangeD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_lstm.cpp, i8* null }]
 @str = private unnamed_addr constant [14 x i8] c"starting main\00", align 1
-@ResultFormatStrIR = global [6 x i8] c"Node\0A\00"
 
 @_ZN5adept5StackD1Ev = dso_local unnamed_addr alias void (%"class.adept::Stack"*), void (%"class.adept::Stack"*)* @_ZN5adept5StackD2Ev
 @_ZN5adept8internal16StackStorageOrigD1Ev = dso_local unnamed_addr alias void (%"class.adept::internal::StackStorageOrig"*), void (%"class.adept::internal::StackStorageOrig"*)* @_ZN5adept8internal16StackStorageOrigD2Ev
@@ -18674,16 +18673,16 @@ entry:
   store double 0.000000e+00, double* %"mul.i'de", align 8
   %"'de" = alloca double, align 8
   store double 0.000000e+00, double* %"'de", align 8
-  %xp.085.i_cache = alloca double**, align 8
-  %_cache = alloca double**, align 8
-  %_augmented_cache = alloca { i8*, i8*, double*, double*, double*, double* }*, align 8
+  %xp.085.i_cache = alloca double**, align 8, !node !336
+  %_cache = alloca double**, align 8, !node !336
+  %_augmented_cache = alloca { i8*, i8*, double*, double*, double*, double* }*, align 8, !node !336
   %"add40.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"add40.i'de", align 8
   %"mul35.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul35.i'de", align 8
   %"'de47" = alloca double, align 8
   store double 0.000000e+00, double* %"'de47", align 8
-  %_cache51 = alloca double*, align 8
+  %_cache51 = alloca double*, align 8, !node !336
   %"'de66" = alloca double, align 8
   store double 0.000000e+00, double* %"'de66", align 8
   %"'de67" = alloca double, align 8
@@ -18694,12 +18693,12 @@ entry:
   store double 0.000000e+00, double* %"'de83", align 8
   %"sum.09.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"sum.09.i'de", align 8
-  %_cache86 = alloca double*, align 8
+  %_cache86 = alloca double*, align 8, !node !336
   %"'de99" = alloca double, align 8
   store double 0.000000e+00, double* %"'de99", align 8
   %"'de100" = alloca double, align 8
   store double 0.000000e+00, double* %"'de100", align 8
-  %"add.i!manual_lcssa_cache" = alloca double*, align 8
+  %"add.i!manual_lcssa_cache" = alloca double*, align 8, !node !336
   %"phi.bo.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"phi.bo.i'de", align 8
   %"sub12'de" = alloca double, align 8
@@ -18718,93 +18717,89 @@ entry:
   store double 0.000000e+00, double* %"fneg'de", align 8
   %"total.0.lcssa'de" = alloca double, align 8
   store double 0.000000e+00, double* %"total.0.lcssa'de", align 8
-  %conv = zext i32 %b to i64
-  %mul = shl nuw nsw i64 %conv, 3
-  %call = tail call noalias i8* @malloc(i64 %mul) #37
-  %call84 = bitcast i8* %call to double*
-  %"call'mi" = tail call noalias nonnull i8* @malloc(i64 %mul) #37
-  call void @llvm.memset.p0i8.i64(i8* nonnull %"call'mi", i8 0, i64 %mul, i1 false)
-  %"'ipc" = bitcast i8* %"call'mi" to double*
-  %0 = bitcast i8* %call to double*
-  %call3 = tail call noalias i8* @malloc(i64 %mul) #37
-  %"call3'mi" = tail call noalias nonnull i8* @malloc(i64 %mul) #37
-  call void @llvm.memset.p0i8.i64(i8* nonnull %"call3'mi", i8 0, i64 %mul, i1 false)
-  %"'ipc111" = bitcast i8* %"call3'mi" to double*
-  %1 = bitcast i8* %call3 to double*
+  %conv = zext i32 %b to i64, !node !336
+  %mul = shl nuw nsw i64 %conv, 3, !node !336
+  %call = tail call noalias i8* @malloc(i64 %mul) #37, !node !336
+  %call84 = bitcast i8* %call to double*, !node !336
+  %"call'mi" = tail call noalias nonnull i8* @malloc(i64 %mul) #37, !node !336
+  call void @llvm.memset.p0i8.i64(i8* nonnull %"call'mi", i8 0, i64 %mul, i1 false), !node !336
+  %"'ipc" = bitcast i8* %"call'mi" to double*, !node !336
+  %0 = bitcast i8* %call to double*, !node !336
+  %call3 = tail call noalias i8* @malloc(i64 %mul) #37, !node !336
+  %"call3'mi" = tail call noalias nonnull i8* @malloc(i64 %mul) #37, !node !336
+  call void @llvm.memset.p0i8.i64(i8* nonnull %"call3'mi", i8 0, i64 %mul, i1 false), !node !336
+  %"'ipc111" = bitcast i8* %"call3'mi" to double*, !node !336
+  %1 = bitcast i8* %call3 to double*, !node !336
   %cmp = icmp sgt i32 %b, 0
   tail call void @llvm.assume(i1 %cmp)
-  %sub = add nsw i32 %c, -1
-  %mul4 = mul nsw i32 %sub, %b
+  %sub = add nsw i32 %c, -1, !node !336
+  %mul4 = mul nsw i32 %sub, %b, !node !336
   %cmp6.not.not83 = icmp sgt i32 %mul4, 0
   br i1 %cmp6.not.not83, label %for.body.preheader.i.lr.ph, label %for.end32
 
 for.body.preheader.i.lr.ph:                       ; preds = %entry
   %mul6.i = shl nsw i32 %l, 1, !node !336
-  %2 = bitcast [6 x i8]* @ResultFormatStrIR to i8*
-  %3 = call i32 (i8*, ...) @printf(i8* %2)
   %mul7.i = mul nsw i32 %mul6.i, %b, !node !336
-  %4 = bitcast [6 x i8]* @ResultFormatStrIR to i8*
-  %5 = call i32 (i8*, ...) @printf(i8* %4)
   %cmp8.not.not83.i = icmp sgt i32 %mul7.i, 0
-  %6 = shl nuw i32 %b, 1
-  %7 = sext i32 %6 to i64
-  %8 = zext i32 %mul7.i to i64
-  %9 = zext i32 %6 to i64
-  %10 = add i32 %c, -1
-  %11 = mul i32 %b, %10
-  %12 = add i32 %11, -1
-  %13 = zext i32 %12 to i64
-  %14 = udiv i64 %13, %conv
-  %15 = add nsw i64 %conv, -1
-  %16 = add nsw i64 %8, -1
-  %17 = add nsw i64 %conv, -1
-  %18 = add nsw i64 %conv, -1
-  %19 = add nsw i64 %conv, -1
-  %20 = add nsw i64 %conv, -1
-  %21 = add nuw i64 %14, 1
-  %_unwrap28 = udiv i64 %16, %7
-  %22 = add nuw i64 %_unwrap28, 1
-  %23 = mul nuw nsw i64 %22, %21
-  %mallocsize = mul nuw nsw i64 %23, 8
-  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %xp.085.i_malloccache = bitcast i8* %malloccall to double**
+  %2 = shl nuw i32 %b, 1, !node !336
+  %3 = sext i32 %2 to i64, !node !336
+  %4 = zext i32 %mul7.i to i64, !node !336
+  %5 = zext i32 %2 to i64, !node !336
+  %6 = add i32 %c, -1, !node !336
+  %7 = mul i32 %b, %6, !node !336
+  %8 = add i32 %7, -1, !node !336
+  %9 = zext i32 %8 to i64, !node !336
+  %10 = udiv i64 %9, %conv, !node !336
+  %11 = add nsw i64 %conv, -1, !node !336
+  %12 = add nsw i64 %4, -1, !node !336
+  %13 = add nsw i64 %conv, -1, !node !336
+  %14 = add nsw i64 %conv, -1, !node !336
+  %15 = add nsw i64 %conv, -1, !node !336
+  %16 = add nsw i64 %conv, -1, !node !336
+  %17 = add nuw i64 %10, 1, !node !336
+  %_unwrap28 = udiv i64 %12, %3, !node !336
+  %18 = add nuw i64 %_unwrap28, 1, !node !336
+  %19 = mul nuw nsw i64 %18, %17, !node !336
+  %mallocsize = mul nuw nsw i64 %19, 8, !node !336
+  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !336
+  %xp.085.i_malloccache = bitcast i8* %malloccall to double**, !node !336
   store double** %xp.085.i_malloccache, double*** %xp.085.i_cache, align 8, !invariant.group !337
-  %mallocsize41 = mul nuw nsw i64 %23, 8
-  %malloccall42 = tail call noalias nonnull i8* @malloc(i64 %mallocsize41)
-  %_malloccache = bitcast i8* %malloccall42 to double**
+  %mallocsize41 = mul nuw nsw i64 %19, 8, !node !336
+  %malloccall42 = tail call noalias nonnull i8* @malloc(i64 %mallocsize41), !node !336
+  %_malloccache = bitcast i8* %malloccall42 to double**, !node !336
   store double** %_malloccache, double*** %_cache, align 8, !invariant.group !338
-  %mallocsize44 = mul nuw nsw i64 %23, 48
-  %malloccall45 = tail call noalias nonnull i8* @malloc(i64 %mallocsize44)
-  %_augmented_malloccache = bitcast i8* %malloccall45 to { i8*, i8*, double*, double*, double*, double* }*
+  %mallocsize44 = mul nuw nsw i64 %19, 48, !node !336
+  %malloccall45 = tail call noalias nonnull i8* @malloc(i64 %mallocsize44), !node !336
+  %_augmented_malloccache = bitcast i8* %malloccall45 to { i8*, i8*, double*, double*, double*, double* }*, !node !336
   store { i8*, i8*, double*, double*, double*, double* }* %_augmented_malloccache, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !invariant.group !339
-  %24 = add nuw i64 %17, 1
-  %25 = mul nuw nsw i64 %24, %21
-  %mallocsize52 = mul nuw nsw i64 %25, 8
-  %malloccall53 = tail call noalias nonnull i8* @malloc(i64 %mallocsize52)
-  %_malloccache54 = bitcast i8* %malloccall53 to double*
+  %20 = add nuw i64 %13, 1, !node !336
+  %21 = mul nuw nsw i64 %20, %17, !node !336
+  %mallocsize52 = mul nuw nsw i64 %21, 8, !node !336
+  %malloccall53 = tail call noalias nonnull i8* @malloc(i64 %mallocsize52), !node !336
+  %_malloccache54 = bitcast i8* %malloccall53 to double*, !node !336
   store double* %_malloccache54, double** %_cache51, align 8, !invariant.group !340
-  %_unwrap85 = add nuw nsw i64 %18, 1
-  %26 = mul nuw nsw i64 1, %21
-  %27 = mul nuw nsw i64 %26, %_unwrap85
-  %mallocsize87 = mul nuw nsw i64 %27, 8
-  %malloccall88 = tail call noalias nonnull i8* @malloc(i64 %mallocsize87)
-  %_malloccache89 = bitcast i8* %malloccall88 to double*
+  %_unwrap85 = add nuw nsw i64 %14, 1, !node !336
+  %22 = mul nuw nsw i64 1, %17, !node !336
+  %23 = mul nuw nsw i64 %22, %_unwrap85, !node !336
+  %mallocsize87 = mul nuw nsw i64 %23, 8, !node !336
+  %malloccall88 = tail call noalias nonnull i8* @malloc(i64 %mallocsize87), !node !336
+  %_malloccache89 = bitcast i8* %malloccall88 to double*, !node !336
   store double* %_malloccache89, double** %_cache86, align 8, !invariant.group !341
-  %mallocsize101 = mul nuw nsw i64 %21, 8
-  %malloccall102 = tail call noalias nonnull i8* @malloc(i64 %mallocsize101)
-  %"add.i!manual_lcssa_malloccache" = bitcast i8* %malloccall102 to double*
+  %mallocsize101 = mul nuw nsw i64 %17, 8, !node !336
+  %malloccall102 = tail call noalias nonnull i8* @malloc(i64 %mallocsize101), !node !336
+  %"add.i!manual_lcssa_malloccache" = bitcast i8* %malloccall102 to double*, !node !336
   store double* %"add.i!manual_lcssa_malloccache", double** %"add.i!manual_lcssa_cache", align 8, !invariant.group !342
   br label %for.body.preheader.i
 
 for.body.preheader.i:                             ; preds = %for.end28, %for.body.preheader.i.lr.ph
   %iv = phi i64 [ %iv.next, %for.end28 ], [ 0, %for.body.preheader.i.lr.ph ]
-  %total.086 = phi double [ 0.000000e+00, %for.body.preheader.i.lr.ph ], [ %add25, %for.end28 ]
+  %total.086 = phi double [ 0.000000e+00, %for.body.preheader.i.lr.ph ], [ %add25, %for.end28 ], !node !336
   %iv.next = add nuw nsw i64 %iv, 1
-  %28 = mul i64 %conv, %iv
-  %scevgep = getelementptr double, double* %sequence, i64 %28
-  %29 = mul i64 %conv, %iv
-  %30 = trunc i64 %29 to i32
-  %31 = mul i64 %conv, %iv
+  %24 = mul i64 %conv, %iv, !node !336
+  %scevgep = getelementptr double, double* %sequence, i64 %24, !node !336
+  %25 = mul i64 %conv, %iv, !node !336
+  %26 = trunc i64 %25 to i32, !node !336
+  %27 = mul i64 %conv, %iv, !node !336
   tail call void @llvm.experimental.noalias.scope.decl(metadata !79)
   tail call void @llvm.experimental.noalias.scope.decl(metadata !82)
   tail call void @llvm.experimental.noalias.scope.decl(metadata !84)
@@ -18815,188 +18810,188 @@ for.cond5.preheader.i:                            ; preds = %for.body.i
   br i1 %cmp8.not.not83.i, label %for.body9.i.preheader, label %for.body29.lr.ph.i
 
 for.body9.i.preheader:                            ; preds = %for.cond5.preheader.i
-  %32 = udiv i64 %16, %7
+  %28 = udiv i64 %12, %3, !node !336
   br label %for.body9.i
 
 for.body.i:                                       ; preds = %for.body.i, %for.body.preheader.i
   %iv1 = phi i64 [ %iv.next2, %for.body.i ], [ 0, %for.body.preheader.i ]
   %iv.next2 = add nuw nsw i64 %iv1, 1
-  %arrayidx.i = getelementptr inbounds double, double* %scevgep, i64 %iv1
-  %33 = load double, double* %arrayidx.i, align 8, !tbaa !61, !alias.scope !84, !noalias !88, !invariant.group !343
-  %"arrayidx2.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %iv1
-  %arrayidx2.i = getelementptr inbounds double, double* %extra_params, i64 %iv1
-  %34 = load double, double* %arrayidx2.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90
-  %mul.i = fmul fast double %34, %33
-  %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv1
-  %arrayidx4.i = getelementptr inbounds double, double* %0, i64 %iv1
+  %arrayidx.i = getelementptr inbounds double, double* %scevgep, i64 %iv1, !node !336
+  %29 = load double, double* %arrayidx.i, align 8, !tbaa !61, !alias.scope !84, !noalias !88, !invariant.group !343, !node !336
+  %"arrayidx2.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %iv1, !node !336
+  %arrayidx2.i = getelementptr inbounds double, double* %extra_params, i64 %iv1, !node !336
+  %30 = load double, double* %arrayidx2.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90, !node !336
+  %mul.i = fmul fast double %30, %29, !node !336
+  %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv1, !node !336
+  %arrayidx4.i = getelementptr inbounds double, double* %0, i64 %iv1, !node !336
   store double %mul.i, double* %arrayidx4.i, align 8, !tbaa !61, !alias.scope !86, !noalias !91
   %exitcond96.not.i = icmp eq i64 %iv.next2, %conv
   br i1 %exitcond96.not.i, label %for.cond5.preheader.i, label %for.body.i, !llvm.loop !76
 
 for.body29.lr.ph.i.loopexit:                      ; preds = %for.body9.i
-  %"arrayidx17.i!manual_lcssa" = phi double* [ %arrayidx17.i, %for.body9.i ]
+  %"arrayidx17.i!manual_lcssa" = phi double* [ %arrayidx17.i, %for.body9.i ], !node !336
   br label %for.body29.lr.ph.i
 
 for.body29.lr.ph.i:                               ; preds = %for.body29.lr.ph.i.loopexit, %for.cond5.preheader.i
-  %"!manual_lcssa73" = phi i64 [ %48, %for.body29.lr.ph.i.loopexit ], [ undef, %for.cond5.preheader.i ]
-  %"arrayidx17.i!manual_lcssa72" = phi double* [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ], [ undef, %for.cond5.preheader.i ]
-  %35 = phi double* [ %"'ipc", %for.cond5.preheader.i ], [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ]
-  %xp.0.lcssa.i = phi double* [ %0, %for.cond5.preheader.i ], [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ]
-  %36 = add nuw nsw i64 %17, 1
+  %"!manual_lcssa73" = phi i64 [ %44, %for.body29.lr.ph.i.loopexit ], [ undef, %for.cond5.preheader.i ], !node !336
+  %"arrayidx17.i!manual_lcssa72" = phi double* [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ], [ undef, %for.cond5.preheader.i ], !node !336
+  %31 = phi double* [ %"'ipc", %for.cond5.preheader.i ], [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ], !node !336
+  %xp.0.lcssa.i = phi double* [ %0, %for.cond5.preheader.i ], [ %arrayidx17.i, %for.body29.lr.ph.i.loopexit ], !node !336
+  %32 = add nuw nsw i64 %13, 1, !node !336
   br label %for.body29.i
 
 for.body9.i:                                      ; preds = %for.body9.i, %for.body9.i.preheader
   %iv3 = phi i64 [ %iv.next4, %for.body9.i ], [ 0, %for.body9.i.preheader ]
-  %37 = phi double* [ %arrayidx17.i, %for.body9.i ], [ %"'ipc", %for.body9.i.preheader ]
-  %xp.085.i = phi double* [ %arrayidx17.i, %for.body9.i ], [ %0, %for.body9.i.preheader ]
-  %38 = load double**, double*** %xp.085.i_cache, align 8, !dereferenceable !344, !invariant.group !337
-  %39 = mul nuw nsw i64 %22, %21
-  %40 = mul nuw nsw i64 %iv, %22
-  %41 = add nuw nsw i64 %iv3, %40
-  %42 = getelementptr inbounds double*, double** %38, i64 %41
-  store double* %xp.085.i, double** %42, align 8, !invariant.group !345
-  %43 = load double**, double*** %_cache, align 8, !dereferenceable !344, !invariant.group !338
-  %44 = mul nuw nsw i64 %22, %21
-  %45 = mul nuw nsw i64 %iv, %22
-  %46 = add nuw nsw i64 %iv3, %45
-  %47 = getelementptr inbounds double*, double** %43, i64 %46
-  store double* %37, double** %47, align 8, !invariant.group !346
-  %48 = mul i64 %7, %iv3
+  %33 = phi double* [ %arrayidx17.i, %for.body9.i ], [ %"'ipc", %for.body9.i.preheader ], !node !336
+  %xp.085.i = phi double* [ %arrayidx17.i, %for.body9.i ], [ %0, %for.body9.i.preheader ], !node !336
+  %34 = load double**, double*** %xp.085.i_cache, align 8, !dereferenceable !344, !invariant.group !337, !node !336
+  %35 = mul nuw nsw i64 %18, %17, !node !336
+  %36 = mul nuw nsw i64 %iv, %18, !node !336
+  %37 = add nuw nsw i64 %iv3, %36, !node !336
+  %38 = getelementptr inbounds double*, double** %34, i64 %37, !node !336
+  store double* %xp.085.i, double** %38, align 8, !invariant.group !345
+  %39 = load double**, double*** %_cache, align 8, !dereferenceable !344, !invariant.group !338, !node !336
+  %40 = mul nuw nsw i64 %18, %17, !node !336
+  %41 = mul nuw nsw i64 %iv, %18, !node !336
+  %42 = add nuw nsw i64 %iv3, %41, !node !336
+  %43 = getelementptr inbounds double*, double** %39, i64 %42, !node !336
+  store double* %33, double** %43, align 8, !invariant.group !346
+  %44 = mul i64 %3, %iv3, !node !336
   %iv.next4 = add nuw nsw i64 %iv3, 1
-  %49 = trunc i64 %48 to i32
-  %mul10.i = shl nsw i32 %49, 2
-  %idxprom11.i = sext i32 %mul10.i to i64
-  %"arrayidx12.i'ipg" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom11.i
-  %arrayidx12.i = getelementptr inbounds double, double* %main_params, i64 %idxprom11.i
-  %50 = add nsw i64 %48, %conv
-  %51 = trunc i64 %50 to i32
-  %mul13.i = shl nsw i32 %51, 2
-  %idxprom14.i = sext i32 %mul13.i to i64
-  %"arrayidx15.i'ipg" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom14.i
-  %arrayidx15.i = getelementptr inbounds double, double* %main_params, i64 %idxprom14.i
-  %arrayidx17.i = getelementptr inbounds double, double* %state, i64 %48
-  %arrayidx20.i = getelementptr inbounds double, double* %state, i64 %50
-  %_augmented = call { i8*, i8*, double*, double*, double*, double* } @augmented_lstm_model(i32 %b, double* %arrayidx12.i, double* %"arrayidx12.i'ipg", double* %arrayidx15.i, double* %"arrayidx15.i'ipg", double* %arrayidx17.i, double* %arrayidx20.i, double* %xp.085.i, double* %37)
-  %52 = load { i8*, i8*, double*, double*, double*, double* }*, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !dereferenceable !344, !invariant.group !339
-  %53 = mul nuw nsw i64 %22, %21
-  %54 = mul nuw nsw i64 %iv, %22
-  %55 = add nuw nsw i64 %iv3, %54
-  %56 = getelementptr inbounds { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %52, i64 %55
-  store { i8*, i8*, double*, double*, double*, double* } %_augmented, { i8*, i8*, double*, double*, double*, double* }* %56, align 8, !invariant.group !347
-  %indvars.iv.next91.i = add i64 %48, %7
-  %cmp8.not.not.i = icmp slt i64 %indvars.iv.next91.i, %8
+  %45 = trunc i64 %44 to i32, !node !336
+  %mul10.i = shl nsw i32 %45, 2, !node !336
+  %idxprom11.i = sext i32 %mul10.i to i64, !node !336
+  %"arrayidx12.i'ipg" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom11.i, !node !336
+  %arrayidx12.i = getelementptr inbounds double, double* %main_params, i64 %idxprom11.i, !node !336
+  %46 = add nsw i64 %44, %conv, !node !336
+  %47 = trunc i64 %46 to i32, !node !336
+  %mul13.i = shl nsw i32 %47, 2, !node !336
+  %idxprom14.i = sext i32 %mul13.i to i64, !node !336
+  %"arrayidx15.i'ipg" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom14.i, !node !336
+  %arrayidx15.i = getelementptr inbounds double, double* %main_params, i64 %idxprom14.i, !node !336
+  %arrayidx17.i = getelementptr inbounds double, double* %state, i64 %44, !node !336
+  %arrayidx20.i = getelementptr inbounds double, double* %state, i64 %46, !node !336
+  %_augmented = call { i8*, i8*, double*, double*, double*, double* } @augmented_lstm_model(i32 %b, double* %arrayidx12.i, double* %"arrayidx12.i'ipg", double* %arrayidx15.i, double* %"arrayidx15.i'ipg", double* %arrayidx17.i, double* %arrayidx20.i, double* %xp.085.i, double* %33), !node !336
+  %48 = load { i8*, i8*, double*, double*, double*, double* }*, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !dereferenceable !344, !invariant.group !339, !node !336
+  %49 = mul nuw nsw i64 %18, %17, !node !336
+  %50 = mul nuw nsw i64 %iv, %18, !node !336
+  %51 = add nuw nsw i64 %iv3, %50, !node !336
+  %52 = getelementptr inbounds { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %48, i64 %51, !node !336
+  store { i8*, i8*, double*, double*, double*, double* } %_augmented, { i8*, i8*, double*, double*, double*, double* }* %52, align 8, !invariant.group !347
+  %indvars.iv.next91.i = add i64 %44, %3, !node !336
+  %cmp8.not.not.i = icmp slt i64 %indvars.iv.next91.i, %4
   br i1 %cmp8.not.not.i, label %for.body9.i, label %for.body29.lr.ph.i.loopexit, !llvm.loop !77
 
 for.body29.i:                                     ; preds = %for.body29.i, %for.body29.lr.ph.i
-  %"!manual_lcssa" = phi i64 [ %"!manual_lcssa", %for.body29.i ], [ %"!manual_lcssa73", %for.body29.lr.ph.i ]
-  %"arrayidx17.i!manual_lcssa71" = phi double* [ %"arrayidx17.i!manual_lcssa71", %for.body29.i ], [ %"arrayidx17.i!manual_lcssa72", %for.body29.lr.ph.i ]
+  %"!manual_lcssa" = phi i64 [ %"!manual_lcssa", %for.body29.i ], [ %"!manual_lcssa73", %for.body29.lr.ph.i ], !node !336
+  %"arrayidx17.i!manual_lcssa71" = phi double* [ %"arrayidx17.i!manual_lcssa71", %for.body29.i ], [ %"arrayidx17.i!manual_lcssa72", %for.body29.lr.ph.i ], !node !336
   %iv5 = phi i64 [ %iv.next6, %for.body29.i ], [ 0, %for.body29.lr.ph.i ]
   %iv.next6 = add nuw nsw i64 %iv5, 1
-  %"arrayidx31.i'ipg" = getelementptr inbounds double, double* %35, i64 %iv5
-  %arrayidx31.i = getelementptr inbounds double, double* %xp.0.lcssa.i, i64 %iv5
-  %57 = load double, double* %arrayidx31.i, align 8, !tbaa !61, !alias.scope !93, !noalias !94
-  %58 = add nuw nsw i64 %iv5, %conv
-  %"arrayidx34.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %58
-  %arrayidx34.i = getelementptr inbounds double, double* %extra_params, i64 %58
-  %59 = load double, double* %arrayidx34.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90, !invariant.group !348
-  %mul35.i = fmul fast double %59, %57
-  %60 = add nuw nsw i64 %iv5, %9
-  %"arrayidx39.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %60
-  %arrayidx39.i = getelementptr inbounds double, double* %extra_params, i64 %60
-  %61 = load double, double* %arrayidx39.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90
-  %add40.i = fadd fast double %mul35.i, %61
-  %"arrayidx42.i'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv5
-  %arrayidx42.i = getelementptr inbounds double, double* %0, i64 %iv5
+  %"arrayidx31.i'ipg" = getelementptr inbounds double, double* %31, i64 %iv5, !node !336
+  %arrayidx31.i = getelementptr inbounds double, double* %xp.0.lcssa.i, i64 %iv5, !node !336
+  %53 = load double, double* %arrayidx31.i, align 8, !tbaa !61, !alias.scope !93, !noalias !94, !node !336
+  %54 = add nuw nsw i64 %iv5, %conv, !node !336
+  %"arrayidx34.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %54, !node !336
+  %arrayidx34.i = getelementptr inbounds double, double* %extra_params, i64 %54, !node !336
+  %55 = load double, double* %arrayidx34.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90, !invariant.group !348, !node !336
+  %mul35.i = fmul fast double %55, %53, !node !336
+  %56 = add nuw nsw i64 %iv5, %5, !node !336
+  %"arrayidx39.i'ipg" = getelementptr inbounds double, double* %"extra_params'", i64 %56, !node !336
+  %arrayidx39.i = getelementptr inbounds double, double* %extra_params, i64 %56, !node !336
+  %57 = load double, double* %arrayidx39.i, align 8, !tbaa !61, !alias.scope !79, !noalias !90, !node !336
+  %add40.i = fadd fast double %mul35.i, %57, !node !336
+  %"arrayidx42.i'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv5, !node !336
+  %arrayidx42.i = getelementptr inbounds double, double* %0, i64 %iv5, !node !336
   store double %add40.i, double* %arrayidx42.i, align 8, !tbaa !61, !alias.scope !86, !noalias !91
-  %62 = load double*, double** %_cache51, align 8, !dereferenceable !344, !invariant.group !340
-  %63 = mul nuw nsw i64 %24, %21
-  %64 = mul nuw nsw i64 %iv, %24
-  %65 = add nuw nsw i64 %iv5, %64
-  %66 = getelementptr inbounds double, double* %62, i64 %65
-  store double %57, double* %66, align 8, !invariant.group !349
+  %58 = load double*, double** %_cache51, align 8, !dereferenceable !344, !invariant.group !340, !node !336
+  %59 = mul nuw nsw i64 %20, %17, !node !336
+  %60 = mul nuw nsw i64 %iv, %20, !node !336
+  %61 = add nuw nsw i64 %iv5, %60, !node !336
+  %62 = getelementptr inbounds double, double* %58, i64 %61, !node !336
+  store double %53, double* %62, align 8, !invariant.group !349
   %exitcond.not.i = icmp eq i64 %iv.next6, %conv
   br i1 %exitcond.not.i, label %for.body.i77.preheader, label %for.body29.i, !llvm.loop !78
 
 for.body.i77.preheader:                           ; preds = %for.body29.i
-  %67 = add nuw nsw i64 %18, 1
-  %68 = load double*, double** %_cache86, align 8, !dereferenceable !344, !invariant.group !341
-  %69 = mul nuw nsw i64 1, %21
-  %70 = mul nuw nsw i64 %iv, 1
-  %71 = add nuw nsw i64 0, %70
-  %72 = mul nuw nsw i64 %71, %67
-  %73 = getelementptr inbounds double, double* %68, i64 %72
-  %74 = bitcast double* %73 to i8*
-  %75 = bitcast double* %call84 to i8*
-  %76 = mul nuw nsw i64 8, %67
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %74, i8* nonnull align 8 %75, i64 %76, i1 false)
+  %63 = add nuw nsw i64 %14, 1, !node !336
+  %64 = load double*, double** %_cache86, align 8, !dereferenceable !344, !invariant.group !341, !node !336
+  %65 = mul nuw nsw i64 1, %17, !node !336
+  %66 = mul nuw nsw i64 %iv, 1
+  %67 = add nuw nsw i64 0, %66
+  %68 = mul nuw nsw i64 %67, %63, !node !336
+  %69 = getelementptr inbounds double, double* %64, i64 %68, !node !336
+  %70 = bitcast double* %69 to i8*, !node !336
+  %71 = bitcast double* %call84 to i8*, !node !336
+  %72 = mul nuw nsw i64 8, %63, !node !336
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 %70, i8* nonnull align 8 %71, i64 %72, i1 false), !node !336
   br label %for.body.i77
 
 for.body.i77:                                     ; preds = %for.body.i77, %for.body.i77.preheader
   %iv7 = phi i64 [ %iv.next8, %for.body.i77 ], [ 0, %for.body.i77.preheader ]
-  %sum.09.i = phi double [ %add.i, %for.body.i77 ], [ 0.000000e+00, %for.body.i77.preheader ]
+  %sum.09.i = phi double [ %add.i, %for.body.i77 ], [ 0.000000e+00, %for.body.i77.preheader ], !node !336
   %iv.next8 = add nuw nsw i64 %iv7, 1
-  %"arrayidx.i74'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv7
-  %arrayidx.i74 = getelementptr inbounds double, double* %0, i64 %iv7
-  %77 = load double, double* %arrayidx.i74, align 8, !tbaa !61
-  %78 = tail call fast double @llvm.exp.f64(double %77) #37
-  %add.i = fadd fast double %78, %sum.09.i
+  %"arrayidx.i74'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv7, !node !336
+  %arrayidx.i74 = getelementptr inbounds double, double* %0, i64 %iv7, !node !336
+  %73 = load double, double* %arrayidx.i74, align 8, !tbaa !61, !node !336
+  %74 = tail call fast double @llvm.exp.f64(double %73) #37, !node !336
+  %add.i = fadd fast double %74, %sum.09.i, !node !336
   %exitcond.not.i76 = icmp eq i64 %iv.next8, %conv
   br i1 %exitcond.not.i76, label %for.body10.preheader, label %for.body.i77, !llvm.loop !72
 
 for.body10.preheader:                             ; preds = %for.body.i77
-  %"add.i!manual_lcssa" = phi double [ %add.i, %for.body.i77 ]
-  %79 = load double*, double** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !344, !invariant.group !342
-  %80 = getelementptr inbounds double, double* %79, i64 %iv
-  store double %"add.i!manual_lcssa", double* %80, align 8, !invariant.group !350
-  %phi.bo.i = fadd fast double %add.i, 2.000000e+00
-  %81 = tail call fast double @llvm.log.f64(double %phi.bo.i) #37
+  %"add.i!manual_lcssa" = phi double [ %add.i, %for.body.i77 ], !node !336
+  %75 = load double*, double** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !344, !invariant.group !342, !node !336
+  %76 = getelementptr inbounds double, double* %75, i64 %iv, !node !336
+  store double %"add.i!manual_lcssa", double* %76, align 8, !invariant.group !350
+  %phi.bo.i = fadd fast double %add.i, 2.000000e+00, !node !336
+  %77 = tail call fast double @llvm.log.f64(double %phi.bo.i) #37, !node !336
   br label %for.body10
 
 for.body10:                                       ; preds = %for.body10, %for.body10.preheader
   %iv9 = phi i64 [ %iv.next10, %for.body10 ], [ 0, %for.body10.preheader ]
   %iv.next10 = add nuw nsw i64 %iv9, 1
-  %"arrayidx11'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv9
-  %arrayidx11 = getelementptr inbounds double, double* %0, i64 %iv9
-  %82 = load double, double* %arrayidx11, align 8, !tbaa !61
-  %sub12 = fsub fast double %82, %81
-  %"arrayidx14'ipg" = getelementptr inbounds double, double* %"'ipc111", i64 %iv9
-  %arrayidx14 = getelementptr inbounds double, double* %1, i64 %iv9
+  %"arrayidx11'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv9, !node !336
+  %arrayidx11 = getelementptr inbounds double, double* %0, i64 %iv9, !node !336
+  %78 = load double, double* %arrayidx11, align 8, !tbaa !61, !node !336
+  %sub12 = fsub fast double %78, %77, !node !336
+  %"arrayidx14'ipg" = getelementptr inbounds double, double* %"'ipc111", i64 %iv9, !node !336
+  %arrayidx14 = getelementptr inbounds double, double* %1, i64 %iv9, !node !336
   store double %sub12, double* %arrayidx14, align 8, !tbaa !61
   %exitcond.not = icmp eq i64 %iv.next10, %conv
   br i1 %exitcond.not, label %for.body19.preheader, label %for.body10, !llvm.loop !95
 
 for.body19.preheader:                             ; preds = %for.body10
-  %indvars.iv.next95 = add i64 %31, %conv
-  %add = add nuw nsw i32 %30, %b
-  %arrayidx16 = getelementptr inbounds double, double* %sequence, i64 %indvars.iv.next95
+  %indvars.iv.next95 = add i64 %27, %conv, !node !336
+  %add = add nuw nsw i32 %26, %b, !node !336
+  %arrayidx16 = getelementptr inbounds double, double* %sequence, i64 %indvars.iv.next95, !node !336
   br label %for.body19
 
 for.body19:                                       ; preds = %for.body19, %for.body19.preheader
   %iv11 = phi i64 [ %iv.next12, %for.body19 ], [ 0, %for.body19.preheader ]
-  %total.181 = phi double [ %total.086, %for.body19.preheader ], [ %add25, %for.body19 ]
+  %total.181 = phi double [ %total.086, %for.body19.preheader ], [ %add25, %for.body19 ], !node !336
   %iv.next12 = add nuw nsw i64 %iv11, 1
-  %arrayidx21 = getelementptr inbounds double, double* %arrayidx16, i64 %iv11
-  %83 = load double, double* %arrayidx21, align 8, !tbaa !61, !invariant.group !351
-  %"arrayidx23'ipg" = getelementptr inbounds double, double* %"'ipc111", i64 %iv11
-  %arrayidx23 = getelementptr inbounds double, double* %1, i64 %iv11
-  %84 = load double, double* %arrayidx23, align 8, !tbaa !61
-  %mul24 = fmul fast double %84, %83
-  %add25 = fadd fast double %mul24, %total.181
+  %arrayidx21 = getelementptr inbounds double, double* %arrayidx16, i64 %iv11, !node !336
+  %79 = load double, double* %arrayidx21, align 8, !tbaa !61, !invariant.group !351, !node !336
+  %"arrayidx23'ipg" = getelementptr inbounds double, double* %"'ipc111", i64 %iv11, !node !336
+  %arrayidx23 = getelementptr inbounds double, double* %1, i64 %iv11, !node !336
+  %80 = load double, double* %arrayidx23, align 8, !tbaa !61, !node !336
+  %mul24 = fmul fast double %80, %79, !node !336
+  %add25 = fadd fast double %mul24, %total.181, !node !336
   %exitcond93.not = icmp eq i64 %iv.next12, %conv
   br i1 %exitcond93.not, label %for.end28, label %for.body19, !llvm.loop !96
 
 for.end28:                                        ; preds = %for.body19
-  %85 = trunc i64 %indvars.iv.next95 to i32
-  %cmp6.not.not = icmp sgt i32 %mul4, %85
+  %81 = trunc i64 %indvars.iv.next95 to i32, !node !336
+  %cmp6.not.not = icmp sgt i32 %mul4, %81
   br i1 %cmp6.not.not, label %for.body.preheader.i, label %for.end32.loopexit, !llvm.loop !97
 
 for.end32.loopexit:                               ; preds = %for.end28
-  %phi.cast = sitofp i32 %add to double
+  %phi.cast = sitofp i32 %add to double, !node !336
   br label %for.end32
 
 for.end32:                                        ; preds = %for.end32.loopexit, %entry
-  %count.0.lcssa = phi double [ 0.000000e+00, %entry ], [ %phi.cast, %for.end32.loopexit ]
-  %total.0.lcssa = phi double [ 0.000000e+00, %entry ], [ %add25, %for.end32.loopexit ]
+  %count.0.lcssa = phi double [ 0.000000e+00, %entry ], [ %phi.cast, %for.end32.loopexit ], !node !336
+  %total.0.lcssa = phi double [ 0.000000e+00, %entry ], [ %add25, %for.end32.loopexit ], !node !336
   br label %invertfor.end32
 
 invertentry:                                      ; preds = %invertfor.end32, %invertfor.body.preheader.i.lr.ph
@@ -19006,57 +19001,57 @@ invertentry:                                      ; preds = %invertfor.end32, %i
   ret void
 
 invertfor.body.preheader.i.lr.ph:                 ; preds = %invertfor.body.preheader.i
-  %86 = load i64, i64* %"iv'ac", align 8
-  %87 = load i64, i64* %"iv3'ac", align 8
+  %82 = load i64, i64* %"iv'ac", align 8
+  %83 = load i64, i64* %"iv3'ac", align 8
   %forfree = load double**, double*** %xp.085.i_cache, align 8, !dereferenceable !344, !invariant.group !337
-  %88 = bitcast double** %forfree to i8*
-  tail call void @free(i8* nonnull %88)
-  %89 = load i64, i64* %"iv'ac", align 8
-  %90 = load i64, i64* %"iv3'ac", align 8
+  %84 = bitcast double** %forfree to i8*
+  tail call void @free(i8* nonnull %84)
+  %85 = load i64, i64* %"iv'ac", align 8
+  %86 = load i64, i64* %"iv3'ac", align 8
   %forfree43 = load double**, double*** %_cache, align 8, !dereferenceable !344, !invariant.group !338
-  %91 = bitcast double** %forfree43 to i8*
-  tail call void @free(i8* nonnull %91)
-  %92 = load i64, i64* %"iv'ac", align 8
-  %93 = load i64, i64* %"iv3'ac", align 8
+  %87 = bitcast double** %forfree43 to i8*
+  tail call void @free(i8* nonnull %87)
+  %88 = load i64, i64* %"iv'ac", align 8
+  %89 = load i64, i64* %"iv3'ac", align 8
   %forfree46 = load { i8*, i8*, double*, double*, double*, double* }*, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !dereferenceable !352, !invariant.group !339
-  %94 = bitcast { i8*, i8*, double*, double*, double*, double* }* %forfree46 to i8*
-  tail call void @free(i8* nonnull %94)
-  %95 = load i64, i64* %"iv'ac", align 8
-  %96 = load i64, i64* %"iv5'ac", align 8
+  %90 = bitcast { i8*, i8*, double*, double*, double*, double* }* %forfree46 to i8*
+  tail call void @free(i8* nonnull %90)
+  %91 = load i64, i64* %"iv'ac", align 8
+  %92 = load i64, i64* %"iv5'ac", align 8
   %forfree55 = load double*, double** %_cache51, align 8, !dereferenceable !344, !invariant.group !340
-  %97 = bitcast double* %forfree55 to i8*
-  tail call void @free(i8* nonnull %97)
-  %98 = load i64, i64* %"iv'ac", align 8
+  %93 = bitcast double* %forfree55 to i8*
+  tail call void @free(i8* nonnull %93)
+  %94 = load i64, i64* %"iv'ac", align 8
   %forfree90 = load double*, double** %_cache86, align 8, !dereferenceable !344, !invariant.group !341
-  %99 = bitcast double* %forfree90 to i8*
-  tail call void @free(i8* nonnull %99)
-  %100 = load i64, i64* %"iv'ac", align 8
+  %95 = bitcast double* %forfree90 to i8*
+  tail call void @free(i8* nonnull %95)
+  %96 = load i64, i64* %"iv'ac", align 8
   %forfree103 = load double*, double** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !344, !invariant.group !342
-  %101 = bitcast double* %forfree103 to i8*
-  tail call void @free(i8* nonnull %101)
+  %97 = bitcast double* %forfree103 to i8*
+  tail call void @free(i8* nonnull %97)
   br label %invertentry
 
 invertfor.body.preheader.i:                       ; preds = %invertfor.body.i
-  %102 = load double, double* %"total.086'de", align 8
+  %98 = load double, double* %"total.086'de", align 8
   store double 0.000000e+00, double* %"total.086'de", align 8
-  %103 = load i64, i64* %"iv'ac", align 8
-  %104 = icmp eq i64 %103, 0
-  %105 = xor i1 %104, true
-  %106 = select fast i1 %105, double %102, double 0.000000e+00
-  %107 = load double, double* %"add25'de", align 8
-  %108 = fadd fast double %107, %102
-  %109 = select fast i1 %104, double %107, double %108
-  store double %109, double* %"add25'de", align 8
-  br i1 %104, label %invertfor.body.preheader.i.lr.ph, label %incinvertfor.body.preheader.i
+  %99 = load i64, i64* %"iv'ac", align 8
+  %100 = icmp eq i64 %99, 0
+  %101 = xor i1 %100, true
+  %102 = select fast i1 %101, double %98, double 0.000000e+00
+  %103 = load double, double* %"add25'de", align 8
+  %104 = fadd fast double %103, %98
+  %105 = select fast i1 %100, double %103, double %104
+  store double %105, double* %"add25'de", align 8
+  br i1 %100, label %invertfor.body.preheader.i.lr.ph, label %incinvertfor.body.preheader.i
 
 incinvertfor.body.preheader.i:                    ; preds = %invertfor.body.preheader.i
-  %110 = load i64, i64* %"iv'ac", align 8
-  %111 = add nsw i64 %110, -1
-  store i64 %111, i64* %"iv'ac", align 8
+  %106 = load i64, i64* %"iv'ac", align 8
+  %107 = add nsw i64 %106, -1
+  store i64 %107, i64* %"iv'ac", align 8
   br label %invertfor.end28
 
 invertfor.cond5.preheader.i:                      ; preds = %invertfor.body29.lr.ph.i, %invertfor.body9.i.preheader
-  %112 = load i64, i64* %"iv'ac", align 8
+  %108 = load i64, i64* %"iv'ac", align 8
   %_unwrap = add nsw i64 %conv, -1
   br label %mergeinvertfor.body.i_for.cond5.preheader.i
 
@@ -19068,47 +19063,47 @@ invertfor.body9.i.preheader:                      ; preds = %invertfor.body9.i
   br label %invertfor.cond5.preheader.i
 
 invertfor.body.i:                                 ; preds = %incinvertfor.body.i, %mergeinvertfor.body.i_for.cond5.preheader.i
-  %113 = load i64, i64* %"iv1'ac", align 8
-  %114 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx4.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %113
-  %115 = load double, double* %"arrayidx4.i'ipg_unwrap", align 8
+  %109 = load i64, i64* %"iv1'ac", align 8
+  %110 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx4.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %109
+  %111 = load double, double* %"arrayidx4.i'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx4.i'ipg_unwrap", align 8
-  %116 = load double, double* %"mul.i'de", align 8
-  %117 = fadd fast double %116, %115
-  store double %117, double* %"mul.i'de", align 8
-  %118 = load double, double* %"mul.i'de", align 8
-  %119 = load i64, i64* %"iv1'ac", align 8
-  %120 = load i64, i64* %"iv'ac", align 8
-  %_unwrap13 = mul i64 %conv, %120
+  %112 = load double, double* %"mul.i'de", align 8
+  %113 = fadd fast double %112, %111
+  store double %113, double* %"mul.i'de", align 8
+  %114 = load double, double* %"mul.i'de", align 8
+  %115 = load i64, i64* %"iv1'ac", align 8
+  %116 = load i64, i64* %"iv'ac", align 8
+  %_unwrap13 = mul i64 %conv, %116
   %scevgep_unwrap = getelementptr double, double* %sequence, i64 %_unwrap13
-  %arrayidx.i_unwrap = getelementptr inbounds double, double* %scevgep_unwrap, i64 %119
+  %arrayidx.i_unwrap = getelementptr inbounds double, double* %scevgep_unwrap, i64 %115
   %_unwrap14 = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !61, !invariant.group !343
-  %m0diffe = fmul fast double %118, %_unwrap14
+  %m0diffe = fmul fast double %114, %_unwrap14
   store double 0.000000e+00, double* %"mul.i'de", align 8
-  %121 = load double, double* %"'de", align 8
-  %122 = fadd fast double %121, %m0diffe
-  store double %122, double* %"'de", align 8
-  %123 = load double, double* %"'de", align 8
+  %117 = load double, double* %"'de", align 8
+  %118 = fadd fast double %117, %m0diffe
+  store double %118, double* %"'de", align 8
+  %119 = load double, double* %"'de", align 8
   store double 0.000000e+00, double* %"'de", align 8
+  %120 = load i64, i64* %"iv1'ac", align 8
+  %121 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"extra_params'", i64 %120
+  %122 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8
+  %123 = fadd fast double %122, %119
+  store double %123, double* %"arrayidx2.i'ipg_unwrap", align 8
   %124 = load i64, i64* %"iv1'ac", align 8
-  %125 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"extra_params'", i64 %124
-  %126 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %127 = fadd fast double %126, %123
-  store double %127, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %128 = load i64, i64* %"iv1'ac", align 8
-  %129 = icmp eq i64 %128, 0
-  %130 = xor i1 %129, true
-  br i1 %129, label %invertfor.body.preheader.i, label %incinvertfor.body.i
+  %125 = icmp eq i64 %124, 0
+  %126 = xor i1 %125, true
+  br i1 %125, label %invertfor.body.preheader.i, label %incinvertfor.body.i
 
 incinvertfor.body.i:                              ; preds = %invertfor.body.i
-  %131 = load i64, i64* %"iv1'ac", align 8
-  %132 = add nsw i64 %131, -1
-  store i64 %132, i64* %"iv1'ac", align 8
+  %127 = load i64, i64* %"iv1'ac", align 8
+  %128 = add nsw i64 %127, -1
+  store i64 %128, i64* %"iv1'ac", align 8
   br label %invertfor.body.i
 
 invertfor.body29.lr.ph.i.loopexit:                ; preds = %invertfor.body29.lr.ph.i
-  %133 = load i64, i64* %"iv'ac", align 8
+  %129 = load i64, i64* %"iv'ac", align 8
   %mul6.i_unwrap = shl nsw i32 %l, 1
   %mul7.i_unwrap = mul nsw i32 %mul6.i_unwrap, %b
   %_unwrap15 = zext i32 %mul7.i_unwrap to i64
@@ -19123,50 +19118,50 @@ mergeinvertfor.body9.i_for.body29.lr.ph.i.loopexit: ; preds = %invertfor.body29.
   br label %invertfor.body9.i
 
 invertfor.body29.lr.ph.i:                         ; preds = %invertfor.body29.i
-  %134 = load i64, i64* %"iv'ac", align 8
+  %130 = load i64, i64* %"iv'ac", align 8
   %mul6.i_unwrap20 = shl nsw i32 %l, 1
   %mul7.i_unwrap21 = mul nsw i32 %mul6.i_unwrap20, %b
   %cmp8.not.not83.i_unwrap = icmp sgt i32 %mul7.i_unwrap21, 0
   br i1 %cmp8.not.not83.i_unwrap, label %invertfor.body29.lr.ph.i.loopexit, label %invertfor.cond5.preheader.i
 
 invertfor.body9.i:                                ; preds = %incinvertfor.body9.i, %mergeinvertfor.body9.i_for.body29.lr.ph.i.loopexit
-  %135 = load i64, i64* %"iv3'ac", align 8
-  %136 = load i64, i64* %"iv'ac", align 8
+  %131 = load i64, i64* %"iv3'ac", align 8
+  %132 = load i64, i64* %"iv'ac", align 8
   %_unwrap22 = shl nuw i32 %b, 1
   %_unwrap23 = sext i32 %_unwrap22 to i64
-  %_unwrap24 = mul i64 %_unwrap23, %135
+  %_unwrap24 = mul i64 %_unwrap23, %131
   %_unwrap25 = trunc i64 %_unwrap24 to i32
   %mul10.i_unwrap = shl nsw i32 %_unwrap25, 2
   %idxprom11.i_unwrap = sext i32 %mul10.i_unwrap to i64
   %arrayidx12.i_unwrap = getelementptr inbounds double, double* %main_params, i64 %idxprom11.i_unwrap
-  %137 = load i64, i64* %"iv3'ac", align 8
-  %138 = load i64, i64* %"iv'ac", align 8
+  %133 = load i64, i64* %"iv3'ac", align 8
+  %134 = load i64, i64* %"iv'ac", align 8
   %"arrayidx12.i'ipg_unwrap" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom11.i_unwrap
-  %139 = load i64, i64* %"iv3'ac", align 8
-  %140 = load i64, i64* %"iv'ac", align 8
+  %135 = load i64, i64* %"iv3'ac", align 8
+  %136 = load i64, i64* %"iv'ac", align 8
   %_unwrap26 = add nsw i64 %_unwrap24, %conv
   %_unwrap27 = trunc i64 %_unwrap26 to i32
   %mul13.i_unwrap = shl nsw i32 %_unwrap27, 2
   %idxprom14.i_unwrap = sext i32 %mul13.i_unwrap to i64
   %arrayidx15.i_unwrap = getelementptr inbounds double, double* %main_params, i64 %idxprom14.i_unwrap
+  %137 = load i64, i64* %"iv3'ac", align 8
+  %138 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx15.i'ipg_unwrap" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom14.i_unwrap
+  %139 = load i64, i64* %"iv3'ac", align 8
+  %140 = load i64, i64* %"iv'ac", align 8
+  %arrayidx17.i_unwrap = getelementptr inbounds double, double* %state, i64 %_unwrap24
   %141 = load i64, i64* %"iv3'ac", align 8
   %142 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx15.i'ipg_unwrap" = getelementptr inbounds double, double* %"main_params'", i64 %idxprom14.i_unwrap
+  %arrayidx20.i_unwrap = getelementptr inbounds double, double* %state, i64 %_unwrap26
   %143 = load i64, i64* %"iv3'ac", align 8
   %144 = load i64, i64* %"iv'ac", align 8
-  %arrayidx17.i_unwrap = getelementptr inbounds double, double* %state, i64 %_unwrap24
-  %145 = load i64, i64* %"iv3'ac", align 8
-  %146 = load i64, i64* %"iv'ac", align 8
-  %arrayidx20.i_unwrap = getelementptr inbounds double, double* %state, i64 %_unwrap26
-  %147 = load i64, i64* %"iv3'ac", align 8
-  %148 = load i64, i64* %"iv'ac", align 8
   %_unwrap29 = add i32 %c, -1
   %_unwrap30 = mul i32 %b, %_unwrap29
   %_unwrap31 = add i32 %_unwrap30, -1
   %_unwrap32 = zext i32 %_unwrap31 to i64
   %conv_unwrap = zext i32 %b to i64
   %_unwrap33 = udiv i64 %_unwrap32, %conv_unwrap
-  %149 = add nuw i64 %_unwrap33, 1
+  %145 = add nuw i64 %_unwrap33, 1
   %mul6.i_unwrap34 = shl nsw i32 %l, 1
   %mul7.i_unwrap35 = mul nsw i32 %mul6.i_unwrap34, %b
   %_unwrap36 = zext i32 %mul7.i_unwrap35 to i64
@@ -19174,158 +19169,158 @@ invertfor.body9.i:                                ; preds = %incinvertfor.body9.
   %_unwrap38 = shl nuw i32 %b, 1
   %_unwrap39 = sext i32 %_unwrap38 to i64
   %_unwrap40 = udiv i64 %_unwrap37, %_unwrap39
-  %150 = add nuw i64 %_unwrap40, 1
-  %151 = mul nuw nsw i64 %150, %149
-  %152 = load double**, double*** %xp.085.i_cache, align 8, !dereferenceable !344, !invariant.group !337
-  %153 = load i64, i64* %"iv3'ac", align 8
-  %154 = load i64, i64* %"iv'ac", align 8
-  %155 = mul nuw nsw i64 %150, %149
-  %156 = mul nuw nsw i64 %154, %150
-  %157 = add nuw nsw i64 %153, %156
-  %158 = getelementptr inbounds double*, double** %152, i64 %157
-  %159 = load double*, double** %158, align 8, !invariant.group !345
-  %160 = load i64, i64* %"iv3'ac", align 8
-  %161 = load i64, i64* %"iv'ac", align 8
-  %162 = add nuw i64 %_unwrap33, 1
-  %163 = add nuw i64 %_unwrap40, 1
-  %164 = mul nuw nsw i64 %163, %162
-  %165 = load double**, double*** %_cache, align 8, !dereferenceable !344, !invariant.group !338
-  %166 = load i64, i64* %"iv3'ac", align 8
-  %167 = load i64, i64* %"iv'ac", align 8
-  %168 = mul nuw nsw i64 %163, %162
-  %169 = mul nuw nsw i64 %167, %163
-  %170 = add nuw nsw i64 %166, %169
-  %171 = getelementptr inbounds double*, double** %165, i64 %170
-  %172 = load double*, double** %171, align 8, !invariant.group !346
-  %173 = load i64, i64* %"iv3'ac", align 8
-  %174 = load i64, i64* %"iv'ac", align 8
-  %175 = add nuw i64 %_unwrap33, 1
-  %176 = add nuw i64 %_unwrap40, 1
-  %177 = mul nuw nsw i64 %176, %175
-  %178 = load { i8*, i8*, double*, double*, double*, double* }*, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !dereferenceable !344, !invariant.group !339
-  %179 = load i64, i64* %"iv3'ac", align 8
-  %180 = load i64, i64* %"iv'ac", align 8
-  %181 = mul nuw nsw i64 %176, %175
-  %182 = mul nuw nsw i64 %180, %176
-  %183 = add nuw nsw i64 %179, %182
-  %184 = getelementptr inbounds { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %178, i64 %183
-  %185 = load { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %184, align 8, !invariant.group !347
-  call void @diffelstm_model(i32 %b, double* %arrayidx12.i_unwrap, double* %"arrayidx12.i'ipg_unwrap", double* %arrayidx15.i_unwrap, double* %"arrayidx15.i'ipg_unwrap", double* %arrayidx17.i_unwrap, double* %arrayidx20.i_unwrap, double* %159, double* %172, { i8*, i8*, double*, double*, double*, double* } %185)
-  %186 = load i64, i64* %"iv3'ac", align 8
-  %187 = icmp eq i64 %186, 0
-  %188 = xor i1 %187, true
-  br i1 %187, label %invertfor.body9.i.preheader, label %incinvertfor.body9.i
+  %146 = add nuw i64 %_unwrap40, 1
+  %147 = mul nuw nsw i64 %146, %145
+  %148 = load double**, double*** %xp.085.i_cache, align 8, !dereferenceable !344, !invariant.group !337
+  %149 = load i64, i64* %"iv3'ac", align 8
+  %150 = load i64, i64* %"iv'ac", align 8
+  %151 = mul nuw nsw i64 %146, %145
+  %152 = mul nuw nsw i64 %150, %146
+  %153 = add nuw nsw i64 %149, %152
+  %154 = getelementptr inbounds double*, double** %148, i64 %153
+  %155 = load double*, double** %154, align 8, !invariant.group !345
+  %156 = load i64, i64* %"iv3'ac", align 8
+  %157 = load i64, i64* %"iv'ac", align 8
+  %158 = add nuw i64 %_unwrap33, 1
+  %159 = add nuw i64 %_unwrap40, 1
+  %160 = mul nuw nsw i64 %159, %158
+  %161 = load double**, double*** %_cache, align 8, !dereferenceable !344, !invariant.group !338
+  %162 = load i64, i64* %"iv3'ac", align 8
+  %163 = load i64, i64* %"iv'ac", align 8
+  %164 = mul nuw nsw i64 %159, %158
+  %165 = mul nuw nsw i64 %163, %159
+  %166 = add nuw nsw i64 %162, %165
+  %167 = getelementptr inbounds double*, double** %161, i64 %166
+  %168 = load double*, double** %167, align 8, !invariant.group !346
+  %169 = load i64, i64* %"iv3'ac", align 8
+  %170 = load i64, i64* %"iv'ac", align 8
+  %171 = add nuw i64 %_unwrap33, 1
+  %172 = add nuw i64 %_unwrap40, 1
+  %173 = mul nuw nsw i64 %172, %171
+  %174 = load { i8*, i8*, double*, double*, double*, double* }*, { i8*, i8*, double*, double*, double*, double* }** %_augmented_cache, align 8, !dereferenceable !344, !invariant.group !339
+  %175 = load i64, i64* %"iv3'ac", align 8
+  %176 = load i64, i64* %"iv'ac", align 8
+  %177 = mul nuw nsw i64 %172, %171
+  %178 = mul nuw nsw i64 %176, %172
+  %179 = add nuw nsw i64 %175, %178
+  %180 = getelementptr inbounds { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %174, i64 %179
+  %181 = load { i8*, i8*, double*, double*, double*, double* }, { i8*, i8*, double*, double*, double*, double* }* %180, align 8, !invariant.group !347
+  call void @diffelstm_model(i32 %b, double* %arrayidx12.i_unwrap, double* %"arrayidx12.i'ipg_unwrap", double* %arrayidx15.i_unwrap, double* %"arrayidx15.i'ipg_unwrap", double* %arrayidx17.i_unwrap, double* %arrayidx20.i_unwrap, double* %155, double* %168, { i8*, i8*, double*, double*, double*, double* } %181)
+  %182 = load i64, i64* %"iv3'ac", align 8
+  %183 = icmp eq i64 %182, 0
+  %184 = xor i1 %183, true
+  br i1 %183, label %invertfor.body9.i.preheader, label %incinvertfor.body9.i
 
 incinvertfor.body9.i:                             ; preds = %invertfor.body9.i
-  %189 = load i64, i64* %"iv3'ac", align 8
-  %190 = add nsw i64 %189, -1
-  store i64 %190, i64* %"iv3'ac", align 8
+  %185 = load i64, i64* %"iv3'ac", align 8
+  %186 = add nsw i64 %185, -1
+  store i64 %186, i64* %"iv3'ac", align 8
   br label %invertfor.body9.i
 
 invertfor.body29.i:                               ; preds = %mergeinvertfor.body29.i_for.body.i77.preheader, %incinvertfor.body29.i
-  %191 = load i64, i64* %"iv5'ac", align 8
-  %192 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx42.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %191
-  %193 = load double, double* %"arrayidx42.i'ipg_unwrap", align 8
+  %187 = load i64, i64* %"iv5'ac", align 8
+  %188 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx42.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %187
+  %189 = load double, double* %"arrayidx42.i'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx42.i'ipg_unwrap", align 8
-  %194 = load double, double* %"add40.i'de", align 8
-  %195 = fadd fast double %194, %193
-  store double %195, double* %"add40.i'de", align 8
-  %196 = load double, double* %"add40.i'de", align 8
+  %190 = load double, double* %"add40.i'de", align 8
+  %191 = fadd fast double %190, %189
+  store double %191, double* %"add40.i'de", align 8
+  %192 = load double, double* %"add40.i'de", align 8
   store double 0.000000e+00, double* %"add40.i'de", align 8
-  %197 = load double, double* %"mul35.i'de", align 8
-  %198 = fadd fast double %197, %196
-  store double %198, double* %"mul35.i'de", align 8
-  %199 = load double, double* %"'de47", align 8
-  %200 = fadd fast double %199, %196
-  store double %200, double* %"'de47", align 8
-  %201 = load double, double* %"'de47", align 8
+  %193 = load double, double* %"mul35.i'de", align 8
+  %194 = fadd fast double %193, %192
+  store double %194, double* %"mul35.i'de", align 8
+  %195 = load double, double* %"'de47", align 8
+  %196 = fadd fast double %195, %192
+  store double %196, double* %"'de47", align 8
+  %197 = load double, double* %"'de47", align 8
   store double 0.000000e+00, double* %"'de47", align 8
-  %202 = load i64, i64* %"iv5'ac", align 8
-  %203 = load i64, i64* %"iv'ac", align 8
+  %198 = load i64, i64* %"iv5'ac", align 8
+  %199 = load i64, i64* %"iv'ac", align 8
   %_unwrap48 = shl nuw i32 %b, 1
   %_unwrap49 = zext i32 %_unwrap48 to i64
-  %_unwrap50 = add nuw nsw i64 %202, %_unwrap49
+  %_unwrap50 = add nuw nsw i64 %198, %_unwrap49
   %"arrayidx39.i'ipg_unwrap" = getelementptr inbounds double, double* %"extra_params'", i64 %_unwrap50
-  %204 = load double, double* %"arrayidx39.i'ipg_unwrap", align 8
-  %205 = fadd fast double %204, %201
-  store double %205, double* %"arrayidx39.i'ipg_unwrap", align 8
-  %206 = load double, double* %"mul35.i'de", align 8
-  %207 = load i64, i64* %"iv5'ac", align 8
-  %208 = load i64, i64* %"iv'ac", align 8
+  %200 = load double, double* %"arrayidx39.i'ipg_unwrap", align 8
+  %201 = fadd fast double %200, %197
+  store double %201, double* %"arrayidx39.i'ipg_unwrap", align 8
+  %202 = load double, double* %"mul35.i'de", align 8
+  %203 = load i64, i64* %"iv5'ac", align 8
+  %204 = load i64, i64* %"iv'ac", align 8
   %_unwrap56 = add i32 %c, -1
   %_unwrap57 = mul i32 %b, %_unwrap56
   %_unwrap58 = add i32 %_unwrap57, -1
   %_unwrap59 = zext i32 %_unwrap58 to i64
   %conv_unwrap60 = zext i32 %b to i64
   %_unwrap61 = udiv i64 %_unwrap59, %conv_unwrap60
-  %209 = add nuw i64 %_unwrap61, 1
+  %205 = add nuw i64 %_unwrap61, 1
   %_unwrap62 = add nsw i64 %conv_unwrap60, -1
-  %210 = add nuw i64 %_unwrap62, 1
-  %211 = mul nuw nsw i64 %210, %209
-  %212 = load double*, double** %_cache51, align 8, !dereferenceable !344, !invariant.group !340
-  %213 = load i64, i64* %"iv5'ac", align 8
-  %214 = load i64, i64* %"iv'ac", align 8
-  %215 = mul nuw nsw i64 %210, %209
-  %216 = mul nuw nsw i64 %214, %210
-  %217 = add nuw nsw i64 %213, %216
-  %218 = getelementptr inbounds double, double* %212, i64 %217
-  %219 = load double, double* %218, align 8, !invariant.group !349
-  %m0diffe63 = fmul fast double %206, %219
-  %220 = load i64, i64* %"iv5'ac", align 8
-  %221 = load i64, i64* %"iv'ac", align 8
-  %_unwrap64 = add nuw nsw i64 %220, %conv
+  %206 = add nuw i64 %_unwrap62, 1
+  %207 = mul nuw nsw i64 %206, %205
+  %208 = load double*, double** %_cache51, align 8, !dereferenceable !344, !invariant.group !340
+  %209 = load i64, i64* %"iv5'ac", align 8
+  %210 = load i64, i64* %"iv'ac", align 8
+  %211 = mul nuw nsw i64 %206, %205
+  %212 = mul nuw nsw i64 %210, %206
+  %213 = add nuw nsw i64 %209, %212
+  %214 = getelementptr inbounds double, double* %208, i64 %213
+  %215 = load double, double* %214, align 8, !invariant.group !349
+  %m0diffe63 = fmul fast double %202, %215
+  %216 = load i64, i64* %"iv5'ac", align 8
+  %217 = load i64, i64* %"iv'ac", align 8
+  %_unwrap64 = add nuw nsw i64 %216, %conv
   %arrayidx34.i_unwrap = getelementptr inbounds double, double* %extra_params, i64 %_unwrap64
   %_unwrap65 = load double, double* %arrayidx34.i_unwrap, align 8, !tbaa !61, !invariant.group !348
-  %m1diffe = fmul fast double %206, %_unwrap65
+  %m1diffe = fmul fast double %202, %_unwrap65
   store double 0.000000e+00, double* %"mul35.i'de", align 8
+  %218 = load double, double* %"'de66", align 8
+  %219 = fadd fast double %218, %m0diffe63
+  store double %219, double* %"'de66", align 8
+  %220 = load double, double* %"'de67", align 8
+  %221 = fadd fast double %220, %m1diffe
+  store double %221, double* %"'de67", align 8
   %222 = load double, double* %"'de66", align 8
-  %223 = fadd fast double %222, %m0diffe63
-  store double %223, double* %"'de66", align 8
-  %224 = load double, double* %"'de67", align 8
-  %225 = fadd fast double %224, %m1diffe
-  store double %225, double* %"'de67", align 8
-  %226 = load double, double* %"'de66", align 8
   store double 0.000000e+00, double* %"'de66", align 8
-  %227 = load i64, i64* %"iv5'ac", align 8
-  %228 = load i64, i64* %"iv'ac", align 8
+  %223 = load i64, i64* %"iv5'ac", align 8
+  %224 = load i64, i64* %"iv'ac", align 8
   %"arrayidx34.i'ipg_unwrap" = getelementptr inbounds double, double* %"extra_params'", i64 %_unwrap64
-  %229 = load double, double* %"arrayidx34.i'ipg_unwrap", align 8
-  %230 = fadd fast double %229, %226
-  store double %230, double* %"arrayidx34.i'ipg_unwrap", align 8
-  %231 = load double, double* %"'de67", align 8
+  %225 = load double, double* %"arrayidx34.i'ipg_unwrap", align 8
+  %226 = fadd fast double %225, %222
+  store double %226, double* %"arrayidx34.i'ipg_unwrap", align 8
+  %227 = load double, double* %"'de67", align 8
   store double 0.000000e+00, double* %"'de67", align 8
-  %232 = load i64, i64* %"iv5'ac", align 8
-  %233 = load i64, i64* %"iv'ac", align 8
+  %228 = load i64, i64* %"iv5'ac", align 8
+  %229 = load i64, i64* %"iv'ac", align 8
   %mul6.i_unwrap68 = shl nsw i32 %l, 1
   %mul7.i_unwrap69 = mul nsw i32 %mul6.i_unwrap68, %b
   %cmp8.not.not83.i_unwrap70 = icmp sgt i32 %mul7.i_unwrap69, 0
   %_unwrap74 = sext i32 %_unwrap48 to i64
-  %234 = load i64, i64* %"iv5'ac", align 8
-  %235 = load i64, i64* %"iv'ac", align 8
+  %230 = load i64, i64* %"iv5'ac", align 8
+  %231 = load i64, i64* %"iv'ac", align 8
   %_unwrap75 = zext i32 %mul7.i_unwrap69 to i64
   %_unwrap76 = add nsw i64 %_unwrap75, -1
   %_unwrap77 = udiv i64 %_unwrap76, %_unwrap74
   %_unwrap78 = mul i64 %_unwrap74, %_unwrap77
   %arrayidx17.i_unwrap79 = getelementptr inbounds double, double* %state, i64 %_unwrap78
   %_unwrap81 = select i1 %cmp8.not.not83.i_unwrap70, double* %arrayidx17.i_unwrap79, double* %"'ipc"
-  %"arrayidx31.i'ipg_unwrap" = getelementptr inbounds double, double* %_unwrap81, i64 %232
-  %236 = load double, double* %"arrayidx31.i'ipg_unwrap", align 8
-  %237 = fadd fast double %236, %231
-  store double %237, double* %"arrayidx31.i'ipg_unwrap", align 8
-  %238 = load i64, i64* %"iv5'ac", align 8
-  %239 = icmp eq i64 %238, 0
-  %240 = xor i1 %239, true
-  br i1 %239, label %invertfor.body29.lr.ph.i, label %incinvertfor.body29.i
+  %"arrayidx31.i'ipg_unwrap" = getelementptr inbounds double, double* %_unwrap81, i64 %228
+  %232 = load double, double* %"arrayidx31.i'ipg_unwrap", align 8
+  %233 = fadd fast double %232, %227
+  store double %233, double* %"arrayidx31.i'ipg_unwrap", align 8
+  %234 = load i64, i64* %"iv5'ac", align 8
+  %235 = icmp eq i64 %234, 0
+  %236 = xor i1 %235, true
+  br i1 %235, label %invertfor.body29.lr.ph.i, label %incinvertfor.body29.i
 
 incinvertfor.body29.i:                            ; preds = %invertfor.body29.i
-  %241 = load i64, i64* %"iv5'ac", align 8
-  %242 = add nsw i64 %241, -1
-  store i64 %242, i64* %"iv5'ac", align 8
+  %237 = load i64, i64* %"iv5'ac", align 8
+  %238 = add nsw i64 %237, -1
+  store i64 %238, i64* %"iv5'ac", align 8
   br label %invertfor.body29.i
 
 invertfor.body.i77.preheader:                     ; preds = %invertfor.body.i77
-  %243 = load i64, i64* %"iv'ac", align 8
+  %239 = load i64, i64* %"iv'ac", align 8
   %_unwrap82 = add nsw i64 %conv, -1
   br label %mergeinvertfor.body29.i_for.body.i77.preheader
 
@@ -19334,96 +19329,96 @@ mergeinvertfor.body29.i_for.body.i77.preheader:   ; preds = %invertfor.body.i77.
   br label %invertfor.body29.i
 
 invertfor.body.i77:                               ; preds = %mergeinvertfor.body.i77_for.body10.preheader, %incinvertfor.body.i77
-  %244 = load double, double* %"add.i'de", align 8
+  %240 = load double, double* %"add.i'de", align 8
   store double 0.000000e+00, double* %"add.i'de", align 8
+  %241 = load double, double* %"'de83", align 8
+  %242 = fadd fast double %241, %240
+  store double %242, double* %"'de83", align 8
+  %243 = load double, double* %"sum.09.i'de", align 8
+  %244 = fadd fast double %243, %240
+  store double %244, double* %"sum.09.i'de", align 8
   %245 = load double, double* %"'de83", align 8
-  %246 = fadd fast double %245, %244
-  store double %246, double* %"'de83", align 8
-  %247 = load double, double* %"sum.09.i'de", align 8
-  %248 = fadd fast double %247, %244
-  store double %248, double* %"sum.09.i'de", align 8
-  %249 = load double, double* %"'de83", align 8
   store double 0.000000e+00, double* %"'de83", align 8
-  %250 = load i64, i64* %"iv7'ac", align 8
-  %251 = load i64, i64* %"iv'ac", align 8
+  %246 = load i64, i64* %"iv7'ac", align 8
+  %247 = load i64, i64* %"iv'ac", align 8
   %_unwrap91 = add i32 %c, -1
   %_unwrap92 = mul i32 %b, %_unwrap91
   %_unwrap93 = add i32 %_unwrap92, -1
   %_unwrap94 = zext i32 %_unwrap93 to i64
   %conv_unwrap95 = zext i32 %b to i64
   %_unwrap96 = udiv i64 %_unwrap94, %conv_unwrap95
-  %252 = add nuw i64 %_unwrap96, 1
-  %253 = mul nuw nsw i64 1, %252
-  %254 = load double*, double** %_cache86, align 8, !dereferenceable !344, !invariant.group !341
-  %255 = load i64, i64* %"iv'ac", align 8
-  %256 = mul nuw nsw i64 1, %252
-  %257 = mul nuw nsw i64 %255, 1
-  %258 = add nuw nsw i64 0, %257
-  %259 = load i64, i64* %"iv7'ac", align 8
-  %260 = load i64, i64* %"iv'ac", align 8
+  %248 = add nuw i64 %_unwrap96, 1
+  %249 = mul nuw nsw i64 1, %248
+  %250 = load double*, double** %_cache86, align 8, !dereferenceable !344, !invariant.group !341
+  %251 = load i64, i64* %"iv'ac", align 8
+  %252 = mul nuw nsw i64 1, %248
+  %253 = mul nuw nsw i64 %251, 1
+  %254 = add nuw nsw i64 0, %253
+  %255 = load i64, i64* %"iv7'ac", align 8
+  %256 = load i64, i64* %"iv'ac", align 8
   %_unwrap97 = add nsw i64 %conv, -1
   %_unwrap98 = add nuw nsw i64 %_unwrap97, 1
-  %261 = mul nuw nsw i64 %258, %_unwrap98
-  %262 = getelementptr inbounds double, double* %254, i64 %261
-  %263 = getelementptr inbounds double, double* %262, i64 %250
-  %264 = load double, double* %263, align 8, !invariant.group !353
-  %265 = call fast double @llvm.exp.f64(double %264)
-  %266 = fmul fast double %249, %265
-  %267 = load double, double* %"'de99", align 8
-  %268 = fadd fast double %267, %266
-  store double %268, double* %"'de99", align 8
-  %269 = load double, double* %"'de99", align 8
+  %257 = mul nuw nsw i64 %254, %_unwrap98
+  %258 = getelementptr inbounds double, double* %250, i64 %257
+  %259 = getelementptr inbounds double, double* %258, i64 %246
+  %260 = load double, double* %259, align 8, !invariant.group !353
+  %261 = call fast double @llvm.exp.f64(double %260)
+  %262 = fmul fast double %245, %261
+  %263 = load double, double* %"'de99", align 8
+  %264 = fadd fast double %263, %262
+  store double %264, double* %"'de99", align 8
+  %265 = load double, double* %"'de99", align 8
   store double 0.000000e+00, double* %"'de99", align 8
-  %270 = load i64, i64* %"iv7'ac", align 8
-  %271 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx.i74'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %270
-  %272 = load double, double* %"arrayidx.i74'ipg_unwrap", align 8
-  %273 = fadd fast double %272, %269
-  store double %273, double* %"arrayidx.i74'ipg_unwrap", align 8
-  %274 = load double, double* %"sum.09.i'de", align 8
+  %266 = load i64, i64* %"iv7'ac", align 8
+  %267 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx.i74'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %266
+  %268 = load double, double* %"arrayidx.i74'ipg_unwrap", align 8
+  %269 = fadd fast double %268, %265
+  store double %269, double* %"arrayidx.i74'ipg_unwrap", align 8
+  %270 = load double, double* %"sum.09.i'de", align 8
   store double 0.000000e+00, double* %"sum.09.i'de", align 8
-  %275 = load i64, i64* %"iv7'ac", align 8
-  %276 = icmp eq i64 %275, 0
-  %277 = xor i1 %276, true
-  %278 = select fast i1 %277, double %274, double 0.000000e+00
-  %279 = load double, double* %"add.i'de", align 8
-  %280 = fadd fast double %279, %274
-  %281 = select fast i1 %276, double %279, double %280
-  store double %281, double* %"add.i'de", align 8
-  br i1 %276, label %invertfor.body.i77.preheader, label %incinvertfor.body.i77
+  %271 = load i64, i64* %"iv7'ac", align 8
+  %272 = icmp eq i64 %271, 0
+  %273 = xor i1 %272, true
+  %274 = select fast i1 %273, double %270, double 0.000000e+00
+  %275 = load double, double* %"add.i'de", align 8
+  %276 = fadd fast double %275, %270
+  %277 = select fast i1 %272, double %275, double %276
+  store double %277, double* %"add.i'de", align 8
+  br i1 %272, label %invertfor.body.i77.preheader, label %incinvertfor.body.i77
 
 incinvertfor.body.i77:                            ; preds = %invertfor.body.i77
-  %282 = load i64, i64* %"iv7'ac", align 8
-  %283 = add nsw i64 %282, -1
-  store i64 %283, i64* %"iv7'ac", align 8
+  %278 = load i64, i64* %"iv7'ac", align 8
+  %279 = add nsw i64 %278, -1
+  store i64 %279, i64* %"iv7'ac", align 8
   br label %invertfor.body.i77
 
 invertfor.body10.preheader:                       ; preds = %invertfor.body10
-  %284 = load double, double* %"'de100", align 8
+  %280 = load double, double* %"'de100", align 8
   store double 0.000000e+00, double* %"'de100", align 8
-  %285 = load i64, i64* %"iv'ac", align 8
+  %281 = load i64, i64* %"iv'ac", align 8
   %_unwrap104 = add i32 %c, -1
   %_unwrap105 = mul i32 %b, %_unwrap104
   %_unwrap106 = add i32 %_unwrap105, -1
   %_unwrap107 = zext i32 %_unwrap106 to i64
   %conv_unwrap108 = zext i32 %b to i64
   %_unwrap109 = udiv i64 %_unwrap107, %conv_unwrap108
-  %286 = add nuw i64 %_unwrap109, 1
-  %287 = load double*, double** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !344, !invariant.group !342
-  %288 = load i64, i64* %"iv'ac", align 8
-  %289 = getelementptr inbounds double, double* %287, i64 %288
-  %290 = load double, double* %289, align 8, !invariant.group !350
-  %phi.bo.i_unwrap = fadd fast double %290, 2.000000e+00
-  %291 = fdiv fast double %284, %phi.bo.i_unwrap
-  %292 = load double, double* %"phi.bo.i'de", align 8
-  %293 = fadd fast double %292, %291
-  store double %293, double* %"phi.bo.i'de", align 8
-  %294 = load double, double* %"phi.bo.i'de", align 8
+  %282 = add nuw i64 %_unwrap109, 1
+  %283 = load double*, double** %"add.i!manual_lcssa_cache", align 8, !dereferenceable !344, !invariant.group !342
+  %284 = load i64, i64* %"iv'ac", align 8
+  %285 = getelementptr inbounds double, double* %283, i64 %284
+  %286 = load double, double* %285, align 8, !invariant.group !350
+  %phi.bo.i_unwrap = fadd fast double %286, 2.000000e+00
+  %287 = fdiv fast double %280, %phi.bo.i_unwrap
+  %288 = load double, double* %"phi.bo.i'de", align 8
+  %289 = fadd fast double %288, %287
+  store double %289, double* %"phi.bo.i'de", align 8
+  %290 = load double, double* %"phi.bo.i'de", align 8
   store double 0.000000e+00, double* %"phi.bo.i'de", align 8
-  %295 = load double, double* %"add.i'de", align 8
-  %296 = fadd fast double %295, %294
-  store double %296, double* %"add.i'de", align 8
-  %297 = load i64, i64* %"iv'ac", align 8
+  %291 = load double, double* %"add.i'de", align 8
+  %292 = fadd fast double %291, %290
+  store double %292, double* %"add.i'de", align 8
+  %293 = load i64, i64* %"iv'ac", align 8
   %_unwrap110 = add nsw i64 %conv, -1
   br label %mergeinvertfor.body.i77_for.body10.preheader
 
@@ -19432,44 +19427,44 @@ mergeinvertfor.body.i77_for.body10.preheader:     ; preds = %invertfor.body10.pr
   br label %invertfor.body.i77
 
 invertfor.body10:                                 ; preds = %mergeinvertfor.body10_for.body19.preheader, %incinvertfor.body10
-  %298 = load i64, i64* %"iv9'ac", align 8
-  %299 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx14'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc111", i64 %298
-  %300 = load double, double* %"arrayidx14'ipg_unwrap", align 8
+  %294 = load i64, i64* %"iv9'ac", align 8
+  %295 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx14'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc111", i64 %294
+  %296 = load double, double* %"arrayidx14'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx14'ipg_unwrap", align 8
-  %301 = load double, double* %"sub12'de", align 8
-  %302 = fadd fast double %301, %300
-  store double %302, double* %"sub12'de", align 8
-  %303 = load double, double* %"sub12'de", align 8
-  %304 = fneg fast double %303
+  %297 = load double, double* %"sub12'de", align 8
+  %298 = fadd fast double %297, %296
+  store double %298, double* %"sub12'de", align 8
+  %299 = load double, double* %"sub12'de", align 8
+  %300 = fneg fast double %299
   store double 0.000000e+00, double* %"sub12'de", align 8
+  %301 = load double, double* %"'de112", align 8
+  %302 = fadd fast double %301, %299
+  store double %302, double* %"'de112", align 8
+  %303 = load double, double* %"'de100", align 8
+  %304 = fadd fast double %303, %300
+  store double %304, double* %"'de100", align 8
   %305 = load double, double* %"'de112", align 8
-  %306 = fadd fast double %305, %303
-  store double %306, double* %"'de112", align 8
-  %307 = load double, double* %"'de100", align 8
-  %308 = fadd fast double %307, %304
-  store double %308, double* %"'de100", align 8
-  %309 = load double, double* %"'de112", align 8
   store double 0.000000e+00, double* %"'de112", align 8
+  %306 = load i64, i64* %"iv9'ac", align 8
+  %307 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx11'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %306
+  %308 = load double, double* %"arrayidx11'ipg_unwrap", align 8
+  %309 = fadd fast double %308, %305
+  store double %309, double* %"arrayidx11'ipg_unwrap", align 8
   %310 = load i64, i64* %"iv9'ac", align 8
-  %311 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx11'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %310
-  %312 = load double, double* %"arrayidx11'ipg_unwrap", align 8
-  %313 = fadd fast double %312, %309
-  store double %313, double* %"arrayidx11'ipg_unwrap", align 8
-  %314 = load i64, i64* %"iv9'ac", align 8
-  %315 = icmp eq i64 %314, 0
-  %316 = xor i1 %315, true
-  br i1 %315, label %invertfor.body10.preheader, label %incinvertfor.body10
+  %311 = icmp eq i64 %310, 0
+  %312 = xor i1 %311, true
+  br i1 %311, label %invertfor.body10.preheader, label %incinvertfor.body10
 
 incinvertfor.body10:                              ; preds = %invertfor.body10
-  %317 = load i64, i64* %"iv9'ac", align 8
-  %318 = add nsw i64 %317, -1
-  store i64 %318, i64* %"iv9'ac", align 8
+  %313 = load i64, i64* %"iv9'ac", align 8
+  %314 = add nsw i64 %313, -1
+  store i64 %314, i64* %"iv9'ac", align 8
   br label %invertfor.body10
 
 invertfor.body19.preheader:                       ; preds = %invertfor.body19
-  %319 = load i64, i64* %"iv'ac", align 8
+  %315 = load i64, i64* %"iv'ac", align 8
   %_unwrap113 = add nsw i64 %conv, -1
   br label %mergeinvertfor.body10_for.body19.preheader
 
@@ -19478,60 +19473,60 @@ mergeinvertfor.body10_for.body19.preheader:       ; preds = %invertfor.body19.pr
   br label %invertfor.body10
 
 invertfor.body19:                                 ; preds = %mergeinvertfor.body19_for.end28, %incinvertfor.body19
-  %320 = load double, double* %"add25'de", align 8
+  %316 = load double, double* %"add25'de", align 8
   store double 0.000000e+00, double* %"add25'de", align 8
+  %317 = load double, double* %"mul24'de", align 8
+  %318 = fadd fast double %317, %316
+  store double %318, double* %"mul24'de", align 8
+  %319 = load double, double* %"total.181'de", align 8
+  %320 = fadd fast double %319, %316
+  store double %320, double* %"total.181'de", align 8
   %321 = load double, double* %"mul24'de", align 8
-  %322 = fadd fast double %321, %320
-  store double %322, double* %"mul24'de", align 8
-  %323 = load double, double* %"total.181'de", align 8
-  %324 = fadd fast double %323, %320
-  store double %324, double* %"total.181'de", align 8
-  %325 = load double, double* %"mul24'de", align 8
-  %326 = load i64, i64* %"iv11'ac", align 8
-  %327 = load i64, i64* %"iv'ac", align 8
-  %_unwrap114 = mul i64 %conv, %327
+  %322 = load i64, i64* %"iv11'ac", align 8
+  %323 = load i64, i64* %"iv'ac", align 8
+  %_unwrap114 = mul i64 %conv, %323
   %indvars.iv.next95_unwrap = add i64 %_unwrap114, %conv
   %arrayidx16_unwrap = getelementptr inbounds double, double* %sequence, i64 %indvars.iv.next95_unwrap
-  %arrayidx21_unwrap = getelementptr inbounds double, double* %arrayidx16_unwrap, i64 %326
+  %arrayidx21_unwrap = getelementptr inbounds double, double* %arrayidx16_unwrap, i64 %322
   %_unwrap115 = load double, double* %arrayidx21_unwrap, align 8, !tbaa !61, !invariant.group !351
-  %m0diffe116 = fmul fast double %325, %_unwrap115
+  %m0diffe116 = fmul fast double %321, %_unwrap115
   store double 0.000000e+00, double* %"mul24'de", align 8
-  %328 = load double, double* %"'de117", align 8
-  %329 = fadd fast double %328, %m0diffe116
-  store double %329, double* %"'de117", align 8
-  %330 = load double, double* %"'de117", align 8
+  %324 = load double, double* %"'de117", align 8
+  %325 = fadd fast double %324, %m0diffe116
+  store double %325, double* %"'de117", align 8
+  %326 = load double, double* %"'de117", align 8
   store double 0.000000e+00, double* %"'de117", align 8
-  %331 = load i64, i64* %"iv11'ac", align 8
-  %332 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx23'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc111", i64 %331
-  %333 = load double, double* %"arrayidx23'ipg_unwrap", align 8
-  %334 = fadd fast double %333, %330
-  store double %334, double* %"arrayidx23'ipg_unwrap", align 8
-  %335 = load double, double* %"total.181'de", align 8
+  %327 = load i64, i64* %"iv11'ac", align 8
+  %328 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx23'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc111", i64 %327
+  %329 = load double, double* %"arrayidx23'ipg_unwrap", align 8
+  %330 = fadd fast double %329, %326
+  store double %330, double* %"arrayidx23'ipg_unwrap", align 8
+  %331 = load double, double* %"total.181'de", align 8
   store double 0.000000e+00, double* %"total.181'de", align 8
-  %336 = load i64, i64* %"iv11'ac", align 8
-  %337 = icmp eq i64 %336, 0
-  %338 = xor i1 %337, true
-  %339 = select fast i1 %338, double %335, double 0.000000e+00
-  %340 = load double, double* %"add25'de", align 8
-  %341 = fadd fast double %340, %335
-  %342 = select fast i1 %337, double %340, double %341
-  store double %342, double* %"add25'de", align 8
-  %343 = select fast i1 %337, double %335, double 0.000000e+00
-  %344 = load double, double* %"total.086'de", align 8
-  %345 = fadd fast double %344, %335
-  %346 = select fast i1 %337, double %345, double %344
-  store double %346, double* %"total.086'de", align 8
-  br i1 %337, label %invertfor.body19.preheader, label %incinvertfor.body19
+  %332 = load i64, i64* %"iv11'ac", align 8
+  %333 = icmp eq i64 %332, 0
+  %334 = xor i1 %333, true
+  %335 = select fast i1 %334, double %331, double 0.000000e+00
+  %336 = load double, double* %"add25'de", align 8
+  %337 = fadd fast double %336, %331
+  %338 = select fast i1 %333, double %336, double %337
+  store double %338, double* %"add25'de", align 8
+  %339 = select fast i1 %333, double %331, double 0.000000e+00
+  %340 = load double, double* %"total.086'de", align 8
+  %341 = fadd fast double %340, %331
+  %342 = select fast i1 %333, double %341, double %340
+  store double %342, double* %"total.086'de", align 8
+  br i1 %333, label %invertfor.body19.preheader, label %incinvertfor.body19
 
 incinvertfor.body19:                              ; preds = %invertfor.body19
-  %347 = load i64, i64* %"iv11'ac", align 8
-  %348 = add nsw i64 %347, -1
-  store i64 %348, i64* %"iv11'ac", align 8
+  %343 = load i64, i64* %"iv11'ac", align 8
+  %344 = add nsw i64 %343, -1
+  store i64 %344, i64* %"iv11'ac", align 8
   br label %invertfor.body19
 
 invertfor.end28:                                  ; preds = %mergeinvertfor.body.preheader.i_for.end32.loopexit, %incinvertfor.body.preheader.i
-  %349 = load i64, i64* %"iv'ac", align 8
+  %345 = load i64, i64* %"iv'ac", align 8
   %_unwrap119 = add nsw i64 %conv, -1
   br label %mergeinvertfor.body19_for.end28
 
@@ -19552,30 +19547,30 @@ mergeinvertfor.body.preheader.i_for.end32.loopexit: ; preds = %invertfor.end32.l
   br label %invertfor.end28
 
 invertfor.end32:                                  ; preds = %for.end32
-  %350 = load double, double* %"loss'", align 8
+  %346 = load double, double* %"loss'", align 8
   store double 0.000000e+00, double* %"loss'", align 8
-  %351 = load double, double* %"div'de", align 8
-  %352 = fadd fast double %351, %350
-  store double %352, double* %"div'de", align 8
-  %353 = load double, double* %"div'de", align 8
-  %d0diffefneg = fdiv fast double %353, %count.0.lcssa
+  %347 = load double, double* %"div'de", align 8
+  %348 = fadd fast double %347, %346
+  store double %348, double* %"div'de", align 8
+  %349 = load double, double* %"div'de", align 8
+  %d0diffefneg = fdiv fast double %349, %count.0.lcssa
   store double 0.000000e+00, double* %"div'de", align 8
-  %354 = load double, double* %"fneg'de", align 8
-  %355 = fadd fast double %354, %d0diffefneg
-  store double %355, double* %"fneg'de", align 8
-  %356 = load double, double* %"fneg'de", align 8
-  %357 = fneg fast double %356
+  %350 = load double, double* %"fneg'de", align 8
+  %351 = fadd fast double %350, %d0diffefneg
+  store double %351, double* %"fneg'de", align 8
+  %352 = load double, double* %"fneg'de", align 8
+  %353 = fneg fast double %352
   store double 0.000000e+00, double* %"fneg'de", align 8
-  %358 = load double, double* %"total.0.lcssa'de", align 8
-  %359 = fadd fast double %358, %357
-  store double %359, double* %"total.0.lcssa'de", align 8
-  %360 = load double, double* %"total.0.lcssa'de", align 8
+  %354 = load double, double* %"total.0.lcssa'de", align 8
+  %355 = fadd fast double %354, %353
+  store double %355, double* %"total.0.lcssa'de", align 8
+  %356 = load double, double* %"total.0.lcssa'de", align 8
   store double 0.000000e+00, double* %"total.0.lcssa'de", align 8
-  %361 = select fast i1 %cmp6.not.not83, double %360, double 0.000000e+00
-  %362 = load double, double* %"add25'de", align 8
-  %363 = fadd fast double %362, %360
-  %364 = select fast i1 %cmp6.not.not83, double %363, double %362
-  store double %364, double* %"add25'de", align 8
+  %357 = select fast i1 %cmp6.not.not83, double %356, double 0.000000e+00
+  %358 = load double, double* %"add25'de", align 8
+  %359 = fadd fast double %358, %356
+  %360 = select fast i1 %cmp6.not.not83, double %359, double %358
+  store double %360, double* %"add25'de", align 8
   br i1 %cmp6.not.not83, label %invertfor.end32.loopexit, label %invertentry
 }
 
@@ -20007,154 +20002,148 @@ entry:
   %mdyncache_fromtape_cache72 = alloca double*, align 8
   store double* %3, double** %mdyncache_fromtape_cache72, align 8
   %mul = shl nsw i32 %hsize, 2, !node !336
-  %4 = bitcast [6 x i8]* @ResultFormatStrIR to i8*
-  %5 = call i32 (i8*, ...) @printf(i8* %4)
-  %conv = sext i32 %mul to i64
-  %mul1 = shl nsw i64 %conv, 3
+  %conv = sext i32 %mul to i64, !node !336
+  %mul1 = shl nsw i64 %conv, 3, !node !336
   %call = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 1
   %"call'mi" = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 0
   %"'ipc" = bitcast i8* %"call'mi" to double*
-  %6 = bitcast i8* %call to double*
-  %idxprom = sext i32 %hsize to i64
-  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom
-  %arrayidx2 = getelementptr inbounds double, double* %6, i64 %idxprom
+  %4 = bitcast i8* %call to double*
+  %idxprom = sext i32 %hsize to i64, !node !336
+  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom, !node !336
+  %arrayidx2 = getelementptr inbounds double, double* %4, i64 %idxprom, !node !336
   %mul3 = shl nsw i32 %hsize, 1, !node !336
-  %7 = bitcast [6 x i8]* @ResultFormatStrIR to i8*
-  %8 = call i32 (i8*, ...) @printf(i8* %7)
-  %idxprom4 = sext i32 %mul3 to i64
-  %"arrayidx5'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom4
+  %idxprom4 = sext i32 %mul3 to i64, !node !336
+  %"arrayidx5'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom4, !node !336
   %mul6 = mul nsw i32 %hsize, 3, !node !336
-  %9 = bitcast [6 x i8]* @ResultFormatStrIR to i8*
-  %10 = call i32 (i8*, ...) @printf(i8* %9)
-  %idxprom7 = sext i32 %mul6 to i64
-  %"arrayidx8'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom7
-  %arrayidx8 = getelementptr inbounds double, double* %6, i64 %idxprom7
+  %idxprom7 = sext i32 %mul6 to i64, !node !336
+  %"arrayidx8'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom7, !node !336
+  %arrayidx8 = getelementptr inbounds double, double* %4, i64 %idxprom7, !node !336
   %cmp171 = icmp sgt i32 %hsize, 0
-  store i8 2, i8* %_cache67, align 1, !invariant.group !362
+  store i8 3, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body.preheader, label %for.end94
 
 for.body.preheader:                               ; preds = %entry
-  %wide.trip.count182 = zext i32 %hsize to i64
-  %11 = add nsw i64 %wide.trip.count182, -1
-  %12 = add nuw i64 %11, 1
-  %mallocsize = mul nuw nsw i64 %12, 8
-  %mallocsize14 = mul nuw nsw i64 %12, 8
+  %wide.trip.count182 = zext i32 %hsize to i64, !node !336
+  %5 = add nsw i64 %wide.trip.count182, -1, !node !336
+  %6 = add nuw i64 %5, 1, !node !336
+  %mallocsize = mul nuw nsw i64 %6, 8, !node !336
+  %mallocsize14 = mul nuw nsw i64 %6, 8, !node !336
   br label %for.body
 
 for.cond62.preheader:                             ; preds = %for.body
-  store i8 0, i8* %_cache67, align 1, !invariant.group !362
+  store i8 1, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body64.preheader, label %for.end94
 
 for.body64.preheader:                             ; preds = %for.cond62.preheader
-  %wide.trip.count175 = zext i32 %hsize to i64
-  %13 = add nsw i64 %wide.trip.count182, -1
-  %14 = add nuw i64 %13, 1
-  %mallocsize47 = mul nuw nsw i64 %14, 8
+  %wide.trip.count175 = zext i32 %hsize to i64, !node !336
+  %7 = add nsw i64 %wide.trip.count182, -1, !node !336
+  %8 = add nuw i64 %7, 1, !node !336
+  %mallocsize47 = mul nuw nsw i64 %8, 8, !node !336
   br label %for.body64
 
 for.body:                                         ; preds = %for.body, %for.body.preheader
   %iv = phi i64 [ %iv.next, %for.body ], [ 0, %for.body.preheader ]
   %iv.next = add nuw nsw i64 %iv, 1
-  %"arrayidx10'ipg" = getelementptr inbounds double, double* %"input'", i64 %iv
-  %15 = load double*, double** %mdyncache_fromtape_cache68, align 8, !dereferenceable !344, !invariant.group !363
-  %16 = getelementptr inbounds double, double* %15, i64 %iv
-  %17 = load double, double* %16, align 8, !invariant.group !364
-  %"arrayidx12'ipg" = getelementptr inbounds double, double* %"weight'", i64 %iv
-  %arrayidx12 = getelementptr inbounds double, double* %weight, i64 %iv
-  %18 = load double, double* %arrayidx12, align 8, !tbaa !61, !invariant.group !365
-  %mul13 = fmul fast double %18, %17
-  %"arrayidx15'ipg" = getelementptr inbounds double, double* %"bias'", i64 %iv
-  %arrayidx15 = getelementptr inbounds double, double* %bias, i64 %iv
-  %19 = load double, double* %arrayidx15, align 8, !tbaa !61, !invariant.group !366
-  %add = fadd fast double %mul13, %19
-  %fneg.i = fneg fast double %add
-  %20 = tail call fast double @llvm.exp.f64(double %fneg.i) #37
-  %add.i = fadd fast double %20, 1.000000e+00
-  %div.i = fdiv fast double 1.000000e+00, %add.i
+  %"arrayidx10'ipg" = getelementptr inbounds double, double* %"input'", i64 %iv, !node !336
+  %9 = load double*, double** %mdyncache_fromtape_cache68, align 8, !dereferenceable !344, !invariant.group !363
+  %10 = getelementptr inbounds double, double* %9, i64 %iv
+  %11 = load double, double* %10, align 8, !invariant.group !364
+  %"arrayidx12'ipg" = getelementptr inbounds double, double* %"weight'", i64 %iv, !node !336
+  %arrayidx12 = getelementptr inbounds double, double* %weight, i64 %iv, !node !336
+  %12 = load double, double* %arrayidx12, align 8, !tbaa !61, !invariant.group !365, !node !336
+  %mul13 = fmul fast double %12, %11, !node !336
+  %"arrayidx15'ipg" = getelementptr inbounds double, double* %"bias'", i64 %iv, !node !336
+  %arrayidx15 = getelementptr inbounds double, double* %bias, i64 %iv, !node !336
+  %13 = load double, double* %arrayidx15, align 8, !tbaa !61, !invariant.group !366, !node !336
+  %add = fadd fast double %mul13, %13, !node !336
+  %fneg.i = fneg fast double %add, !node !336
+  %14 = tail call fast double @llvm.exp.f64(double %fneg.i) #37, !node !336
+  %add.i = fadd fast double %14, 1.000000e+00, !node !336
+  %div.i = fdiv fast double 1.000000e+00, %add.i, !node !336
   %"arrayidx18'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv
-  %21 = load double*, double** %mdyncache_fromtape_cache70, align 8, !dereferenceable !344, !invariant.group !367
-  %22 = getelementptr inbounds double, double* %21, i64 %iv
-  %23 = load double, double* %22, align 8, !invariant.group !368
-  %24 = add nsw i64 %iv, %idxprom
-  %"arrayidx23'ipg" = getelementptr inbounds double, double* %"weight'", i64 %24
-  %arrayidx23 = getelementptr inbounds double, double* %weight, i64 %24
-  %25 = load double, double* %arrayidx23, align 8, !tbaa !61, !invariant.group !369
-  %mul24 = fmul fast double %25, %23
-  %"arrayidx27'ipg" = getelementptr inbounds double, double* %"bias'", i64 %24
-  %arrayidx27 = getelementptr inbounds double, double* %bias, i64 %24
-  %26 = load double, double* %arrayidx27, align 8, !tbaa !61, !invariant.group !370
-  %add28 = fadd fast double %mul24, %26
-  %fneg.i164 = fneg fast double %add28
-  %27 = tail call fast double @llvm.exp.f64(double %fneg.i164) #37
-  %add.i165 = fadd fast double %27, 1.000000e+00
-  %div.i166 = fdiv fast double 1.000000e+00, %add.i165
-  %"arrayidx31'ipg" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %iv
-  %28 = add nsw i64 %iv, %idxprom4
-  %"arrayidx37'ipg" = getelementptr inbounds double, double* %"weight'", i64 %28
-  %arrayidx37 = getelementptr inbounds double, double* %weight, i64 %28
-  %29 = load double, double* %arrayidx37, align 8, !tbaa !61, !invariant.group !371
-  %mul38 = fmul fast double %29, %17
-  %"arrayidx42'ipg" = getelementptr inbounds double, double* %"bias'", i64 %28
-  %arrayidx42 = getelementptr inbounds double, double* %bias, i64 %28
-  %30 = load double, double* %arrayidx42, align 8, !tbaa !61, !invariant.group !372
-  %add43 = fadd fast double %mul38, %30
-  %fneg.i161 = fneg fast double %add43
-  %31 = tail call fast double @llvm.exp.f64(double %fneg.i161) #37
-  %add.i162 = fadd fast double %31, 1.000000e+00
-  %div.i163 = fdiv fast double 1.000000e+00, %add.i162
-  %"arrayidx46'ipg" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %iv
-  %32 = add nsw i64 %iv, %idxprom7
-  %"arrayidx52'ipg" = getelementptr inbounds double, double* %"weight'", i64 %32
-  %arrayidx52 = getelementptr inbounds double, double* %weight, i64 %32
-  %33 = load double, double* %arrayidx52, align 8, !tbaa !61, !invariant.group !373
-  %mul53 = fmul fast double %33, %23
-  %"arrayidx57'ipg" = getelementptr inbounds double, double* %"bias'", i64 %32
-  %arrayidx57 = getelementptr inbounds double, double* %bias, i64 %32
-  %34 = load double, double* %arrayidx57, align 8, !tbaa !61, !invariant.group !374
-  %add58 = fadd fast double %mul53, %34
-  %"arrayidx61'ipg" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %iv
+  %15 = load double*, double** %mdyncache_fromtape_cache70, align 8, !dereferenceable !344, !invariant.group !367
+  %16 = getelementptr inbounds double, double* %15, i64 %iv
+  %17 = load double, double* %16, align 8, !invariant.group !368
+  %18 = add nsw i64 %iv, %idxprom, !node !336
+  %"arrayidx23'ipg" = getelementptr inbounds double, double* %"weight'", i64 %18, !node !336
+  %arrayidx23 = getelementptr inbounds double, double* %weight, i64 %18, !node !336
+  %19 = load double, double* %arrayidx23, align 8, !tbaa !61, !invariant.group !369, !node !336
+  %mul24 = fmul fast double %19, %17, !node !336
+  %"arrayidx27'ipg" = getelementptr inbounds double, double* %"bias'", i64 %18, !node !336
+  %arrayidx27 = getelementptr inbounds double, double* %bias, i64 %18, !node !336
+  %20 = load double, double* %arrayidx27, align 8, !tbaa !61, !invariant.group !370, !node !336
+  %add28 = fadd fast double %mul24, %20, !node !336
+  %fneg.i164 = fneg fast double %add28, !node !336
+  %21 = tail call fast double @llvm.exp.f64(double %fneg.i164) #37, !node !336
+  %add.i165 = fadd fast double %21, 1.000000e+00, !node !336
+  %div.i166 = fdiv fast double 1.000000e+00, %add.i165, !node !336
+  %"arrayidx31'ipg" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %iv, !node !336
+  %22 = add nsw i64 %iv, %idxprom4, !node !336
+  %"arrayidx37'ipg" = getelementptr inbounds double, double* %"weight'", i64 %22, !node !336
+  %arrayidx37 = getelementptr inbounds double, double* %weight, i64 %22, !node !336
+  %23 = load double, double* %arrayidx37, align 8, !tbaa !61, !invariant.group !371, !node !336
+  %mul38 = fmul fast double %23, %11, !node !336
+  %"arrayidx42'ipg" = getelementptr inbounds double, double* %"bias'", i64 %22, !node !336
+  %arrayidx42 = getelementptr inbounds double, double* %bias, i64 %22, !node !336
+  %24 = load double, double* %arrayidx42, align 8, !tbaa !61, !invariant.group !372, !node !336
+  %add43 = fadd fast double %mul38, %24, !node !336
+  %fneg.i161 = fneg fast double %add43, !node !336
+  %25 = tail call fast double @llvm.exp.f64(double %fneg.i161) #37, !node !336
+  %add.i162 = fadd fast double %25, 1.000000e+00, !node !336
+  %div.i163 = fdiv fast double 1.000000e+00, %add.i162, !node !336
+  %"arrayidx46'ipg" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %iv, !node !336
+  %26 = add nsw i64 %iv, %idxprom7, !node !336
+  %"arrayidx52'ipg" = getelementptr inbounds double, double* %"weight'", i64 %26, !node !336
+  %arrayidx52 = getelementptr inbounds double, double* %weight, i64 %26, !node !336
+  %27 = load double, double* %arrayidx52, align 8, !tbaa !61, !invariant.group !373, !node !336
+  %mul53 = fmul fast double %27, %17, !node !336
+  %"arrayidx57'ipg" = getelementptr inbounds double, double* %"bias'", i64 %26, !node !336
+  %arrayidx57 = getelementptr inbounds double, double* %bias, i64 %26, !node !336
+  %28 = load double, double* %arrayidx57, align 8, !tbaa !61, !invariant.group !374, !node !336
+  %add58 = fadd fast double %mul53, %28, !node !336
+  %"arrayidx61'ipg" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %iv, !node !336
   %exitcond183.not = icmp eq i64 %iv.next, %wide.trip.count182
   br i1 %exitcond183.not, label %for.cond62.preheader, label %for.body, !llvm.loop !73
 
 for.cond81.preheader:                             ; preds = %for.body64
-  store i8 3, i8* %_cache67, align 1, !invariant.group !362
+  store i8 2, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body83.preheader, label %for.end94
 
 for.body83.preheader:                             ; preds = %for.cond81.preheader
-  %wide.trip.count = zext i32 %hsize to i64
-  %35 = add nsw i64 %wide.trip.count182, -1
-  %36 = add nuw i64 %35, 1
-  %mallocsize55 = mul nuw nsw i64 %36, 8
+  %wide.trip.count = zext i32 %hsize to i64, !node !336
+  %29 = add nsw i64 %wide.trip.count182, -1, !node !336
+  %30 = add nuw i64 %29, 1, !node !336
+  %mallocsize55 = mul nuw nsw i64 %30, 8, !node !336
   br label %for.body83
 
 for.body64:                                       ; preds = %for.body64, %for.body64.preheader
   %iv1 = phi i64 [ %iv.next2, %for.body64 ], [ 0, %for.body64.preheader ]
   %iv.next2 = add nuw nsw i64 %iv1, 1
-  %37 = load double*, double** %mdyncache_fromtape_cache72, align 8, !dereferenceable !344, !invariant.group !375
-  %38 = getelementptr inbounds double, double* %37, i64 %iv1
-  %39 = load double, double* %38, align 8, !invariant.group !376
+  %31 = load double*, double** %mdyncache_fromtape_cache72, align 8, !dereferenceable !344, !invariant.group !375
+  %32 = getelementptr inbounds double, double* %31, i64 %iv1
+  %33 = load double, double* %32, align 8, !invariant.group !376
   %"arrayidx68'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %iv1
-  %"arrayidx71'ipg" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %iv1
-  %arrayidx71 = getelementptr inbounds double, double* %arrayidx2, i64 %iv1
-  %40 = load double, double* %arrayidx71, align 8, !tbaa !61, !invariant.group !377
-  %"arrayidx73'ipg" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %iv1
-  %arrayidx73 = getelementptr inbounds double, double* %arrayidx8, i64 %iv1
-  %41 = load double, double* %arrayidx73, align 8, !tbaa !61, !invariant.group !378
+  %"arrayidx71'ipg" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %iv1, !node !336
+  %arrayidx71 = getelementptr inbounds double, double* %arrayidx2, i64 %iv1, !node !336
+  %34 = load double, double* %arrayidx71, align 8, !tbaa !61, !invariant.group !377, !node !336
+  %"arrayidx73'ipg" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %iv1, !node !336
+  %arrayidx73 = getelementptr inbounds double, double* %arrayidx8, i64 %iv1, !node !336
+  %35 = load double, double* %arrayidx73, align 8, !tbaa !61, !invariant.group !378, !node !336
   %exitcond176.not = icmp eq i64 %iv.next2, %wide.trip.count175
   br i1 %exitcond176.not, label %for.cond81.preheader, label %for.body64, !llvm.loop !74
 
 for.body83:                                       ; preds = %for.body83, %for.body83.preheader
   %iv3 = phi i64 [ %iv.next4, %for.body83 ], [ 0, %for.body83.preheader ]
   %iv.next4 = add nuw nsw i64 %iv3, 1
-  %"arrayidx85'ipg" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %iv3
-  %42 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !344, !invariant.group !379
-  %43 = getelementptr inbounds double, double* %42, i64 %iv3
-  %call88 = load double, double* %43, align 8, !invariant.group !380
+  %"arrayidx85'ipg" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %iv3, !node !336
+  %36 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !344, !invariant.group !379
+  %37 = getelementptr inbounds double, double* %36, i64 %iv3
+  %call88 = load double, double* %37, align 8, !invariant.group !380
   %exitcond.not = icmp eq i64 %iv.next4, %wide.trip.count
   br i1 %exitcond.not, label %for.end94.loopexit, label %for.body83, !llvm.loop !75
 
 for.end94.loopexit:                               ; preds = %for.body83
-  store i8 1, i8* %_cache67, align 1, !invariant.group !362
+  store i8 0, i8* %_cache67, align 1, !invariant.group !362
   br label %for.end94
 
 for.end94:                                        ; preds = %for.end94.loopexit, %for.cond81.preheader, %for.cond62.preheader, %entry
@@ -20166,16 +20155,16 @@ invertentry:                                      ; preds = %invertfor.end94, %i
   ret void
 
 invertfor.body.preheader:                         ; preds = %invertfor.body
-  %44 = load i64, i64* %"iv'ac", align 8
-  %45 = load i64, i64* %"iv'ac", align 8
-  %46 = load i64, i64* %"iv'ac", align 8
+  %38 = load i64, i64* %"iv'ac", align 8
+  %39 = load i64, i64* %"iv'ac", align 8
+  %40 = load i64, i64* %"iv'ac", align 8
   %forfree69 = load double*, double** %mdyncache_fromtape_cache68, align 8, !dereferenceable !344, !invariant.group !363
-  %47 = bitcast double* %forfree69 to i8*
-  tail call void @free(i8* nonnull %47)
-  %48 = load i64, i64* %"iv'ac", align 8
+  %41 = bitcast double* %forfree69 to i8*
+  tail call void @free(i8* nonnull %41)
+  %42 = load i64, i64* %"iv'ac", align 8
   %forfree71 = load double*, double** %mdyncache_fromtape_cache70, align 8, !dereferenceable !344, !invariant.group !367
-  %49 = bitcast double* %forfree71 to i8*
-  tail call void @free(i8* nonnull %49)
+  %43 = bitcast double* %forfree71 to i8*
+  tail call void @free(i8* nonnull %43)
   br label %invertentry
 
 invertfor.cond62.preheader:                       ; preds = %invertfor.end94, %invertfor.body64.preheader
@@ -20188,322 +20177,322 @@ mergeinvertfor.body_for.cond62.preheader:         ; preds = %invertfor.cond62.pr
   br label %invertfor.body
 
 invertfor.body64.preheader:                       ; preds = %invertfor.body64
-  %50 = load i64, i64* %"iv1'ac", align 8
-  %51 = load i64, i64* %"iv1'ac", align 8
+  %44 = load i64, i64* %"iv1'ac", align 8
+  %45 = load i64, i64* %"iv1'ac", align 8
   %forfree = load double*, double** %mdyncache_fromtape_cache72, align 8, !dereferenceable !344, !invariant.group !375
-  %52 = bitcast double* %forfree to i8*
-  tail call void @free(i8* nonnull %52)
+  %46 = bitcast double* %forfree to i8*
+  tail call void @free(i8* nonnull %46)
   br label %invertfor.cond62.preheader
 
 invertfor.body:                                   ; preds = %incinvertfor.body, %mergeinvertfor.body_for.cond62.preheader
-  %53 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx61'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %53
-  %54 = load double, double* %"arrayidx61'ipg_unwrap", align 8
+  %47 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx61'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %47
+  %48 = load double, double* %"arrayidx61'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx61'ipg_unwrap", align 8
-  %55 = load double, double* %"call59'de", align 8
-  %56 = fadd fast double %55, %54
-  store double %56, double* %"call59'de", align 8
-  %57 = load i64, i64* %"iv'ac", align 8
-  %_unwrap5 = add nsw i64 %57, %idxprom7
+  %49 = load double, double* %"call59'de", align 8
+  %50 = fadd fast double %49, %48
+  store double %50, double* %"call59'de", align 8
+  %51 = load i64, i64* %"iv'ac", align 8
+  %_unwrap5 = add nsw i64 %51, %idxprom7
   %arrayidx52_unwrap = getelementptr inbounds double, double* %weight, i64 %_unwrap5
   %_unwrap6 = load double, double* %arrayidx52_unwrap, align 8, !tbaa !61, !invariant.group !373
   %wide.trip.count182_unwrap7 = zext i32 %hsize to i64
   %_unwrap8 = add nsw i64 %wide.trip.count182_unwrap7, -1
-  %58 = add nuw i64 %_unwrap8, 1
-  %59 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 4
-  %60 = load i64, i64* %"iv'ac", align 8
-  %61 = getelementptr inbounds double, double* %59, i64 %60
-  %62 = load double, double* %61, align 8, !invariant.group !381
-  %mul53_unwrap = fmul fast double %_unwrap6, %62
+  %52 = add nuw i64 %_unwrap8, 1
+  %53 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 4
+  %54 = load i64, i64* %"iv'ac", align 8
+  %55 = getelementptr inbounds double, double* %53, i64 %54
+  %56 = load double, double* %55, align 8, !invariant.group !381
+  %mul53_unwrap = fmul fast double %_unwrap6, %56
   %arrayidx57_unwrap = getelementptr inbounds double, double* %bias, i64 %_unwrap5
   %_unwrap9 = load double, double* %arrayidx57_unwrap, align 8, !tbaa !61, !invariant.group !374
   %add58_unwrap = fadd fast double %mul53_unwrap, %_unwrap9
-  %63 = call fast double @cosh(double %add58_unwrap)
-  %64 = fmul fast double %63, %63
-  %65 = load double, double* %"call59'de", align 8
-  %66 = fdiv fast double %65, %64
+  %57 = call fast double @cosh(double %add58_unwrap)
+  %58 = fmul fast double %57, %57
+  %59 = load double, double* %"call59'de", align 8
+  %60 = fdiv fast double %59, %58
   store double 0.000000e+00, double* %"call59'de", align 8
-  %67 = load double, double* %"add58'de", align 8
-  %68 = fadd fast double %67, %66
-  store double %68, double* %"add58'de", align 8
-  %69 = load double, double* %"add58'de", align 8
+  %61 = load double, double* %"add58'de", align 8
+  %62 = fadd fast double %61, %60
+  store double %62, double* %"add58'de", align 8
+  %63 = load double, double* %"add58'de", align 8
   store double 0.000000e+00, double* %"add58'de", align 8
-  %70 = load double, double* %"mul53'de", align 8
-  %71 = fadd fast double %70, %69
-  store double %71, double* %"mul53'de", align 8
-  %72 = load double, double* %"'de", align 8
-  %73 = fadd fast double %72, %69
-  store double %73, double* %"'de", align 8
-  %74 = load double, double* %"'de", align 8
+  %64 = load double, double* %"mul53'de", align 8
+  %65 = fadd fast double %64, %63
+  store double %65, double* %"mul53'de", align 8
+  %66 = load double, double* %"'de", align 8
+  %67 = fadd fast double %66, %63
+  store double %67, double* %"'de", align 8
+  %68 = load double, double* %"'de", align 8
   store double 0.000000e+00, double* %"'de", align 8
-  %75 = load i64, i64* %"iv'ac", align 8
+  %69 = load i64, i64* %"iv'ac", align 8
   %"arrayidx57'ipg_unwrap" = getelementptr inbounds double, double* %"bias'", i64 %_unwrap5
-  %76 = load double, double* %"arrayidx57'ipg_unwrap", align 8
-  %77 = fadd fast double %76, %74
-  store double %77, double* %"arrayidx57'ipg_unwrap", align 8
-  %78 = load double, double* %"mul53'de", align 8
-  %m0diffe = fmul fast double %78, %62
+  %70 = load double, double* %"arrayidx57'ipg_unwrap", align 8
+  %71 = fadd fast double %70, %68
+  store double %71, double* %"arrayidx57'ipg_unwrap", align 8
+  %72 = load double, double* %"mul53'de", align 8
+  %m0diffe = fmul fast double %72, %56
   store double 0.000000e+00, double* %"mul53'de", align 8
-  %79 = load double, double* %"'de10", align 8
-  %80 = fadd fast double %79, %m0diffe
-  store double %80, double* %"'de10", align 8
-  %81 = load double, double* %"'de10", align 8
+  %73 = load double, double* %"'de10", align 8
+  %74 = fadd fast double %73, %m0diffe
+  store double %74, double* %"'de10", align 8
+  %75 = load double, double* %"'de10", align 8
   store double 0.000000e+00, double* %"'de10", align 8
-  %82 = load i64, i64* %"iv'ac", align 8
+  %76 = load i64, i64* %"iv'ac", align 8
   %"arrayidx52'ipg_unwrap" = getelementptr inbounds double, double* %"weight'", i64 %_unwrap5
-  %83 = load double, double* %"arrayidx52'ipg_unwrap", align 8
-  %84 = fadd fast double %83, %81
-  store double %84, double* %"arrayidx52'ipg_unwrap", align 8
-  %85 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx46'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %85
-  %86 = load double, double* %"arrayidx46'ipg_unwrap", align 8
+  %77 = load double, double* %"arrayidx52'ipg_unwrap", align 8
+  %78 = fadd fast double %77, %75
+  store double %78, double* %"arrayidx52'ipg_unwrap", align 8
+  %79 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx46'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %79
+  %80 = load double, double* %"arrayidx46'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx46'ipg_unwrap", align 8
-  %87 = load double, double* %"div.i163'de", align 8
-  %88 = fadd fast double %87, %86
-  store double %88, double* %"div.i163'de", align 8
-  %89 = load double, double* %"div.i163'de", align 8
-  %90 = load i64, i64* %"iv'ac", align 8
-  %_unwrap11 = add nsw i64 %90, %idxprom4
+  %81 = load double, double* %"div.i163'de", align 8
+  %82 = fadd fast double %81, %80
+  store double %82, double* %"div.i163'de", align 8
+  %83 = load double, double* %"div.i163'de", align 8
+  %84 = load i64, i64* %"iv'ac", align 8
+  %_unwrap11 = add nsw i64 %84, %idxprom4
   %arrayidx37_unwrap = getelementptr inbounds double, double* %weight, i64 %_unwrap11
   %_unwrap12 = load double, double* %arrayidx37_unwrap, align 8, !tbaa !61, !invariant.group !371
-  %91 = add nuw i64 %_unwrap8, 1
-  %92 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 3
-  %93 = load i64, i64* %"iv'ac", align 8
-  %94 = getelementptr inbounds double, double* %92, i64 %93
-  %95 = load double, double* %94, align 8, !invariant.group !382
-  %mul38_unwrap = fmul fast double %_unwrap12, %95
+  %85 = add nuw i64 %_unwrap8, 1
+  %86 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 3
+  %87 = load i64, i64* %"iv'ac", align 8
+  %88 = getelementptr inbounds double, double* %86, i64 %87
+  %89 = load double, double* %88, align 8, !invariant.group !382
+  %mul38_unwrap = fmul fast double %_unwrap12, %89
   %arrayidx42_unwrap = getelementptr inbounds double, double* %bias, i64 %_unwrap11
   %_unwrap18 = load double, double* %arrayidx42_unwrap, align 8, !tbaa !61, !invariant.group !372
   %add43_unwrap = fadd fast double %mul38_unwrap, %_unwrap18
   %fneg.i161_unwrap = fneg fast double %add43_unwrap
-  %96 = tail call fast double @llvm.exp.f64(double %fneg.i161_unwrap) #37
-  %add.i162_unwrap = fadd fast double %96, 1.000000e+00
-  %97 = load i64, i64* %"iv'ac", align 8
+  %90 = tail call fast double @llvm.exp.f64(double %fneg.i161_unwrap) #37
+  %add.i162_unwrap = fadd fast double %90, 1.000000e+00
+  %91 = load i64, i64* %"iv'ac", align 8
   %div.i163_unwrap = fdiv fast double 1.000000e+00, %add.i162_unwrap
-  %98 = fdiv fast double %89, %add.i162_unwrap
-  %99 = fmul fast double %div.i163_unwrap, %98
-  %100 = fneg fast double %99
+  %92 = fdiv fast double %83, %add.i162_unwrap
+  %93 = fmul fast double %div.i163_unwrap, %92
+  %94 = fneg fast double %93
   store double 0.000000e+00, double* %"div.i163'de", align 8
-  %101 = load double, double* %"add.i162'de", align 8
-  %102 = fadd fast double %101, %100
-  store double %102, double* %"add.i162'de", align 8
-  %103 = load double, double* %"add.i162'de", align 8
+  %95 = load double, double* %"add.i162'de", align 8
+  %96 = fadd fast double %95, %94
+  store double %96, double* %"add.i162'de", align 8
+  %97 = load double, double* %"add.i162'de", align 8
   store double 0.000000e+00, double* %"add.i162'de", align 8
-  %104 = load double, double* %"'de19", align 8
-  %105 = fadd fast double %104, %103
-  store double %105, double* %"'de19", align 8
-  %106 = load double, double* %"'de19", align 8
+  %98 = load double, double* %"'de19", align 8
+  %99 = fadd fast double %98, %97
+  store double %99, double* %"'de19", align 8
+  %100 = load double, double* %"'de19", align 8
   store double 0.000000e+00, double* %"'de19", align 8
-  %107 = call fast double @llvm.exp.f64(double %fneg.i161_unwrap)
-  %108 = fmul fast double %106, %107
-  %109 = load double, double* %"fneg.i161'de", align 8
-  %110 = fadd fast double %109, %108
-  store double %110, double* %"fneg.i161'de", align 8
-  %111 = load double, double* %"fneg.i161'de", align 8
-  %112 = fneg fast double %111
+  %101 = call fast double @llvm.exp.f64(double %fneg.i161_unwrap)
+  %102 = fmul fast double %100, %101
+  %103 = load double, double* %"fneg.i161'de", align 8
+  %104 = fadd fast double %103, %102
+  store double %104, double* %"fneg.i161'de", align 8
+  %105 = load double, double* %"fneg.i161'de", align 8
+  %106 = fneg fast double %105
   store double 0.000000e+00, double* %"fneg.i161'de", align 8
-  %113 = load double, double* %"add43'de", align 8
-  %114 = fadd fast double %113, %112
-  store double %114, double* %"add43'de", align 8
-  %115 = load double, double* %"add43'de", align 8
+  %107 = load double, double* %"add43'de", align 8
+  %108 = fadd fast double %107, %106
+  store double %108, double* %"add43'de", align 8
+  %109 = load double, double* %"add43'de", align 8
   store double 0.000000e+00, double* %"add43'de", align 8
-  %116 = load double, double* %"mul38'de", align 8
-  %117 = fadd fast double %116, %115
-  store double %117, double* %"mul38'de", align 8
-  %118 = load double, double* %"'de20", align 8
-  %119 = fadd fast double %118, %115
-  store double %119, double* %"'de20", align 8
-  %120 = load double, double* %"'de20", align 8
+  %110 = load double, double* %"mul38'de", align 8
+  %111 = fadd fast double %110, %109
+  store double %111, double* %"mul38'de", align 8
+  %112 = load double, double* %"'de20", align 8
+  %113 = fadd fast double %112, %109
+  store double %113, double* %"'de20", align 8
+  %114 = load double, double* %"'de20", align 8
   store double 0.000000e+00, double* %"'de20", align 8
-  %121 = load i64, i64* %"iv'ac", align 8
+  %115 = load i64, i64* %"iv'ac", align 8
   %"arrayidx42'ipg_unwrap" = getelementptr inbounds double, double* %"bias'", i64 %_unwrap11
-  %122 = load double, double* %"arrayidx42'ipg_unwrap", align 8
-  %123 = fadd fast double %122, %120
-  store double %123, double* %"arrayidx42'ipg_unwrap", align 8
-  %124 = load double, double* %"mul38'de", align 8
-  %m0diffe21 = fmul fast double %124, %95
-  %m1diffe = fmul fast double %124, %_unwrap12
+  %116 = load double, double* %"arrayidx42'ipg_unwrap", align 8
+  %117 = fadd fast double %116, %114
+  store double %117, double* %"arrayidx42'ipg_unwrap", align 8
+  %118 = load double, double* %"mul38'de", align 8
+  %m0diffe21 = fmul fast double %118, %89
+  %m1diffe = fmul fast double %118, %_unwrap12
   store double 0.000000e+00, double* %"mul38'de", align 8
-  %125 = load double, double* %"'de22", align 8
-  %126 = fadd fast double %125, %m0diffe21
-  store double %126, double* %"'de22", align 8
-  %127 = load double, double* %"'de23", align 8
-  %128 = fadd fast double %127, %m1diffe
-  store double %128, double* %"'de23", align 8
-  %129 = load double, double* %"'de22", align 8
+  %119 = load double, double* %"'de22", align 8
+  %120 = fadd fast double %119, %m0diffe21
+  store double %120, double* %"'de22", align 8
+  %121 = load double, double* %"'de23", align 8
+  %122 = fadd fast double %121, %m1diffe
+  store double %122, double* %"'de23", align 8
+  %123 = load double, double* %"'de22", align 8
   store double 0.000000e+00, double* %"'de22", align 8
-  %130 = load i64, i64* %"iv'ac", align 8
+  %124 = load i64, i64* %"iv'ac", align 8
   %"arrayidx37'ipg_unwrap" = getelementptr inbounds double, double* %"weight'", i64 %_unwrap11
-  %131 = load double, double* %"arrayidx37'ipg_unwrap", align 8
-  %132 = fadd fast double %131, %129
-  store double %132, double* %"arrayidx37'ipg_unwrap", align 8
-  %133 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %133
-  %134 = load double, double* %"arrayidx31'ipg_unwrap", align 8
+  %125 = load double, double* %"arrayidx37'ipg_unwrap", align 8
+  %126 = fadd fast double %125, %123
+  store double %126, double* %"arrayidx37'ipg_unwrap", align 8
+  %127 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %127
+  %128 = load double, double* %"arrayidx31'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx31'ipg_unwrap", align 8
-  %135 = load double, double* %"div.i166'de", align 8
-  %136 = fadd fast double %135, %134
-  store double %136, double* %"div.i166'de", align 8
-  %137 = load double, double* %"div.i166'de", align 8
-  %138 = load i64, i64* %"iv'ac", align 8
-  %_unwrap24 = add nsw i64 %138, %idxprom
+  %129 = load double, double* %"div.i166'de", align 8
+  %130 = fadd fast double %129, %128
+  store double %130, double* %"div.i166'de", align 8
+  %131 = load double, double* %"div.i166'de", align 8
+  %132 = load i64, i64* %"iv'ac", align 8
+  %_unwrap24 = add nsw i64 %132, %idxprom
   %arrayidx23_unwrap = getelementptr inbounds double, double* %weight, i64 %_unwrap24
   %_unwrap25 = load double, double* %arrayidx23_unwrap, align 8, !tbaa !61, !invariant.group !369
-  %mul24_unwrap = fmul fast double %_unwrap25, %62
+  %mul24_unwrap = fmul fast double %_unwrap25, %56
   %arrayidx27_unwrap = getelementptr inbounds double, double* %bias, i64 %_unwrap24
   %_unwrap26 = load double, double* %arrayidx27_unwrap, align 8, !tbaa !61, !invariant.group !370
   %add28_unwrap = fadd fast double %mul24_unwrap, %_unwrap26
   %fneg.i164_unwrap = fneg fast double %add28_unwrap
-  %139 = tail call fast double @llvm.exp.f64(double %fneg.i164_unwrap) #37
-  %add.i165_unwrap = fadd fast double %139, 1.000000e+00
-  %140 = load i64, i64* %"iv'ac", align 8
+  %133 = tail call fast double @llvm.exp.f64(double %fneg.i164_unwrap) #37
+  %add.i165_unwrap = fadd fast double %133, 1.000000e+00
+  %134 = load i64, i64* %"iv'ac", align 8
   %div.i166_unwrap = fdiv fast double 1.000000e+00, %add.i165_unwrap
-  %141 = fdiv fast double %137, %add.i165_unwrap
-  %142 = fmul fast double %div.i166_unwrap, %141
-  %143 = fneg fast double %142
+  %135 = fdiv fast double %131, %add.i165_unwrap
+  %136 = fmul fast double %div.i166_unwrap, %135
+  %137 = fneg fast double %136
   store double 0.000000e+00, double* %"div.i166'de", align 8
-  %144 = load double, double* %"add.i165'de", align 8
-  %145 = fadd fast double %144, %143
-  store double %145, double* %"add.i165'de", align 8
-  %146 = load double, double* %"add.i165'de", align 8
+  %138 = load double, double* %"add.i165'de", align 8
+  %139 = fadd fast double %138, %137
+  store double %139, double* %"add.i165'de", align 8
+  %140 = load double, double* %"add.i165'de", align 8
   store double 0.000000e+00, double* %"add.i165'de", align 8
-  %147 = load double, double* %"'de27", align 8
-  %148 = fadd fast double %147, %146
-  store double %148, double* %"'de27", align 8
-  %149 = load double, double* %"'de27", align 8
+  %141 = load double, double* %"'de27", align 8
+  %142 = fadd fast double %141, %140
+  store double %142, double* %"'de27", align 8
+  %143 = load double, double* %"'de27", align 8
   store double 0.000000e+00, double* %"'de27", align 8
-  %150 = call fast double @llvm.exp.f64(double %fneg.i164_unwrap)
-  %151 = fmul fast double %149, %150
-  %152 = load double, double* %"fneg.i164'de", align 8
-  %153 = fadd fast double %152, %151
-  store double %153, double* %"fneg.i164'de", align 8
-  %154 = load double, double* %"fneg.i164'de", align 8
-  %155 = fneg fast double %154
+  %144 = call fast double @llvm.exp.f64(double %fneg.i164_unwrap)
+  %145 = fmul fast double %143, %144
+  %146 = load double, double* %"fneg.i164'de", align 8
+  %147 = fadd fast double %146, %145
+  store double %147, double* %"fneg.i164'de", align 8
+  %148 = load double, double* %"fneg.i164'de", align 8
+  %149 = fneg fast double %148
   store double 0.000000e+00, double* %"fneg.i164'de", align 8
-  %156 = load double, double* %"add28'de", align 8
-  %157 = fadd fast double %156, %155
-  store double %157, double* %"add28'de", align 8
-  %158 = load double, double* %"add28'de", align 8
+  %150 = load double, double* %"add28'de", align 8
+  %151 = fadd fast double %150, %149
+  store double %151, double* %"add28'de", align 8
+  %152 = load double, double* %"add28'de", align 8
   store double 0.000000e+00, double* %"add28'de", align 8
-  %159 = load double, double* %"mul24'de", align 8
-  %160 = fadd fast double %159, %158
-  store double %160, double* %"mul24'de", align 8
-  %161 = load double, double* %"'de28", align 8
-  %162 = fadd fast double %161, %158
-  store double %162, double* %"'de28", align 8
-  %163 = load double, double* %"'de28", align 8
+  %153 = load double, double* %"mul24'de", align 8
+  %154 = fadd fast double %153, %152
+  store double %154, double* %"mul24'de", align 8
+  %155 = load double, double* %"'de28", align 8
+  %156 = fadd fast double %155, %152
+  store double %156, double* %"'de28", align 8
+  %157 = load double, double* %"'de28", align 8
   store double 0.000000e+00, double* %"'de28", align 8
-  %164 = load i64, i64* %"iv'ac", align 8
+  %158 = load i64, i64* %"iv'ac", align 8
   %"arrayidx27'ipg_unwrap" = getelementptr inbounds double, double* %"bias'", i64 %_unwrap24
-  %165 = load double, double* %"arrayidx27'ipg_unwrap", align 8
-  %166 = fadd fast double %165, %163
-  store double %166, double* %"arrayidx27'ipg_unwrap", align 8
-  %167 = load double, double* %"mul24'de", align 8
-  %m0diffe29 = fmul fast double %167, %62
+  %159 = load double, double* %"arrayidx27'ipg_unwrap", align 8
+  %160 = fadd fast double %159, %157
+  store double %160, double* %"arrayidx27'ipg_unwrap", align 8
+  %161 = load double, double* %"mul24'de", align 8
+  %m0diffe29 = fmul fast double %161, %56
   store double 0.000000e+00, double* %"mul24'de", align 8
-  %168 = load double, double* %"'de30", align 8
-  %169 = fadd fast double %168, %m0diffe29
-  store double %169, double* %"'de30", align 8
-  %170 = load double, double* %"'de30", align 8
+  %162 = load double, double* %"'de30", align 8
+  %163 = fadd fast double %162, %m0diffe29
+  store double %163, double* %"'de30", align 8
+  %164 = load double, double* %"'de30", align 8
   store double 0.000000e+00, double* %"'de30", align 8
-  %171 = load i64, i64* %"iv'ac", align 8
+  %165 = load i64, i64* %"iv'ac", align 8
   %"arrayidx23'ipg_unwrap" = getelementptr inbounds double, double* %"weight'", i64 %_unwrap24
-  %172 = load double, double* %"arrayidx23'ipg_unwrap", align 8
-  %173 = fadd fast double %172, %170
-  store double %173, double* %"arrayidx23'ipg_unwrap", align 8
-  %174 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx18'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %174
-  %175 = load double, double* %"arrayidx18'ipg_unwrap", align 8
+  %166 = load double, double* %"arrayidx23'ipg_unwrap", align 8
+  %167 = fadd fast double %166, %164
+  store double %167, double* %"arrayidx23'ipg_unwrap", align 8
+  %168 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx18'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %168
+  %169 = load double, double* %"arrayidx18'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx18'ipg_unwrap", align 8
-  %176 = load double, double* %"div.i'de", align 8
-  %177 = fadd fast double %176, %175
-  store double %177, double* %"div.i'de", align 8
-  %178 = load double, double* %"div.i'de", align 8
-  %179 = load i64, i64* %"iv'ac", align 8
-  %arrayidx12_unwrap = getelementptr inbounds double, double* %weight, i64 %179
+  %170 = load double, double* %"div.i'de", align 8
+  %171 = fadd fast double %170, %169
+  store double %171, double* %"div.i'de", align 8
+  %172 = load double, double* %"div.i'de", align 8
+  %173 = load i64, i64* %"iv'ac", align 8
+  %arrayidx12_unwrap = getelementptr inbounds double, double* %weight, i64 %173
   %_unwrap31 = load double, double* %arrayidx12_unwrap, align 8, !tbaa !61, !invariant.group !365
-  %mul13_unwrap = fmul fast double %_unwrap31, %95
-  %arrayidx15_unwrap = getelementptr inbounds double, double* %bias, i64 %179
+  %mul13_unwrap = fmul fast double %_unwrap31, %89
+  %arrayidx15_unwrap = getelementptr inbounds double, double* %bias, i64 %173
   %_unwrap32 = load double, double* %arrayidx15_unwrap, align 8, !tbaa !61, !invariant.group !366
   %add_unwrap = fadd fast double %mul13_unwrap, %_unwrap32
   %fneg.i_unwrap = fneg fast double %add_unwrap
-  %180 = tail call fast double @llvm.exp.f64(double %fneg.i_unwrap) #37
-  %add.i_unwrap = fadd fast double %180, 1.000000e+00
-  %181 = load i64, i64* %"iv'ac", align 8
+  %174 = tail call fast double @llvm.exp.f64(double %fneg.i_unwrap) #37
+  %add.i_unwrap = fadd fast double %174, 1.000000e+00
+  %175 = load i64, i64* %"iv'ac", align 8
   %div.i_unwrap = fdiv fast double 1.000000e+00, %add.i_unwrap
-  %182 = fdiv fast double %178, %add.i_unwrap
-  %183 = fmul fast double %div.i_unwrap, %182
-  %184 = fneg fast double %183
+  %176 = fdiv fast double %172, %add.i_unwrap
+  %177 = fmul fast double %div.i_unwrap, %176
+  %178 = fneg fast double %177
   store double 0.000000e+00, double* %"div.i'de", align 8
-  %185 = load double, double* %"add.i'de", align 8
-  %186 = fadd fast double %185, %184
-  store double %186, double* %"add.i'de", align 8
-  %187 = load double, double* %"add.i'de", align 8
+  %179 = load double, double* %"add.i'de", align 8
+  %180 = fadd fast double %179, %178
+  store double %180, double* %"add.i'de", align 8
+  %181 = load double, double* %"add.i'de", align 8
   store double 0.000000e+00, double* %"add.i'de", align 8
-  %188 = load double, double* %"'de33", align 8
-  %189 = fadd fast double %188, %187
-  store double %189, double* %"'de33", align 8
-  %190 = load double, double* %"'de33", align 8
+  %182 = load double, double* %"'de33", align 8
+  %183 = fadd fast double %182, %181
+  store double %183, double* %"'de33", align 8
+  %184 = load double, double* %"'de33", align 8
   store double 0.000000e+00, double* %"'de33", align 8
-  %191 = call fast double @llvm.exp.f64(double %fneg.i_unwrap)
-  %192 = fmul fast double %190, %191
-  %193 = load double, double* %"fneg.i'de", align 8
-  %194 = fadd fast double %193, %192
-  store double %194, double* %"fneg.i'de", align 8
-  %195 = load double, double* %"fneg.i'de", align 8
-  %196 = fneg fast double %195
+  %185 = call fast double @llvm.exp.f64(double %fneg.i_unwrap)
+  %186 = fmul fast double %184, %185
+  %187 = load double, double* %"fneg.i'de", align 8
+  %188 = fadd fast double %187, %186
+  store double %188, double* %"fneg.i'de", align 8
+  %189 = load double, double* %"fneg.i'de", align 8
+  %190 = fneg fast double %189
   store double 0.000000e+00, double* %"fneg.i'de", align 8
-  %197 = load double, double* %"add'de", align 8
-  %198 = fadd fast double %197, %196
-  store double %198, double* %"add'de", align 8
-  %199 = load double, double* %"add'de", align 8
+  %191 = load double, double* %"add'de", align 8
+  %192 = fadd fast double %191, %190
+  store double %192, double* %"add'de", align 8
+  %193 = load double, double* %"add'de", align 8
   store double 0.000000e+00, double* %"add'de", align 8
-  %200 = load double, double* %"mul13'de", align 8
-  %201 = fadd fast double %200, %199
-  store double %201, double* %"mul13'de", align 8
-  %202 = load double, double* %"'de34", align 8
-  %203 = fadd fast double %202, %199
-  store double %203, double* %"'de34", align 8
-  %204 = load double, double* %"'de34", align 8
+  %194 = load double, double* %"mul13'de", align 8
+  %195 = fadd fast double %194, %193
+  store double %195, double* %"mul13'de", align 8
+  %196 = load double, double* %"'de34", align 8
+  %197 = fadd fast double %196, %193
+  store double %197, double* %"'de34", align 8
+  %198 = load double, double* %"'de34", align 8
   store double 0.000000e+00, double* %"'de34", align 8
-  %205 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx15'ipg_unwrap" = getelementptr inbounds double, double* %"bias'", i64 %205
-  %206 = load double, double* %"arrayidx15'ipg_unwrap", align 8
-  %207 = fadd fast double %206, %204
-  store double %207, double* %"arrayidx15'ipg_unwrap", align 8
-  %208 = load double, double* %"mul13'de", align 8
-  %m0diffe35 = fmul fast double %208, %95
-  %m1diffe36 = fmul fast double %208, %_unwrap31
+  %199 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx15'ipg_unwrap" = getelementptr inbounds double, double* %"bias'", i64 %199
+  %200 = load double, double* %"arrayidx15'ipg_unwrap", align 8
+  %201 = fadd fast double %200, %198
+  store double %201, double* %"arrayidx15'ipg_unwrap", align 8
+  %202 = load double, double* %"mul13'de", align 8
+  %m0diffe35 = fmul fast double %202, %89
+  %m1diffe36 = fmul fast double %202, %_unwrap31
   store double 0.000000e+00, double* %"mul13'de", align 8
-  %209 = load double, double* %"'de37", align 8
-  %210 = fadd fast double %209, %m0diffe35
-  store double %210, double* %"'de37", align 8
-  %211 = load double, double* %"'de23", align 8
-  %212 = fadd fast double %211, %m1diffe36
-  store double %212, double* %"'de23", align 8
-  %213 = load double, double* %"'de37", align 8
+  %203 = load double, double* %"'de37", align 8
+  %204 = fadd fast double %203, %m0diffe35
+  store double %204, double* %"'de37", align 8
+  %205 = load double, double* %"'de23", align 8
+  %206 = fadd fast double %205, %m1diffe36
+  store double %206, double* %"'de23", align 8
+  %207 = load double, double* %"'de37", align 8
   store double 0.000000e+00, double* %"'de37", align 8
-  %214 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"weight'", i64 %214
-  %215 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %216 = fadd fast double %215, %213
-  store double %216, double* %"arrayidx12'ipg_unwrap", align 8
-  %217 = load double, double* %"'de23", align 8
+  %208 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"weight'", i64 %208
+  %209 = load double, double* %"arrayidx12'ipg_unwrap", align 8
+  %210 = fadd fast double %209, %207
+  store double %210, double* %"arrayidx12'ipg_unwrap", align 8
+  %211 = load double, double* %"'de23", align 8
   store double 0.000000e+00, double* %"'de23", align 8
-  %218 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"input'", i64 %218
-  %219 = load double, double* %"arrayidx10'ipg_unwrap", align 8
-  %220 = fadd fast double %219, %217
-  store double %220, double* %"arrayidx10'ipg_unwrap", align 8
-  %221 = load i64, i64* %"iv'ac", align 8
-  %222 = icmp eq i64 %221, 0
-  %223 = xor i1 %222, true
-  br i1 %222, label %invertfor.body.preheader, label %incinvertfor.body
+  %212 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"input'", i64 %212
+  %213 = load double, double* %"arrayidx10'ipg_unwrap", align 8
+  %214 = fadd fast double %213, %211
+  store double %214, double* %"arrayidx10'ipg_unwrap", align 8
+  %215 = load i64, i64* %"iv'ac", align 8
+  %216 = icmp eq i64 %215, 0
+  %217 = xor i1 %216, true
+  br i1 %216, label %invertfor.body.preheader, label %incinvertfor.body
 
 incinvertfor.body:                                ; preds = %invertfor.body
-  %224 = load i64, i64* %"iv'ac", align 8
-  %225 = add nsw i64 %224, -1
-  store i64 %225, i64* %"iv'ac", align 8
+  %218 = load i64, i64* %"iv'ac", align 8
+  %219 = add nsw i64 %218, -1
+  store i64 %219, i64* %"iv'ac", align 8
   br label %invertfor.body
 
 invertfor.cond81.preheader:                       ; preds = %invertfor.end94, %invertfor.body83.preheader
@@ -20516,115 +20505,115 @@ mergeinvertfor.body64_for.cond81.preheader:       ; preds = %invertfor.cond81.pr
   br label %invertfor.body64
 
 invertfor.body83.preheader:                       ; preds = %invertfor.body83
-  %226 = load i64, i64* %"iv3'ac", align 8
-  %227 = load i64, i64* %"iv3'ac", align 8
+  %220 = load i64, i64* %"iv3'ac", align 8
+  %221 = load i64, i64* %"iv3'ac", align 8
   %forfree62 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !344, !invariant.group !379
-  %228 = bitcast double* %forfree62 to i8*
-  tail call void @free(i8* nonnull %228)
+  %222 = bitcast double* %forfree62 to i8*
+  tail call void @free(i8* nonnull %222)
   br label %invertfor.cond81.preheader
 
 invertfor.body64:                                 ; preds = %incinvertfor.body64, %mergeinvertfor.body64_for.cond81.preheader
-  %229 = load double, double* %"add75'de", align 8
+  %223 = load double, double* %"add75'de", align 8
   store double 0.000000e+00, double* %"add75'de", align 8
-  %230 = load double, double* %"mul74'de", align 8
-  %231 = fadd fast double %230, %229
-  store double %231, double* %"mul74'de", align 8
-  %232 = load double, double* %"mul69'de", align 8
-  %233 = fadd fast double %232, %229
-  store double %233, double* %"mul69'de", align 8
-  %234 = load double, double* %"mul74'de", align 8
-  %235 = load i64, i64* %"iv1'ac", align 8
-  %arrayidx71_unwrap = getelementptr inbounds double, double* %arrayidx2, i64 %235
+  %224 = load double, double* %"mul74'de", align 8
+  %225 = fadd fast double %224, %223
+  store double %225, double* %"mul74'de", align 8
+  %226 = load double, double* %"mul69'de", align 8
+  %227 = fadd fast double %226, %223
+  store double %227, double* %"mul69'de", align 8
+  %228 = load double, double* %"mul74'de", align 8
+  %229 = load i64, i64* %"iv1'ac", align 8
+  %arrayidx71_unwrap = getelementptr inbounds double, double* %arrayidx2, i64 %229
   %_unwrap40 = load double, double* %arrayidx71_unwrap, align 8, !tbaa !61, !invariant.group !377
-  %m0diffe41 = fmul fast double %234, %_unwrap40
-  %236 = load i64, i64* %"iv1'ac", align 8
-  %arrayidx73_unwrap = getelementptr inbounds double, double* %arrayidx8, i64 %236
+  %m0diffe41 = fmul fast double %228, %_unwrap40
+  %230 = load i64, i64* %"iv1'ac", align 8
+  %arrayidx73_unwrap = getelementptr inbounds double, double* %arrayidx8, i64 %230
   %_unwrap42 = load double, double* %arrayidx73_unwrap, align 8, !tbaa !61, !invariant.group !378
-  %m1diffe43 = fmul fast double %234, %_unwrap42
+  %m1diffe43 = fmul fast double %228, %_unwrap42
   store double 0.000000e+00, double* %"mul74'de", align 8
-  %237 = load double, double* %"'de44", align 8
-  %238 = fadd fast double %237, %m0diffe41
-  store double %238, double* %"'de44", align 8
-  %239 = load double, double* %"'de45", align 8
-  %240 = fadd fast double %239, %m1diffe43
-  store double %240, double* %"'de45", align 8
-  %241 = load double, double* %"'de44", align 8
+  %231 = load double, double* %"'de44", align 8
+  %232 = fadd fast double %231, %m0diffe41
+  store double %232, double* %"'de44", align 8
+  %233 = load double, double* %"'de45", align 8
+  %234 = fadd fast double %233, %m1diffe43
+  store double %234, double* %"'de45", align 8
+  %235 = load double, double* %"'de44", align 8
   store double 0.000000e+00, double* %"'de44", align 8
-  %242 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx73'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %242
-  %243 = load double, double* %"arrayidx73'ipg_unwrap", align 8
-  %244 = fadd fast double %243, %241
-  store double %244, double* %"arrayidx73'ipg_unwrap", align 8
-  %245 = load double, double* %"'de45", align 8
+  %236 = load i64, i64* %"iv1'ac", align 8
+  %"arrayidx73'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx8'ipg", i64 %236
+  %237 = load double, double* %"arrayidx73'ipg_unwrap", align 8
+  %238 = fadd fast double %237, %235
+  store double %238, double* %"arrayidx73'ipg_unwrap", align 8
+  %239 = load double, double* %"'de45", align 8
   store double 0.000000e+00, double* %"'de45", align 8
-  %246 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx71'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %246
-  %247 = load double, double* %"arrayidx71'ipg_unwrap", align 8
-  %248 = fadd fast double %247, %245
-  store double %248, double* %"arrayidx71'ipg_unwrap", align 8
-  %249 = load double, double* %"mul69'de", align 8
-  %250 = load i64, i64* %"iv1'ac", align 8
+  %240 = load i64, i64* %"iv1'ac", align 8
+  %"arrayidx71'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx2'ipg", i64 %240
+  %241 = load double, double* %"arrayidx71'ipg_unwrap", align 8
+  %242 = fadd fast double %241, %239
+  store double %242, double* %"arrayidx71'ipg_unwrap", align 8
+  %243 = load double, double* %"mul69'de", align 8
+  %244 = load i64, i64* %"iv1'ac", align 8
   %wide.trip.count182_unwrap51 = zext i32 %hsize to i64
   %_unwrap52 = add nsw i64 %wide.trip.count182_unwrap51, -1
-  %251 = add nuw i64 %_unwrap52, 1
-  %252 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 5
-  %253 = load i64, i64* %"iv1'ac", align 8
-  %254 = getelementptr inbounds double, double* %252, i64 %253
-  %255 = load double, double* %254, align 8, !invariant.group !383
-  %m0diffe53 = fmul fast double %249, %255
+  %245 = add nuw i64 %_unwrap52, 1
+  %246 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 5
+  %247 = load i64, i64* %"iv1'ac", align 8
+  %248 = getelementptr inbounds double, double* %246, i64 %247
+  %249 = load double, double* %248, align 8, !invariant.group !383
+  %m0diffe53 = fmul fast double %243, %249
   store double 0.000000e+00, double* %"mul69'de", align 8
-  %256 = load double, double* %"'de54", align 8
-  %257 = fadd fast double %256, %m0diffe53
-  store double %257, double* %"'de54", align 8
-  %258 = load double, double* %"'de54", align 8
+  %250 = load double, double* %"'de54", align 8
+  %251 = fadd fast double %250, %m0diffe53
+  store double %251, double* %"'de54", align 8
+  %252 = load double, double* %"'de54", align 8
   store double 0.000000e+00, double* %"'de54", align 8
-  %259 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx68'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %259
-  %260 = load double, double* %"arrayidx68'ipg_unwrap", align 8
-  %261 = fadd fast double %260, %258
-  store double %261, double* %"arrayidx68'ipg_unwrap", align 8
-  %262 = load i64, i64* %"iv1'ac", align 8
-  %263 = icmp eq i64 %262, 0
-  %264 = xor i1 %263, true
-  br i1 %263, label %invertfor.body64.preheader, label %incinvertfor.body64
+  %253 = load i64, i64* %"iv1'ac", align 8
+  %"arrayidx68'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %253
+  %254 = load double, double* %"arrayidx68'ipg_unwrap", align 8
+  %255 = fadd fast double %254, %252
+  store double %255, double* %"arrayidx68'ipg_unwrap", align 8
+  %256 = load i64, i64* %"iv1'ac", align 8
+  %257 = icmp eq i64 %256, 0
+  %258 = xor i1 %257, true
+  br i1 %257, label %invertfor.body64.preheader, label %incinvertfor.body64
 
 incinvertfor.body64:                              ; preds = %invertfor.body64
-  %265 = load i64, i64* %"iv1'ac", align 8
-  %266 = add nsw i64 %265, -1
-  store i64 %266, i64* %"iv1'ac", align 8
+  %259 = load i64, i64* %"iv1'ac", align 8
+  %260 = add nsw i64 %259, -1
+  store i64 %260, i64* %"iv1'ac", align 8
   br label %invertfor.body64
 
 invertfor.body83:                                 ; preds = %mergeinvertfor.body83_for.end94.loopexit, %incinvertfor.body83
-  %267 = load double, double* %"mul89'de", align 8
-  %268 = load i64, i64* %"iv3'ac", align 8
+  %261 = load double, double* %"mul89'de", align 8
+  %262 = load i64, i64* %"iv3'ac", align 8
   %wide.trip.count182_unwrap58 = zext i32 %hsize to i64
   %_unwrap59 = add nsw i64 %wide.trip.count182_unwrap58, -1
-  %269 = add nuw i64 %_unwrap59, 1
-  %270 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 2
-  %271 = load i64, i64* %"iv3'ac", align 8
-  %272 = getelementptr inbounds double, double* %270, i64 %271
-  %273 = load double, double* %272, align 8, !invariant.group !384
-  %m1diffe60 = fmul fast double %267, %273
+  %263 = add nuw i64 %_unwrap59, 1
+  %264 = extractvalue { i8*, i8*, double*, double*, double*, double* } %tapeArg, 2
+  %265 = load i64, i64* %"iv3'ac", align 8
+  %266 = getelementptr inbounds double, double* %264, i64 %265
+  %267 = load double, double* %266, align 8, !invariant.group !384
+  %m1diffe60 = fmul fast double %261, %267
   store double 0.000000e+00, double* %"mul89'de", align 8
-  %274 = load double, double* %"'de61", align 8
-  %275 = fadd fast double %274, %m1diffe60
-  store double %275, double* %"'de61", align 8
-  %276 = load double, double* %"'de61", align 8
+  %268 = load double, double* %"'de61", align 8
+  %269 = fadd fast double %268, %m1diffe60
+  store double %269, double* %"'de61", align 8
+  %270 = load double, double* %"'de61", align 8
   store double 0.000000e+00, double* %"'de61", align 8
-  %277 = load i64, i64* %"iv3'ac", align 8
-  %"arrayidx85'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %277
-  %278 = load double, double* %"arrayidx85'ipg_unwrap", align 8
-  %279 = fadd fast double %278, %276
-  store double %279, double* %"arrayidx85'ipg_unwrap", align 8
-  %280 = load i64, i64* %"iv3'ac", align 8
-  %281 = icmp eq i64 %280, 0
-  %282 = xor i1 %281, true
-  br i1 %281, label %invertfor.body83.preheader, label %incinvertfor.body83
+  %271 = load i64, i64* %"iv3'ac", align 8
+  %"arrayidx85'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx5'ipg", i64 %271
+  %272 = load double, double* %"arrayidx85'ipg_unwrap", align 8
+  %273 = fadd fast double %272, %270
+  store double %273, double* %"arrayidx85'ipg_unwrap", align 8
+  %274 = load i64, i64* %"iv3'ac", align 8
+  %275 = icmp eq i64 %274, 0
+  %276 = xor i1 %275, true
+  br i1 %275, label %invertfor.body83.preheader, label %incinvertfor.body83
 
 incinvertfor.body83:                              ; preds = %invertfor.body83
-  %283 = load i64, i64* %"iv3'ac", align 8
-  %284 = add nsw i64 %283, -1
-  store i64 %284, i64* %"iv3'ac", align 8
+  %277 = load i64, i64* %"iv3'ac", align 8
+  %278 = add nsw i64 %277, -1
+  store i64 %278, i64* %"iv3'ac", align 8
   br label %invertfor.body83
 
 invertfor.end94.loopexit:                         ; preds = %invertfor.end94
@@ -20637,11 +20626,11 @@ mergeinvertfor.body83_for.end94.loopexit:         ; preds = %invertfor.end94.loo
   br label %invertfor.body83
 
 invertfor.end94:                                  ; preds = %for.end94
-  %285 = load i8, i8* %_cache67, align 1, !invariant.group !362
-  switch i8 %285, label %invertfor.cond81.preheader [
-    i8 0, label %invertfor.cond62.preheader
-    i8 1, label %invertfor.end94.loopexit
-    i8 2, label %invertentry
+  %279 = load i8, i8* %_cache67, align 1, !invariant.group !362
+  switch i8 %279, label %invertentry [
+    i8 0, label %invertfor.end94.loopexit
+    i8 1, label %invertfor.cond62.preheader
+    i8 2, label %invertfor.cond81.preheader
   ]
 }
 

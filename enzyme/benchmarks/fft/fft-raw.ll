@@ -9893,8 +9893,8 @@ entry:
   store double 0.000000e+00, double* %"'de19", align 8
   %"'de20" = alloca double, align 8
   store double 0.000000e+00, double* %"'de20", align 8
-  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32
-  %tapeld40_cache = alloca { i8*, i8*, double*, double* }, align 32
+  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32, !node !179
+  %tapeld40_cache = alloca { i8*, i8*, double*, double* }, align 32, !node !179
   %"'de48" = alloca double, align 8
   store double 0.000000e+00, double* %"'de48", align 8
   %j.040.i.i8_cache = alloca i32*, align 8
@@ -9930,7 +9930,7 @@ for.body.i.i:                                     ; preds = %while.end.i.i, %for
   %iv = phi i64 [ %iv.next, %while.end.i.i ], [ 0, %for.body.lr.ph.i.i ]
   %j.040.i.i = phi i32 [ 1, %for.body.lr.ph.i.i ], [ %add.i.i, %while.end.i.i ], !node !179
   %5 = load i32*, i32** %j.040.i.i_cache, align 8, !dereferenceable !181, !invariant.group !180
-  %6 = getelementptr inbounds i32, i32* %5, i64 %iv
+  %6 = getelementptr inbounds i32, i32* %5, i64 %iv, !node !179
   store i32 %j.040.i.i, i32* %6, align 4, !invariant.group !182
   %iv.next = add nuw nsw i64 %iv, 1
   %7 = shl nuw nsw i64 %iv, 1
@@ -9981,19 +9981,19 @@ while.end.i.i:                                    ; preds = %while.end.i.i.loope
   br i1 %cmp.i.i, label %for.body.i.i, label %for.body.lr.ph.i.i6, !llvm.loop !146
 
 _ZL8scramblePdj.exit.thread.i:                    ; preds = %entry
-  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij.4(double* %data, double* %"data'", i32 1, i32 %len)
-  %13 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %13, align 8, !enzyme_mustcache !183
+  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij.4(double* %data, double* %"data'", i32 1, i32 %len), !node !179
+  %13 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*, !node !179
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %13, align 8, !enzyme_mustcache !183, !node !179
   store { i8*, i8*, double*, double* } %tapeld, { i8*, i8*, double*, double* }* %tapeld_cache, align 32, !invariant.group !184
-  tail call void @free(i8* nonnull %_augmented)
+  tail call void @free(i8* nonnull %_augmented), !node !179
   br label %_ZL4ifftPdj.exit
 
 for.body.lr.ph.i.i6:                              ; preds = %while.end.i.i
-  %_augmented39 = call fastcc i8* @augmented__ZL14recursiveApplyPdij.4(double* %data, double* %"data'", i32 1, i32 %len)
-  %14 = bitcast i8* %_augmented39 to { i8*, i8*, double*, double* }*
-  %tapeld40 = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %14, align 8, !enzyme_mustcache !183
+  %_augmented39 = call fastcc i8* @augmented__ZL14recursiveApplyPdij.4(double* %data, double* %"data'", i32 1, i32 %len), !node !179
+  %14 = bitcast i8* %_augmented39 to { i8*, i8*, double*, double* }*, !node !179
+  %tapeld40 = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %14, align 8, !enzyme_mustcache !183, !node !179
   store { i8*, i8*, double*, double* } %tapeld40, { i8*, i8*, double*, double* }* %tapeld40_cache, align 32, !invariant.group !185
-  tail call void @free(i8* nonnull %_augmented39)
+  tail call void @free(i8* nonnull %_augmented39), !node !179
   %15 = icmp ugt i64 %0, 3
   %umax5 = select i1 %15, i64 %0, i64 3
   %16 = add nsw i64 %umax5, -2
@@ -10009,7 +10009,7 @@ for.body.i.i10:                                   ; preds = %while.end.i.i32, %f
   %iv3 = phi i64 [ %iv.next4, %while.end.i.i32 ], [ 0, %for.body.lr.ph.i.i6 ]
   %j.040.i.i8 = phi i32 [ 1, %for.body.lr.ph.i.i6 ], [ %add.i.i29, %while.end.i.i32 ], !node !179
   %19 = load i32*, i32** %j.040.i.i8_cache, align 8, !dereferenceable !181, !invariant.group !186
-  %20 = getelementptr inbounds i32, i32* %19, i64 %iv3
+  %20 = getelementptr inbounds i32, i32* %19, i64 %iv3, !node !179
   store i32 %j.040.i.i8, i32* %20, align 4, !invariant.group !187
   %iv.next4 = add nuw nsw i64 %iv3, 1
   %21 = shl nuw nsw i64 %iv3, 1
@@ -10540,7 +10540,7 @@ return:                                           ; preds = %return.loopexit, %i
 define internal fastcc void @diffe_ZL14recursiveApplyPdij(double* %data, double* %"data'", i32 %iSign, i32 %N) unnamed_addr #16 {
 entry:
   %"iv'ac" = alloca i64, align 8
-  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32
+  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32, !node !179
   %"add43'de" = alloca double, align 8
   store double 0.000000e+00, double* %"add43'de", align 8
   %"'de" = alloca double, align 8
@@ -10565,10 +10565,10 @@ entry:
   store double 0.000000e+00, double* %"mul23'de", align 8
   %"mul19'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul19'de", align 8
-  %wr.0111_cache = alloca double*, align 8
+  %wr.0111_cache = alloca double*, align 8, !node !179
   %"'de11" = alloca double, align 8
   store double 0.000000e+00, double* %"'de11", align 8
-  %wi.0110_cache = alloca double*, align 8
+  %wi.0110_cache = alloca double*, align 8, !node !179
   %"'de16" = alloca double, align 8
   store double 0.000000e+00, double* %"'de16", align 8
   %"mul11'de" = alloca double, align 8
@@ -10580,23 +10580,23 @@ entry:
 
 if.end:                                           ; preds = %entry
   %div = lshr i32 %N, 1, !node !179
-  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij(double* %data, double* %"data'", i32 %iSign, i32 %div)
-  %0 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183
+  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij(double* %data, double* %"data'", i32 %iSign, i32 %div), !node !179
+  %0 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*, !node !179
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183, !node !179
   store { i8*, i8*, double*, double* } %tapeld, { i8*, i8*, double*, double* }* %tapeld_cache, align 32, !invariant.group !189
-  tail call void @free(i8* nonnull %_augmented)
+  tail call void @free(i8* nonnull %_augmented), !node !179
   %idx.ext = zext i32 %N to i64, !node !179
   %"add.ptr'ipg" = getelementptr inbounds double, double* %"data'", i64 %idx.ext, !node !179
   %add.ptr = getelementptr inbounds double, double* %data, i64 %idx.ext, !node !179
   %conv = sitofp i32 %iSign to double, !node !179
   %conv2 = uitofp i32 %N to double, !node !179
   %div3 = fdiv fast double 0x400921FB54442D18, %conv2, !node !179
-  %1 = tail call fast double @llvm.sin.f64(double %div3)
+  %1 = tail call fast double @llvm.sin.f64(double %div3), !node !179
   %mul = fmul fast double %1, %conv, !node !179
   %sub = sub nsw i32 0, %iSign, !node !179
   %conv4 = sitofp i32 %sub to double, !node !179
   %div6 = fdiv fast double 0x401921FB54442D18, %conv2, !node !179
-  %2 = tail call fast double @llvm.sin.f64(double %div6)
+  %2 = tail call fast double @llvm.sin.f64(double %div6), !node !179
   %mul7 = fmul fast double %2, %conv4, !node !179
   %3 = fmul fast double %mul, %mul, !node !179
   %mul9 = fmul fast double %3, -2.000000e+00, !node !179
@@ -10609,12 +10609,12 @@ for.body.preheader:                               ; preds = %if.end
   %6 = lshr i64 %5, 1, !node !179
   %7 = add nuw i64 %6, 1, !node !179
   %mallocsize = mul nuw nsw i64 %7, 8, !node !179
-  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %wr.0111_malloccache = bitcast i8* %malloccall to double*
+  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !179
+  %wr.0111_malloccache = bitcast i8* %malloccall to double*, !node !179
   store double* %wr.0111_malloccache, double** %wr.0111_cache, align 8, !invariant.group !190
   %mallocsize12 = mul nuw nsw i64 %7, 8, !node !179
-  %malloccall13 = tail call noalias nonnull i8* @malloc(i64 %mallocsize12)
-  %wi.0110_malloccache = bitcast i8* %malloccall13 to double*
+  %malloccall13 = tail call noalias nonnull i8* @malloc(i64 %mallocsize12), !node !179
+  %wi.0110_malloccache = bitcast i8* %malloccall13 to double*, !node !179
   store double* %wi.0110_malloccache, double** %wi.0110_cache, align 8, !invariant.group !191
   br label %for.body
 
@@ -10622,11 +10622,11 @@ for.body:                                         ; preds = %for.body, %for.body
   %iv = phi i64 [ %iv.next, %for.body ], [ 0, %for.body.preheader ]
   %wr.0111 = phi double [ %add47, %for.body ], [ 1.000000e+00, %for.body.preheader ], !node !179
   %wi.0110 = phi double [ %add51, %for.body ], [ 0.000000e+00, %for.body.preheader ], !node !179
-  %8 = load double*, double** %wr.0111_cache, align 8, !dereferenceable !181, !invariant.group !190
-  %9 = getelementptr inbounds double, double* %8, i64 %iv
+  %8 = load double*, double** %wr.0111_cache, align 8, !dereferenceable !181, !invariant.group !190, !node !179
+  %9 = getelementptr inbounds double, double* %8, i64 %iv, !node !179
   store double %wr.0111, double* %9, align 8, !invariant.group !192
-  %10 = load double*, double** %wi.0110_cache, align 8, !dereferenceable !181, !invariant.group !191
-  %11 = getelementptr inbounds double, double* %10, i64 %iv
+  %10 = load double*, double** %wi.0110_cache, align 8, !dereferenceable !181, !invariant.group !191, !node !179
+  %11 = getelementptr inbounds double, double* %10, i64 %iv, !node !179
   store double %wi.0110, double* %11, align 8, !invariant.group !193
   %iv.next = add nuw nsw i64 %iv, 1
   %12 = shl nuw i64 %iv, 1
@@ -10875,7 +10875,7 @@ staging:                                          ; preds = %invertreturn
 define internal fastcc void @diffe_ZL14recursiveApplyPdij.1(double* %data, double* %"data'", i32 %iSign, i32 %N) unnamed_addr #16 {
 entry:
   %"iv'ac" = alloca i64, align 8
-  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32
+  %tapeld_cache = alloca { i8*, i8*, double*, double* }, align 32, !node !179
   %"add43'de" = alloca double, align 8
   store double 0.000000e+00, double* %"add43'de", align 8
   %"'de" = alloca double, align 8
@@ -10900,10 +10900,10 @@ entry:
   store double 0.000000e+00, double* %"mul23'de", align 8
   %"mul19'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul19'de", align 8
-  %wr.0111_cache = alloca double*, align 8
+  %wr.0111_cache = alloca double*, align 8, !node !179
   %"'de11" = alloca double, align 8
   store double 0.000000e+00, double* %"'de11", align 8
-  %wi.0110_cache = alloca double*, align 8
+  %wi.0110_cache = alloca double*, align 8, !node !179
   %"'de16" = alloca double, align 8
   store double 0.000000e+00, double* %"'de16", align 8
   %"mul11'de" = alloca double, align 8
@@ -10915,23 +10915,23 @@ entry:
 
 if.end:                                           ; preds = %entry
   %div = lshr i32 %N, 1, !node !179
-  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij(double* %data, double* %"data'", i32 %iSign, i32 %div)
-  %0 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183
+  %_augmented = call fastcc i8* @augmented__ZL14recursiveApplyPdij(double* %data, double* %"data'", i32 %iSign, i32 %div), !node !179
+  %0 = bitcast i8* %_augmented to { i8*, i8*, double*, double* }*, !node !179
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183, !node !179
   store { i8*, i8*, double*, double* } %tapeld, { i8*, i8*, double*, double* }* %tapeld_cache, align 32, !invariant.group !194
-  tail call void @free(i8* nonnull %_augmented)
+  tail call void @free(i8* nonnull %_augmented), !node !179
   %idx.ext = zext i32 %N to i64, !node !179
   %"add.ptr'ipg" = getelementptr inbounds double, double* %"data'", i64 %idx.ext, !node !179
   %add.ptr = getelementptr inbounds double, double* %data, i64 %idx.ext, !node !179
   %conv = sitofp i32 %iSign to double, !node !179
   %conv2 = uitofp i32 %N to double, !node !179
   %div3 = fdiv fast double 0x400921FB54442D18, %conv2, !node !179
-  %1 = tail call fast double @llvm.sin.f64(double %div3)
+  %1 = tail call fast double @llvm.sin.f64(double %div3), !node !179
   %mul = fmul fast double %1, %conv, !node !179
   %sub = sub nsw i32 0, %iSign, !node !179
   %conv4 = sitofp i32 %sub to double, !node !179
   %div6 = fdiv fast double 0x401921FB54442D18, %conv2, !node !179
-  %2 = tail call fast double @llvm.sin.f64(double %div6)
+  %2 = tail call fast double @llvm.sin.f64(double %div6), !node !179
   %mul7 = fmul fast double %2, %conv4, !node !179
   %3 = fmul fast double %mul, %mul, !node !179
   %mul9 = fmul fast double %3, -2.000000e+00, !node !179
@@ -10944,12 +10944,12 @@ for.body.preheader:                               ; preds = %if.end
   %6 = lshr i64 %5, 1, !node !179
   %7 = add nuw i64 %6, 1, !node !179
   %mallocsize = mul nuw nsw i64 %7, 8, !node !179
-  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %wr.0111_malloccache = bitcast i8* %malloccall to double*
+  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !179
+  %wr.0111_malloccache = bitcast i8* %malloccall to double*, !node !179
   store double* %wr.0111_malloccache, double** %wr.0111_cache, align 8, !invariant.group !195
   %mallocsize12 = mul nuw nsw i64 %7, 8, !node !179
-  %malloccall13 = tail call noalias nonnull i8* @malloc(i64 %mallocsize12)
-  %wi.0110_malloccache = bitcast i8* %malloccall13 to double*
+  %malloccall13 = tail call noalias nonnull i8* @malloc(i64 %mallocsize12), !node !179
+  %wi.0110_malloccache = bitcast i8* %malloccall13 to double*, !node !179
   store double* %wi.0110_malloccache, double** %wi.0110_cache, align 8, !invariant.group !196
   br label %for.body
 
@@ -10957,11 +10957,11 @@ for.body:                                         ; preds = %for.body, %for.body
   %iv = phi i64 [ %iv.next, %for.body ], [ 0, %for.body.preheader ]
   %wr.0111 = phi double [ %add47, %for.body ], [ 1.000000e+00, %for.body.preheader ], !node !179
   %wi.0110 = phi double [ %add51, %for.body ], [ 0.000000e+00, %for.body.preheader ], !node !179
-  %8 = load double*, double** %wr.0111_cache, align 8, !dereferenceable !181, !invariant.group !195
-  %9 = getelementptr inbounds double, double* %8, i64 %iv
+  %8 = load double*, double** %wr.0111_cache, align 8, !dereferenceable !181, !invariant.group !195, !node !179
+  %9 = getelementptr inbounds double, double* %8, i64 %iv, !node !179
   store double %wr.0111, double* %9, align 8, !invariant.group !197
-  %10 = load double*, double** %wi.0110_cache, align 8, !dereferenceable !181, !invariant.group !196
-  %11 = getelementptr inbounds double, double* %10, i64 %iv
+  %10 = load double*, double** %wi.0110_cache, align 8, !dereferenceable !181, !invariant.group !196, !node !179
+  %11 = getelementptr inbounds double, double* %10, i64 %iv, !node !179
   store double %wi.0110, double* %11, align 8, !invariant.group !198
   %iv.next = add nuw nsw i64 %iv, 1
   %12 = shl nuw i64 %iv, 1

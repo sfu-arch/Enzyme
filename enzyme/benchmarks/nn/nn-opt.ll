@@ -10030,7 +10030,7 @@ for.body.i3:                                      ; preds = %middle.block76, %fo
   %iv.i = phi i64 [ %iv.next.i, %middle.block76 ], [ 0, %for.body ]
   %arrayidx.i1 = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %network, i64 0, i32 0, i64 %iv.i, !node !232
   %20 = load float, float* %arrayidx.i1, align 4, !tbaa !155, !node !232
-  %arrayidx2.i2 = getelementptr inbounds [10 x float], [10 x float]* %activations.i, i64 0, i64 %iv.i
+  %arrayidx2.i2 = getelementptr inbounds [10 x float], [10 x float]* %activations.i, i64 0, i64 %iv.i, !node !232
   store float %20, float* %arrayidx2.i2, align 4, !tbaa !155
   %21 = insertelement <4 x float> <float poison, float 0.000000e+00, float 0.000000e+00, float 0.000000e+00>, float %20, i32 0
   br label %vector.body78

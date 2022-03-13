@@ -1,3 +1,6 @@
 [submodule "enzyme/xcache_sweep_sim"]
 	path = enzyme/xcache_sweep_sim
 	url = git@github.com:sfu-arch/xcache_sweep_sim.git
+[submodule "enzyme/reverse_ad_plot"]
+	path = enzyme/reverse_ad_plot
+	url = git@github.com:sfu-arch/reverse_ad_plots.git

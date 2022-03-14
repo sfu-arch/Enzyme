@@ -1,0 +1,2 @@
+reg_count, fifo_size
+50, 341

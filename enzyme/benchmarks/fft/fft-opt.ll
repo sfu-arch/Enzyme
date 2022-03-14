@@ -11431,10 +11431,10 @@ entry:
   store double 0.000000e+00, double* %"mul11'de", align 8
   %"mul15'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul15'de", align 8
-  %0 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 3
+  %0 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 2
   %mdyncache_fromtape_cache = alloca double*, align 8
   store double* %0, double** %mdyncache_fromtape_cache, align 8
-  %1 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 2
+  %1 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 3
   %mdyncache_fromtape_cache32 = alloca double*, align 8
   store double* %1, double** %mdyncache_fromtape_cache32, align 8
   %cmp = icmp eq i32 %N, 1
@@ -11471,10 +11471,10 @@ for.body:                                         ; preds = %for.body, %for.body
   %iv = phi i64 [ %iv.next, %for.body ], [ 0, %for.body.preheader ]
   %8 = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !205
   %9 = getelementptr inbounds double, double* %8, i64 %iv
-  %wr.0111 = load double, double* %9, align 8, !invariant.group !206
+  %wi.0110 = load double, double* %9, align 8, !invariant.group !206
   %10 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !181, !invariant.group !207
   %11 = getelementptr inbounds double, double* %10, i64 %iv
-  %wi.0110 = load double, double* %11, align 8, !invariant.group !208
+  %wr.0111 = load double, double* %11, align 8, !invariant.group !208
   %iv.next = add nuw nsw i64 %iv, 1
   %12 = shl nuw i64 %iv, 1
   %13 = trunc i64 %12 to i32
@@ -11521,8 +11521,8 @@ invertfor.body.preheader:                         ; preds = %invertfor.body
   %19 = bitcast double* %forfree31 to i8*
   tail call void @free(i8* nonnull %19)
   %20 = load i64, i64* %"iv'ac", align 8
-  %forfree33 = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !205
-  %21 = bitcast double* %forfree33 to i8*
+  %forfree = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !205
+  %21 = bitcast double* %forfree to i8*
   tail call void @free(i8* nonnull %21)
   br label %invertif.end
 
@@ -11851,10 +11851,10 @@ entry:
   store double 0.000000e+00, double* %"mul11'de", align 8
   %"mul15'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul15'de", align 8
-  %0 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 3
+  %0 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 2
   %mdyncache_fromtape_cache = alloca double*, align 8
   store double* %0, double** %mdyncache_fromtape_cache, align 8
-  %1 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 2
+  %1 = extractvalue { i8*, i8*, double*, double* } %tapeArg, 3
   %mdyncache_fromtape_cache32 = alloca double*, align 8
   store double* %1, double** %mdyncache_fromtape_cache32, align 8
   %cmp = icmp eq i32 %N, 1
@@ -11891,10 +11891,10 @@ for.body:                                         ; preds = %for.body, %for.body
   %iv = phi i64 [ %iv.next, %for.body ], [ 0, %for.body.preheader ]
   %8 = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !217
   %9 = getelementptr inbounds double, double* %8, i64 %iv
-  %wr.0111 = load double, double* %9, align 8, !invariant.group !218
+  %wi.0110 = load double, double* %9, align 8, !invariant.group !218
   %10 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !181, !invariant.group !219
   %11 = getelementptr inbounds double, double* %10, i64 %iv
-  %wi.0110 = load double, double* %11, align 8, !invariant.group !220
+  %wr.0111 = load double, double* %11, align 8, !invariant.group !220
   %iv.next = add nuw nsw i64 %iv, 1
   %12 = shl nuw i64 %iv, 1
   %13 = trunc i64 %12 to i32
@@ -11941,8 +11941,8 @@ invertfor.body.preheader:                         ; preds = %invertfor.body
   %19 = bitcast double* %forfree31 to i8*
   tail call void @free(i8* nonnull %19)
   %20 = load i64, i64* %"iv'ac", align 8
-  %forfree33 = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !217
-  %21 = bitcast double* %forfree33 to i8*
+  %forfree = load double*, double** %mdyncache_fromtape_cache32, align 8, !dereferenceable !181, !invariant.group !217
+  %21 = bitcast double* %forfree to i8*
   tail call void @free(i8* nonnull %21)
   br label %invertif.end
 

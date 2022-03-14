@@ -27,6 +27,8 @@ class Node {
         Node(Value *v) : value(v), level(0), cost(0) {}
         void AddChild(Node *child);
         int GetInstructionCost(Value *inst);
+        int GetFifoSize(int max_level);
+        int GetChildrenCount() { return children.size(); }
 
         void PushToTape();
         void UndoPushToTape(int prev_cost);
@@ -37,7 +39,6 @@ class Node {
         void DumpReverse(std::ofstream &myfile);
 
         Value* GetValue() { return value; }
-
         bool visited = false;
         int level;
         int cost;
@@ -59,6 +60,10 @@ class Graph {
         std::map<Value*, int> GetLevels();
         
         int GetTotalCost();
+        int GetFifoSize();
+        int GetMaxLevel();
+        int GetParentChildCount();
+
         bool contains(Value *v) { return nodes.find(v) != nodes.end(); }
 
         void DumpForward(std::ofstream &myfile);
@@ -67,7 +72,6 @@ class Graph {
 
     private:
         std::map<Value*, Node*> nodes;
-    
 };
 
 struct BFSPass : public llvm::FunctionPass,

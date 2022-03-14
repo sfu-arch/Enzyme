@@ -95,6 +95,14 @@ bool BFSPass::runOnFunction(Function &f) {
     myfile << "}\n";
     myfile.close();
 
+    myfile.open ("stats.txt");
+    myfile << "Register Count: " << g().size() << "\n";
+    myfile << "Fifo size: " << g.GetFifoSize() << "\n";
+    myfile << "Forward multicasts: " << g.GetParentChildCount() << "\n";
+    myfile << "Reverse multicasts: " << 2 * g.GetParentChildCount() << "\n";
+    myfile << "Number of recomputations: " << g.GetTotalCost() << "\n";
+
+    myfile.close();
     return true;
 }
 
@@ -110,6 +118,25 @@ std::map<Value*, int> Graph::GetLevels() {
     for (auto it = nodes.begin(); it != nodes.end(); it++)
         levels[it->first] = it->second->level;
     return levels;
+}
+
+int Graph::GetMaxLevel() {
+    int max_level = 0;
+    for (auto i: nodes) {
+        if (i.second->level > max_level)
+            max_level = i.second->level;
+    }
+    return max_level;
+}
+
+int Graph::GetFifoSize() {
+    int max_level = GetMaxLevel();
+
+    int fifo_size = 0;
+    for (auto i: nodes) {
+        fifo_size += i.second->GetFifoSize(max_level);
+    }
+    return fifo_size;
 }
 
 void Graph::PrintLevels() {
@@ -222,6 +249,14 @@ void Node::DumpReverse(std::ofstream &myfile) {
     }
 }
 
+int Node::GetFifoSize(int max_level) {
+    int fifo_size = 0;
+    for (auto j: children) {
+        fifo_size +=  max_level + 2 * (max_level - j->level) - level;
+    }
+    return fifo_size;
+}
+
 void Graph::DumpForward(std::ofstream &myfile) {
     for (auto i: nodes)
         i.second->DumpForward(myfile);
@@ -230,6 +265,14 @@ void Graph::DumpForward(std::ofstream &myfile) {
 void Graph::DumpReverse(std::ofstream &myfile) {
     for (auto i: nodes)
         i.second->DumpReverse(myfile);
+}
+
+int Graph::GetParentChildCount() {
+    int count = 0;
+    for (auto i: nodes) {
+        count += i.second->GetChildrenCount();
+    }
+    return count;
 }
 
 char BFSPass::ID = 0;

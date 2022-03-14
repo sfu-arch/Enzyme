@@ -1,12 +1,12 @@
 Regular
 Step 0000	Average Loss: 4.36	Accuracy: 0.152
-0.070253
+0.047311
 Enzyme
 Step 0000	Average Loss: 6.05	Accuracy: 0.137
-0.043118
+0.043584
 Adept
 Step 0000	Average Loss: 4.41	Accuracy: 0.199
-0.184207
+0.179741
 Tapenade
 Step 0000	Average Loss: 4.41	Accuracy: 0.114
-0.043078
+0.042771

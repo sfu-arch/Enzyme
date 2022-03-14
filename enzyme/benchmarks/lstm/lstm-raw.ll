@@ -20019,7 +20019,7 @@ entry:
   %"arrayidx8'ipg" = getelementptr inbounds double, double* %"'ipc", i64 %idxprom7, !node !336
   %arrayidx8 = getelementptr inbounds double, double* %4, i64 %idxprom7, !node !336
   %cmp171 = icmp sgt i32 %hsize, 0
-  store i8 3, i8* %_cache67, align 1, !invariant.group !362
+  store i8 2, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body.preheader, label %for.end94
 
 for.body.preheader:                               ; preds = %entry
@@ -20031,7 +20031,7 @@ for.body.preheader:                               ; preds = %entry
   br label %for.body
 
 for.cond62.preheader:                             ; preds = %for.body
-  store i8 1, i8* %_cache67, align 1, !invariant.group !362
+  store i8 3, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body64.preheader, label %for.end94
 
 for.body64.preheader:                             ; preds = %for.cond62.preheader
@@ -20106,7 +20106,7 @@ for.body:                                         ; preds = %for.body, %for.body
   br i1 %exitcond183.not, label %for.cond62.preheader, label %for.body, !llvm.loop !73
 
 for.cond81.preheader:                             ; preds = %for.body64
-  store i8 2, i8* %_cache67, align 1, !invariant.group !362
+  store i8 0, i8* %_cache67, align 1, !invariant.group !362
   br i1 %cmp171, label %for.body83.preheader, label %for.end94
 
 for.body83.preheader:                             ; preds = %for.cond81.preheader
@@ -20143,7 +20143,7 @@ for.body83:                                       ; preds = %for.body83, %for.bo
   br i1 %exitcond.not, label %for.end94.loopexit, label %for.body83, !llvm.loop !75
 
 for.end94.loopexit:                               ; preds = %for.body83
-  store i8 0, i8* %_cache67, align 1, !invariant.group !362
+  store i8 1, i8* %_cache67, align 1, !invariant.group !362
   br label %for.end94
 
 for.end94:                                        ; preds = %for.end94.loopexit, %for.cond81.preheader, %for.cond62.preheader, %entry
@@ -20627,10 +20627,10 @@ mergeinvertfor.body83_for.end94.loopexit:         ; preds = %invertfor.end94.loo
 
 invertfor.end94:                                  ; preds = %for.end94
   %279 = load i8, i8* %_cache67, align 1, !invariant.group !362
-  switch i8 %279, label %invertentry [
-    i8 0, label %invertfor.end94.loopexit
-    i8 1, label %invertfor.cond62.preheader
-    i8 2, label %invertfor.cond81.preheader
+  switch i8 %279, label %invertfor.cond62.preheader [
+    i8 0, label %invertfor.cond81.preheader
+    i8 1, label %invertfor.end94.loopexit
+    i8 2, label %invertentry
   ]
 }
 

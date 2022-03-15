@@ -11920,19 +11920,19 @@ entry:
   %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  %_augmented7 = call { i8*, i8*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc")
+  %_augmented7 = call { i8*, i8*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc"), !node !273
   %call.i39 = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i39'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i39'mi", i8 0, i64 16, i1 false)
   %"'ipc6" = bitcast i8* %"call.i39'mi" to %struct.Matrix*
   %1 = bitcast i8* %call.i39 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
-  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc6")
+  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc6"), !node !273
   %cmp45 = icmp sgt i32 %corresp_count, 0
   br i1 %cmp45, label %for.cond2.preheader.lr.ph, label %invertentry
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
-  %wide.trip.count = zext i32 %corresp_count to i64
+  %wide.trip.count = zext i32 %corresp_count to i64, !node !273
   %wide.trip.count_unwrap = zext i32 %corresp_count to i64
   br label %invertfor.inc17
 
@@ -11958,11 +11958,11 @@ invertfor.body4:                                  ; preds = %invertfor.inc17, %i
   store double 0.000000e+00, double* %"arrayidx16'ipg_unwrap", align 8
   %"data5'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i39'mi", i64 8
   %"'ipc8_unwrap" = bitcast i8* %"data5'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !273
+  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !274
   %nrows8_unwrap = bitcast i8* %call.i39 to i32*
-  %_unwrap15 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !274
+  %_unwrap15 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !275
   %arrayidx7_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv'ac.0"
-  %_unwrap16 = load i32, i32* %arrayidx7_unwrap, align 4, !tbaa !59, !invariant.group !275
+  %_unwrap16 = load i32, i32* %arrayidx7_unwrap, align 4, !tbaa !59, !invariant.group !276
   %mul9_unwrap = mul nsw i32 %_unwrap15, %_unwrap16
   %_unwrap17 = sext i32 %mul9_unwrap to i64
   %_unwrap18 = add nsw i64 %"iv2'ac.0", %_unwrap17
@@ -12625,17 +12625,17 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %35 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %36 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %36, align 8, !invariant.group !276
+  store double* %"'ipl", double** %36, align 8, !invariant.group !277
   %37 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %35, i32* %37, align 4, !invariant.group !277
+  store i32 %35, i32* %37, align 4, !invariant.group !278
   %38 = getelementptr inbounds double*, double** %"'ipl11_malloccache", i64 %iv
-  store double* %"'ipl11", double** %38, align 8, !invariant.group !278
+  store double* %"'ipl11", double** %38, align 8, !invariant.group !279
   %39 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %39, align 8, !invariant.group !279
+  store double* %"'ipl8", double** %39, align 8, !invariant.group !280
   %40 = load double*, double** %data14, align 8, !tbaa !137
   %41 = load i32, i32* %ncols21, align 4, !tbaa !139
   %42 = getelementptr inbounds i32, i32* %_malloccache19, i64 %iv
-  store i32 %41, i32* %42, align 4, !invariant.group !280
+  store i32 %41, i32* %42, align 4, !invariant.group !281
   %cmp2281 = icmp sgt i32 %41, 1
   %43 = sext i32 %35 to i64
   %wide.trip.count = zext i32 %41 to i64
@@ -12656,9 +12656,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %49 = mul nuw nsw i64 %iv, %wide.trip.count96
   %50 = add nuw nsw i64 %iv4, %49
   %51 = getelementptr inbounds double, double* %_malloccache27, i64 %50
-  store double %46, double* %51, align 8, !invariant.group !281
+  store double %46, double* %51, align 8, !invariant.group !282
   %52 = getelementptr inbounds double, double* %_malloccache23, i64 %50
-  store double %44, double* %52, align 8, !invariant.group !282
+  store double %44, double* %52, align 8, !invariant.group !283
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -12688,12 +12688,12 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %63, %61
   %add43 = fadd fast double %58, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %64 = load double*, double** %56, align 8, !dereferenceable !283, !invariant.group !284
+  %64 = load double*, double** %56, align 8, !dereferenceable !284, !invariant.group !285
   %65 = getelementptr inbounds double, double* %64, i64 %iv6
-  store double %63, double* %65, align 8, !invariant.group !285
-  %66 = load double*, double** %53, align 8, !dereferenceable !283, !invariant.group !286
+  store double %63, double* %65, align 8, !invariant.group !286
+  %66 = load double*, double** %53, align 8, !dereferenceable !284, !invariant.group !287
   %67 = getelementptr inbounds double, double* %66, i64 %iv6
-  store double %61, double* %67, align 8, !invariant.group !287
+  store double %61, double* %67, align 8, !invariant.group !288
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -12764,7 +12764,7 @@ for.body:                                         ; preds = %for.inc, %for.body.
   %arrayidx = getelementptr inbounds i32, i32* %parents, i64 %iv
   %14 = load i32, i32* %arrayidx, align 4, !tbaa !59
   %15 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %14, i32* %15, align 4, !invariant.group !288
+  store i32 %14, i32* %15, align 4, !invariant.group !289
   %cmp1 = icmp eq i32 %14, -1
   br i1 %cmp1, label %if.then, label %if.else
 
@@ -12775,7 +12775,7 @@ if.then:                                          ; preds = %for.body
   %cmp.not.i = icmp eq double* %16, null
   %17 = getelementptr inbounds i8, i8* %malloccall12, i64 %iv
   %18 = bitcast i8* %17 to i1*
-  store i1 %cmp.not.i, i1* %18, align 1, !invariant.group !289
+  store i1 %cmp.not.i, i1* %18, align 1, !invariant.group !290
   %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv, i32 1
   %19 = load i32, i32* %ncols.i, align 4, !tbaa !139
   %"ncols2.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %iv, i32 1
@@ -12798,11 +12798,11 @@ if.then:                                          ; preds = %for.body
   %21 = bitcast double** %data.i to i8**
   store i8* %"call.i'mi", i8** %"'ipc", align 8
   %22 = getelementptr inbounds i32, i32* %mul.i_malloccache, i64 %iv
-  store i32 %mul.i, i32* %22, align 4, !invariant.group !290
+  store i32 %mul.i, i32* %22, align 4, !invariant.group !291
   %23 = getelementptr inbounds i8*, i8** %call.i_malloccache, i64 %iv
-  store i8* %call.i, i8** %23, align 8, !invariant.group !291
+  store i8* %call.i, i8** %23, align 8, !invariant.group !292
   %24 = getelementptr inbounds i8*, i8** %"call.i'mi_malloccache", i64 %iv
-  store i8* %"call.i'mi", i8** %24, align 8, !invariant.group !292
+  store i8* %"call.i'mi", i8** %24, align 8, !invariant.group !293
   store i8* %call.i, i8** %21, align 8, !tbaa !137
   %cmp1131.i = icmp sgt i32 %mul.i, 0
   %25 = bitcast i8* %call.i to double*
@@ -12813,7 +12813,7 @@ for.body.lr.ph.i:                                 ; preds = %if.then
   %data12.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv, i32 2
   %"'ipl" = load double*, double** %"data12.i'ipg", align 8
   %26 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %26, align 8, !invariant.group !293
+  store double* %"'ipl", double** %26, align 8, !invariant.group !294
   %27 = load double*, double** %data12.i, align 8, !tbaa !137
   %wide.trip.count.i = zext i32 %mul.i to i64
   br label %for.body.i
@@ -12838,7 +12838,7 @@ if.else:                                          ; preds = %for.body
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %iv
   %_augmented = call { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } @augmented_mat_mult(%struct.Matrix* %arrayidx9, %struct.Matrix* %"arrayidx9'ipg", %struct.Matrix* %arrayidx11, %struct.Matrix* %"arrayidx11'ipg", %struct.Matrix* %arrayidx13, %struct.Matrix* %"arrayidx13'ipg")
   %29 = getelementptr inbounds { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_augmented_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %_augmented, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %29, align 8, !invariant.group !294
+  store { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %_augmented, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %29, align 8, !invariant.group !295
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body.i, %if.else, %if.then
@@ -13351,7 +13351,7 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %28 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %29 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %29, align 8, !invariant.group !295
+  store double* %"'ipl", double** %29, align 8, !invariant.group !296
   %30 = load double*, double** %data14, align 8, !tbaa !137
   %31 = load i32, i32* %ncols21, align 4, !tbaa !139
   %cmp2281 = icmp sgt i32 %31, 1
@@ -13374,9 +13374,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %38 = mul nuw nsw i64 %iv, %wide.trip.count96
   %39 = add nuw nsw i64 %iv4, %38
   %40 = getelementptr inbounds double, double* %_malloccache15, i64 %39
-  store double %35, double* %40, align 8, !invariant.group !296
+  store double %35, double* %40, align 8, !invariant.group !297
   %41 = getelementptr inbounds double, double* %_malloccache, i64 %39
-  store double %33, double* %41, align 8, !invariant.group !297
+  store double %33, double* %41, align 8, !invariant.group !298
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -13398,9 +13398,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %50 = mul nuw nsw i64 %iv, %20
   %51 = add nuw nsw i64 %49, %50
   %52 = getelementptr inbounds double, double* %_malloccache24, i64 %51
-  store double %47, double* %52, align 8, !invariant.group !298
+  store double %47, double* %52, align 8, !invariant.group !299
   %53 = getelementptr inbounds double, double* %_malloccache20, i64 %51
-  store double %45, double* %53, align 8, !invariant.group !299
+  store double %45, double* %53, align 8, !invariant.group !300
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -13549,9 +13549,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %35 = mul nuw nsw i64 %iv, %wide.trip.count96
   %36 = add nuw nsw i64 %iv4, %35
   %37 = getelementptr inbounds double, double* %_malloccache13, i64 %36
-  store double %32, double* %37, align 8, !invariant.group !300
+  store double %32, double* %37, align 8, !invariant.group !301
   %38 = getelementptr inbounds double, double* %_malloccache, i64 %36
-  store double %30, double* %38, align 8, !invariant.group !301
+  store double %30, double* %38, align 8, !invariant.group !302
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -13573,9 +13573,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %47 = mul nuw nsw i64 %iv, %18
   %48 = add nuw nsw i64 %46, %47
   %49 = getelementptr inbounds double, double* %_malloccache22, i64 %48
-  store double %44, double* %49, align 8, !invariant.group !302
+  store double %44, double* %49, align 8, !invariant.group !303
   %50 = getelementptr inbounds double, double* %_malloccache18, i64 %48
-  store double %42, double* %50, align 8, !invariant.group !303
+  store double %42, double* %50, align 8, !invariant.group !304
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14027,11 +14027,11 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %24 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %25 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %25, align 8, !invariant.group !304
+  store double* %"'ipl", double** %25, align 8, !invariant.group !305
   %26 = load double*, double** %data14, align 8, !tbaa !137
   %27 = load i32, i32* %ncols21, align 4, !tbaa !139
   %28 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %27, i32* %28, align 4, !invariant.group !305
+  store i32 %27, i32* %28, align 4, !invariant.group !306
   %cmp2281 = icmp sgt i32 %27, 1
   %29 = sext i32 %24 to i64
   %wide.trip.count = zext i32 %27 to i64
@@ -14052,7 +14052,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %35 = mul nuw nsw i64 %iv, %wide.trip.count96
   %36 = add nuw nsw i64 %iv4, %35
   %37 = getelementptr inbounds double, double* %_malloccache14, i64 %36
-  store double %30, double* %37, align 8, !invariant.group !306
+  store double %30, double* %37, align 8, !invariant.group !307
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14078,9 +14078,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %46, %44
   %add43 = fadd fast double %41, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %47 = load double*, double** %38, align 8, !dereferenceable !283, !invariant.group !307
+  %47 = load double*, double** %38, align 8, !dereferenceable !284, !invariant.group !308
   %48 = getelementptr inbounds double, double* %47, i64 %iv6
-  store double %44, double* %48, align 8, !invariant.group !308
+  store double %44, double* %48, align 8, !invariant.group !309
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14310,7 +14310,7 @@ set_identity.exit:                                ; preds = %for.inc12.i
   store double %_augmented.elt30, double* %.repack29, align 8
   %36 = load i32, i32* %10, align 4, !tbaa !139
   %37 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %36, i32* %37, align 4, !invariant.group !309
+  store i32 %36, i32* %37, align 4, !invariant.group !310
   %cmp30.i = icmp sgt i32 %36, 0
   br i1 %cmp30.i, label %for.cond1.preheader.lr.ph.i26, label %set_block.exit
 
@@ -14326,7 +14326,7 @@ for.cond1.preheader.lr.ph.i26:                    ; preds = %set_identity.exit
   %42 = bitcast double*** %41 to i8**
   store i8* %malloccall20, i8** %42, align 8
   %43 = getelementptr inbounds i32, i32* %_malloccache31, i64 %iv
-  store i32 %38, i32* %43, align 4, !invariant.group !310
+  store i32 %38, i32* %43, align 4, !invariant.group !311
   br label %for.cond1.preheader.i27
 
 for.cond1.preheader.i27:                          ; preds = %for.inc13.i, %for.cond1.preheader.lr.ph.i26
@@ -14336,9 +14336,9 @@ for.cond1.preheader.i27:                          ; preds = %for.inc13.i, %for.c
 
 for.body3.lr.ph.i29:                              ; preds = %for.cond1.preheader.i27
   %"'ipl16" = load double*, double** %"'ipc15", align 8
-  %44 = load double**, double*** %41, align 8, !dereferenceable !283, !invariant.group !311
+  %44 = load double**, double*** %41, align 8, !dereferenceable !284, !invariant.group !312
   %45 = getelementptr inbounds double*, double** %44, i64 %iv5
-  store double* %"'ipl16", double** %45, align 8, !invariant.group !312
+  store double* %"'ipl16", double** %45, align 8, !invariant.group !313
   %46 = load double*, double** %20, align 8, !tbaa !137
   %47 = shl nsw i64 %iv5, 2
   %48 = mul nsw i64 %iv5, %40
@@ -14366,7 +14366,7 @@ set_block.exit:                                   ; preds = %for.inc13.i, %set_i
   %arrayidx3 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv
   %_augmented23 = call { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.3(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %3, %struct.Matrix* nonnull %"'ipc22", %struct.Matrix* %arrayidx3, %struct.Matrix* %"arrayidx3'ipg")
   %52 = getelementptr inbounds { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_augmented23_malloccache, i64 %iv
-  store { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %_augmented23, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %52, align 8, !invariant.group !313
+  store { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %_augmented23, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %52, align 8, !invariant.group !314
   %exitcond.not = icmp eq i64 %iv.next, %wide.trip.count
   br i1 %exitcond.not, label %if.then.i35, label %for.cond1.preheader.lr.ph.i, !llvm.loop !200
 
@@ -14495,13 +14495,13 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %27 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %28 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %28, align 8, !invariant.group !314
+  store double* %"'ipl", double** %28, align 8, !invariant.group !315
   %29 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %29, align 8, !invariant.group !315
+  store double* %"'ipl8", double** %29, align 8, !invariant.group !316
   %30 = load double*, double** %data14, align 8, !tbaa !137
   %31 = load i32, i32* %ncols21, align 4, !tbaa !139
   %32 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %31, i32* %32, align 4, !invariant.group !316
+  store i32 %31, i32* %32, align 4, !invariant.group !317
   %cmp2281 = icmp sgt i32 %31, 1
   %33 = sext i32 %27 to i64
   %wide.trip.count = zext i32 %31 to i64
@@ -14522,7 +14522,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %39 = mul nuw nsw i64 %iv, %wide.trip.count96
   %40 = add nuw nsw i64 %iv4, %39
   %41 = getelementptr inbounds double, double* %_malloccache16, i64 %40
-  store double %36, double* %41, align 8, !invariant.group !317
+  store double %36, double* %41, align 8, !invariant.group !318
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14548,9 +14548,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %50, %48
   %add43 = fadd fast double %45, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %51 = load double*, double** %42, align 8, !dereferenceable !283, !invariant.group !318
+  %51 = load double*, double** %42, align 8, !dereferenceable !284, !invariant.group !319
   %52 = getelementptr inbounds double, double* %51, i64 %iv6
-  store double %50, double* %52, align 8, !invariant.group !319
+  store double %50, double* %52, align 8, !invariant.group !320
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14685,13 +14685,13 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %26 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %27 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %27, align 8, !invariant.group !320
+  store double* %"'ipl", double** %27, align 8, !invariant.group !321
   %28 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %28, align 8, !invariant.group !321
+  store double* %"'ipl8", double** %28, align 8, !invariant.group !322
   %29 = load double*, double** %data14, align 8, !tbaa !137
   %30 = load i32, i32* %ncols21, align 4, !tbaa !139
   %31 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %30, i32* %31, align 4, !invariant.group !322
+  store i32 %30, i32* %31, align 4, !invariant.group !323
   %cmp2281 = icmp sgt i32 %30, 1
   %32 = sext i32 %26 to i64
   %wide.trip.count = zext i32 %30 to i64
@@ -14712,7 +14712,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %38 = mul nuw nsw i64 %iv, %wide.trip.count96
   %39 = add nuw nsw i64 %iv4, %38
   %40 = getelementptr inbounds double, double* %_malloccache16, i64 %39
-  store double %35, double* %40, align 8, !invariant.group !323
+  store double %35, double* %40, align 8, !invariant.group !324
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14738,9 +14738,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %49, %47
   %add43 = fadd fast double %44, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %50 = load double*, double** %41, align 8, !dereferenceable !283, !invariant.group !324
+  %50 = load double*, double** %41, align 8, !dereferenceable !284, !invariant.group !325
   %51 = getelementptr inbounds double, double* %50, i64 %iv6
-  store double %49, double* %51, align 8, !invariant.group !325
+  store double %49, double* %51, align 8, !invariant.group !326
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -15048,7 +15048,7 @@ for.body.i:                                       ; preds = %for.body.i, %entry
   %arrayidx2.i = getelementptr inbounds double, double* %angle_axis, i64 %iv.next
   %5 = load double, double* %arrayidx2.i, align 8, !tbaa !75
   %6 = getelementptr inbounds double, double* %_malloccache, i64 %iv
-  store double %5, double* %6, align 8, !invariant.group !326
+  store double %5, double* %6, align 8, !invariant.group !327
   %mul5.i = fmul fast double %5, %5
   %add.i = fadd fast double %mul5.i, %res.017.i
   %exitcond.not.i = icmp eq i64 %iv, 1
@@ -15321,11 +15321,11 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %arrayidx = getelementptr inbounds double, double* %29, i64 %iv
   %"'ipl8" = load double*, double** %"data7'ipg", align 8
   %30 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %30, align 8, !invariant.group !327
+  store double* %"'ipl8", double** %30, align 8, !invariant.group !328
   %31 = load double*, double** %data7, align 8, !tbaa !137
   %32 = load i32, i32* %nrows8, align 8, !tbaa !138
   %33 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %32, i32* %33, align 4, !invariant.group !328
+  store i32 %32, i32* %33, align 4, !invariant.group !329
   %34 = load double*, double** %data14, align 8, !tbaa !137
   %35 = load i32, i32* %ncols21, align 4, !tbaa !139
   %cmp2281 = icmp sgt i32 %35, 1
@@ -15348,9 +15348,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %42 = mul nuw nsw i64 %iv, %wide.trip.count96
   %43 = add nuw nsw i64 %iv4, %42
   %44 = getelementptr inbounds double, double* %_malloccache19, i64 %43
-  store double %39, double* %44, align 8, !invariant.group !329
+  store double %39, double* %44, align 8, !invariant.group !330
   %45 = getelementptr inbounds double, double* %_malloccache15, i64 %43
-  store double %37, double* %45, align 8, !invariant.group !330
+  store double %37, double* %45, align 8, !invariant.group !331
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -15372,9 +15372,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %54 = mul nuw nsw i64 %iv, %23
   %55 = add nuw nsw i64 %53, %54
   %56 = getelementptr inbounds double, double* %_malloccache28, i64 %55
-  store double %51, double* %56, align 8, !invariant.group !331
+  store double %51, double* %56, align 8, !invariant.group !332
   %57 = getelementptr inbounds double, double* %_malloccache24, i64 %55
-  store double %49, double* %57, align 8, !invariant.group !332
+  store double %49, double* %57, align 8, !invariant.group !333
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -15490,9 +15490,9 @@ for.body3:                                        ; preds = %for.body3, %for.con
   %mul11 = fmul fast double %24, %22
   store double %mul11, double* %arrayidx10, align 8, !tbaa !75
   %25 = getelementptr inbounds double, double* %_malloccache23, i64 %23
-  store double %24, double* %25, align 8, !invariant.group !333
+  store double %24, double* %25, align 8, !invariant.group !334
   %26 = getelementptr inbounds double, double* %_malloccache, i64 %23
-  store double %22, double* %26, align 8, !invariant.group !334
+  store double %22, double* %26, align 8, !invariant.group !335
   %exitcond102.not = icmp eq i64 %iv.next3, 3
   br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
 
@@ -15688,7 +15688,7 @@ for.body:                                         ; preds = %for.body, %for.body
   %arrayidx6 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv
   %_augmented26 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %"arrayidx'ipg", %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6, %struct.Matrix* nonnull %"arrayidx6'ipg")
   %21 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented26_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !335
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !336
   %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
   br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
 
@@ -15851,17 +15851,17 @@ for.body11:                                       ; preds = %for.inc43, %for.bod
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv1
   %_augmented31 = call { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.5(%struct.Matrix* %arrayidx13, %struct.Matrix* nonnull %"arrayidx13'ipg", %struct.Matrix* %base_positions, %struct.Matrix* nonnull %35, %struct.Matrix* nonnull %"'ipc30")
   %51 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_augmented31_malloccache, i64 %iv1
-  store { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %51, align 64, !invariant.group !336
+  store { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %51, align 64, !invariant.group !337
   br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
 
 for.cond18.preheader.lr.ph:                       ; preds = %for.body11
   %"'ipl35" = load double*, double** %"'ipc34", align 8
   %52 = getelementptr inbounds double*, double** %"'ipl35_malloccache", i64 %iv1
-  store double* %"'ipl35", double** %52, align 8, !invariant.group !337
+  store double* %"'ipl35", double** %52, align 8, !invariant.group !338
   %53 = load double*, double** %40, align 8, !tbaa !137
   %54 = load i32, i32* %nrows1.i17, align 8, !tbaa !138
   %55 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv1
-  store i32 %54, i32* %55, align 4, !invariant.group !338
+  store i32 %54, i32* %55, align 4, !invariant.group !339
   %56 = load double*, double** %data23, align 8, !tbaa !137
   %57 = load i32, i32* %nrows24, align 8, !tbaa !138
   %58 = load double*, double** %data30, align 8, !tbaa !137
@@ -15895,7 +15895,7 @@ for.body20:                                       ; preds = %for.body20, %for.co
   %70 = mul nuw nsw i64 %iv1, %47
   %71 = add nuw nsw i64 %68, %70
   %72 = getelementptr inbounds double, double* %_malloccache49, i64 %71
-  store double %67, double* %72, align 8, !invariant.group !339
+  store double %67, double* %72, align 8, !invariant.group !340
   %exitcond86.not = icmp eq i64 %iv.next9, 3
   br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
 
@@ -15934,7 +15934,7 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   %mul56 = fneg fast double %77
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %78 = getelementptr inbounds double, double* %_malloccache53, i64 %iv11
-  store double %77, double* %78, align 8, !invariant.group !340
+  store double %77, double* %78, align 8, !invariant.group !341
   %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
   br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
 
@@ -15960,7 +15960,7 @@ for.body.i31:                                     ; preds = %for.body.i31, %for.
   %cmp1.not.i = icmp eq double* %82, null
   %83 = getelementptr inbounds i8, i8* %malloccall54, i64 %iv14
   %84 = bitcast i8* %83 to i1*
-  store i1 %cmp1.not.i, i1* %84, align 1, !invariant.group !341
+  store i1 %cmp1.not.i, i1* %84, align 1, !invariant.group !342
   %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
   br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
 
@@ -15979,7 +15979,7 @@ for.body.i41:                                     ; preds = %for.body.i41, %for.
   %cmp1.not.i40 = icmp eq double* %87, null
   %88 = getelementptr inbounds i8, i8* %malloccall55, i64 %iv17
   %89 = bitcast i8* %88 to i1*
-  store i1 %cmp1.not.i40, i1* %89, align 1, !invariant.group !342
+  store i1 %cmp1.not.i40, i1* %89, align 1, !invariant.group !343
   %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
   br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
 
@@ -15998,7 +15998,7 @@ for.body.i53:                                     ; preds = %for.body.i53, %for.
   %cmp1.not.i52 = icmp eq double* %92, null
   %93 = getelementptr inbounds i8, i8* %malloccall56, i64 %iv20
   %94 = bitcast i8* %93 to i1*
-  store i1 %cmp1.not.i52, i1* %94, align 1, !invariant.group !343
+  store i1 %cmp1.not.i52, i1* %94, align 1, !invariant.group !344
   %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
   br i1 %exitcond.not.i56, label %delete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
@@ -16054,14 +16054,14 @@ get_matrix_array.exit12:                          ; preds = %for.body.preheader.
   br i1 %cmp15.i, label %for.body.preheader, label %for.end
 
 for.body.preheader:                               ; preds = %get_matrix_array.exit12
-  %wide.trip.count101 = zext i32 %bone_count to i64
+  %wide.trip.count101 = zext i32 %bone_count to i64, !node !273
   br label %for.end
 
 for.end:                                          ; preds = %for.body.preheader, %get_matrix_array.exit12
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
-  %14 = load i32, i32* %ncols, align 4, !tbaa !139
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1, !node !273
+  %14 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
   %mul.i13 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 22
-  %mul3.i = mul i32 %14, 3
+  %mul3.i = mul i32 %14, 3, !node !273
   %cmp.not.i = icmp eq i32 %mul.i13, %mul3.i
   br i1 %cmp.not.i, label %resize.exit, label %if.end.i
 
@@ -16077,7 +16077,7 @@ for.body.lr.ph.i:                                 ; preds = %resize.exit, %if.en
   br label %fill.exit
 
 fill.exit:                                        ; preds = %if.end.i, %for.body.lr.ph.i, %resize.exit
-  %_cache.0 = phi i8 [ 0, %for.body.lr.ph.i ], [ 1, %resize.exit ], [ 2, %if.end.i ]
+  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 0, %if.end.i ]
   %call.i16 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 18
   %"call.i16'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 17
   %"'ipc41" = bitcast i8* %"call.i16'mi" to %struct.Matrix*
@@ -16088,8 +16088,8 @@ fill.exit:                                        ; preds = %if.end.i, %for.body
 
 for.body11.lr.ph:                                 ; preds = %fill.exit
   %cmp1674 = icmp sgt i32 %14, 0
-  %wide.trip.count97 = zext i32 %bone_count to i64
-  %wide.trip.count93 = zext i32 %14 to i64
+  %wide.trip.count97 = zext i32 %bone_count to i64, !node !273
+  %wide.trip.count93 = zext i32 %14 to i64, !node !273
   br label %for.end45
 
 for.end45:                                        ; preds = %for.body11.lr.ph, %fill.exit
@@ -16099,7 +16099,7 @@ for.end45:                                        ; preds = %for.body11.lr.ph, %
   br i1 %or.cond, label %for.body49.lr.ph, label %if.then61
 
 for.body49.lr.ph:                                 ; preds = %for.end45
-  %wide.trip.count = zext i32 %14 to i64
+  %wide.trip.count = zext i32 %14 to i64, !node !273
   br label %if.then61
 
 if.then61:                                        ; preds = %for.body49.lr.ph, %for.end45
@@ -16107,7 +16107,7 @@ if.then61:                                        ; preds = %for.body49.lr.ph, %
   br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_matrix.exit
 
 for.body.preheader.i28:                           ; preds = %if.then61
-  %wide.trip.count.i27 = zext i32 %bone_count to i64
+  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !273
   %wide.trip.count.i27_unwrap108 = zext i32 %bone_count to i64
   %_unwrap109 = add nsw i64 %wide.trip.count.i27_unwrap108, -1
   %16 = bitcast i1* %8 to i8*
@@ -16166,7 +16166,7 @@ invertfor.body:                                   ; preds = %invertfor.body, %me
   %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv'ac.0"
   %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0"
   %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0"
-  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !344
+  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !345
   call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap)
   %20 = icmp eq i64 %"iv'ac.0", 0
   br i1 %20, label %invertfor.body.preheader, label %invertfor.body
@@ -16190,7 +16190,7 @@ invertfill.exit:                                  ; preds = %invertfor.end45, %i
   tail call void @free(i8* %call4.i)
   tail call void @free(i8* nonnull %"call.i16'mi")
   tail call void @free(i8* %call.i16)
-  %cond = icmp eq i8 %_cache.0, 0
+  %cond = icmp eq i8 %_cache.0, 1
   %cond.not = xor i1 %cond, true
   %brmerge = or i1 %cond.not, %cmp.not.i
   br i1 %brmerge, label %invertfor.end, label %invertresize.exit.thread
@@ -16210,7 +16210,7 @@ invertfor.body11:                                 ; preds = %invertfor.cond18.pr
   %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv1'ac.0"
   %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0"
   %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0"
-  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 64, !invariant.group !345
+  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 64, !invariant.group !346
   call void @diffemat_mult.11(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %15, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap)
   %25 = icmp eq i64 %"iv1'ac.0", 0
   br i1 %25, label %invertfor.body11.lr.ph, label %invertfor.inc43
@@ -16222,7 +16222,7 @@ invertfor.cond18.preheader:                       ; preds = %invertfor.body20
 invertfor.body20:                                 ; preds = %invertfor.inc40, %incinvertfor.body20
   %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %38, %incinvertfor.body20 ]
   %"data30'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data30'ipg_unwrap", align 8, !invariant.group !346
+  %"'ipl_unwrap" = load double*, double** %"data30'ipg_unwrap", align 8, !invariant.group !347
   %_unwrap56 = mul nuw nsw i64 %"iv6'ac.1", 3
   %_unwrap57 = add nuw nsw i64 %"iv8'ac.1", %_unwrap56
   %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap57
@@ -16233,12 +16233,12 @@ invertfor.body20:                                 ; preds = %invertfor.inc40, %i
   %29 = mul nuw nsw i64 %"iv1'ac.0", %28
   %30 = add nuw nsw i64 %_unwrap57, %29
   %31 = getelementptr inbounds double, double* %4, i64 %30
-  %32 = load double, double* %31, align 8, !invariant.group !347
+  %32 = load double, double* %31, align 8, !invariant.group !348
   %m1diffe = fmul fast double %27, %32
   %_unwrap66 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap66, align 8, !invariant.group !348
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap66, align 8, !invariant.group !349
   %33 = getelementptr inbounds i32, i32* %3, i64 %"iv1'ac.0"
-  %34 = load i32, i32* %33, align 4, !invariant.group !349
+  %34 = load i32, i32* %33, align 4, !invariant.group !350
   %_unwrap72 = sext i32 %34 to i64
   %_unwrap73 = mul nsw i64 %"iv6'ac.1", %_unwrap72
   %_unwrap74 = add nsw i64 %_unwrap73, %"iv8'ac.1"
@@ -16283,7 +16283,7 @@ invertfor.body49:                                 ; preds = %invertfor.body49, %
   %"iv11'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body49_if.then61.loopexit ], [ %"iv11'ac.0", %invertfor.body49 ]
   %"iv11'ac.0" = add nsw i64 %"iv11'ac.0.in", -1
   %"data50'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl80_unwrap" = load double*, double** %"data50'ipg_unwrap", align 8, !invariant.group !350
+  %"'ipl80_unwrap" = load double*, double** %"data50'ipg_unwrap", align 8, !invariant.group !351
   %_unwrap82 = mul nuw nsw i64 %"iv11'ac.0", 3
   %"arrayidx55'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl80_unwrap", i64 %_unwrap82
   %40 = load double, double* %"arrayidx55'ipg_unwrap", align 8
@@ -16315,7 +16315,7 @@ entry:
   br i1 %cmp26, label %for.body.preheader, label %invertentry
 
 for.body.preheader:                               ; preds = %entry
-  %wide.trip.count = zext i32 %count to i64
+  %wide.trip.count = zext i32 %count to i64, !node !273
   %wide.trip.count_unwrap42 = zext i32 %count to i64
   br label %invertfor.inc
 
@@ -16345,10 +16345,10 @@ invertfor.body:                                   ; preds = %invertif.else, %inv
 
 invertif.end.i:                                   ; preds = %invertfor.body.i, %staging
   %_unwrap7 = getelementptr inbounds i8*, i8** %0, i64 %"iv'ac.0"
-  %"call.i'mi_unwrap" = load i8*, i8** %_unwrap7, align 8, !invariant.group !351
+  %"call.i'mi_unwrap" = load i8*, i8** %_unwrap7, align 8, !invariant.group !352
   tail call void @free(i8* nonnull %"call.i'mi_unwrap")
   %_unwrap11 = getelementptr inbounds i8*, i8** %1, i64 %"iv'ac.0"
-  %call.i_unwrap = load i8*, i8** %_unwrap11, align 8, !invariant.group !352
+  %call.i_unwrap = load i8*, i8** %_unwrap11, align 8, !invariant.group !353
   tail call void @free(i8* %call.i_unwrap)
   br label %invertfor.body
 
@@ -16362,7 +16362,7 @@ invertfor.body.i:                                 ; preds = %invertfor.body.i, %
   %16 = load double, double* %"arrayidx15.i'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx15.i'ipg_unwrap", align 8
   %_unwrap23 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap23, align 8, !invariant.group !353
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap23, align 8, !invariant.group !354
   %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv2'ac.0"
   %17 = load double, double* %"arrayidx.i'ipg_unwrap", align 8
   %18 = fadd fast double %17, %16
@@ -16379,7 +16379,7 @@ invertif.else:                                    ; preds = %invertfor.inc
   %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %"iv'ac.0"
   %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %"iv'ac.0"
   %_unwrap33 = getelementptr inbounds { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %3, i64 %"iv'ac.0"
-  %tapeArg29_unwrap = load { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_unwrap33, align 8, !invariant.group !354
+  %tapeArg29_unwrap = load { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_unwrap33, align 8, !invariant.group !355
   call void @diffemat_mult(%struct.Matrix* %arrayidx9_unwrap, %struct.Matrix* %"arrayidx9'ipg_unwrap", %struct.Matrix* %arrayidx11_unwrap, %struct.Matrix* %"arrayidx11'ipg_unwrap", %struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %tapeArg29_unwrap)
   br label %invertfor.body
 
@@ -16391,10 +16391,10 @@ invertfor.inc:                                    ; preds = %invertfor.body, %fo
   %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap42, %for.body.preheader ], [ %"iv'ac.0", %invertfor.body ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
   %20 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %21 = load i32, i32* %20, align 4, !invariant.group !355
+  %21 = load i32, i32* %20, align 4, !invariant.group !356
   %cmp1_unwrap = icmp eq i32 %21, -1
   %22 = getelementptr inbounds i32, i32* %6, i64 %"iv'ac.0"
-  %23 = load i32, i32* %22, align 4, !invariant.group !356
+  %23 = load i32, i32* %22, align 4, !invariant.group !357
   br i1 %cmp1_unwrap, label %staging, label %invertif.else
 
 staging:                                          ; preds = %invertfor.inc
@@ -16474,7 +16474,7 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %"add43'de.1" = phi double [ %.lcssa160, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !357
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !358
   %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap121
   %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
@@ -16484,15 +16484,15 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %24 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap119
   %25 = add nuw nsw i64 %"iv4'ac.1", %24
   %26 = getelementptr inbounds double, double* %6, i64 %25
-  %27 = load double, double* %26, align 8, !invariant.group !358
+  %27 = load double, double* %26, align 8, !invariant.group !359
   %m0diffe = fmul fast double %23, %27
   %28 = getelementptr inbounds double, double* %7, i64 %25
-  %29 = load double, double* %28, align 8, !invariant.group !359
+  %29 = load double, double* %28, align 8, !invariant.group !360
   %m1diffe = fmul fast double %23, %29
   %_unwrap34 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap" = load double*, double** %_unwrap34, align 8, !invariant.group !360
+  %"'il_phi2_unwrap" = load double*, double** %_unwrap34, align 8, !invariant.group !361
   %30 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %31 = load i32, i32* %30, align 4, !invariant.group !361
+  %31 = load i32, i32* %30, align 4, !invariant.group !362
   %_unwrap40 = sext i32 %31 to i64
   %_unwrap41 = mul nsw i64 %"iv4'ac.1", %_unwrap40
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap", i64 %_unwrap41
@@ -16500,7 +16500,7 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %33 = fadd fast double %32, %m0diffe
   store double %33, double* %"arrayidx12'ipg_unwrap", align 8
   %_unwrap43 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap43, align 8, !invariant.group !362
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap43, align 8, !invariant.group !363
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
   %34 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %35 = fadd fast double %34, %m1diffe
@@ -16514,10 +16514,10 @@ invertfor.body23.preheader:                       ; preds = %invertfor.body23
   %.lcssa160 = phi double [ %54, %invertfor.body23 ]
   %.lcssa = phi double [ %56, %invertfor.body23 ]
   %37 = bitcast double** %.lcssa161 to i8**
-  %forfree129158 = load i8*, i8** %37, align 8, !dereferenceable !283
+  %forfree129158 = load i8*, i8** %37, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree129158)
   %38 = bitcast double** %.lcssa162 to i8**
-  %forfree144159 = load i8*, i8** %38, align 8, !dereferenceable !283
+  %forfree144159 = load i8*, i8** %38, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree144159)
   br label %invertfor.body5
 
@@ -16526,26 +16526,26 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %56, %incinvertfor.body23 ]
   %"iv6'ac.0" = phi i64 [ %_unwrap115, %mergeinvertfor.body23_for.inc44.loopexit ], [ %57, %incinvertfor.body23 ]
   %_unwrap45 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap46" = load double*, double** %_unwrap45, align 8, !invariant.group !357
+  %"'il_phi3_unwrap46" = load double*, double** %_unwrap45, align 8, !invariant.group !358
   %_unwrap48 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap121
   %_unwrap49 = add nuw nsw i64 %_unwrap48, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap50" = getelementptr inbounds double, double* %"'il_phi3_unwrap46", i64 %_unwrap49
   %39 = load double, double* %"arrayidx19'ipg_unwrap50", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap50", align 8
   %40 = fadd fast double %"add43'de.2", %39
-  %41 = load double*, double** %60, align 8, !dereferenceable !283, !invariant.group !363
+  %41 = load double*, double** %60, align 8, !dereferenceable !284, !invariant.group !364
   %42 = getelementptr inbounds double, double* %41, i64 %"iv6'ac.0"
-  %43 = load double, double* %42, align 8, !invariant.group !364
+  %43 = load double, double* %42, align 8, !invariant.group !365
   %m0diffe76 = fmul fast double %40, %43
-  %44 = load double*, double** %61, align 8, !dereferenceable !283, !invariant.group !365
+  %44 = load double*, double** %61, align 8, !dereferenceable !284, !invariant.group !366
   %45 = getelementptr inbounds double, double* %44, i64 %"iv6'ac.0"
-  %46 = load double, double* %45, align 8, !invariant.group !366
+  %46 = load double, double* %45, align 8, !invariant.group !367
   %m1diffe90 = fmul fast double %40, %46
   %_unwrap94 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap95" = load double*, double** %_unwrap94, align 8, !invariant.group !360
+  %"'il_phi2_unwrap95" = load double*, double** %_unwrap94, align 8, !invariant.group !361
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %47 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %48 = load i32, i32* %47, align 4, !invariant.group !361
+  %48 = load i32, i32* %47, align 4, !invariant.group !362
   %_unwrap96 = sext i32 %48 to i64
   %_unwrap97 = mul nsw i64 %"iv4'ac.1", %_unwrap96
   %_unwrap98 = add nsw i64 %iv.next7_unwrap, %_unwrap97
@@ -16554,7 +16554,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %50 = fadd fast double %49, %m0diffe76
   store double %50, double* %"arrayidx35'ipg_unwrap", align 8
   %_unwrap100 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap101" = load double*, double** %_unwrap100, align 8, !invariant.group !362
+  %"'il_phi1_unwrap101" = load double*, double** %_unwrap100, align 8, !invariant.group !363
   %_unwrap102 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap121
   %_unwrap103 = add nuw nsw i64 %_unwrap102, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap101", i64 %_unwrap103
@@ -16585,7 +16585,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %i
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap119, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %62 = getelementptr inbounds i32, i32* %5, i64 %"iv'ac.0"
-  %63 = load i32, i32* %62, align 4, !invariant.group !367
+  %63 = load i32, i32* %62, align 4, !invariant.group !368
   %cmp2281_unwrap = icmp sgt i32 %63, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -16607,8 +16607,8 @@ entry:
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 8
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 9
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 10
-  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 13
-  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 14
+  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 14
+  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 13
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 6
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 5
   %"'ipc59" = bitcast i8* %"call.i'mi" to %struct.Matrix*
@@ -16623,7 +16623,7 @@ entry:
   br i1 %cmp40, label %for.body.lr.ph, label %invertentry
 
 for.body.lr.ph:                                   ; preds = %entry
-  %wide.trip.count = zext i32 %bone_count to i64
+  %wide.trip.count = zext i32 %bone_count to i64, !node !273
   %wide.trip.count_unwrap67 = zext i32 %bone_count to i64
   br label %invertset_block.exit
 
@@ -16758,7 +16758,7 @@ invertset_identity.exit:                          ; preds = %invertset_block.exi
 invertfor.cond1.preheader.lr.ph.i26:              ; preds = %invertfor.cond1.preheader.i27
   %_unwrap29 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0"
   %32 = bitcast double*** %_unwrap29 to i8**
-  %forfree30108 = load i8*, i8** %32, align 8, !dereferenceable !283
+  %forfree30108 = load i8*, i8** %32, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree30108)
   br label %invertset_identity.exit
 
@@ -16775,10 +16775,10 @@ invertfor.body3.i32:                              ; preds = %invertfor.body3.i32
   %34 = load double, double* %"arrayidx12.i'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx12.i'ipg_unwrap", align 8
   %_unwrap35 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0"
-  %_unwrap36 = load double**, double*** %_unwrap35, align 8, !invariant.group !368
+  %_unwrap36 = load double**, double*** %_unwrap35, align 8, !invariant.group !369
   %_unwrap37 = getelementptr inbounds double*, double** %_unwrap36, i64 %"iv5'ac.0"
-  %"'il_phi7_unwrap" = load double*, double** %_unwrap37, align 8, !invariant.group !369
-  %35 = load i32, i32* %39, align 4, !invariant.group !370
+  %"'il_phi7_unwrap" = load double*, double** %_unwrap37, align 8, !invariant.group !370
+  %35 = load i32, i32* %39, align 4, !invariant.group !371
   %_unwrap41 = sext i32 %35 to i64
   %_unwrap42 = mul nsw i64 %"iv5'ac.0", %_unwrap41
   %_unwrap43 = add nsw i64 %"iv8'ac.0", %_unwrap42
@@ -16796,8 +16796,8 @@ mergeinvertfor.body3.i32_for.inc13.i.loopexit:    ; preds = %invertfor.inc13.i
 invertfor.inc13.i:                                ; preds = %invertfor.cond1.preheader.i27, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit
   %"iv5'ac.0.in" = phi i64 [ %_unwrap57, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit ], [ %"iv5'ac.0", %invertfor.cond1.preheader.i27 ]
   %"iv5'ac.0" = add nsw i64 %"iv5'ac.0.in", -1
-  %39 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !370
+  %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
+  %40 = load i32, i32* %39, align 4, !invariant.group !371
   %cmp228.i_unwrap = icmp sgt i32 %40, 0
   br i1 %cmp228.i_unwrap, label %mergeinvertfor.body3.i32_for.inc13.i.loopexit, label %invertfor.cond1.preheader.i27
 
@@ -16812,10 +16812,10 @@ invertset_block.exit:                             ; preds = %invertfor.cond1.pre
   %arrayidx3_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %"iv'ac.0"
   %"arrayidx3'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"relatives'", i64 %"iv'ac.0"
   %_unwrap64 = getelementptr inbounds { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %2, i64 %"iv'ac.0"
-  %tapeArg60_unwrap = load { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap64, align 8, !invariant.group !371
+  %tapeArg60_unwrap = load { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap64, align 8, !invariant.group !372
   call void @diffemat_mult.9(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %5, %struct.Matrix* %"'ipc59", %struct.Matrix* %arrayidx3_unwrap, %struct.Matrix* %"arrayidx3'ipg_unwrap", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg60_unwrap)
-  %41 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %42 = load i32, i32* %41, align 4, !invariant.group !372
+  %41 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
+  %42 = load i32, i32* %41, align 4, !invariant.group !373
   %cmp30.i_unwrap = icmp sgt i32 %42, 0
   br i1 %cmp30.i_unwrap, label %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit, label %invertset_identity.exit
 }
@@ -16824,9 +16824,9 @@ invertset_block.exit:                             ; preds = %invertfor.cond1.pre
 define internal void @diffeeuler_angles_to_rotation_matrix(double* noalias nocapture readonly %xzy, double* nocapture %"xzy'", %struct.Matrix* noalias nocapture %R, %struct.Matrix* nocapture %"R'", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg) local_unnamed_addr #5 {
 for.cond1.preheader.lr.ph.i:
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 13
-  %"arrayidx1'ipg" = getelementptr inbounds double, double* %"xzy'", i64 2
+  %"arrayidx1'ipg" = getelementptr inbounds double, double* %"xzy'", i64 2, !node !273
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 14
-  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"xzy'", i64 1
+  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"xzy'", i64 1, !node !273
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 15
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 8
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 7
@@ -17073,20 +17073,20 @@ entry:
   %2 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 5
   %3 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 6
   %4 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 7
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0
-  %5 = load i32, i32* %nrows, align 8, !tbaa !138
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139
-  %mul3.i = mul nsw i32 %6, %5
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
+  %5 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+  %mul3.i = mul nsw i32 %6, %5, !node !273
   %cmp.not.i = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 3
   %cmp85 = icmp sgt i32 %5, 0
   br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %6, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %7 = zext i32 %5 to i64
-  %wide.trip.count96 = zext i32 %6 to i64
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
+  %7 = zext i32 %5 to i64, !node !273
+  %wide.trip.count96 = zext i32 %6 to i64, !node !273
   %wide.trip.count100_unwrap90 = zext i32 %5 to i64
   br label %invertfor.inc47
 
@@ -17128,7 +17128,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %44, %invertfor.body23 ]
   %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %46, %invertfor.body23 ]
   %_unwrap16 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap16, align 8, !invariant.group !373
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap16, align 8, !invariant.group !374
   %_unwrap18 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
   %_unwrap19 = add nuw nsw i64 %_unwrap18, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap19
@@ -17140,15 +17140,15 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
   %17 = add nuw nsw i64 %"iv4'ac.1", %16
   %18 = getelementptr inbounds double, double* %2, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !374
+  %19 = load double, double* %18, align 8, !invariant.group !375
   %m0diffe = fmul fast double %15, %19
   %20 = getelementptr inbounds double, double* %3, i64 %17
-  %21 = load double, double* %20, align 8, !invariant.group !375
+  %21 = load double, double* %20, align 8, !invariant.group !376
   %m1diffe = fmul fast double %15, %21
   %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !376
+  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !377
   %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap31 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !377
+  %_unwrap31 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !378
   %_unwrap32 = sext i32 %_unwrap31 to i64
   %_unwrap33 = mul nsw i64 %"iv4'ac.1", %_unwrap32
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap33
@@ -17156,7 +17156,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %23 = fadd fast double %22, %m0diffe
   store double %23, double* %"arrayidx12'ipg_unwrap", align 8
   %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !378
+  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !379
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0"
   %24 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %25 = fadd fast double %24, %m1diffe
@@ -17169,7 +17169,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %46, %incinvertfor.body23 ]
   %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %47, %incinvertfor.body23 ]
   %_unwrap35 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap36" = load double*, double** %_unwrap35, align 8, !invariant.group !373
+  %"'il_phi3_unwrap36" = load double*, double** %_unwrap35, align 8, !invariant.group !374
   %_unwrap38 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
   %_unwrap39 = add nuw nsw i64 %_unwrap38, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap40" = getelementptr inbounds double, double* %"'il_phi3_unwrap36", i64 %_unwrap39
@@ -17187,16 +17187,16 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %33 = mul nuw nsw i64 %"iv'ac.0", %30
   %34 = add nuw nsw i64 %32, %33
   %35 = getelementptr inbounds double, double* %4, i64 %34
-  %36 = load double, double* %35, align 8, !invariant.group !379
+  %36 = load double, double* %35, align 8, !invariant.group !380
   %m0diffe60 = fmul fast double %28, %36
   %37 = getelementptr inbounds double, double* %1, i64 %34
-  %38 = load double, double* %37, align 8, !invariant.group !380
+  %38 = load double, double* %37, align 8, !invariant.group !381
   %m1diffe66 = fmul fast double %28, %38
   %"data7'ipg_unwrap69" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap70" = load double*, double** %"data7'ipg_unwrap69", align 8, !invariant.group !376
+  %"'ipl_unwrap70" = load double*, double** %"data7'ipg_unwrap69", align 8, !invariant.group !377
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
   %nrows8_unwrap71 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap72 = load i32, i32* %nrows8_unwrap71, align 8, !tbaa !138, !invariant.group !377
+  %_unwrap72 = load i32, i32* %nrows8_unwrap71, align 8, !tbaa !138, !invariant.group !378
   %_unwrap73 = sext i32 %_unwrap72 to i64
   %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73
   %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74
@@ -17205,7 +17205,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %40 = fadd fast double %39, %m0diffe60
   store double %40, double* %"arrayidx35'ipg_unwrap", align 8
   %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !378
+  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !379
   %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90
   %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79
@@ -17232,7 +17232,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %m
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !381
+  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !382
   %cmp2281_unwrap = icmp sgt i32 %_unwrap87, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -17255,20 +17255,20 @@ entry:
   %1 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 4
   %2 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 5
   %3 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 6
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1
-  %5 = load i32, i32* %ncols, align 4, !tbaa !139
-  %mul3.i = mul nsw i32 %5, %4
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
+  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
+  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+  %mul3.i = mul nsw i32 %5, %4, !node !273
   %cmp.not.i = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 2
   %cmp85 = icmp sgt i32 %4, 0
   br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %5, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %6 = zext i32 %4 to i64
-  %wide.trip.count96 = zext i32 %5 to i64
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
+  %6 = zext i32 %4 to i64, !node !273
+  %wide.trip.count96 = zext i32 %5 to i64, !node !273
   %wide.trip.count100_unwrap87 = zext i32 %4 to i64
   br label %invertfor.inc47
 
@@ -17308,7 +17308,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %42, %invertfor.body23 ]
   %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %44, %invertfor.body23 ]
   %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !382
+  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !383
   %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87
   %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap18
@@ -17320,15 +17320,15 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %14 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
   %15 = add nuw nsw i64 %"iv4'ac.1", %14
   %16 = getelementptr inbounds double, double* %1, i64 %15
-  %17 = load double, double* %16, align 8, !invariant.group !383
+  %17 = load double, double* %16, align 8, !invariant.group !384
   %m0diffe = fmul fast double %13, %17
   %18 = getelementptr inbounds double, double* %2, i64 %15
-  %19 = load double, double* %18, align 8, !invariant.group !384
+  %19 = load double, double* %18, align 8, !invariant.group !385
   %m1diffe = fmul fast double %13, %19
   %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl13_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !385
+  %"'ipl13_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !386
   %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap29 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !386
+  %_unwrap29 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !387
   %_unwrap30 = sext i32 %_unwrap29 to i64
   %_unwrap31 = mul nsw i64 %"iv4'ac.1", %_unwrap30
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl13_unwrap", i64 %_unwrap31
@@ -17336,7 +17336,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %21 = fadd fast double %20, %m0diffe
   store double %21, double* %"arrayidx12'ipg_unwrap", align 8
   %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl15_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !387
+  %"'ipl15_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !388
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap", i64 %"iv'ac.0"
   %22 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %23 = fadd fast double %22, %m1diffe
@@ -17349,7 +17349,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %44, %incinvertfor.body23 ]
   %"iv6'ac.2" = phi i64 [ %_unwrap82, %mergeinvertfor.body23_for.inc44.loopexit ], [ %45, %incinvertfor.body23 ]
   %"data14'ipg_unwrap32" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap33" = load double*, double** %"data14'ipg_unwrap32", align 8, !invariant.group !382
+  %"'ipl_unwrap33" = load double*, double** %"data14'ipg_unwrap32", align 8, !invariant.group !383
   %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87
   %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'ipl_unwrap33", i64 %_unwrap36
@@ -17367,16 +17367,16 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %31 = mul nuw nsw i64 %"iv'ac.0", %28
   %32 = add nuw nsw i64 %30, %31
   %33 = getelementptr inbounds double, double* %3, i64 %32
-  %34 = load double, double* %33, align 8, !invariant.group !388
+  %34 = load double, double* %33, align 8, !invariant.group !389
   %m0diffe57 = fmul fast double %26, %34
   %35 = getelementptr inbounds double, double* %0, i64 %32
-  %36 = load double, double* %35, align 8, !invariant.group !389
+  %36 = load double, double* %35, align 8, !invariant.group !390
   %m1diffe63 = fmul fast double %26, %36
   %"data7'ipg_unwrap66" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl13_unwrap67" = load double*, double** %"data7'ipg_unwrap66", align 8, !invariant.group !385
+  %"'ipl13_unwrap67" = load double*, double** %"data7'ipg_unwrap66", align 8, !invariant.group !386
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
   %nrows8_unwrap68 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap69 = load i32, i32* %nrows8_unwrap68, align 8, !tbaa !138, !invariant.group !386
+  %_unwrap69 = load i32, i32* %nrows8_unwrap68, align 8, !tbaa !138, !invariant.group !387
   %_unwrap70 = sext i32 %_unwrap69 to i64
   %_unwrap71 = mul nsw i64 %"iv4'ac.1", %_unwrap70
   %_unwrap72 = add nsw i64 %iv.next7_unwrap, %_unwrap71
@@ -17385,7 +17385,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %38 = fadd fast double %37, %m0diffe57
   store double %38, double* %"arrayidx35'ipg_unwrap", align 8
   %"data'ipg_unwrap73" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl15_unwrap74" = load double*, double** %"data'ipg_unwrap73", align 8, !invariant.group !387
+  %"'ipl15_unwrap74" = load double*, double** %"data'ipg_unwrap73", align 8, !invariant.group !388
   %_unwrap75 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap87
   %_unwrap76 = add nuw nsw i64 %_unwrap75, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap74", i64 %_unwrap76
@@ -17412,7 +17412,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %m
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap85, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %ncols21_unwrap83 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap84 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139, !invariant.group !390
+  %_unwrap84 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139, !invariant.group !391
   %cmp2281_unwrap = icmp sgt i32 %_unwrap84, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -17436,9 +17436,9 @@ entry:
   %2 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 7
   %3 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 8
   %4 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 3
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1
-  %5 = load i32, i32* %ncols, align 4, !tbaa !139
-  %mul3.i = mul nsw i32 %5, %4
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
+  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+  %mul3.i = mul nsw i32 %5, %4, !node !273
   %cmp.not.i = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 4
   %cmp85 = icmp sgt i32 %4, 0
   br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
@@ -17446,7 +17446,7 @@ entry:
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %5, 0
   %6 = zext i32 %4 to i64
-  %wide.trip.count96 = zext i32 %5 to i64
+  %wide.trip.count96 = zext i32 %5 to i64, !node !273
   %wide.trip.count100_unwrap91 = zext i32 %4 to i64
   br label %invertfor.inc47
 
@@ -17486,7 +17486,7 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %"add43'de.1" = phi double [ %.lcssa115, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
   %_unwrap15 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap15, align 8, !invariant.group !391
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap15, align 8, !invariant.group !392
   %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91
   %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap18
@@ -17498,12 +17498,12 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %14 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
   %15 = add nuw nsw i64 %"iv4'ac.1", %14
   %16 = getelementptr inbounds double, double* %2, i64 %15
-  %17 = load double, double* %16, align 8, !invariant.group !392
+  %17 = load double, double* %16, align 8, !invariant.group !393
   %m0diffe = fmul fast double %13, %17
   %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !393
+  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !394
   %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap23 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !394
+  %_unwrap23 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !395
   %_unwrap24 = sext i32 %_unwrap23 to i64
   %_unwrap25 = mul nsw i64 %"iv4'ac.1", %_unwrap24
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap25
@@ -17522,7 +17522,7 @@ invertfor.body23.preheader:                       ; preds = %invertfor.body23
   %_unwrap101 = add nuw nsw i64 %"iv4'ac.1", %_unwrap100
   %_unwrap102 = getelementptr inbounds double*, double** %3, i64 %_unwrap101
   %21 = bitcast double** %_unwrap102 to i8**
-  %forfree103114 = load i8*, i8** %21, align 8, !dereferenceable !283
+  %forfree103114 = load i8*, i8** %21, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree103114)
   br label %invertfor.body5
 
@@ -17531,7 +17531,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %35, %incinvertfor.body23 ]
   %"iv6'ac.0" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %36, %incinvertfor.body23 ]
   %_unwrap28 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap29" = load double*, double** %_unwrap28, align 8, !invariant.group !391
+  %"'il_phi3_unwrap29" = load double*, double** %_unwrap28, align 8, !invariant.group !392
   %_unwrap31 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91
   %_unwrap32 = add nuw nsw i64 %_unwrap31, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap33" = getelementptr inbounds double, double* %"'il_phi3_unwrap29", i64 %_unwrap32
@@ -17543,15 +17543,15 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %24 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap58
   %25 = add nuw nsw i64 %"iv4'ac.1", %24
   %26 = getelementptr inbounds double*, double** %3, i64 %25
-  %27 = load double*, double** %26, align 8, !dereferenceable !283, !invariant.group !395
+  %27 = load double*, double** %26, align 8, !dereferenceable !284, !invariant.group !396
   %28 = getelementptr inbounds double, double* %27, i64 %"iv6'ac.0"
-  %29 = load double, double* %28, align 8, !invariant.group !396
+  %29 = load double, double* %28, align 8, !invariant.group !397
   %m0diffe62 = fmul fast double %23, %29
   %"data7'ipg_unwrap64" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap65" = load double*, double** %"data7'ipg_unwrap64", align 8, !invariant.group !393
+  %"'ipl_unwrap65" = load double*, double** %"data7'ipg_unwrap64", align 8, !invariant.group !394
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %nrows8_unwrap66 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap67 = load i32, i32* %nrows8_unwrap66, align 8, !tbaa !138, !invariant.group !394
+  %_unwrap67 = load i32, i32* %nrows8_unwrap66, align 8, !tbaa !138, !invariant.group !395
   %_unwrap68 = sext i32 %_unwrap67 to i64
   %_unwrap69 = mul nsw i64 %"iv4'ac.1", %_unwrap68
   %_unwrap70 = add nsw i64 %iv.next7_unwrap, %_unwrap69
@@ -17579,7 +17579,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %m
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap89, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %37 = getelementptr inbounds i32, i32* %1, i64 %"iv'ac.0"
-  %38 = load i32, i32* %37, align 4, !invariant.group !397
+  %38 = load i32, i32* %37, align 4, !invariant.group !398
   %cmp2281_unwrap = icmp sgt i32 %38, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -17655,7 +17655,7 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %"add43'de.1" = phi double [ %.lcssa116, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !398
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !399
   %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap89
   %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
@@ -17665,10 +17665,10 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap87
   %17 = add nuw nsw i64 %"iv4'ac.1", %16
   %18 = getelementptr inbounds double, double* %4, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !399
+  %19 = load double, double* %18, align 8, !invariant.group !400
   %m1diffe = fmul fast double %15, %19
   %_unwrap29 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !400
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !401
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
   %20 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %21 = fadd fast double %20, %m1diffe
@@ -17681,7 +17681,7 @@ invertfor.body23.preheader:                       ; preds = %invertfor.body23
   %.lcssa116 = phi double [ %32, %invertfor.body23 ]
   %.lcssa = phi double [ %34, %invertfor.body23 ]
   %23 = bitcast double** %.lcssa117 to i8**
-  %forfree97115 = load i8*, i8** %23, align 8, !dereferenceable !283
+  %forfree97115 = load i8*, i8** %23, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree97115)
   br label %invertfor.body5
 
@@ -17690,19 +17690,19 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %34, %incinvertfor.body23 ]
   %"iv6'ac.0" = phi i64 [ %_unwrap83, %mergeinvertfor.body23_for.inc44.loopexit ], [ %35, %incinvertfor.body23 ]
   %_unwrap32 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !398
+  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !399
   %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap89
   %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'il_phi3_unwrap33", i64 %_unwrap36
   %24 = load double, double* %"arrayidx19'ipg_unwrap37", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap37", align 8
   %25 = fadd fast double %"add43'de.2", %24
-  %26 = load double*, double** %38, align 8, !dereferenceable !283, !invariant.group !401
+  %26 = load double*, double** %38, align 8, !dereferenceable !284, !invariant.group !402
   %27 = getelementptr inbounds double, double* %26, i64 %"iv6'ac.0"
-  %28 = load double, double* %27, align 8, !invariant.group !402
+  %28 = load double, double* %27, align 8, !invariant.group !403
   %m1diffe63 = fmul fast double %25, %28
   %_unwrap67 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap68" = load double*, double** %_unwrap67, align 8, !invariant.group !400
+  %"'il_phi1_unwrap68" = load double*, double** %_unwrap67, align 8, !invariant.group !401
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %_unwrap69 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap89
   %_unwrap70 = add nuw nsw i64 %_unwrap69, %"iv'ac.0"
@@ -17733,7 +17733,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %i
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap87, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !403
+  %40 = load i32, i32* %39, align 4, !invariant.group !404
   %cmp2281_unwrap = icmp sgt i32 %40, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -17758,9 +17758,9 @@ entry:
   %3 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 7
   %4 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 8
   %5 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 4
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139
-  %mul3.i = mul nsw i32 %6, %5
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+  %mul3.i = mul nsw i32 %6, %5, !node !273
   %cmp.not.i = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 5
   %cmp85 = icmp sgt i32 %5, 0
   br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
@@ -17768,7 +17768,7 @@ entry:
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %6, 0
   %7 = zext i32 %5 to i64
-  %wide.trip.count96 = zext i32 %6 to i64
+  %wide.trip.count96 = zext i32 %6 to i64, !node !273
   %wide.trip.count100_unwrap92 = zext i32 %5 to i64
   br label %invertfor.inc47
 
@@ -17810,7 +17810,7 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %"add43'de.1" = phi double [ %.lcssa116, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !404
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !405
   %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92
   %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
@@ -17822,10 +17822,10 @@ invertfor.body5:                                  ; preds = %invertfor.inc44, %i
   %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
   %17 = add nuw nsw i64 %"iv4'ac.1", %16
   %18 = getelementptr inbounds double, double* %4, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !405
+  %19 = load double, double* %18, align 8, !invariant.group !406
   %m1diffe = fmul fast double %15, %19
   %_unwrap29 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !406
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !407
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
   %20 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %21 = fadd fast double %20, %m1diffe
@@ -17842,7 +17842,7 @@ invertfor.body23.preheader:                       ; preds = %invertfor.body23
   %_unwrap98 = add nuw nsw i64 %"iv4'ac.1", %_unwrap97
   %_unwrap99 = getelementptr inbounds double*, double** %2, i64 %_unwrap98
   %23 = bitcast double** %_unwrap99 to i8**
-  %forfree100115 = load i8*, i8** %23, align 8, !dereferenceable !283
+  %forfree100115 = load i8*, i8** %23, align 8, !dereferenceable !284
   tail call void @free(i8* nonnull %forfree100115)
   br label %invertfor.body5
 
@@ -17851,7 +17851,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %37, %incinvertfor.body23 ]
   %"iv6'ac.0" = phi i64 [ %_unwrap86, %mergeinvertfor.body23_for.inc44.loopexit ], [ %38, %incinvertfor.body23 ]
   %_unwrap32 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !404
+  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !405
   %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92
   %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'il_phi3_unwrap33", i64 %_unwrap36
@@ -17863,12 +17863,12 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %26 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap62
   %27 = add nuw nsw i64 %"iv4'ac.1", %26
   %28 = getelementptr inbounds double*, double** %2, i64 %27
-  %29 = load double*, double** %28, align 8, !dereferenceable !283, !invariant.group !407
+  %29 = load double*, double** %28, align 8, !dereferenceable !284, !invariant.group !408
   %30 = getelementptr inbounds double, double* %29, i64 %"iv6'ac.0"
-  %31 = load double, double* %30, align 8, !invariant.group !408
+  %31 = load double, double* %30, align 8, !invariant.group !409
   %m1diffe66 = fmul fast double %25, %31
   %_unwrap70 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap71" = load double*, double** %_unwrap70, align 8, !invariant.group !406
+  %"'il_phi1_unwrap71" = load double*, double** %_unwrap70, align 8, !invariant.group !407
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %_unwrap72 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap92
   %_unwrap73 = add nuw nsw i64 %_unwrap72, %"iv'ac.0"
@@ -17896,7 +17896,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %m
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap90, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !409
+  %40 = load i32, i32* %39, align 4, !invariant.group !410
   %cmp2281_unwrap = icmp sgt i32 %40, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -17922,9 +17922,9 @@ entry:
   %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %2 = bitcast i8* %call.i to %struct.Matrix*
   %"call4.i'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 3
-  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
+  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2, !node !273
   %"'il_phi1" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 0
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0, !node !273
   %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 10
   %"'ipc16" = bitcast i8* %"call4.i'mi" to double*
   %4 = sext i32 %3 to i64
@@ -17933,17 +17933,17 @@ entry:
   %"'ipc24" = bitcast i8* %"call.i81'mi" to %struct.Matrix*
   %5 = bitcast i8* %call.i81 to %struct.Matrix*
   %tapeArg25 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 6
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 1
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 1, !node !273
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
   %cmp1789 = icmp sgt i32 %6, 0
   br i1 %cmp1789, label %for.cond19.preheader.lr.ph, label %invertfor.end14
 
 for.cond19.preheader.lr.ph:                       ; preds = %entry
-  %nrows20 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0
-  %7 = load i32, i32* %nrows20, align 8, !tbaa !138, !invariant.group !410
+  %nrows20 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0, !node !273
+  %7 = load i32, i32* %nrows20, align 8, !tbaa !138, !invariant.group !411, !node !273
   %cmp2187 = icmp sgt i32 %7, 0
-  %wide.trip.count = zext i32 %7 to i64
-  %8 = zext i32 %6 to i64
+  %wide.trip.count = zext i32 %7 to i64, !node !273
+  %8 = zext i32 %6 to i64, !node !273
   %_unwrap53 = zext i32 %6 to i64
   br label %invertfor.inc45
 
@@ -17977,10 +17977,10 @@ invertfor.body3:                                  ; preds = %invertfor.inc12, %i
   %14 = load double, double* %"arrayidx10'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx10'ipg_unwrap", align 8
   %15 = getelementptr inbounds double, double* %1, i64 %_unwrap17
-  %16 = load double, double* %15, align 8, !invariant.group !411
+  %16 = load double, double* %15, align 8, !invariant.group !412
   %m0diffe = fmul fast double %14, %16
   %17 = getelementptr inbounds double, double* %0, i64 %_unwrap17
-  %18 = load double, double* %17, align 8, !invariant.group !412
+  %18 = load double, double* %17, align 8, !invariant.group !413
   %m1diffe = fmul fast double %14, %18
   store double %m0diffe, double* %"arrayidx10'ipg_unwrap", align 8
   %_unwrap23 = add nsw i64 %"iv'ac.0", %4
@@ -18013,16 +18013,16 @@ invertfor.body22:                                 ; preds = %invertfor.body22, %
   %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %invertfor.body22 ]
   %"iv9'ac.0" = add nsw i64 %"iv9'ac.0.in", -1
   %"data36'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data36'ipg_unwrap", align 8, !invariant.group !413
-  %_unwrap33 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !410
+  %"'ipl_unwrap" = load double*, double** %"data36'ipg_unwrap", align 8, !invariant.group !414
+  %_unwrap33 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !411
   %_unwrap34 = sext i32 %_unwrap33 to i64
   %_unwrap35 = mul nsw i64 %"iv4'ac.0", %_unwrap34
   %_unwrap36 = add nsw i64 %"iv9'ac.0", %_unwrap35
   %"arrayidx41'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap36
   %24 = load double, double* %"arrayidx41'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx41'ipg_unwrap", align 8
-  %"'ipl28_unwrap" = load double*, double** %"data'ipg", align 8, !invariant.group !414
-  %_unwrap39 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !415
+  %"'ipl28_unwrap" = load double*, double** %"data'ipg", align 8, !invariant.group !415
+  %_unwrap39 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !416
   %mul31_unwrap = shl nsw i32 %_unwrap39, 1
   %_unwrap40 = sext i32 %mul31_unwrap to i64
   %_unwrap41 = add nsw i64 %"iv9'ac.0", %_unwrap40
@@ -18032,9 +18032,9 @@ invertfor.body22:                                 ; preds = %invertfor.body22, %
   store double %26, double* %"arrayidx34'ipg_unwrap", align 8
   %"data23'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i81'mi", i64 8
   %"'ipc30_unwrap" = bitcast i8* %"data23'ipg_unwrap" to double**
-  %"'ipl31_unwrap" = load double*, double** %"'ipc30_unwrap", align 8, !invariant.group !416
+  %"'ipl31_unwrap" = load double*, double** %"'ipc30_unwrap", align 8, !invariant.group !417
   %nrows24_unwrap = bitcast i8* %call.i81 to i32*
-  %_unwrap43 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !417
+  %_unwrap43 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !418
   %_unwrap44 = sext i32 %_unwrap43 to i64
   %_unwrap45 = mul nsw i64 %"iv4'ac.0", %_unwrap44
   %_unwrap46 = add nsw i64 %"iv9'ac.0", %_unwrap45
@@ -18053,7 +18053,7 @@ invertfor.inc45:                                  ; preds = %invertfor.cond19.pr
   %"iv4'ac.0.in" = phi i64 [ %_unwrap53, %for.cond19.preheader.lr.ph ], [ %"iv4'ac.0", %invertfor.cond19.preheader ]
   %"iv4'ac.0" = add nsw i64 %"iv4'ac.0.in", -1
   %nrows20_unwrap51 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0
-  %_unwrap52 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !410
+  %_unwrap52 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !411
   %cmp2187_unwrap = icmp sgt i32 %_unwrap52, 0
   br i1 %cmp2187_unwrap, label %mergeinvertfor.body22_for.inc45.loopexit, label %invertfor.cond19.preheader
 }
@@ -18069,17 +18069,17 @@ entry:
   br i1 %cmp, label %if.then, label %invertcleanup
 
 if.then:                                          ; preds = %entry
-  %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1
-  %3 = load i32, i32* %ncols.i, align 4, !tbaa !139, !invariant.group !418
+  %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1, !node !273
+  %3 = load i32, i32* %ncols.i, align 4, !tbaa !139, !invariant.group !419, !node !273
   %cmp33.i = icmp sgt i32 %3, 0
   br i1 %cmp33.i, label %for.cond1.preheader.lr.ph.i, label %invertcleanup
 
 for.cond1.preheader.lr.ph.i:                      ; preds = %if.then
-  %nrows.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
-  %4 = load i32, i32* %nrows.i, align 8, !tbaa !138, !invariant.group !419
+  %nrows.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0, !node !273
+  %4 = load i32, i32* %nrows.i, align 8, !tbaa !138, !invariant.group !420, !node !273
   %cmp230.i = icmp sgt i32 %4, 0
-  %5 = zext i32 %4 to i64
-  %6 = zext i32 %3 to i64
+  %5 = zext i32 %4 to i64, !node !273
+  %6 = zext i32 %3 to i64, !node !273
   br label %invertcleanup
 
 invertentry:                                      ; preds = %invertfor.body.i
@@ -18098,7 +18098,7 @@ invertfor.body.i:                                 ; preds = %mergeinvertfor.body
   %"mul.i'de.0" = phi double [ 0.000000e+00, %mergeinvertfor.body.i_square_sum.exit ], [ %19, %incinvertfor.body.i ]
   %"iv'ac.0" = phi i64 [ 1, %mergeinvertfor.body.i_square_sum.exit ], [ %20, %incinvertfor.body.i ]
   %12 = getelementptr inbounds double, double* %0, i64 %"iv'ac.0"
-  %13 = load double, double* %12, align 8, !invariant.group !420
+  %13 = load double, double* %12, align 8, !invariant.group !421
   %m0diffe6 = fmul fast double %24, %13
   %14 = fadd fast double %m0diffe6, %m0diffe6
   %iv.next_unwrap = add nuw nsw i64 %"iv'ac.0", 1
@@ -18134,7 +18134,7 @@ invertfor.body3.i:                                ; preds = %invertfor.body3.i, 
   %"data6.i'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2
   %"'il_phi_unwrap" = load double*, double** %"data6.i'ipg_unwrap", align 8, !tbaa !137
   %cmp4.i_unwrap = icmp eq i64 %"iv1'ac.0.in", %"iv3'ac.0.in"
-  %_unwrap = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !419
+  %_unwrap = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !420
   %_unwrap11 = sext i32 %_unwrap to i64
   %_unwrap12 = mul nsw i64 %"iv1'ac.0", %_unwrap11
   %.sink178_unwrap.v = select i1 %cmp4.i_unwrap, i64 %"iv1'ac.0", i64 %"iv3'ac.0"
@@ -18152,7 +18152,7 @@ invertfor.inc12.i:                                ; preds = %invertfor.cond1.pre
   %"iv1'ac.0.in" = phi i64 [ %_unwrap50, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit ], [ %"iv1'ac.0", %invertfor.cond1.preheader.i ]
   %"iv1'ac.0" = add nsw i64 %"iv1'ac.0.in", -1
   %nrows.i_unwrap21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
-  %_unwrap22 = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !419
+  %_unwrap22 = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !420
   %cmp230.i_unwrap = icmp sgt i32 %_unwrap22, 0
   br i1 %cmp230.i_unwrap, label %mergeinvertfor.body3.i_for.inc12.i.loopexit, label %invertfor.cond1.preheader.i
 
@@ -18160,7 +18160,7 @@ invertif.end:                                     ; preds = %invertcleanup
   %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2
   %"'il_phi5_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !tbaa !137
   %nrows_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
-  %_unwrap23 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !421
+  %_unwrap23 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !422
   %mul28_unwrap = shl nsw i32 %_unwrap23, 1
   %add95_unwrap = add nsw i32 %mul28_unwrap, 2
   %idxprom96_unwrap = sext i32 %add95_unwrap to i64
@@ -18297,7 +18297,7 @@ mergeinvertfor.cond1.preheader.i_cleanup.loopexit: ; preds = %staging
 
 invertcleanup:                                    ; preds = %for.cond1.preheader.lr.ph.i, %if.then, %entry
   %ncols.i_unwrap52 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1
-  %_unwrap53 = load i32, i32* %ncols.i_unwrap52, align 4, !tbaa !139, !invariant.group !418
+  %_unwrap53 = load i32, i32* %ncols.i_unwrap52, align 4, !tbaa !139, !invariant.group !419
   br i1 %cmp, label %staging, label %invertif.end
 
 staging:                                          ; preds = %invertcleanup
@@ -18314,18 +18314,18 @@ entry:
   %3 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 7
   %4 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 8
   %5 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 9
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0
-  %6 = load i32, i32* %nrows, align 8, !tbaa !138
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
+  %6 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
   %7 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 3
-  %mul3.i = mul nsw i32 %7, %6
+  %mul3.i = mul nsw i32 %7, %6, !node !273
   %cmp.not.i = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 4
   %cmp85 = icmp sgt i32 %6, 0
   br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %7, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %8 = zext i32 %6 to i64
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
+  %8 = zext i32 %6 to i64, !node !273
   %wide.trip.count96 = zext i32 %7 to i64
   %wide.trip.count100_unwrap90 = zext i32 %6 to i64
   br label %invertfor.inc47
@@ -18370,7 +18370,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %50, %invertfor.body23 ]
   %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %52, %invertfor.body23 ]
   %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !422
+  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !423
   %_unwrap16 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
   %_unwrap17 = add nuw nsw i64 %_unwrap16, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap17
@@ -18380,15 +18380,15 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %18 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap88
   %19 = add nuw nsw i64 %"iv4'ac.1", %18
   %20 = getelementptr inbounds double, double* %3, i64 %19
-  %21 = load double, double* %20, align 8, !invariant.group !423
+  %21 = load double, double* %20, align 8, !invariant.group !424
   %m0diffe = fmul fast double %17, %21
   %22 = getelementptr inbounds double, double* %4, i64 %19
-  %23 = load double, double* %22, align 8, !invariant.group !424
+  %23 = load double, double* %22, align 8, !invariant.group !425
   %m1diffe = fmul fast double %17, %23
   %_unwrap29 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !425
+  %"'il_phi2_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !426
   %24 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0"
-  %25 = load i32, i32* %24, align 4, !invariant.group !426
+  %25 = load i32, i32* %24, align 4, !invariant.group !427
   %_unwrap35 = sext i32 %25 to i64
   %_unwrap36 = mul nsw i64 %"iv4'ac.1", %_unwrap35
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap", i64 %_unwrap36
@@ -18396,7 +18396,7 @@ invertfor.body5:                                  ; preds = %invertfor.body23, %
   %27 = fadd fast double %26, %m0diffe
   store double %27, double* %"arrayidx12'ipg_unwrap", align 8
   %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !427
+  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !428
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0"
   %28 = load double, double* %"arrayidx'ipg_unwrap", align 8
   %29 = fadd fast double %28, %m1diffe
@@ -18409,7 +18409,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %52, %incinvertfor.body23 ]
   %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %53, %incinvertfor.body23 ]
   %"data14'ipg_unwrap37" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap38" = load double*, double** %"data14'ipg_unwrap37", align 8, !invariant.group !422
+  %"'ipl_unwrap38" = load double*, double** %"data14'ipg_unwrap37", align 8, !invariant.group !423
   %_unwrap40 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
   %_unwrap41 = add nuw nsw i64 %_unwrap40, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap42" = getelementptr inbounds double, double* %"'ipl_unwrap38", i64 %_unwrap41
@@ -18425,16 +18425,16 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %37 = mul nuw nsw i64 %"iv'ac.0", %34
   %38 = add nuw nsw i64 %36, %37
   %39 = getelementptr inbounds double, double* %5, i64 %38
-  %40 = load double, double* %39, align 8, !invariant.group !428
+  %40 = load double, double* %39, align 8, !invariant.group !429
   %m0diffe61 = fmul fast double %32, %40
   %41 = getelementptr inbounds double, double* %1, i64 %38
-  %42 = load double, double* %41, align 8, !invariant.group !429
+  %42 = load double, double* %41, align 8, !invariant.group !430
   %m1diffe67 = fmul fast double %32, %42
   %_unwrap71 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap72" = load double*, double** %_unwrap71, align 8, !invariant.group !425
+  %"'il_phi2_unwrap72" = load double*, double** %_unwrap71, align 8, !invariant.group !426
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
   %43 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0"
-  %44 = load i32, i32* %43, align 4, !invariant.group !426
+  %44 = load i32, i32* %43, align 4, !invariant.group !427
   %_unwrap73 = sext i32 %44 to i64
   %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73
   %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74
@@ -18443,7 +18443,7 @@ invertfor.body23:                                 ; preds = %mergeinvertfor.body
   %46 = fadd fast double %45, %m0diffe61
   store double %46, double* %"arrayidx35'ipg_unwrap", align 8
   %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !427
+  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !428
   %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90
   %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79
@@ -18470,7 +18470,7 @@ invertfor.inc44:                                  ; preds = %invertfor.body5, %i
   %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
   %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !430
+  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !431
   %cmp2281_unwrap = icmp sgt i32 %_unwrap87, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
@@ -18758,7 +18758,7 @@ for.cond20.preheader:                             ; preds = %for.end45, %for.con
   %i_pose_params.093 = phi i32 [ %inc46, %for.end45 ], [ 5, %for.cond17.preheader ]
   %i_theta.092 = phi i32 [ %i_theta.2.lcssa, %for.end45 ], [ 6, %for.cond17.preheader ]
   %24 = getelementptr inbounds i32, i32* %i_pose_params.093_malloccache, i64 %iv2
-  store i32 %i_pose_params.093, i32* %24, align 4, !invariant.group !431
+  store i32 %i_pose_params.093, i32* %24, align 4, !invariant.group !432
   %iv.next3 = add nuw nsw i64 %iv2, 1
   %25 = trunc i64 %iv2 to i32
   %26 = sext i32 %i_pose_params.093 to i64
@@ -18779,7 +18779,7 @@ for.body22:                                       ; preds = %if.end, %for.cond20
   %31 = mul nuw nsw i64 %iv2, 3
   %32 = add nuw nsw i64 %iv4, %31
   %33 = getelementptr inbounds i32, i32* %i_theta.189_malloccache, i64 %32
-  store i32 %i_theta.189, i32* %33, align 4, !invariant.group !432
+  store i32 %i_theta.189, i32* %33, align 4, !invariant.group !433
   %inc31 = add nsw i32 %i_theta.189, 1
   %cmp32 = icmp eq i32 %27, 0
   br i1 %cmp32, label %if.then, label %if.end
@@ -18846,8 +18846,8 @@ for.body.lr.ph.i:                                 ; preds = %resize.exit, %resiz
 for.cond17.preheader:                             ; preds = %resize.exit, %for.body.lr.ph.i, %if.end.i
   %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 0, %resize.exit ], [ 2, %if.end.i ]
   %4 = phi double* [ %3, %for.body.lr.ph.i ], [ %".pre'il_phi", %resize.exit ], [ null, %if.end.i ]
-  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %"'ipl" = load double*, double** %"data'ipg", align 8
+  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2, !node !273
+  %"'ipl" = load double*, double** %"data'ipg", align 8, !node !273
   br label %invertfor.end45
 
 invertentry:                                      ; preds = %invertfill.exit, %invertresize.exit.thread
@@ -18904,7 +18904,7 @@ incinvertfor.cond20.preheader:                    ; preds = %invertfor.cond20.pr
 
 invertfor.body22:                                 ; preds = %invertif.end, %invertif.then
   %14 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %15 = load i32, i32* %14, align 4, !invariant.group !433
+  %15 = load i32, i32* %14, align 4, !invariant.group !434
   %_unwrap17 = sext i32 %15 to i64
   %_unwrap18 = add i64 %"iv4'ac.0", %_unwrap17
   %_unwrap19 = mul nsw i64 %_unwrap18, 3
@@ -18914,7 +18914,7 @@ invertfor.body22:                                 ; preds = %invertif.end, %inve
   %17 = mul nuw nsw i64 %"iv2'ac.0", 3
   %18 = add nuw nsw i64 %"iv4'ac.0", %17
   %19 = getelementptr inbounds i32, i32* %1, i64 %18
-  %20 = load i32, i32* %19, align 4, !invariant.group !434
+  %20 = load i32, i32* %19, align 4, !invariant.group !435
   %idxprom23_unwrap = sext i32 %20 to i64
   %"arrayidx24'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23_unwrap
   %21 = load double, double* %"arrayidx24'ipg_unwrap", align 8
@@ -18929,7 +18929,7 @@ incinvertfor.body22:                              ; preds = %invertfor.body22
 
 invertif.then:                                    ; preds = %invertif.end
   %25 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %26 = load i32, i32* %25, align 4, !invariant.group !433
+  %26 = load i32, i32* %25, align 4, !invariant.group !434
   %_unwrap24 = sext i32 %26 to i64
   %_unwrap25 = add i64 %"iv4'ac.0", %_unwrap24
   %_unwrap26 = mul nsw i64 %_unwrap25, 3
@@ -18940,7 +18940,7 @@ invertif.then:                                    ; preds = %invertif.end
   %28 = mul nuw nsw i64 %"iv2'ac.0", 3
   %29 = add nuw nsw i64 %"iv4'ac.0", %28
   %30 = getelementptr inbounds i32, i32* %1, i64 %29
-  %31 = load i32, i32* %30, align 4, !invariant.group !434
+  %31 = load i32, i32* %30, align 4, !invariant.group !435
   %inc31_unwrap = add nsw i32 %31, 1
   %idxprom33_unwrap = sext i32 %inc31_unwrap to i64
   %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33_unwrap
@@ -19084,14 +19084,14 @@ entry:
   %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  %_augmented5 = call { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params.17(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc")
+  %_augmented5 = call { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params.17(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc"), !node !273
   %call.i84 = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i84'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i84'mi", i8 0, i64 16, i1 false)
   %"'ipc4" = bitcast i8* %"call.i84'mi" to %struct.Matrix*
   %1 = bitcast i8* %call.i84 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i84, i8 0, i64 16, i1 false) #31
-  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.14(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc4")
+  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.14(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc4"), !node !273
   %cmp89 = icmp sgt i32 %corresp_count, 0
   br i1 %cmp89, label %for.body.lr.ph, label %invertfor.end51
 
@@ -19100,70 +19100,70 @@ for.body.lr.ph:                                   ; preds = %entry
   %2 = bitcast i8* %data to double**
   %3 = load double*, double** %2, align 8, !tbaa !137
   %nrows = bitcast i8* %call.i84 to i32*
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !435
-  %wide.trip.count = zext i32 %corresp_count to i64
-  %mallocsize = mul nuw nsw i64 %wide.trip.count, 24
-  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %_malloccache = bitcast i8* %malloccall to double*
-  %malloccall14 = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %_malloccache15 = bitcast i8* %malloccall14 to double*
-  %malloccall20 = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %_malloccache21 = bitcast i8* %malloccall20 to double*
-  %malloccall27 = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %_malloccache28 = bitcast i8* %malloccall27 to double*
-  %malloccall36 = tail call noalias nonnull i8* @malloc(i64 %mallocsize)
-  %_malloccache37 = bitcast i8* %malloccall36 to double*
+  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !436
+  %wide.trip.count = zext i32 %corresp_count to i64, !node !273
+  %mallocsize = mul nuw nsw i64 %wide.trip.count, 24, !node !273
+  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
+  %_malloccache = bitcast i8* %malloccall to double*, !node !273
+  %malloccall14 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
+  %_malloccache15 = bitcast i8* %malloccall14 to double*, !node !273
+  %malloccall20 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
+  %_malloccache21 = bitcast i8* %malloccall20 to double*, !node !273
+  %malloccall27 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
+  %_malloccache28 = bitcast i8* %malloccall27 to double*, !node !273
+  %malloccall36 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
+  %_malloccache37 = bitcast i8* %malloccall36 to double*, !node !273
   br label %for.body
 
 for.body:                                         ; preds = %for.end, %for.body.lr.ph
   %iv = phi i64 [ %iv.next, %for.end ], [ 0, %for.body.lr.ph ]
   %iv.next = add nuw nsw i64 %iv, 1
-  %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %iv
-  %5 = load i32, i32* %arrayidx, align 4, !tbaa !59, !invariant.group !436
-  %idxprom2 = sext i32 %5 to i64
-  %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0
+  %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %iv, !node !273
+  %5 = load i32, i32* %arrayidx, align 4, !tbaa !59, !invariant.group !437, !node !273
+  %idxprom2 = sext i32 %5 to i64, !node !273
+  %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0, !node !273
   %6 = shl nuw nsw i64 %iv, 1
-  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %6
-  %7 = load i32, i32* %arraydecay, align 4, !tbaa !59, !invariant.group !437
-  %mul12 = mul nsw i32 %4, %7
-  %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1
-  %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1
-  %8 = load i32, i32* %arrayidx18, align 4, !tbaa !59, !invariant.group !438
-  %mul20 = mul nsw i32 %8, %4
-  %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2
-  %9 = load i32, i32* %arrayidx30, align 4, !tbaa !59, !invariant.group !439
-  %mul32 = mul nsw i32 %9, %4
+  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %6, !node !273
+  %7 = load i32, i32* %arraydecay, align 4, !tbaa !59, !invariant.group !438, !node !273
+  %mul12 = mul nsw i32 %4, %7, !node !273
+  %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1, !node !273
+  %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1, !node !273
+  %8 = load i32, i32* %arrayidx18, align 4, !tbaa !59, !invariant.group !439, !node !273
+  %mul20 = mul nsw i32 %8, %4, !node !273
+  %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2, !node !273
+  %9 = load i32, i32* %arrayidx30, align 4, !tbaa !59, !invariant.group !440, !node !273
+  %mul32 = mul nsw i32 %9, %4, !node !273
   %10 = mul nuw nsw i64 %iv, 3
-  %11 = sext i32 %mul12 to i64
-  %12 = sext i32 %mul20 to i64
-  %13 = sext i32 %mul32 to i64
+  %11 = sext i32 %mul12 to i64, !node !273
+  %12 = sext i32 %mul20 to i64, !node !273
+  %13 = sext i32 %mul32 to i64, !node !273
   br label %for.body9
 
 for.body9:                                        ; preds = %for.body9, %for.body
   %iv2 = phi i64 [ %iv.next3, %for.body9 ], [ 0, %for.body ]
   %iv.next3 = add nuw nsw i64 %iv2, 1
-  %14 = load double, double* %arrayidx6, align 8, !tbaa !75
+  %14 = load double, double* %arrayidx6, align 8, !tbaa !75, !node !273
   %15 = add nuw nsw i64 %iv2, %10
-  %16 = getelementptr inbounds double, double* %_malloccache, i64 %15
-  store double %14, double* %16, align 8, !invariant.group !440
-  %17 = add nsw i64 %iv2, %11
-  %arrayidx14 = getelementptr inbounds double, double* %3, i64 %17
-  %18 = load double, double* %arrayidx14, align 8, !tbaa !75
-  %19 = load double, double* %arrayidx16, align 8, !tbaa !75
-  %20 = getelementptr inbounds double, double* %_malloccache15, i64 %15
-  store double %19, double* %20, align 8, !invariant.group !441
-  %21 = getelementptr inbounds double, double* %_malloccache37, i64 %15
-  store double %18, double* %21, align 8, !invariant.group !442
-  %22 = add nsw i64 %iv2, %12
-  %arrayidx23 = getelementptr inbounds double, double* %3, i64 %22
-  %23 = load double, double* %arrayidx23, align 8, !tbaa !75
-  %24 = add nsw i64 %iv2, %13
-  %arrayidx35 = getelementptr inbounds double, double* %3, i64 %24
-  %25 = load double, double* %arrayidx35, align 8, !tbaa !75
-  %26 = getelementptr inbounds double, double* %_malloccache21, i64 %15
-  store double %25, double* %26, align 8, !invariant.group !443
-  %27 = getelementptr inbounds double, double* %_malloccache28, i64 %15
-  store double %23, double* %27, align 8, !invariant.group !444
+  %16 = getelementptr inbounds double, double* %_malloccache, i64 %15, !node !273
+  store double %14, double* %16, align 8, !invariant.group !441
+  %17 = add nsw i64 %iv2, %11, !node !273
+  %arrayidx14 = getelementptr inbounds double, double* %3, i64 %17, !node !273
+  %18 = load double, double* %arrayidx14, align 8, !tbaa !75, !node !273
+  %19 = load double, double* %arrayidx16, align 8, !tbaa !75, !node !273
+  %20 = getelementptr inbounds double, double* %_malloccache15, i64 %15, !node !273
+  store double %19, double* %20, align 8, !invariant.group !442
+  %21 = getelementptr inbounds double, double* %_malloccache37, i64 %15, !node !273
+  store double %18, double* %21, align 8, !invariant.group !443
+  %22 = add nsw i64 %iv2, %12, !node !273
+  %arrayidx23 = getelementptr inbounds double, double* %3, i64 %22, !node !273
+  %23 = load double, double* %arrayidx23, align 8, !tbaa !75, !node !273
+  %24 = add nsw i64 %iv2, %13, !node !273
+  %arrayidx35 = getelementptr inbounds double, double* %3, i64 %24, !node !273
+  %25 = load double, double* %arrayidx35, align 8, !tbaa !75, !node !273
+  %26 = getelementptr inbounds double, double* %_malloccache21, i64 %15, !node !273
+  store double %25, double* %26, align 8, !invariant.group !444
+  %27 = getelementptr inbounds double, double* %_malloccache28, i64 %15, !node !273
+  store double %23, double* %27, align 8, !invariant.group !445
   %exitcond.not = icmp eq i64 %iv.next3, 3
   br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !211
 
@@ -19205,27 +19205,27 @@ invertfor.body9:                                  ; preds = %invertfor.end, %inc
   %34 = load double, double* %"arrayidx48'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx48'ipg_unwrap", align 8
   %35 = getelementptr inbounds double, double* %_cache.0, i64 %_unwrap10
-  %36 = load double, double* %35, align 8, !invariant.group !440
+  %36 = load double, double* %35, align 8, !invariant.group !441
   %37 = getelementptr inbounds double, double* %_cache12.0, i64 %_unwrap10
-  %38 = load double, double* %37, align 8, !invariant.group !441
+  %38 = load double, double* %37, align 8, !invariant.group !442
   %_unwrap17 = fadd fast double %36, %38
   %sub28_unwrap = fsub fast double 1.000000e+00, %_unwrap17
   %39 = getelementptr inbounds double, double* %_cache18.0, i64 %_unwrap10
-  %40 = load double, double* %39, align 8, !invariant.group !443
+  %40 = load double, double* %39, align 8, !invariant.group !444
   %41 = getelementptr inbounds double, double* %_cache25.0, i64 %_unwrap10
-  %42 = load double, double* %41, align 8, !invariant.group !444
+  %42 = load double, double* %41, align 8, !invariant.group !445
   %43 = getelementptr inbounds double, double* %_cache34.0, i64 %_unwrap10
-  %44 = load double, double* %43, align 8, !invariant.group !442
+  %44 = load double, double* %43, align 8, !invariant.group !443
   %"data'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i84'mi", i64 8
   %"'ipc8_unwrap" = bitcast i8* %"data'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !445
+  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !446
   %arrayidx_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv'ac.0"
-  %_unwrap44 = load i32, i32* %arrayidx_unwrap, align 4, !tbaa !59, !invariant.group !436
+  %_unwrap44 = load i32, i32* %arrayidx_unwrap, align 4, !tbaa !59, !invariant.group !437
   %idxprom2_unwrap = sext i32 %_unwrap44 to i64
   %arrayidx30_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 2
-  %_unwrap45 = load i32, i32* %arrayidx30_unwrap, align 4, !tbaa !59, !invariant.group !439
+  %_unwrap45 = load i32, i32* %arrayidx30_unwrap, align 4, !tbaa !59, !invariant.group !440
   %nrows_unwrap = bitcast i8* %call.i84 to i32*
-  %_unwrap46 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !435
+  %_unwrap46 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !436
   %mul32_unwrap = mul nsw i32 %_unwrap45, %_unwrap46
   %_unwrap47 = sext i32 %mul32_unwrap to i64
   %_unwrap48 = add nsw i64 %"iv2'ac.0", %_unwrap47
@@ -19240,7 +19240,7 @@ invertfor.body9:                                  ; preds = %invertfor.end, %inc
   %51 = fmul fast double %34, %42
   %52 = fsub fast double %48, %51
   %arrayidx18_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 1
-  %_unwrap50 = load i32, i32* %arrayidx18_unwrap, align 4, !tbaa !59, !invariant.group !438
+  %_unwrap50 = load i32, i32* %arrayidx18_unwrap, align 4, !tbaa !59, !invariant.group !439
   %mul20_unwrap = mul nsw i32 %_unwrap50, %_unwrap46
   %_unwrap51 = sext i32 %mul20_unwrap to i64
   %_unwrap52 = add nsw i64 %"iv2'ac.0", %_unwrap51
@@ -19256,7 +19256,7 @@ invertfor.body9:                                  ; preds = %invertfor.end, %inc
   %57 = fadd fast double %56, %52
   store double %57, double* %"arrayidx16'ipg_unwrap", align 8
   %arraydecay_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 0
-  %_unwrap54 = load i32, i32* %arraydecay_unwrap, align 4, !tbaa !59, !invariant.group !437
+  %_unwrap54 = load i32, i32* %arraydecay_unwrap, align 4, !tbaa !59, !invariant.group !438
   %mul12_unwrap = mul nsw i32 %_unwrap46, %_unwrap54
   %_unwrap55 = sext i32 %mul12_unwrap to i64
   %_unwrap56 = add nsw i64 %"iv2'ac.0", %_unwrap55
@@ -19391,9 +19391,9 @@ for.body3:                                        ; preds = %for.body3, %for.con
   %mul11 = fmul fast double %24, %22
   store double %mul11, double* %arrayidx10, align 8, !tbaa !75
   %25 = getelementptr inbounds double, double* %_malloccache26, i64 %23
-  store double %24, double* %25, align 8, !invariant.group !446
+  store double %24, double* %25, align 8, !invariant.group !447
   %26 = getelementptr inbounds double, double* %_malloccache, i64 %23
-  store double %22, double* %26, align 8, !invariant.group !447
+  store double %22, double* %26, align 8, !invariant.group !448
   %exitcond102.not = icmp eq i64 %iv.next3, 3
   br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
 
@@ -19471,11 +19471,11 @@ for.body22.lr.ph:                                 ; preds = %for.cond19.preheade
   %mul31 = shl nsw i32 %49, 1
   %"'ipl17" = load double*, double** %"data36'ipg", align 8
   %50 = getelementptr inbounds double*, double** %"'ipl17_malloccache", i64 %iv4
-  store double* %"'ipl17", double** %50, align 8, !invariant.group !448
+  store double* %"'ipl17", double** %50, align 8, !invariant.group !449
   %51 = getelementptr inbounds i32, i32* %mul31_malloccache, i64 %iv4
-  store i32 %mul31, i32* %51, align 4, !invariant.group !449
+  store i32 %mul31, i32* %51, align 4, !invariant.group !450
   %52 = getelementptr inbounds double*, double** %"'ipl18_malloccache", i64 %iv4
-  store double* %"'ipl18", double** %52, align 8, !invariant.group !450
+  store double* %"'ipl18", double** %52, align 8, !invariant.group !451
   %53 = load double*, double** %data36, align 8, !tbaa !137
   %54 = sext i32 %mul31 to i64
   %55 = mul nsw i64 %iv4, %36
@@ -19619,7 +19619,7 @@ for.body:                                         ; preds = %for.body, %for.body
   %arrayidx6 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv
   %_augmented26 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %"arrayidx'ipg", %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6, %struct.Matrix* nonnull %"arrayidx6'ipg")
   %21 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented26_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !451
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !452
   %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
   br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
 
@@ -19790,7 +19790,7 @@ for.body11:                                       ; preds = %for.inc43, %for.bod
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv1
   %_augmented31 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx13, %struct.Matrix* nonnull %"arrayidx13'ipg", %struct.Matrix* %base_positions, %struct.Matrix* nonnull %36, %struct.Matrix* nonnull %"'ipc30")
   %54 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented31_malloccache, i64 %iv1
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %54, align 8, !invariant.group !452
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %54, align 8, !invariant.group !453
   br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
 
 for.cond18.preheader.lr.ph:                       ; preds = %for.body11
@@ -19801,11 +19801,11 @@ for.cond18.preheader.lr.ph:                       ; preds = %for.body11
   %58 = load i32, i32* %nrows24, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data30'ipg", align 8
   %59 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv1
-  store double* %"'ipl", double** %59, align 8, !invariant.group !453
+  store double* %"'ipl", double** %59, align 8, !invariant.group !454
   %60 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv1
-  store i32 %56, i32* %60, align 4, !invariant.group !454
+  store i32 %56, i32* %60, align 4, !invariant.group !455
   %61 = getelementptr inbounds double*, double** %"'ipl37_malloccache", i64 %iv1
-  store double* %"'ipl37", double** %61, align 8, !invariant.group !455
+  store double* %"'ipl37", double** %61, align 8, !invariant.group !456
   %62 = load double*, double** %data30, align 8, !tbaa !137
   %63 = sext i32 %56 to i64
   %64 = sext i32 %58 to i64
@@ -19837,7 +19837,7 @@ for.body20:                                       ; preds = %for.body20, %for.co
   %74 = mul nuw nsw i64 %iv1, %50
   %75 = add nuw nsw i64 %72, %74
   %76 = getelementptr inbounds double, double* %_malloccache51, i64 %75
-  store double %71, double* %76, align 8, !invariant.group !456
+  store double %71, double* %76, align 8, !invariant.group !457
   %exitcond86.not = icmp eq i64 %iv.next9, 3
   br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
 
@@ -19880,7 +19880,7 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   %mul56 = fneg fast double %82
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %83 = getelementptr inbounds double, double* %_malloccache55, i64 %iv11
-  store double %82, double* %83, align 8, !invariant.group !457
+  store double %82, double* %83, align 8, !invariant.group !458
   %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
   br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
 
@@ -19906,7 +19906,7 @@ for.body.i31:                                     ; preds = %for.body.i31, %for.
   %cmp1.not.i = icmp eq double* %87, null
   %88 = getelementptr inbounds i8, i8* %malloccall56, i64 %iv14
   %89 = bitcast i8* %88 to i1*
-  store i1 %cmp1.not.i, i1* %89, align 1, !invariant.group !458
+  store i1 %cmp1.not.i, i1* %89, align 1, !invariant.group !459
   %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
   br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
 
@@ -19925,7 +19925,7 @@ for.body.i41:                                     ; preds = %for.body.i41, %for.
   %cmp1.not.i40 = icmp eq double* %92, null
   %93 = getelementptr inbounds i8, i8* %malloccall57, i64 %iv17
   %94 = bitcast i8* %93 to i1*
-  store i1 %cmp1.not.i40, i1* %94, align 1, !invariant.group !459
+  store i1 %cmp1.not.i40, i1* %94, align 1, !invariant.group !460
   %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
   br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
 
@@ -19944,7 +19944,7 @@ for.body.i53:                                     ; preds = %for.body.i53, %for.
   %cmp1.not.i52 = icmp eq double* %97, null
   %98 = getelementptr inbounds i8, i8* %malloccall58, i64 %iv20
   %99 = bitcast i8* %98 to i1*
-  store i1 %cmp1.not.i52, i1* %99, align 1, !invariant.group !460
+  store i1 %cmp1.not.i52, i1* %99, align 1, !invariant.group !461
   %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
   br i1 %exitcond.not.i56, label %delete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
@@ -20001,7 +20001,7 @@ get_matrix_array.exit12:                          ; preds = %for.body.preheader.
   br i1 %cmp15.i, label %for.body.preheader, label %for.end
 
 for.body.preheader:                               ; preds = %get_matrix_array.exit12
-  %wide.trip.count101 = zext i32 %bone_count to i64
+  %wide.trip.count101 = zext i32 %bone_count to i64, !node !273
   br label %for.end
 
 for.end:                                          ; preds = %for.body.preheader, %get_matrix_array.exit12
@@ -20023,7 +20023,7 @@ for.body.lr.ph.i:                                 ; preds = %resize.exit, %if.en
   br label %fill.exit
 
 fill.exit:                                        ; preds = %if.end.i, %for.body.lr.ph.i, %resize.exit
-  %_cache.0 = phi i8 [ 0, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 1, %if.end.i ]
+  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 0, %if.end.i ]
   %call.i16 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 18
   %"call.i16'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 17
   %"'ipc41" = bitcast i8* %"call.i16'mi" to %struct.Matrix*
@@ -20034,7 +20034,7 @@ fill.exit:                                        ; preds = %if.end.i, %for.body
 
 for.body11.lr.ph:                                 ; preds = %fill.exit
   %cmp1674 = icmp sgt i32 %15, 0
-  %wide.trip.count97 = zext i32 %bone_count to i64
+  %wide.trip.count97 = zext i32 %bone_count to i64, !node !273
   %wide.trip.count93 = zext i32 %15 to i64
   br label %for.end45
 
@@ -20053,7 +20053,7 @@ if.then61:                                        ; preds = %for.body49.lr.ph, %
   br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_matrix.exit
 
 for.body.preheader.i28:                           ; preds = %if.then61
-  %wide.trip.count.i27 = zext i32 %bone_count to i64
+  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !273
   %wide.trip.count.i27_unwrap110 = zext i32 %bone_count to i64
   %_unwrap111 = add nsw i64 %wide.trip.count.i27_unwrap110, -1
   %17 = bitcast i1* %9 to i8*
@@ -20112,7 +20112,7 @@ invertfor.body:                                   ; preds = %invertfor.body, %me
   %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv'ac.0"
   %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0"
   %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0"
-  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !461
+  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !462
   call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap)
   %21 = icmp eq i64 %"iv'ac.0", 0
   br i1 %21, label %invertfor.body.preheader, label %invertfor.body
@@ -20136,7 +20136,7 @@ invertfill.exit:                                  ; preds = %invertfor.end45, %i
   tail call void @free(i8* %call4.i)
   tail call void @free(i8* nonnull %"call.i16'mi")
   tail call void @free(i8* %call.i16)
-  %cond = icmp eq i8 %_cache.0, 0
+  %cond = icmp eq i8 %_cache.0, 1
   %cond.not = xor i1 %cond, true
   %brmerge = or i1 %cond.not, %cmp.not.i
   br i1 %brmerge, label %invertfor.end, label %invertresize.exit.thread
@@ -20158,7 +20158,7 @@ invertfor.body11:                                 ; preds = %invertfor.cond18.pr
   %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv1'ac.0"
   %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0"
   %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0"
-  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 8, !invariant.group !462
+  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 8, !invariant.group !463
   call void @diffemat_mult.10(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %16, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap)
   %27 = icmp eq i64 %"iv1'ac.0", 0
   br i1 %27, label %invertfor.body11.lr.ph, label %invertfor.inc43
@@ -20170,7 +20170,7 @@ invertfor.cond18.preheader:                       ; preds = %invertfor.body20
 invertfor.body20:                                 ; preds = %invertfor.inc40, %incinvertfor.body20
   %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %40, %incinvertfor.body20 ]
   %_unwrap59 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0"
-  %"'il_phi5_unwrap" = load double*, double** %_unwrap59, align 8, !invariant.group !463
+  %"'il_phi5_unwrap" = load double*, double** %_unwrap59, align 8, !invariant.group !464
   %_unwrap60 = mul nuw nsw i64 %"iv6'ac.1", 3
   %_unwrap61 = add nuw nsw i64 %"iv8'ac.1", %_unwrap60
   %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %_unwrap61
@@ -20179,12 +20179,12 @@ invertfor.body20:                                 ; preds = %invertfor.inc40, %i
   %31 = mul nuw nsw i64 %"iv1'ac.0", %30
   %32 = add nuw nsw i64 %_unwrap61, %31
   %33 = getelementptr inbounds double, double* %5, i64 %32
-  %34 = load double, double* %33, align 8, !invariant.group !464
+  %34 = load double, double* %33, align 8, !invariant.group !465
   %m1diffe = fmul fast double %29, %34
   %_unwrap69 = getelementptr inbounds double*, double** %3, i64 %"iv1'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap69, align 8, !invariant.group !465
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap69, align 8, !invariant.group !466
   %35 = getelementptr inbounds i32, i32* %4, i64 %"iv1'ac.0"
-  %36 = load i32, i32* %35, align 4, !invariant.group !466
+  %36 = load i32, i32* %35, align 4, !invariant.group !467
   %_unwrap75 = sext i32 %36 to i64
   %_unwrap76 = mul nsw i64 %"iv6'ac.1", %_unwrap75
   %_unwrap77 = add nsw i64 %_unwrap76, %"iv8'ac.1"
@@ -20251,8 +20251,8 @@ define internal void @diffeapply_global_transform.16(%struct.Matrix* nocapture r
 entry:
   %0 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 9
   %1 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 10
-  %2 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 17
-  %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 14
+  %2 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 14
+  %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 17
   %4 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 13
   %call.i = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 5
   %"call.i'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 4
@@ -20288,7 +20288,7 @@ invertentry:                                      ; preds = %invertfor.cond1.pre
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
-  %13 = bitcast double* %3 to i8*
+  %13 = bitcast double* %2 to i8*
   tail call void @free(i8* nonnull %13)
   %14 = bitcast double* %4 to i8*
   tail call void @free(i8* nonnull %14)
@@ -20310,10 +20310,10 @@ invertfor.body3:                                  ; preds = %invertfor.inc12, %i
   %17 = load double, double* %"arrayidx10'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx10'ipg_unwrap", align 8
   %18 = getelementptr inbounds double, double* %4, i64 %_unwrap17
-  %19 = load double, double* %18, align 8, !invariant.group !467
+  %19 = load double, double* %18, align 8, !invariant.group !468
   %m0diffe = fmul fast double %17, %19
-  %20 = getelementptr inbounds double, double* %3, i64 %_unwrap17
-  %21 = load double, double* %20, align 8, !invariant.group !468
+  %20 = getelementptr inbounds double, double* %2, i64 %_unwrap17
+  %21 = load double, double* %20, align 8, !invariant.group !469
   %m1diffe = fmul fast double %17, %21
   store double %m0diffe, double* %"arrayidx10'ipg_unwrap", align 8
   %_unwrap23 = add nsw i64 %"iv'ac.0", %7
@@ -20343,7 +20343,7 @@ invertfor.cond19.preheader.lr.ph:                 ; preds = %invertfor.cond19.pr
   tail call void @free(i8* nonnull %26)
   %27 = bitcast double** %1 to i8*
   tail call void @free(i8* nonnull %27)
-  %28 = bitcast i32* %2 to i8*
+  %28 = bitcast i32* %3 to i8*
   tail call void @free(i8* nonnull %28)
   br label %invertfor.end14
 
@@ -20355,7 +20355,7 @@ invertfor.body22:                                 ; preds = %invertfor.body22, %
   %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %invertfor.body22 ]
   %"iv9'ac.0" = add nsw i64 %"iv9'ac.0.in", -1
   %_unwrap36 = getelementptr inbounds double*, double** %0, i64 %"iv4'ac.0"
-  %"'il_phi8_unwrap" = load double*, double** %_unwrap36, align 8, !invariant.group !469
+  %"'il_phi8_unwrap" = load double*, double** %_unwrap36, align 8, !invariant.group !470
   %_unwrap38 = sext i32 %_unwrap71 to i64
   %_unwrap39 = mul nsw i64 %"iv4'ac.0", %_unwrap38
   %_unwrap40 = add nsw i64 %"iv9'ac.0", %_unwrap39
@@ -20363,9 +20363,9 @@ invertfor.body22:                                 ; preds = %invertfor.body22, %
   %30 = load double, double* %"arrayidx41'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx41'ipg_unwrap", align 8
   %_unwrap44 = getelementptr inbounds double*, double** %1, i64 %"iv4'ac.0"
-  %"'il_phi7_unwrap" = load double*, double** %_unwrap44, align 8, !invariant.group !470
-  %31 = getelementptr inbounds i32, i32* %2, i64 %"iv4'ac.0"
-  %32 = load i32, i32* %31, align 4, !invariant.group !471
+  %"'il_phi7_unwrap" = load double*, double** %_unwrap44, align 8, !invariant.group !471
+  %31 = getelementptr inbounds i32, i32* %3, i64 %"iv4'ac.0"
+  %32 = load i32, i32* %31, align 4, !invariant.group !472
   %_unwrap49 = sext i32 %32 to i64
   %_unwrap50 = add nsw i64 %"iv9'ac.0", %_unwrap49
   %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi7_unwrap", i64 %_unwrap50
@@ -20374,9 +20374,9 @@ invertfor.body22:                                 ; preds = %invertfor.body22, %
   store double %34, double* %"arrayidx34'ipg_unwrap", align 8
   %"data23'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i81'mi", i64 8
   %"'ipc33_unwrap" = bitcast i8* %"data23'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc33_unwrap", align 8, !invariant.group !472
+  %"'ipl_unwrap" = load double*, double** %"'ipc33_unwrap", align 8, !invariant.group !473
   %nrows24_unwrap = bitcast i8* %call.i81 to i32*
-  %_unwrap52 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !473
+  %_unwrap52 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !474
   %_unwrap53 = sext i32 %_unwrap52 to i64
   %_unwrap54 = mul nsw i64 %"iv4'ac.0", %_unwrap53
   %_unwrap55 = add nsw i64 %"iv9'ac.0", %_unwrap54
@@ -20530,7 +20530,7 @@ for.cond20.preheader:                             ; preds = %for.end45, %for.con
   %i_pose_params.093 = phi i32 [ %inc46, %for.end45 ], [ 5, %for.cond17.preheader ]
   %i_theta.092 = phi i32 [ %i_theta.2.lcssa, %for.end45 ], [ 6, %for.cond17.preheader ]
   %25 = getelementptr inbounds i32, i32* %i_pose_params.093_malloccache, i64 %iv2
-  store i32 %i_pose_params.093, i32* %25, align 4, !invariant.group !474
+  store i32 %i_pose_params.093, i32* %25, align 4, !invariant.group !475
   %iv.next3 = add nuw nsw i64 %iv2, 1
   %26 = trunc i64 %iv2 to i32
   %27 = sext i32 %i_pose_params.093 to i64
@@ -20551,7 +20551,7 @@ for.body22:                                       ; preds = %if.end, %for.cond20
   %32 = mul nuw nsw i64 %iv2, 3
   %33 = add nuw nsw i64 %iv4, %32
   %34 = getelementptr inbounds i32, i32* %i_theta.189_malloccache, i64 %33
-  store i32 %i_theta.189, i32* %34, align 4, !invariant.group !475
+  store i32 %i_theta.189, i32* %34, align 4, !invariant.group !476
   %inc31 = add nsw i32 %i_theta.189, 1
   %cmp32 = icmp eq i32 %28, 0
   br i1 %cmp32, label %if.then, label %if.end
@@ -20675,7 +20675,7 @@ incinvertfor.cond20.preheader:                    ; preds = %invertfor.cond20.pr
 
 invertfor.body22:                                 ; preds = %invertif.end, %invertif.then
   %14 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %15 = load i32, i32* %14, align 4, !invariant.group !476
+  %15 = load i32, i32* %14, align 4, !invariant.group !477
   %_unwrap17 = sext i32 %15 to i64
   %_unwrap18 = add i64 %"iv4'ac.0", %_unwrap17
   %_unwrap19 = mul nsw i64 %_unwrap18, 3
@@ -20685,7 +20685,7 @@ invertfor.body22:                                 ; preds = %invertif.end, %inve
   %17 = mul nuw nsw i64 %"iv2'ac.0", 3
   %18 = add nuw nsw i64 %"iv4'ac.0", %17
   %19 = getelementptr inbounds i32, i32* %1, i64 %18
-  %20 = load i32, i32* %19, align 4, !invariant.group !477
+  %20 = load i32, i32* %19, align 4, !invariant.group !478
   %idxprom23_unwrap = sext i32 %20 to i64
   %"arrayidx24'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23_unwrap
   %21 = load double, double* %"arrayidx24'ipg_unwrap", align 8
@@ -20700,7 +20700,7 @@ incinvertfor.body22:                              ; preds = %invertfor.body22
 
 invertif.then:                                    ; preds = %invertif.end
   %25 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %26 = load i32, i32* %25, align 4, !invariant.group !476
+  %26 = load i32, i32* %25, align 4, !invariant.group !477
   %_unwrap24 = sext i32 %26 to i64
   %_unwrap25 = add i64 %"iv4'ac.0", %_unwrap24
   %_unwrap26 = mul nsw i64 %_unwrap25, 3
@@ -20711,7 +20711,7 @@ invertif.then:                                    ; preds = %invertif.end
   %28 = mul nuw nsw i64 %"iv2'ac.0", 3
   %29 = add nuw nsw i64 %"iv4'ac.0", %28
   %30 = getelementptr inbounds i32, i32* %1, i64 %29
-  %31 = load i32, i32* %30, align 4, !invariant.group !477
+  %31 = load i32, i32* %30, align 4, !invariant.group !478
   %inc31_unwrap = add nsw i32 %31, 1
   %idxprom33_unwrap = sext i32 %inc31_unwrap to i64
   %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33_unwrap
@@ -21046,7 +21046,7 @@ attributes #37 = { builtin nounwind }
 !270 = distinct !{!270, !9, !10}
 !271 = distinct !{!271, !9, !10}
 !272 = distinct !{!272, !9, !10}
-!273 = distinct !{}
+!273 = !{!"true"}
 !274 = distinct !{}
 !275 = distinct !{}
 !276 = distinct !{}
@@ -21056,8 +21056,8 @@ attributes #37 = { builtin nounwind }
 !280 = distinct !{}
 !281 = distinct !{}
 !282 = distinct !{}
-!283 = !{i64 8}
-!284 = distinct !{}
+!283 = distinct !{}
+!284 = !{i64 8}
 !285 = distinct !{}
 !286 = distinct !{}
 !287 = distinct !{}
@@ -21251,3 +21251,4 @@ attributes #37 = { builtin nounwind }
 !475 = distinct !{}
 !476 = distinct !{}
 !477 = distinct !{}
+!478 = distinct !{}

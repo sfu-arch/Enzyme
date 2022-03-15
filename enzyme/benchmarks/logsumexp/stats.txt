@@ -1,0 +1,5 @@
+Register Count: 31
+Fifo size: 410
+Forward multicasts: 33
+Reverse multicasts: 66
+Number of recomputations: 198

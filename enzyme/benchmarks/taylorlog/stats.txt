@@ -1,0 +1,5 @@
+Register Count: 2
+Fifo size: 0
+Forward multicasts: 0
+Reverse multicasts: 0
+Number of recomputations: 0

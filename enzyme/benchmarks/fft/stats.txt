@@ -1,5 +1,5 @@
-Register Count: 50
-Fifo size: 480
-Forward multicasts: 59
-Reverse multicasts: 118
-Number of recomputations: 186
+Register Count: 23
+Fifo size: 180
+Forward multicasts: 18
+Reverse multicasts: 36
+Number of recomputations: 36

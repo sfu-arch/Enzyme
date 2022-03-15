@@ -25,10 +25,14 @@ std::vector<std::pair<Value*, int>> SortMap(std::map<Value*, int> &map);
 class Node {
     public:
         Node(Value *v) : value(v), level(0), cost(0) {}
+        Value* GetValue() { return value; }
+
         void AddChild(Node *child);
+
         int GetInstructionCost(Value *inst);
         int GetFifoSize(int max_level);
         int GetChildrenCount() { return children.size(); }
+        int GetFifoSizeBetweenNodes(int max_level, int parent_level, int child_level);
 
         void PushToTape();
         void UndoPushToTape(int prev_cost);
@@ -37,8 +41,11 @@ class Node {
         
         void DumpForward(std::ofstream &myfile);
         void DumpReverse(std::ofstream &myfile);
+        void DumpRecompute(std::ofstream &myfile, int);
 
-        Value* GetValue() { return value; }
+
+        std::string RecurseToRoot(std::string prefix);
+
         bool visited = false;
         int level;
         int cost;
@@ -68,6 +75,8 @@ class Graph {
 
         void DumpForward(std::ofstream &myfile);
         void DumpReverse(std::ofstream &myfile);
+        void DumpRecompute(std::ofstream &myfile);
+
         void PrintLevels();
 
     private:

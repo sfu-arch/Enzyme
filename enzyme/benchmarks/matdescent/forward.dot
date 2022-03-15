@@ -1,0 +1,12 @@
+digraph G {
+		"mat" -> "arrayidx6"
+		"vec" -> "arrayidx8"
+		"arrayidx8" -> "%5"
+		"%5" -> "mul9"
+		"%4" -> "mul9"
+		"mul9" -> "add12"
+		"add12" -> "arrayidx"
+		"add12" -> "%2"
+		"arrayidx" -> "arrayidx"
+		"arrayidx6" -> "%4"
+}

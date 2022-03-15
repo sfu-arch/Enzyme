@@ -1,0 +1,36 @@
+digraph G {
+	subgraph Forward {
+		"mat" -> "arrayidx6"
+		"vec" -> "arrayidx8"
+		"arrayidx8" -> "%5"
+		"%5" -> "mul9"
+		"%4" -> "mul9"
+		"mul9" -> "add12"
+		"add12" -> "arrayidx"
+		"add12" -> "%2"
+		"arrayidx" -> "arrayidx"
+		"arrayidx6" -> "%4"
+	}
+	subgraph Reverse {
+		"garrayidx8" -> "gvec"
+		"vec" -> "garrayidx8"
+		"g%5" -> "garrayidx8"
+		"arrayidx8" -> "g%5"
+		"g%4" -> "garrayidx6"
+		"arrayidx6" -> "g%4"
+		"g%2" -> "gadd12"
+		"add12" -> "g%2"
+		"gmul9" -> "g%4"
+		"%4" -> "gmul9"
+		"gmul9" -> "g%5"
+		"%5" -> "gmul9"
+		"gadd12" -> "gmul9"
+		"mul9" -> "gadd12"
+		"garrayidx" -> "garrayidx"
+		"arrayidx" -> "garrayidx"
+		"garrayidx" -> "gadd12"
+		"add12" -> "garrayidx"
+		"garrayidx6" -> "gmat"
+		"mat" -> "garrayidx6"
+	}
+}

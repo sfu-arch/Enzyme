@@ -11,11 +11,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <sstream>
 
 #include "BFSPass.h"
 #include "Utils.h"
 
 #include "llvm/IR/IRBuilder.h"
+
 
 #define REGION_COUNT 3
 
@@ -91,6 +93,17 @@ bool BFSPass::runOnFunction(Function &f) {
     myfile << "\t}\n";
     myfile << "\tsubgraph Reverse {\n";
     g.DumpReverse(myfile);
+    myfile << "\t}\n";
+    myfile << "}\n";
+    myfile.close();
+
+    myfile.open ("recompute.dot");
+    myfile << "digraph G {\n";
+    myfile << "\tsubgraph Forward {\n";
+    g.DumpForward(myfile);
+    myfile << "\t}\n";
+    myfile << "\tsubgraph Reverse {\n";
+    g.DumpRecompute(myfile);
     myfile << "\t}\n";
     myfile << "}\n";
     myfile.close();
@@ -233,10 +246,9 @@ void Node::DumpForward(std::ofstream &myfile) {
     if (value->getName().contains("'"))
         return;
 
-    for (auto child : children) {
+    for (auto child : children)
         myfile << "\t\t\"" << value->getNameOrAsOperand()  << '"' << " -> " << '"' << child->value->getNameOrAsOperand()  << '"' <<  "\n";
 
-    }
 }
 
 void Node::DumpReverse(std::ofstream &myfile) {
@@ -244,9 +256,32 @@ void Node::DumpReverse(std::ofstream &myfile) {
         return;
     for (auto parent : parents) {
         myfile << "\t\t\"g" << value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
-        myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
+        myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << value->getNameOrAsOperand()  << '"' <<  "\n";
 
     }
+}
+
+void Node::DumpRecompute(std::ofstream &myfile, int max_level) {
+    if (value->getName().contains("'"))
+        return;
+    for (auto parent : parents) {
+        myfile << "\t\t\"g" << value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
+        if (GetFifoSizeBetweenNodes(max_level, parent->level, level) > 2) {
+            myfile << "\t\t\"" << value->getNameOrAsOperand() << "_" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << value->getNameOrAsOperand()  << '"' << "[color=" << '"' <<  "red" << '"' <<"]" <<  "\n";
+            myfile << parent->RecurseToRoot(value->getNameOrAsOperand());
+        } else {
+            myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << value->getNameOrAsOperand()  << '"' <<  "\n";
+        }
+    }
+}
+
+std::string Node::RecurseToRoot(std::string prefix) {
+    std::stringstream ss;
+    for (auto parent : parents) {
+        ss << "\t\t\"" << prefix << "_" << parent->value->getNameOrAsOperand()  << '"' << " -> " <<  '"' << prefix << '_' << value->getNameOrAsOperand()  << '"' << "[color=" << '"' <<  "red" << '"' <<"]"  <<  "\n";
+        ss << parent->RecurseToRoot(prefix);
+    }
+    return ss.str();
 }
 
 int Node::GetFifoSize(int max_level) {
@@ -257,6 +292,10 @@ int Node::GetFifoSize(int max_level) {
     return fifo_size;
 }
 
+int Node::GetFifoSizeBetweenNodes(int max_level, int parent_level, int child_level) {
+    return max_level + 2 * (max_level - child_level) - parent_level;
+}
+
 void Graph::DumpForward(std::ofstream &myfile) {
     for (auto i: nodes)
         i.second->DumpForward(myfile);
@@ -265,6 +304,12 @@ void Graph::DumpForward(std::ofstream &myfile) {
 void Graph::DumpReverse(std::ofstream &myfile) {
     for (auto i: nodes)
         i.second->DumpReverse(myfile);
+}
+
+void Graph::DumpRecompute(std::ofstream &myfile) {
+    int max_level = GetMaxLevel();
+    for (auto i: nodes)
+        i.second->DumpRecompute(myfile, max_level);
 }
 
 int Graph::GetParentChildCount() {

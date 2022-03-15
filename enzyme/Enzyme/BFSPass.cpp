@@ -108,6 +108,20 @@ bool BFSPass::runOnFunction(Function &f) {
     myfile << "}\n";
     myfile.close();
 
+    myfile.open ("store.dot");
+    myfile << "digraph G {\n";
+    myfile <<  "\t{\n" <<"\t\tnode [shape=Mrecord, color=green, style=dashed, width=8];\n\t\tTape\n\t}\n";
+    myfile << "\tsubgraph Forward {\n";
+    g.DumpForward(myfile);
+    myfile << "\t}\n";
+    myfile << "\tsubgraph Reverse {\n";
+    g.DumpStore(myfile);
+    myfile << "\t}\n";
+    myfile << "}\n";
+    myfile.close();
+
+
+
     myfile.open ("stats.txt");
     myfile << "Register Count: " << g().size() << "\n";
     myfile << "Fifo size: " << g.GetFifoSize() << "\n";
@@ -275,6 +289,17 @@ void Node::DumpRecompute(std::ofstream &myfile, int max_level) {
     }
 }
 
+void Node::DumpStore(std::ofstream &myfile) {
+    if (value->getName().contains("'"))
+        return;
+    for (auto parent : parents) {
+        myfile << "\t\t\"g" << value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
+        myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "Tape" <<  "\n";
+        myfile << "\t\tTape -> " << "\"g" << value->getNameOrAsOperand()  << '"' <<  "\n";
+
+    }
+}
+
 std::string Node::RecurseToRoot(std::string prefix) {
     std::stringstream ss;
     for (auto parent : parents) {
@@ -310,6 +335,11 @@ void Graph::DumpRecompute(std::ofstream &myfile) {
     int max_level = GetMaxLevel();
     for (auto i: nodes)
         i.second->DumpRecompute(myfile, max_level);
+}
+
+void Graph::DumpStore(std::ofstream &myfile) {
+    for (auto i: nodes)
+        i.second->DumpStore(myfile);
 }
 
 int Graph::GetParentChildCount() {

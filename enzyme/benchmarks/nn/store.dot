@@ -1,4 +1,8 @@
 digraph G {
+	{
+		node [shape=Mrecord, color=green, style=dashed, width=8];
+		Tape
+	}
 	subgraph Forward {
 		"conv" -> "mul"
 		"%3" -> "div"
@@ -23,42 +27,61 @@ digraph G {
 	}
 	subgraph Reverse {
 		"gconv" -> "g%4"
-		"%4" -> "gconv"
+		"%4" -> Tape
+		Tape -> "gconv"
 		"g%3" -> "garrayidx9"
-		"arrayidx9" -> "g%3"
+		"arrayidx9" -> Tape
+		Tape -> "g%3"
 		"g%4" -> "garrayidx11"
-		"arrayidx11" -> "g%4"
+		"arrayidx11" -> Tape
+		Tape -> "g%4"
 		"g%2" -> "g%1"
-		"%1" -> "g%2"
+		"%1" -> Tape
+		Tape -> "g%2"
 		"garrayidx9" -> "gnetwork"
-		"network" -> "garrayidx9"
+		"network" -> Tape
+		Tape -> "garrayidx9"
 		"gidxprom18" -> "glabel"
-		"label" -> "gidxprom18"
+		"label" -> Tape
+		Tape -> "gidxprom18"
 		"garrayidx19" -> "gidxprom18"
-		"idxprom18" -> "garrayidx19"
+		"idxprom18" -> Tape
+		Tape -> "garrayidx19"
 		"g%22" -> "g%21"
-		"%21" -> "g%22"
+		"%21" -> Tape
+		Tape -> "g%22"
 		"gdiv" -> "g%3"
-		"%3" -> "gdiv"
+		"%3" -> Tape
+		Tape -> "gdiv"
 		"garrayidx2" -> "garrayidx2"
-		"arrayidx2" -> "garrayidx2"
+		"arrayidx2" -> Tape
+		Tape -> "garrayidx2"
 		"garrayidx2" -> "g%1"
-		"%1" -> "garrayidx2"
+		"%1" -> Tape
+		Tape -> "garrayidx2"
 		"gmul" -> "gconv"
-		"conv" -> "gmul"
+		"conv" -> Tape
+		Tape -> "gmul"
 		"gmul" -> "gdiv"
-		"div" -> "gmul"
+		"div" -> Tape
+		Tape -> "gmul"
 		"gadd" -> "g%2"
-		"%2" -> "gadd"
+		"%2" -> Tape
+		Tape -> "gadd"
 		"gadd" -> "gmul"
-		"mul" -> "gadd"
+		"mul" -> Tape
+		Tape -> "gadd"
 		"garrayidx11" -> "gimage"
-		"image" -> "garrayidx11"
+		"image" -> Tape
+		Tape -> "garrayidx11"
 		"g%1" -> "garrayidx"
-		"arrayidx" -> "g%1"
+		"arrayidx" -> Tape
+		Tape -> "g%1"
 		"g%21" -> "garrayidx19"
-		"arrayidx19" -> "g%21"
+		"arrayidx19" -> Tape
+		Tape -> "g%21"
 		"garrayidx" -> "gnetwork"
-		"network" -> "garrayidx"
+		"network" -> Tape
+		Tape -> "garrayidx"
 	}
 }

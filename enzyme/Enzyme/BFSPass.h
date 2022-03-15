@@ -42,7 +42,7 @@ class Node {
         void DumpForward(std::ofstream &myfile);
         void DumpReverse(std::ofstream &myfile);
         void DumpRecompute(std::ofstream &myfile, int);
-
+        void DumpStore(std::ofstream &myfile);
 
         std::string RecurseToRoot(std::string prefix);
 
@@ -76,6 +76,7 @@ class Graph {
         void DumpForward(std::ofstream &myfile);
         void DumpReverse(std::ofstream &myfile);
         void DumpRecompute(std::ofstream &myfile);
+        void DumpStore(std::ofstream &myfile);
 
         void PrintLevels();
 

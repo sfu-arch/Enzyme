@@ -47,6 +47,7 @@
 #include "llvm/Analysis/AliasAnalysis.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/Analysis/ValueTracking.h"
+#include "llvm/Transforms/Scalar.h"
 
 #include "llvm/Transforms/Utils/BasicBlockUtils.h"
 #include "llvm/Transforms/Utils/Cloning.h"
@@ -2857,7 +2858,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
       break;
     }
   }
-
+    
   if (hasMetadata(key.todiff, "enzyme_gradient")) {
 
     DIFFE_TYPE subretType = key.todiff->getReturnType()->isFPOrFPVectorTy()
@@ -2973,7 +2974,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
     assert(md2->getNumOperands() == 1);
     auto gvemd = cast<ConstantAsMetadata>(md2->getOperand(0));
     auto foundcalled = cast<Function>(gvemd->getValue());
-
+  
     if (hasconstant) {
       EmitWarning("NoCustom",
                   key.todiff->getEntryBlock().begin()->getDebugLoc(),
@@ -3263,7 +3264,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   auto getIndex = [&](Instruction *I, CacheType u) -> unsigned {
     return gutils->getIndex(std::make_pair(I, u), mapping);
   };
-
+    
   gutils->computeMinCache(TR, guaranteedUnreachable);
 
   SmallPtrSet<const Value *, 4> unnecessaryValues;
@@ -3715,6 +3716,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //       errs() << bb.getName() << "\n";
   PassManagerBuilder Builder;
   legacy::FunctionPassManager PM(nf->getParent());
+  // PM.add(createLoopUnrollPass());
+  // PM.run(*nf);
+
   // PM.add(new instrumem::InstruMemPass());
   // PM.add(new instrumem::NodeDetectorPass());
   PM.add(new instrumem::BFSPass());

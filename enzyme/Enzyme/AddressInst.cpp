@@ -21,12 +21,15 @@ bool AddressInstPass::runOnFunction(Function &f) {
 
 void AddressInstPass::visitLoadInst(LoadInst &inst) {
     if (!inst.getParent()->getName().contains("invert"))
-        callPrintf(&inst, "load %x\n", {inst.getOperand(0)});
+        callPrintf(&inst, "load Forward %x\n", {inst.getOperand(0)});
+    callPrintf(&inst, "load Reverse %x\n", {inst.getOperand(0)});
+    
 }
 
 void AddressInstPass::visitStoreInst(StoreInst &inst) {
     if (!inst.getParent()->getName().contains("invert"))
-        callPrintf(&inst, "store %x\n", {inst.getPointerOperand()});
+        callPrintf(&inst, "store Forward %x\n", {inst.getPointerOperand()});
+    callPrintf(&inst, "store Reverse %x\n", {inst.getPointerOperand()});
 }
 // This function calls the printf before the given instruction.
 // HOW TO USE:
@@ -44,7 +47,7 @@ void AddressInstPass::callPrintf(Instruction *I, char *format, std::vector<Value
     llvm::Constant *ResultFormatStr = llvm::ConstantDataArray::getString(context, format);
 
     Constant *ResultFormatStrVar =
-        m.getOrInsertGlobal("ResultFormatStrIR" + std::to_string(isa<LoadInst>(I)) , ResultFormatStr->getType());
+        m.getOrInsertGlobal("ResultFormatStrIR" + std::string(format), ResultFormatStr->getType());
     dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
 
     Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "");

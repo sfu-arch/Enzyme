@@ -46,6 +46,8 @@
 #include "llvm/Analysis/MemoryDependenceAnalysis.h"
 #include "llvm/Analysis/MemorySSA.h"
 #include "llvm/Analysis/OptimizationRemarkEmitter.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "llvm/Transforms/Scalar.h"
 
 #include "llvm/Analysis/CFLSteensAliasAnalysis.h"
 #include "llvm/Analysis/DependenceAnalysis.h"
@@ -1556,6 +1558,8 @@ Function *PreProcessCache::CloneFunctionWithReturns(
     SmallPtrSetImpl<Value *> &constants, SmallPtrSetImpl<Value *> &nonconstant,
     SmallPtrSetImpl<Value *> &returnvals, ReturnType returnValue, Twine name,
     ValueToValueMapTy *VMapO, bool diffeReturnArg, llvm::Type *additionalArg) {
+  
+
   assert(!F->empty());
   F = preprocessForClone(F, mode);
   std::vector<Type *> RetTypes;

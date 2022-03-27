@@ -24,6 +24,7 @@
 using namespace instrumem;
 
 BFSPass::BFSPass() : FunctionPass(ID) {} // BFSPass
+std::string GetOpName(Value* op);
 
 bool BFSPass::runOnFunction(Function &f) {
     std::vector<Value*> bfs_stack;
@@ -38,17 +39,21 @@ bool BFSPass::runOnFunction(Function &f) {
         bfs_stack.erase(bfs_stack.begin());
         for (auto i: curr->users()) {
             if (auto *I = dyn_cast<Instruction>(i)) {
-                if (I->getParent()->getName().contains("invert") || !isValidInstruction(I)) 
-                    continue;
                 Value *child = I;
+                if (!isValidInstruction(I)) 
+                    continue;
                 if (isa<StoreInst>(I)) 
                     child = dyn_cast<StoreInst>(I)->getPointerOperand();
                 if (!g().count(child))
                     g.AddNode(child);
+ 
+                g[curr]->AddChild(g[child]);
+                
                 if (g[child]->visited)
                     continue;
-                g[curr]->AddChild(g[child]);
                 bfs_stack.push_back(child);
+            } else {
+                errs() << "Not an instruction << " <<  *i << "\n";
             }
         }
         g[curr]->visited = true;
@@ -97,39 +102,39 @@ bool BFSPass::runOnFunction(Function &f) {
     myfile << "}\n";
     myfile.close();
 
-    myfile.open ("recompute.dot");
-    myfile << "digraph G {\n";
-    myfile << "\tsubgraph Forward {\n";
-    g.DumpForward(myfile);
-    myfile << "\t}\n";
-    myfile << "\tsubgraph Reverse {\n";
-    g.DumpRecompute(myfile);
-    myfile << "\t}\n";
-    myfile << "}\n";
-    myfile.close();
+    // myfile.open ("recompute.dot");
+    // myfile << "digraph G {\n";
+    // myfile << "\tsubgraph Forward {\n";
+    // g.DumpForward(myfile);
+    // myfile << "\t}\n";
+    // myfile << "\tsubgraph Reverse {\n";
+    // g.DumpRecompute(myfile);
+    // myfile << "\t}\n";
+    // myfile << "}\n";
+    // myfile.close();
 
-    myfile.open ("store.dot");
-    myfile << "digraph G {\n";
-    myfile <<  "\t{\n" <<"\t\tnode [shape=Mrecord, color=green, style=dashed, width=8];\n\t\tTape\n\t}\n";
-    myfile << "\tsubgraph Forward {\n";
-    g.DumpForward(myfile);
-    myfile << "\t}\n";
-    myfile << "\tsubgraph Reverse {\n";
-    g.DumpStore(myfile);
-    myfile << "\t}\n";
-    myfile << "}\n";
-    myfile.close();
+    // myfile.open ("store.dot");
+    // myfile << "digraph G {\n";
+    // myfile <<  "\t{\n" <<"\t\tnode [shape=Mrecord, color=green, style=dashed, width=8];\n\t\tTape\n\t}\n";
+    // myfile << "\tsubgraph Forward {\n";
+    // g.DumpForward(myfile);
+    // myfile << "\t}\n";
+    // myfile << "\tsubgraph Reverse {\n";
+    // g.DumpStore(myfile);
+    // myfile << "\t}\n";
+    // myfile << "}\n";
+    // myfile.close();
 
 
 
-    myfile.open ("stats.txt");
-    myfile << "Register Count: " << g().size() << "\n";
-    myfile << "Fifo size: " << g.GetFifoSize() << "\n";
-    myfile << "Forward multicasts: " << g.GetParentChildCount() << "\n";
-    myfile << "Reverse multicasts: " << 2 * g.GetParentChildCount() << "\n";
-    myfile << "Number of recomputations: " << g.GetTotalCost() << "\n";
+    // myfile.open ("stats.txt");
+    // myfile << "Register Count: " << g().size() << "\n";
+    // myfile << "Fifo size: " << g.GetFifoSize() << "\n";
+    // myfile << "Forward multicasts: " << g.GetParentChildCount() << "\n";
+    // myfile << "Reverse multicasts: " << 2 * g.GetParentChildCount() << "\n";
+    // myfile << "Number of recomputations: " << g.GetTotalCost() << "\n";
 
-    myfile.close();
+    // myfile.close();
     return true;
 }
 
@@ -241,7 +246,8 @@ void Node::PropagateCost(int parent_old_cost, int parent_new_cost) {
 bool instrumem::isValidInstruction(Instruction *inst) {
     return isa<LoadInst>(inst)  || isa<BinaryOperator>(inst) 
     || isa<UnaryOperator>(inst) || isa<GetElementPtrInst>(inst) || isa<AllocaInst>(inst) || 
-    isa<CastInst>(inst) || isa<PHINode>(inst) || isa<CallInst>(inst) || isa<StoreInst>(inst);
+    isa<CastInst>(inst) || isa<PHINode>(inst) || isa<CallInst>(inst) || isa<StoreInst>(inst) ||
+    isa<BitCastInst>(inst);
 }
 
 std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &map) {
@@ -257,21 +263,31 @@ std::vector<std::pair<Value*, int>> instrumem::SortMap(std::map<Value*, int> &ma
 
 void Node::DumpForward(std::ofstream &myfile) {
  
-    if (value->getName().contains("'"))
-        return;
+    // if (value->getName().contains("'"))
+    //     return;
 
-    for (auto child : children)
-        myfile << "\t\t\"" << value->getNameOrAsOperand()  << '"' << " -> " << '"' << child->value->getNameOrAsOperand()  << '"' <<  "\n";
+    if (is_memop)
+        myfile << "\t\t\"" << GetNodeName() << "\" [color = gray style=filled];" <<  "\n";
+    if (isa<BinaryOperator>(value) || isa<UnaryOperator>(value))
+        myfile << "\t\t\"" << GetNodeName() << "\" [color = yellow style=filled];" <<  "\n";
+    for (auto child : children) {
+        myfile << "\t\t\"" << GetNodeName() << '"' << " -> " << '"' << child->GetNodeName() << "\" " <<  "\n";
+    }
 
 }
 
-void Node::DumpReverse(std::ofstream &myfile) {
-    if (value->getName().contains("'"))
-        return;
-    for (auto parent : parents) {
-        myfile << "\t\t\"g" << value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << parent->value->getNameOrAsOperand()  << '"' <<  "\n";
-        myfile << "\t\t\"" << parent->value->getNameOrAsOperand()  << '"' << " -> " << "\"g" << value->getNameOrAsOperand()  << '"' <<  "\n";
+std::string Node::GetNodeName() {
+    std::string prefix =  value->getNameOrAsOperand()[0] == '%'? "$": "";
+    std::string parent = isa<Instruction>(value)? " : " + ((Instruction*)value)->getParent()->getName().str(): "";
+    return prefix + value->getNameOrAsOperand() + " : " + GetOpName(value) + parent;
+}
 
+void Node::DumpReverse(std::ofstream &myfile) {
+    // if (value->getName().contains("'"))
+    //     return;
+    for (auto parent : parents) {
+        myfile << "\t\t\"g" << GetNodeName()  << '"' << " -> " << "\"g" << parent->GetNodeName()  << '"' <<  "\n";
+        myfile << "\t\t\"" << parent-> GetNodeName()  << '"' << " -> " << "\"g" <<  GetNodeName()  << '"' <<  "\n";
     }
 }
 
@@ -350,5 +366,30 @@ int Graph::GetParentChildCount() {
     return count;
 }
 
+std::string GetOpName(Value* op) {
+    if (!isa<Instruction>(op))
+        return "";
+    
+    int opcode = cast<Instruction>(op)->getOpcode();
+    if (opcode == Instruction::PHI)
+        return "PHI";
+    if (opcode == Instruction::Alloca)
+        return "Alloca";
+    if (opcode == Instruction::Load)
+        return "Load";
+    if (opcode == Instruction::Store)
+        return "Store";
+    if (opcode == Instruction::FAdd)
+        return "FAdd";
+    if (opcode == Instruction::FSub)
+        return "FSub";
+    if (opcode == Instruction::FMul)
+        return "FMul";
+    if (opcode == Instruction::FDiv)
+        return "FDiv";
+   
+    return std::to_string(opcode);
+
+}
 char BFSPass::ID = 0;
 static RegisterPass<BFSPass> X("bfs", "BFS Pass");

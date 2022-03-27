@@ -1,189 +1,189 @@
 read_ba_instance: opened data/ba10_n1197_m126327_p563734.txt
-Tapenade combined 0.386786
+Tapenade combined 0.376428
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba10_n1197_m126327_p563734.txt
-Adept combined 12.091038
+Adept combined 11.465162
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba10_n1197_m126327_p563734.txt
-Enzyme combined 0.306269
+Enzyme combined 0.297911
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba14_n356_m226730_p1255268.txt
-Tapenade combined 0.800894
+Tapenade combined 0.774319
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba14_n356_m226730_p1255268.txt
-Adept combined 2.507097
+Adept combined 2.379591
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba14_n356_m226730_p1255268.txt
-Enzyme combined 0.677869
+Enzyme combined 0.660885
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba18_n1936_m649673_p5213733.txt
-Tapenade combined 3.303229
+Tapenade combined 3.191188
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba18_n1936_m649673_p5213733.txt
-Adept combined 10.367336
+Adept combined 9.959287
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba18_n1936_m649673_p5213733.txt
-Enzyme combined 2.791410
+Enzyme combined 2.705025
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba2_n21_m11315_p36455.txt
-Tapenade combined 0.018497
+Tapenade combined 0.017587
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba2_n21_m11315_p36455.txt
-Adept combined 0.068071
+Adept combined 0.064731
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba2_n21_m11315_p36455.txt
-Enzyme combined 0.014631
+Enzyme combined 0.013750
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba6_n539_m65220_p277273.txt
-Tapenade combined 0.177016
+Tapenade combined 0.169668
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba6_n539_m65220_p277273.txt
-Adept combined 0.586441
+Adept combined 0.531846
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba6_n539_m65220_p277273.txt
-Enzyme combined 0.149106
+Enzyme combined 0.146713
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/test.txt
 Tapenade combined 0.000009
 228.877202 634.574811 -782.222866 2.428926 -11.782808 
 read_ba_instance: opened data/test.txt
-Adept combined 0.000040
+Adept combined 0.000037
 228.877202 634.574811 -782.222866 2.428926 -11.782808 
 read_ba_instance: opened data/test.txt
-Enzyme combined 0.000005
+Enzyme combined 0.000004
 228.877202 634.574811 -782.222866 2.428926 -11.782808 
 read_ba_instance: opened data/ba11_n1723_m156502_p678718.txt
-Tapenade combined 0.433601
+Tapenade combined 0.415215
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba11_n1723_m156502_p678718.txt
-Adept combined 1.356861
+Adept combined 1.291427
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba11_n1723_m156502_p678718.txt
-Enzyme combined 0.368313
+Enzyme combined 0.358713
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba15_n1102_m780462_p4052340.txt
-Tapenade combined 2.564423
+Tapenade combined 2.463155
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba15_n1102_m780462_p4052340.txt
-Adept combined 8.057864
+Adept combined 7.718474
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba15_n1102_m780462_p4052340.txt
-Enzyme combined 2.171629
+Enzyme combined 2.119817
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba19_n4585_m1324582_p9125125.txt
-Tapenade combined 5.770508
+Tapenade combined 5.566659
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba19_n4585_m1324582_p9125125.txt
-Adept combined 18.299435
+Adept combined 17.983637
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba19_n4585_m1324582_p9125125.txt
-Enzyme combined 4.882819
+Enzyme combined 4.717540
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba3_n161_m48126_p182072.txt
-Tapenade combined 0.109098
+Tapenade combined 0.109344
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba3_n161_m48126_p182072.txt
-Adept combined 0.355456
+Adept combined 0.358411
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba3_n161_m48126_p182072.txt
-Enzyme combined 0.090006
+Enzyme combined 0.090474
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba7_n93_m61203_p287451.txt
-Tapenade combined 0.174528
+Tapenade combined 0.167353
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba7_n93_m61203_p287451.txt
-Adept combined 0.561618
+Adept combined 0.534982
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba7_n93_m61203_p287451.txt
-Enzyme combined 0.155336
+Enzyme combined 0.149191
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba12_n253_m163691_p899155.txt
-Tapenade combined 0.575006
+Tapenade combined 0.551033
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba12_n253_m163691_p899155.txt
-Adept combined 1.794087
+Adept combined 1.722604
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba12_n253_m163691_p899155.txt
-Enzyme combined 0.486840
+Enzyme combined 0.471747
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba16_n1544_m942409_p4750193.txt
-Tapenade combined 3.012009
+Tapenade combined 2.887050
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba16_n1544_m942409_p4750193.txt
-Adept combined 9.362268
+Adept combined 9.078422
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba16_n1544_m942409_p4750193.txt
-Enzyme combined 2.548432
+Enzyme combined 2.464496
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba1_n49_m7776_p31843.txt
-Tapenade combined 0.015875
+Tapenade combined 0.015088
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba1_n49_m7776_p31843.txt
-Adept combined 0.059032
+Adept combined 0.057032
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba1_n49_m7776_p31843.txt
-Enzyme combined 0.012708
+Enzyme combined 0.012379
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba4_n372_m47423_p204472.txt
-Tapenade combined 0.128264
+Tapenade combined 0.123352
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba4_n372_m47423_p204472.txt
-Adept combined 0.398535
+Adept combined 0.376679
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba4_n372_m47423_p204472.txt
-Enzyme combined 0.101431
+Enzyme combined 0.098587
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba8_n88_m64298_p383937.txt
-Tapenade combined 0.245662
+Tapenade combined 0.234021
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba8_n88_m64298_p383937.txt
-Adept combined 0.770986
+Adept combined 0.729051
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba8_n88_m64298_p383937.txt
-Enzyme combined 0.208868
+Enzyme combined 0.200952
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba13_n245_m198739_p1091386.txt
-Tapenade combined 0.700579
+Tapenade combined 0.673418
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba13_n245_m198739_p1091386.txt
-Adept combined 2.181829
+Adept combined 2.117351
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba13_n245_m198739_p1091386.txt
-Enzyme combined 0.594148
+Enzyme combined 0.580420
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba17_n1778_m993923_p5001946.txt
-Tapenade combined 3.166228
+Tapenade combined 3.056364
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba17_n1778_m993923_p5001946.txt
-Adept combined 9.988075
+Adept combined 9.503299
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba17_n1778_m993923_p5001946.txt
-Enzyme combined 2.679919
+Enzyme combined 2.596778
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba20_n13682_m4456117_p2987644.txt
-Tapenade combined 18.325600
+Tapenade combined 17.433399
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba20_n13682_m4456117_p2987644.txt
-Adept combined 57.838356
+Adept combined 54.838531
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba20_n13682_m4456117_p2987644.txt
-Enzyme combined 15.608816
+Enzyme combined 14.942485
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba5_n257_m65132_p225911.txt
-Tapenade combined 0.143996
+Tapenade combined 0.138087
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba5_n257_m65132_p225911.txt
-Adept combined 0.444350
+Adept combined 0.425454
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba5_n257_m65132_p225911.txt
-Enzyme combined 0.122789
+Enzyme combined 0.116942
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba9_n810_m88814_p393775.txt
-Tapenade combined 0.252359
+Tapenade combined 0.239881
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba9_n810_m88814_p393775.txt
-Adept combined 0.784345
+Adept combined 0.742532
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 
 read_ba_instance: opened data/ba9_n810_m88814_p393775.txt
-Enzyme combined 0.213732
+Enzyme combined 0.208900
 -461.446321 178.867928 -19.423916 -3.061598 6.392458 

@@ -1,45 +1,39 @@
 digraph G {
 	subgraph Forward {
 		"conv" -> "mul"
-		"%3" -> "div"
-		"%4" -> "conv"
+		"idxprom18" -> "arrayidx19"
+		"idxprom18" -> "arrayidx19'ipg"
 		"%2" -> "add"
 		"arrayidx9" -> "%3"
-		"idxprom18" -> "arrayidx19'ipg"
-		"idxprom18" -> "arrayidx19"
 		"arrayidx19" -> "%21"
-		"div" -> "mul"
-		"arrayidx2" -> "arrayidx2"
+		"arrayidx11" -> "%4"
 		"mul" -> "add"
 		"image" -> "arrayidx11"
-		"network" -> "arrayidx"
 		"network" -> "arrayidx9"
+		"network" -> "arrayidx"
 		"label" -> "idxprom18"
-		"arrayidx11" -> "%4"
+		"arrayidx2" -> "arrayidx2"
+		"arrayidx" -> "%1"
 		"%1" -> "arrayidx2"
 		"%1" -> "%2"
+		"%4" -> "conv"
 		"%21" -> "%22"
-		"arrayidx" -> "%1"
+		"div" -> "mul"
+		"%3" -> "div"
 	}
 	subgraph Reverse {
 		"gconv" -> "g%4"
 		"conv_%4" -> "gconv"[color="red"]
 		"conv_arrayidx11" -> "conv_%4"[color="red"]
 		"conv_image" -> "conv_arrayidx11"[color="red"]
-		"g%3" -> "garrayidx9"
-		"%3_arrayidx9" -> "g%3"[color="red"]
-		"%3_network" -> "%3_arrayidx9"[color="red"]
-		"g%4" -> "garrayidx11"
-		"%4_arrayidx11" -> "g%4"[color="red"]
-		"%4_image" -> "%4_arrayidx11"[color="red"]
+		"gidxprom18" -> "glabel"
+		"idxprom18_label" -> "gidxprom18"[color="red"]
 		"g%2" -> "g%1"
 		"%2_%1" -> "g%2"[color="red"]
 		"%2_arrayidx" -> "%2_%1"[color="red"]
 		"%2_network" -> "%2_arrayidx"[color="red"]
 		"garrayidx9" -> "gnetwork"
 		"arrayidx9_network" -> "garrayidx9"[color="red"]
-		"gidxprom18" -> "glabel"
-		"idxprom18_label" -> "gidxprom18"[color="red"]
 		"garrayidx19" -> "gidxprom18"
 		"arrayidx19_idxprom18" -> "garrayidx19"[color="red"]
 		"arrayidx19_label" -> "arrayidx19_idxprom18"[color="red"]
@@ -48,16 +42,12 @@ digraph G {
 		"%22_arrayidx19" -> "%22_%21"[color="red"]
 		"%22_idxprom18" -> "%22_arrayidx19"[color="red"]
 		"%22_label" -> "%22_idxprom18"[color="red"]
-		"gdiv" -> "g%3"
-		"div_%3" -> "gdiv"[color="red"]
-		"div_arrayidx9" -> "div_%3"[color="red"]
-		"div_network" -> "div_arrayidx9"[color="red"]
-		"garrayidx2" -> "garrayidx2"
-		"arrayidx2" -> "garrayidx2"
-		"garrayidx2" -> "g%1"
-		"arrayidx2_%1" -> "garrayidx2"[color="red"]
-		"arrayidx2_arrayidx" -> "arrayidx2_%1"[color="red"]
-		"arrayidx2_network" -> "arrayidx2_arrayidx"[color="red"]
+		"gadd" -> "gmul"
+		"mul" -> "gadd"
+		"gadd" -> "g%2"
+		"%2" -> "gadd"
+		"garrayidx11" -> "gimage"
+		"arrayidx11_image" -> "garrayidx11"[color="red"]
 		"gmul" -> "gconv"
 		"mul_conv" -> "gmul"[color="red"]
 		"mul_%4" -> "mul_conv"[color="red"]
@@ -68,20 +58,30 @@ digraph G {
 		"mul_%3" -> "mul_div"[color="red"]
 		"mul_arrayidx9" -> "mul_%3"[color="red"]
 		"mul_network" -> "mul_arrayidx9"[color="red"]
-		"gadd" -> "g%2"
-		"%2" -> "gadd"
-		"gadd" -> "gmul"
-		"mul" -> "gadd"
-		"garrayidx11" -> "gimage"
-		"arrayidx11_image" -> "garrayidx11"[color="red"]
+		"garrayidx2" -> "garrayidx2"
+		"arrayidx2" -> "garrayidx2"
+		"garrayidx2" -> "g%1"
+		"arrayidx2_%1" -> "garrayidx2"[color="red"]
+		"arrayidx2_arrayidx" -> "arrayidx2_%1"[color="red"]
+		"arrayidx2_network" -> "arrayidx2_arrayidx"[color="red"]
+		"garrayidx" -> "gnetwork"
+		"arrayidx_network" -> "garrayidx"[color="red"]
 		"g%1" -> "garrayidx"
 		"%1_arrayidx" -> "g%1"[color="red"]
 		"%1_network" -> "%1_arrayidx"[color="red"]
+		"g%4" -> "garrayidx11"
+		"%4_arrayidx11" -> "g%4"[color="red"]
+		"%4_image" -> "%4_arrayidx11"[color="red"]
 		"g%21" -> "garrayidx19"
 		"%21_arrayidx19" -> "g%21"[color="red"]
 		"%21_idxprom18" -> "%21_arrayidx19"[color="red"]
 		"%21_label" -> "%21_idxprom18"[color="red"]
-		"garrayidx" -> "gnetwork"
-		"arrayidx_network" -> "garrayidx"[color="red"]
+		"gdiv" -> "g%3"
+		"div_%3" -> "gdiv"[color="red"]
+		"div_arrayidx9" -> "div_%3"[color="red"]
+		"div_network" -> "div_arrayidx9"[color="red"]
+		"g%3" -> "garrayidx9"
+		"%3_arrayidx9" -> "g%3"[color="red"]
+		"%3_network" -> "%3_arrayidx9"[color="red"]
 	}
 }

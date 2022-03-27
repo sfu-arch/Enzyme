@@ -25,8 +25,8 @@ bool ForwardNodeInstPass::runOnFunction(Function &f) {
 }
 
 void ForwardNodeInstPass::visitInstruction(Instruction &I) {
-    if (I.hasMetadata("node"))
-        CallPrintf(&I, "Node\n", {});
+    // if (I.hasMetadata("node"))
+    //     CallPrintf(&I, "Node\n", {});
 }
 
 

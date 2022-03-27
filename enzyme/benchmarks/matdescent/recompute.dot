@@ -1,62 +1,62 @@
 digraph G {
 	subgraph Forward {
+		"arrayidx6" -> "%4"
 		"mat" -> "arrayidx6"
 		"vec" -> "arrayidx8"
 		"arrayidx8" -> "%5"
+		"arrayidx" -> "arrayidx"
 		"%5" -> "mul9"
-		"%4" -> "mul9"
-		"mul9" -> "add12"
 		"add12" -> "arrayidx"
 		"add12" -> "%2"
-		"arrayidx" -> "arrayidx"
-		"arrayidx6" -> "%4"
+		"mul9" -> "add12"
+		"%4" -> "mul9"
 	}
 	subgraph Reverse {
+		"garrayidx6" -> "gmat"
+		"arrayidx6_mat" -> "garrayidx6"[color="red"]
 		"garrayidx8" -> "gvec"
 		"arrayidx8_vec" -> "garrayidx8"[color="red"]
-		"g%5" -> "garrayidx8"
-		"%5_arrayidx8" -> "g%5"[color="red"]
-		"%5_vec" -> "%5_arrayidx8"[color="red"]
-		"g%4" -> "garrayidx6"
-		"%4_arrayidx6" -> "g%4"[color="red"]
-		"%4_mat" -> "%4_arrayidx6"[color="red"]
-		"g%2" -> "gadd12"
-		"%2_add12" -> "g%2"[color="red"]
-		"%2_mul9" -> "%2_add12"[color="red"]
-		"%2_%4" -> "%2_mul9"[color="red"]
-		"%2_arrayidx6" -> "%2_%4"[color="red"]
-		"%2_mat" -> "%2_arrayidx6"[color="red"]
-		"%2_%5" -> "%2_mul9"[color="red"]
-		"%2_arrayidx8" -> "%2_%5"[color="red"]
-		"%2_vec" -> "%2_arrayidx8"[color="red"]
-		"gmul9" -> "g%4"
-		"mul9_%4" -> "gmul9"[color="red"]
-		"mul9_arrayidx6" -> "mul9_%4"[color="red"]
-		"mul9_mat" -> "mul9_arrayidx6"[color="red"]
-		"gmul9" -> "g%5"
-		"mul9_%5" -> "gmul9"[color="red"]
-		"mul9_arrayidx8" -> "mul9_%5"[color="red"]
-		"mul9_vec" -> "mul9_arrayidx8"[color="red"]
-		"gadd12" -> "gmul9"
-		"add12_mul9" -> "gadd12"[color="red"]
-		"add12_%4" -> "add12_mul9"[color="red"]
-		"add12_arrayidx6" -> "add12_%4"[color="red"]
-		"add12_mat" -> "add12_arrayidx6"[color="red"]
-		"add12_%5" -> "add12_mul9"[color="red"]
-		"add12_arrayidx8" -> "add12_%5"[color="red"]
-		"add12_vec" -> "add12_arrayidx8"[color="red"]
 		"garrayidx" -> "garrayidx"
 		"arrayidx" -> "garrayidx"
 		"garrayidx" -> "gadd12"
 		"arrayidx_add12" -> "garrayidx"[color="red"]
 		"arrayidx_mul9" -> "arrayidx_add12"[color="red"]
-		"arrayidx_%4" -> "arrayidx_mul9"[color="red"]
-		"arrayidx_arrayidx6" -> "arrayidx_%4"[color="red"]
-		"arrayidx_mat" -> "arrayidx_arrayidx6"[color="red"]
 		"arrayidx_%5" -> "arrayidx_mul9"[color="red"]
 		"arrayidx_arrayidx8" -> "arrayidx_%5"[color="red"]
 		"arrayidx_vec" -> "arrayidx_arrayidx8"[color="red"]
-		"garrayidx6" -> "gmat"
-		"arrayidx6_mat" -> "garrayidx6"[color="red"]
+		"arrayidx_%4" -> "arrayidx_mul9"[color="red"]
+		"arrayidx_arrayidx6" -> "arrayidx_%4"[color="red"]
+		"arrayidx_mat" -> "arrayidx_arrayidx6"[color="red"]
+		"g%5" -> "garrayidx8"
+		"%5_arrayidx8" -> "g%5"[color="red"]
+		"%5_vec" -> "%5_arrayidx8"[color="red"]
+		"gadd12" -> "gmul9"
+		"add12_mul9" -> "gadd12"[color="red"]
+		"add12_%5" -> "add12_mul9"[color="red"]
+		"add12_arrayidx8" -> "add12_%5"[color="red"]
+		"add12_vec" -> "add12_arrayidx8"[color="red"]
+		"add12_%4" -> "add12_mul9"[color="red"]
+		"add12_arrayidx6" -> "add12_%4"[color="red"]
+		"add12_mat" -> "add12_arrayidx6"[color="red"]
+		"gmul9" -> "g%5"
+		"mul9_%5" -> "gmul9"[color="red"]
+		"mul9_arrayidx8" -> "mul9_%5"[color="red"]
+		"mul9_vec" -> "mul9_arrayidx8"[color="red"]
+		"gmul9" -> "g%4"
+		"mul9_%4" -> "gmul9"[color="red"]
+		"mul9_arrayidx6" -> "mul9_%4"[color="red"]
+		"mul9_mat" -> "mul9_arrayidx6"[color="red"]
+		"g%2" -> "gadd12"
+		"%2_add12" -> "g%2"[color="red"]
+		"%2_mul9" -> "%2_add12"[color="red"]
+		"%2_%5" -> "%2_mul9"[color="red"]
+		"%2_arrayidx8" -> "%2_%5"[color="red"]
+		"%2_vec" -> "%2_arrayidx8"[color="red"]
+		"%2_%4" -> "%2_mul9"[color="red"]
+		"%2_arrayidx6" -> "%2_%4"[color="red"]
+		"%2_mat" -> "%2_arrayidx6"[color="red"]
+		"g%4" -> "garrayidx6"
+		"%4_arrayidx6" -> "g%4"[color="red"]
+		"%4_mat" -> "%4_arrayidx6"[color="red"]
 	}
 }

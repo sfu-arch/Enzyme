@@ -54,6 +54,7 @@
 #include "llvm/Analysis/InlineCost.h"
 #include "llvm/Analysis/ScalarEvolution.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
+#include "llvm/IR/LegacyPassManager.h"
 
 #include "ActivityAnalysis.h"
 #include "EnzymeLogic.h"
@@ -689,6 +690,7 @@ public:
     Function *newFunc = nullptr;
     Type *tapeType = nullptr;
     const AugmentedReturn *aug;
+
     switch (mode) {
     case DerivativeMode::ForwardModeVector:
     case DerivativeMode::ForwardModeSplit:
@@ -719,10 +721,13 @@ public:
       bool forceAnonymousTape = !sizeOnly && allocatedTapeSize == -1;
       bool returnUsed = !cast<Function>(fn)->getReturnType()->isVoidTy() &&
                         !cast<Function>(fn)->getReturnType()->isEmptyTy();
+      // errs() << "creating primal function\n" << cast<Function>(fn)->getName() << "\n";
+
       aug = &Logic.CreateAugmentedPrimal(
           cast<Function>(fn), retType, constants, TLI, TA,
           /*returnUsed*/ returnUsed, type_args, volatile_args,
           forceAnonymousTape, /*atomicAdd*/ AtomicAdd, /*PostOpt*/ PostOpt);
+
       auto &DL = cast<Function>(fn)->getParent()->getDataLayout();
       if (!forceAnonymousTape) {
         assert(!aug->tapeType);

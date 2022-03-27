@@ -10142,8 +10142,8 @@ _ZL25neural_network_softmax_v2PKfPfi.exit.i:      ; preds = %for.body15.for.body
   %"arrayidx19'ipg.i" = getelementptr inbounds [10 x float], [10 x float]* %"activations2'ipa.i", i64 0, i64 %idxprom18.i, !node !232
   %arrayidx19.i = getelementptr inbounds [10 x float], [10 x float]* %activations2.i, i64 0, i64 %idxprom18.i, !node !232
   %53 = load float, float* %arrayidx19.i, align 4, !tbaa !155, !node !232
-  %54 = fdiv fast float 1.000000e+00, %53
-  %55 = load float, float* %"arrayidx19'ipg.i", align 4
+  %54 = fdiv fast float 1.000000e+00, %53, !node !232
+  %55 = load float, float* %"arrayidx19'ipg.i", align 4, !node !232
   %56 = fsub fast float %55, %54
   store float %56, float* %"arrayidx19'ipg.i", align 4
   %57 = fdiv fast float 1.000000e+00, %add.i.i22
@@ -10159,7 +10159,7 @@ invertfor.inc14.i:                                ; preds = %invertfor.body15.i.
   %"iv'ac.0.i" = phi i64 [ 9, %invertfor.body15.i.preheader.i ], [ %73, %invertfor.body.invertfor.inc14_crit_edge.i ]
   %"arrayidx2'ipg_unwrap12.i" = getelementptr inbounds [10 x float], [10 x float]* %"activations'ipa.i", i64 0, i64 %"iv'ac.0.i"
   store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap12.i", align 4
-  %m0diffediv.i = fmul fast float %58, 0x3F70101020000000
+  %m0diffediv.i = fmul fast float %58, 0x3F70101020000000, !node !232
   %broadcast.splatinsert = insertelement <4 x float> poison, float %m0diffediv.i, i32 0
   %broadcast.splat = shufflevector <4 x float> %broadcast.splatinsert, <4 x float> poison, <4 x i32> zeroinitializer
   br label %vector.body66
@@ -10167,14 +10167,14 @@ invertfor.inc14.i:                                ; preds = %invertfor.body15.i.
 vector.body66:                                    ; preds = %vector.body66, %invertfor.inc14.i
   %index68 = phi i64 [ 0, %invertfor.inc14.i ], [ %index.next69, %vector.body66 ]
   %offset.idx = sub i64 783, %index68
-  %59 = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %3, i64 %indvars.iv80, i32 0, i64 %offset.idx
+  %59 = getelementptr inbounds %struct.mnist_image_t_, %struct.mnist_image_t_* %3, i64 %indvars.iv80, i32 0, i64 %offset.idx, !node !232
   %60 = getelementptr inbounds i8, i8* %59, i64 -3
   %61 = bitcast i8* %60 to <4 x i8>*
   %wide.load72 = load <4 x i8>, <4 x i8>* %61, align 1, !tbaa !12
   %reverse = shufflevector <4 x i8> %wide.load72, <4 x i8> poison, <4 x i32> <i32 3, i32 2, i32 1, i32 0>
   %62 = uitofp <4 x i8> %reverse to <4 x float>
   %63 = fmul fast <4 x float> %broadcast.splat, %62
-  %64 = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %gradient, i64 0, i32 1, i64 %"iv'ac.0.i", i64 %offset.idx
+  %64 = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %gradient, i64 0, i32 1, i64 %"iv'ac.0.i", i64 %offset.idx, !node !232
   %65 = getelementptr inbounds float, float* %64, i64 -3
   %66 = bitcast float* %65 to <4 x float>*
   %wide.load73 = load <4 x float>, <4 x float>* %66, align 4
@@ -10189,9 +10189,9 @@ vector.body66:                                    ; preds = %vector.body66, %inv
 
 middle.block64:                                   ; preds = %vector.body66
   store float 0.000000e+00, float* %"arrayidx2'ipg_unwrap12.i", align 4
-  %"arrayidx'ipg_unwrap.i" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %gradient, i64 0, i32 0, i64 %"iv'ac.0.i"
-  %70 = load float, float* %"arrayidx'ipg_unwrap.i", align 4
-  %71 = fadd fast float %70, %58
+  %"arrayidx'ipg_unwrap.i" = getelementptr inbounds %struct.neural_network_t_, %struct.neural_network_t_* %gradient, i64 0, i32 0, i64 %"iv'ac.0.i", !node !232
+  %70 = load float, float* %"arrayidx'ipg_unwrap.i", align 4, !node !232
+  %71 = fadd fast float %70, %58, !node !232
   store float %71, float* %"arrayidx'ipg_unwrap.i", align 4
   %72 = icmp eq i64 %"iv'ac.0.i", 0
   %73 = add nsw i64 %"iv'ac.0.i", -1

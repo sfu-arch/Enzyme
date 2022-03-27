@@ -27,11 +27,12 @@ using adept::Vector;
 #define ITERS 1000
 #define RATE 0.00000001
 
-double matvec_real(double* mat, double* vec) {
+inline double matvec_real(double* mat, double* vec) {
   double *out = (double*)malloc(sizeof(double)*N);
   //double *out = new double[N];
   for(int i=0; i<N; i++) {
     out[i] = 0;
+    #pragma clang loop unroll(full)
     for(int j=0; j<M; j++) {
         out[i] += mat[i*M+j] * vec[j];
     }
@@ -95,8 +96,8 @@ adouble matvec(aMatrix& mat, Vector& vec) {
   for(int i=0; i<N; i++) {
     out[i] = 0;
     for(int j=0; j<M; j++) {
-        out[i] +=
-//        out[i] += mat[i*M+j] * vec[j];
+        // out[i] +=
+       out[i] += mat[i*M+j] * vec[j];
     }
   }
 #endif

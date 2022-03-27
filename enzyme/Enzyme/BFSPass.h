@@ -24,7 +24,10 @@ std::vector<std::pair<Value*, int>> SortMap(std::map<Value*, int> &map);
 
 class Node {
     public:
-        Node(Value *v) : value(v), level(0), cost(0) {}
+        Node(Value *v) : value(v), level(0), cost(0) {
+            if (isa<Instruction>(v) && (isa<LoadInst>(v) || isa<StoreInst>(v)))
+                is_memop = true;
+        }
         Value* GetValue() { return value; }
 
         void AddChild(Node *child);
@@ -33,6 +36,8 @@ class Node {
         int GetFifoSize(int max_level);
         int GetChildrenCount() { return children.size(); }
         int GetFifoSizeBetweenNodes(int max_level, int parent_level, int child_level);
+
+        bool IsMemOp() { return is_memop; }
 
         void PushToTape();
         void UndoPushToTape(int prev_cost);
@@ -45,12 +50,14 @@ class Node {
         void DumpStore(std::ofstream &myfile);
 
         std::string RecurseToRoot(std::string prefix);
-
+        std::string GetNodeName();
+        
         bool visited = false;
         int level;
         int cost;
     private:
         Value *value;
+        bool is_memop = false;
 
         std::set<Node *> children;
         std::set<Node *> parents;

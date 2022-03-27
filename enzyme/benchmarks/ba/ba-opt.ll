@@ -23077,41 +23077,41 @@ entry:
 ; Function Attrs: nofree norecurse nounwind uwtable willreturn mustprogress
 define internal void @diffecompute_zach_weight_error(double* nocapture readonly %w, double* nocapture %"w'", double* nocapture %err, double* nocapture %"err'") #14 {
 entry:
-  %"sub'de" = alloca double, align 8
+  %"sub'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %"mul'de" = alloca double, align 8
+  %"mul'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul'de", align 8
-  %"'de" = alloca double, align 8
+  %"'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
   %0 = load double, double* %w, align 8, !tbaa !68, !node !362
   br label %invertentry
 
 invertentry:                                      ; preds = %entry
-  %1 = load double, double* %"err'", align 8
+  %1 = load double, double* %"err'", align 8, !node !362
   store double 0.000000e+00, double* %"err'", align 8
-  %2 = load double, double* %"sub'de", align 8
-  %3 = fadd fast double %2, %1
+  %2 = load double, double* %"sub'de", align 8, !node !362
+  %3 = fadd fast double %2, %1, !node !362
   store double %3, double* %"sub'de", align 8
-  %4 = load double, double* %"sub'de", align 8
-  %5 = fneg fast double %4
+  %4 = load double, double* %"sub'de", align 8, !node !362
+  %5 = fneg fast double %4, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %6 = load double, double* %"mul'de", align 8
-  %7 = fadd fast double %6, %5
+  %6 = load double, double* %"mul'de", align 8, !node !362
+  %7 = fadd fast double %6, %5, !node !362
   store double %7, double* %"mul'de", align 8
-  %8 = load double, double* %"mul'de", align 8
-  %m0diffe = fmul fast double %8, %0
-  %m1diffe = fmul fast double %8, %0
+  %8 = load double, double* %"mul'de", align 8, !node !362
+  %m0diffe = fmul fast double %8, %0, !node !362
+  %m1diffe = fmul fast double %8, %0, !node !362
   store double 0.000000e+00, double* %"mul'de", align 8
-  %9 = load double, double* %"'de", align 8
-  %10 = fadd fast double %9, %m0diffe
+  %9 = load double, double* %"'de", align 8, !node !362
+  %10 = fadd fast double %9, %m0diffe, !node !362
   store double %10, double* %"'de", align 8
-  %11 = load double, double* %"'de", align 8
-  %12 = fadd fast double %11, %m1diffe
+  %11 = load double, double* %"'de", align 8, !node !362
+  %12 = fadd fast double %11, %m1diffe, !node !362
   store double %12, double* %"'de", align 8
-  %13 = load double, double* %"'de", align 8
+  %13 = load double, double* %"'de", align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
-  %14 = load double, double* %"w'", align 8
-  %15 = fadd fast double %14, %13
+  %14 = load double, double* %"w'", align 8, !node !362
+  %15 = fadd fast double %14, %13, !node !362
   store double %15, double* %"w'", align 8
   ret void
 }
@@ -23197,59 +23197,59 @@ project.exit:
 ; Function Attrs: nofree nounwind uwtable mustprogress
 define internal void @diffecompute_reproj_error(double* noalias nocapture readonly %cam, double* nocapture %"cam'", double* noalias nocapture readonly %X, double* nocapture %"X'", double* noalias nocapture readonly %w, double* nocapture %"w'", double* noalias nocapture readonly %feat, double* noalias nocapture %err, double* nocapture %"err'") #15 {
 project.exit:
-  %"mul6'de" = alloca double, align 8
+  %"mul6'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul6'de", align 8
-  %"sub5'de" = alloca double, align 8
+  %"sub5'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub5'de", align 8
-  %"'de" = alloca double, align 8
+  %"'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
-  %"add30.i'de" = alloca double, align 8
+  %"add30.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add30.i'de", align 8
-  %"mul'de" = alloca double, align 8
+  %"mul'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul'de", align 8
-  %"sub'de" = alloca double, align 8
+  %"sub'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %"add.i'de" = alloca double, align 8
+  %"add.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add.i'de", align 8
-  %"mul28.i'de" = alloca double, align 8
+  %"mul28.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul28.i'de", align 8
-  %"'de2" = alloca double, align 8
+  %"'de2" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de2", align 8
-  %"mul6.i.i'de" = alloca double, align 8
+  %"mul6.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul6.i.i'de", align 8
-  %"div19.i'de" = alloca double, align 8
+  %"div19.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"div19.i'de", align 8
-  %"mul.i'de" = alloca double, align 8
+  %"mul.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul.i'de", align 8
-  %"'de3" = alloca double, align 8
+  %"'de3" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de3", align 8
-  %"div.i'de" = alloca double, align 8
+  %"div.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"div.i'de", align 8
-  %"add4.i.i'de" = alloca double, align 8
+  %"add4.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add4.i.i'de", align 8
-  %"'de6" = alloca double, align 8
+  %"'de6" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de6", align 8
-  %"reass.mul.i.i'de" = alloca double, align 8
+  %"reass.mul.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"reass.mul.i.i'de", align 8
-  %"reass.add.i.i'de" = alloca double, align 8
+  %"reass.add.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"reass.add.i.i'de", align 8
-  %"add.i.i.i'de" = alloca double, align 8
+  %"add.i.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add.i.i.i'de", align 8
-  %"mul3.i.i'de" = alloca double, align 8
+  %"mul3.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul3.i.i'de", align 8
-  %"'de7" = alloca double, align 8
+  %"'de7" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de7", align 8
-  %"'de9" = alloca double, align 8
+  %"'de9" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de9", align 8
-  %"mul.i.i.i11'de" = alloca double, align 8
+  %"mul.i.i.i11'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul.i.i.i11'de", align 8
-  %"mul.i.i.i'de" = alloca double, align 8
+  %"mul.i.i.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul.i.i.i'de", align 8
-  %"'de12" = alloca double, align 8
+  %"'de12" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de12", align 8
-  %"'de13" = alloca double, align 8
+  %"'de13" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de13", align 8
-  %"'de15" = alloca double, align 8
+  %"'de15" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de15", align 8
   %"sub10.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"sub10.i'de", align 8
@@ -23283,7 +23283,7 @@ project.exit:
   %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub.i = fsub fast double %0, %1, !node !362
   %"arrayidx3.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 0
-  %arrayidx3.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 0
+  %arrayidx3.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 0, !node !362
   store double %sub.i, double* %arrayidx3.i, align 16, !tbaa !68, !noalias !108
   %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"X'", i64 1, !node !362
   %arrayidx4.i = getelementptr inbounds double, double* %X, i64 1, !node !362
@@ -23293,7 +23293,7 @@ project.exit:
   %3 = load double, double* %arrayidx5.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub6.i = fsub fast double %2, %3, !node !362
   %"arrayidx7.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 1
-  %arrayidx7.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 1
+  %arrayidx7.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 1, !node !362
   store double %sub6.i, double* %arrayidx7.i, align 8, !tbaa !68, !noalias !108
   %"arrayidx8.i'ipg" = getelementptr inbounds double, double* %"X'", i64 2, !node !362
   %arrayidx8.i = getelementptr inbounds double, double* %X, i64 2, !node !362
@@ -23303,17 +23303,17 @@ project.exit:
   %5 = load double, double* %arrayidx9.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub10.i = fsub fast double %4, %5, !node !362
   %"arrayidx11.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 2
-  %arrayidx11.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 2
+  %arrayidx11.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 2, !node !362
   store double %sub10.i, double* %arrayidx11.i, align 16, !tbaa !68, !noalias !108
-  %"arraydecay13.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 0
+  %"arraydecay13.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 0, !node !362
   %arraydecay13.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 0
-  %_augmented = call { i8*, i8*, i8*, i8*, i8*, double* } @augmented_rodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg")
+  %_augmented = call { i8*, i8*, i8*, i8*, i8*, double* } @augmented_rodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg"), !node !362
   %6 = load double, double* %arraydecay13.i, align 16, !tbaa !68, !noalias !108
-  %"arrayidx15.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 2
+  %"arrayidx15.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 2, !node !362
   %arrayidx15.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 2
   %7 = load double, double* %arrayidx15.i, align 16, !tbaa !68, !noalias !108
   %div.i = fdiv fast double %6, %7
-  %"arrayidx17.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 1
+  %"arrayidx17.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 1, !node !362
   %arrayidx17.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 1
   %8 = load double, double* %arrayidx17.i, align 8, !tbaa !68, !noalias !108
   %div19.i = fdiv fast double %8, %7
@@ -23354,223 +23354,223 @@ project.exit:
   br label %invertproject.exit
 
 invertproject.exit:                               ; preds = %project.exit
-  %17 = load double, double* %"arrayidx7'ipg", align 8
+  %17 = load double, double* %"arrayidx7'ipg", align 8, !node !362
   store double 0.000000e+00, double* %"arrayidx7'ipg", align 8
-  %18 = load double, double* %"mul6'de", align 8
-  %19 = fadd fast double %18, %17
+  %18 = load double, double* %"mul6'de", align 8, !node !362
+  %19 = fadd fast double %18, %17, !node !362
   store double %19, double* %"mul6'de", align 8
-  %20 = load double, double* %"mul6'de", align 8
-  %m0diffesub5 = fmul fast double %20, %14
-  %m1diffe = fmul fast double %20, %sub5
+  %20 = load double, double* %"mul6'de", align 8, !node !362
+  %m0diffesub5 = fmul fast double %20, %14, !node !362
+  %m1diffe = fmul fast double %20, %sub5, !node !362
   store double 0.000000e+00, double* %"mul6'de", align 8
-  %21 = load double, double* %"sub5'de", align 8
-  %22 = fadd fast double %21, %m0diffesub5
+  %21 = load double, double* %"sub5'de", align 8, !node !362
+  %22 = fadd fast double %21, %m0diffesub5, !node !362
   store double %22, double* %"sub5'de", align 8
-  %23 = load double, double* %"'de", align 8
-  %24 = fadd fast double %23, %m1diffe
+  %23 = load double, double* %"'de", align 8, !node !362
+  %24 = fadd fast double %23, %m1diffe, !node !362
   store double %24, double* %"'de", align 8
-  %25 = load double, double* %"sub5'de", align 8
+  %25 = load double, double* %"sub5'de", align 8, !node !362
   store double 0.000000e+00, double* %"sub5'de", align 8
-  %26 = load double, double* %"add30.i'de", align 8
-  %27 = fadd fast double %26, %25
+  %26 = load double, double* %"add30.i'de", align 8, !node !362
+  %27 = fadd fast double %26, %25, !node !362
   store double %27, double* %"add30.i'de", align 8
-  %28 = load double, double* %"err'", align 8
+  %28 = load double, double* %"err'", align 8, !node !362
   store double 0.000000e+00, double* %"err'", align 8
-  %29 = load double, double* %"mul'de", align 8
-  %30 = fadd fast double %29, %28
+  %29 = load double, double* %"mul'de", align 8, !node !362
+  %30 = fadd fast double %29, %28, !node !362
   store double %30, double* %"mul'de", align 8
-  %31 = load double, double* %"mul'de", align 8
-  %m0diffesub = fmul fast double %31, %14
-  %m1diffe1 = fmul fast double %31, %sub
+  %31 = load double, double* %"mul'de", align 8, !node !362
+  %m0diffesub = fmul fast double %31, %14, !node !362
+  %m1diffe1 = fmul fast double %31, %sub, !node !362
   store double 0.000000e+00, double* %"mul'de", align 8
-  %32 = load double, double* %"sub'de", align 8
-  %33 = fadd fast double %32, %m0diffesub
+  %32 = load double, double* %"sub'de", align 8, !node !362
+  %33 = fadd fast double %32, %m0diffesub, !node !362
   store double %33, double* %"sub'de", align 8
-  %34 = load double, double* %"'de", align 8
-  %35 = fadd fast double %34, %m1diffe1
+  %34 = load double, double* %"'de", align 8, !node !362
+  %35 = fadd fast double %34, %m1diffe1, !node !362
   store double %35, double* %"'de", align 8
-  %36 = load double, double* %"sub'de", align 8
+  %36 = load double, double* %"sub'de", align 8, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %37 = load double, double* %"add.i'de", align 8
-  %38 = fadd fast double %37, %36
+  %37 = load double, double* %"add.i'de", align 8, !node !362
+  %38 = fadd fast double %37, %36, !node !362
   store double %38, double* %"add.i'de", align 8
-  %39 = load double, double* %"'de", align 8
+  %39 = load double, double* %"'de", align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
-  %40 = load double, double* %"w'", align 8
-  %41 = fadd fast double %40, %39
+  %40 = load double, double* %"w'", align 8, !node !362
+  %41 = fadd fast double %40, %39, !node !362
   store double %41, double* %"w'", align 8
-  %42 = load double, double* %"add30.i'de", align 8
+  %42 = load double, double* %"add30.i'de", align 8, !node !362
   store double 0.000000e+00, double* %"add30.i'de", align 8
-  %43 = load double, double* %"mul28.i'de", align 8
-  %44 = fadd fast double %43, %42
+  %43 = load double, double* %"mul28.i'de", align 8, !node !362
+  %44 = fadd fast double %43, %42, !node !362
   store double %44, double* %"mul28.i'de", align 8
-  %45 = load double, double* %"'de2", align 8
-  %46 = fadd fast double %45, %42
+  %45 = load double, double* %"'de2", align 8, !node !362
+  %46 = fadd fast double %45, %42, !node !362
   store double %46, double* %"'de2", align 8
-  %47 = load double, double* %"'de2", align 8
+  %47 = load double, double* %"'de2", align 8, !node !362
   store double 0.000000e+00, double* %"'de2", align 8
-  %48 = load double, double* %"arrayidx29.i'ipg", align 8
-  %49 = fadd fast double %48, %47
+  %48 = load double, double* %"arrayidx29.i'ipg", align 8, !node !362
+  %49 = fadd fast double %48, %47, !node !362
   store double %49, double* %"arrayidx29.i'ipg", align 8
-  %50 = load double, double* %"mul28.i'de", align 8
-  %m0diffemul6.i.i = fmul fast double %50, %div19.i
-  %m1diffediv19.i = fmul fast double %50, %mul6.i.i
+  %50 = load double, double* %"mul28.i'de", align 8, !node !362
+  %m0diffemul6.i.i = fmul fast double %50, %div19.i, !node !362
+  %m1diffediv19.i = fmul fast double %50, %mul6.i.i, !node !362
   store double 0.000000e+00, double* %"mul28.i'de", align 8
-  %51 = load double, double* %"mul6.i.i'de", align 8
-  %52 = fadd fast double %51, %m0diffemul6.i.i
+  %51 = load double, double* %"mul6.i.i'de", align 8, !node !362
+  %52 = fadd fast double %51, %m0diffemul6.i.i, !node !362
   store double %52, double* %"mul6.i.i'de", align 8
-  %53 = load double, double* %"div19.i'de", align 8
-  %54 = fadd fast double %53, %m1diffediv19.i
+  %53 = load double, double* %"div19.i'de", align 8, !node !362
+  %54 = fadd fast double %53, %m1diffediv19.i, !node !362
   store double %54, double* %"div19.i'de", align 8
-  %55 = load double, double* %"add.i'de", align 8
+  %55 = load double, double* %"add.i'de", align 8, !node !362
   store double 0.000000e+00, double* %"add.i'de", align 8
-  %56 = load double, double* %"mul.i'de", align 8
-  %57 = fadd fast double %56, %55
+  %56 = load double, double* %"mul.i'de", align 8, !node !362
+  %57 = fadd fast double %56, %55, !node !362
   store double %57, double* %"mul.i'de", align 8
-  %58 = load double, double* %"'de3", align 8
-  %59 = fadd fast double %58, %55
+  %58 = load double, double* %"'de3", align 8, !node !362
+  %59 = fadd fast double %58, %55, !node !362
   store double %59, double* %"'de3", align 8
-  %60 = load double, double* %"'de3", align 8
+  %60 = load double, double* %"'de3", align 8, !node !362
   store double 0.000000e+00, double* %"'de3", align 8
-  %61 = load double, double* %"arrayidx24.i'ipg", align 8
-  %62 = fadd fast double %61, %60
+  %61 = load double, double* %"arrayidx24.i'ipg", align 8, !node !362
+  %62 = fadd fast double %61, %60, !node !362
   store double %62, double* %"arrayidx24.i'ipg", align 8
-  %63 = load double, double* %"mul.i'de", align 8
-  %m0diffemul6.i.i4 = fmul fast double %63, %div.i
-  %m1diffediv.i = fmul fast double %63, %mul6.i.i
+  %63 = load double, double* %"mul.i'de", align 8, !node !362
+  %m0diffemul6.i.i4 = fmul fast double %63, %div.i, !node !362
+  %m1diffediv.i = fmul fast double %63, %mul6.i.i, !node !362
   store double 0.000000e+00, double* %"mul.i'de", align 8
-  %64 = load double, double* %"mul6.i.i'de", align 8
-  %65 = fadd fast double %64, %m0diffemul6.i.i4
+  %64 = load double, double* %"mul6.i.i'de", align 8, !node !362
+  %65 = fadd fast double %64, %m0diffemul6.i.i4, !node !362
   store double %65, double* %"mul6.i.i'de", align 8
-  %66 = load double, double* %"div.i'de", align 8
-  %67 = fadd fast double %66, %m1diffediv.i
+  %66 = load double, double* %"div.i'de", align 8, !node !362
+  %67 = fadd fast double %66, %m1diffediv.i, !node !362
   store double %67, double* %"div.i'de", align 8
-  %68 = load double, double* %"mul6.i.i'de", align 8
-  %m0diffeadd4.i.i = fmul fast double %68, %11
-  %m1diffe5 = fmul fast double %68, %add4.i.i
+  %68 = load double, double* %"mul6.i.i'de", align 8, !node !362
+  %m0diffeadd4.i.i = fmul fast double %68, %11, !node !362
+  %m1diffe5 = fmul fast double %68, %add4.i.i, !node !362
   store double 0.000000e+00, double* %"mul6.i.i'de", align 8
-  %69 = load double, double* %"add4.i.i'de", align 8
-  %70 = fadd fast double %69, %m0diffeadd4.i.i
+  %69 = load double, double* %"add4.i.i'de", align 8, !node !362
+  %70 = fadd fast double %69, %m0diffeadd4.i.i, !node !362
   store double %70, double* %"add4.i.i'de", align 8
-  %71 = load double, double* %"'de6", align 8
-  %72 = fadd fast double %71, %m1diffe5
+  %71 = load double, double* %"'de6", align 8, !node !362
+  %72 = fadd fast double %71, %m1diffe5, !node !362
   store double %72, double* %"'de6", align 8
-  %73 = load double, double* %"'de6", align 8
+  %73 = load double, double* %"'de6", align 8, !node !362
   store double 0.000000e+00, double* %"'de6", align 8
-  %74 = load double, double* %"arrayidx23.i'ipg", align 8
-  %75 = fadd fast double %74, %73
+  %74 = load double, double* %"arrayidx23.i'ipg", align 8, !node !362
+  %75 = fadd fast double %74, %73, !node !362
   store double %75, double* %"arrayidx23.i'ipg", align 8
-  %76 = load double, double* %"add4.i.i'de", align 8
+  %76 = load double, double* %"add4.i.i'de", align 8, !node !362
   store double 0.000000e+00, double* %"add4.i.i'de", align 8
-  %77 = load double, double* %"reass.mul.i.i'de", align 8
-  %78 = fadd fast double %77, %76
+  %77 = load double, double* %"reass.mul.i.i'de", align 8, !node !362
+  %78 = fadd fast double %77, %76, !node !362
   store double %78, double* %"reass.mul.i.i'de", align 8
-  %79 = load double, double* %"reass.mul.i.i'de", align 8
-  %m0differeass.add.i.i = fmul fast double %79, %add.i.i.i
-  %m1diffeadd.i.i.i = fmul fast double %79, %reass.add.i.i
+  %79 = load double, double* %"reass.mul.i.i'de", align 8, !node !362
+  %m0differeass.add.i.i = fmul fast double %79, %add.i.i.i, !node !362
+  %m1diffeadd.i.i.i = fmul fast double %79, %reass.add.i.i, !node !362
   store double 0.000000e+00, double* %"reass.mul.i.i'de", align 8
-  %80 = load double, double* %"reass.add.i.i'de", align 8
-  %81 = fadd fast double %80, %m0differeass.add.i.i
+  %80 = load double, double* %"reass.add.i.i'de", align 8, !node !362
+  %81 = fadd fast double %80, %m0differeass.add.i.i, !node !362
   store double %81, double* %"reass.add.i.i'de", align 8
-  %82 = load double, double* %"add.i.i.i'de", align 8
-  %83 = fadd fast double %82, %m1diffeadd.i.i.i
+  %82 = load double, double* %"add.i.i.i'de", align 8, !node !362
+  %83 = fadd fast double %82, %m1diffeadd.i.i.i, !node !362
   store double %83, double* %"add.i.i.i'de", align 8
-  %84 = load double, double* %"reass.add.i.i'de", align 8
+  %84 = load double, double* %"reass.add.i.i'de", align 8, !node !362
   store double 0.000000e+00, double* %"reass.add.i.i'de", align 8
-  %85 = load double, double* %"mul3.i.i'de", align 8
-  %86 = fadd fast double %85, %84
+  %85 = load double, double* %"mul3.i.i'de", align 8, !node !362
+  %86 = fadd fast double %85, %84, !node !362
   store double %86, double* %"mul3.i.i'de", align 8
-  %87 = load double, double* %"'de7", align 8
-  %88 = fadd fast double %87, %84
+  %87 = load double, double* %"'de7", align 8, !node !362
+  %88 = fadd fast double %87, %84, !node !362
   store double %88, double* %"'de7", align 8
-  %89 = load double, double* %"mul3.i.i'de", align 8
-  %m0diffe = fmul fast double %89, %add.i.i.i
-  %m1diffeadd.i.i.i8 = fmul fast double %89, %10
+  %89 = load double, double* %"mul3.i.i'de", align 8, !node !362
+  %m0diffe = fmul fast double %89, %add.i.i.i, !node !362
+  %m1diffeadd.i.i.i8 = fmul fast double %89, %10, !node !362
   store double 0.000000e+00, double* %"mul3.i.i'de", align 8
-  %90 = load double, double* %"'de9", align 8
-  %91 = fadd fast double %90, %m0diffe
+  %90 = load double, double* %"'de9", align 8, !node !362
+  %91 = fadd fast double %90, %m0diffe, !node !362
   store double %91, double* %"'de9", align 8
-  %92 = load double, double* %"add.i.i.i'de", align 8
-  %93 = fadd fast double %92, %m1diffeadd.i.i.i8
+  %92 = load double, double* %"add.i.i.i'de", align 8, !node !362
+  %93 = fadd fast double %92, %m1diffeadd.i.i.i8, !node !362
   store double %93, double* %"add.i.i.i'de", align 8
-  %94 = load double, double* %"'de9", align 8
+  %94 = load double, double* %"'de9", align 8, !node !362
   store double 0.000000e+00, double* %"'de9", align 8
-  %95 = load double, double* %"arrayidx1.i.i'ipg", align 8
-  %96 = fadd fast double %95, %94
+  %95 = load double, double* %"arrayidx1.i.i'ipg", align 8, !node !362
+  %96 = fadd fast double %95, %94, !node !362
   store double %96, double* %"arrayidx1.i.i'ipg", align 8
-  %97 = load double, double* %"'de7", align 8
+  %97 = load double, double* %"'de7", align 8, !node !362
   store double 0.000000e+00, double* %"'de7", align 8
-  %98 = load double, double* %"arrayidx21.i'ipg", align 8
-  %99 = fadd fast double %98, %97
+  %98 = load double, double* %"arrayidx21.i'ipg", align 8, !node !362
+  %99 = fadd fast double %98, %97, !node !362
   store double %99, double* %"arrayidx21.i'ipg", align 8
-  %100 = load double, double* %"add.i.i.i'de", align 8
+  %100 = load double, double* %"add.i.i.i'de", align 8, !node !362
   store double 0.000000e+00, double* %"add.i.i.i'de", align 8
-  %101 = load double, double* %"mul.i.i.i11'de", align 8
-  %102 = fadd fast double %101, %100
+  %101 = load double, double* %"mul.i.i.i11'de", align 8, !node !362
+  %102 = fadd fast double %101, %100, !node !362
   store double %102, double* %"mul.i.i.i11'de", align 8
-  %103 = load double, double* %"mul.i.i.i'de", align 8
-  %104 = fadd fast double %103, %100
+  %103 = load double, double* %"mul.i.i.i'de", align 8, !node !362
+  %104 = fadd fast double %103, %100, !node !362
   store double %104, double* %"mul.i.i.i'de", align 8
-  %105 = load double, double* %"mul.i.i.i'de", align 8
-  %m0diffediv19.i = fmul fast double %105, %div19.i
-  %m1diffediv19.i10 = fmul fast double %105, %div19.i
+  %105 = load double, double* %"mul.i.i.i'de", align 8, !node !362
+  %m0diffediv19.i = fmul fast double %105, %div19.i, !node !362
+  %m1diffediv19.i10 = fmul fast double %105, %div19.i, !node !362
   store double 0.000000e+00, double* %"mul.i.i.i'de", align 8
-  %106 = load double, double* %"div19.i'de", align 8
-  %107 = fadd fast double %106, %m0diffediv19.i
+  %106 = load double, double* %"div19.i'de", align 8, !node !362
+  %107 = fadd fast double %106, %m0diffediv19.i, !node !362
   store double %107, double* %"div19.i'de", align 8
-  %108 = load double, double* %"div19.i'de", align 8
-  %109 = fadd fast double %108, %m1diffediv19.i10
+  %108 = load double, double* %"div19.i'de", align 8, !node !362
+  %109 = fadd fast double %108, %m1diffediv19.i10, !node !362
   store double %109, double* %"div19.i'de", align 8
-  %110 = load double, double* %"mul.i.i.i11'de", align 8
-  %m0diffediv.i = fmul fast double %110, %div.i
-  %m1diffediv.i11 = fmul fast double %110, %div.i
+  %110 = load double, double* %"mul.i.i.i11'de", align 8, !node !362
+  %m0diffediv.i = fmul fast double %110, %div.i, !node !362
+  %m1diffediv.i11 = fmul fast double %110, %div.i, !node !362
   store double 0.000000e+00, double* %"mul.i.i.i11'de", align 8
-  %111 = load double, double* %"div.i'de", align 8
-  %112 = fadd fast double %111, %m0diffediv.i
+  %111 = load double, double* %"div.i'de", align 8, !node !362
+  %112 = fadd fast double %111, %m0diffediv.i, !node !362
   store double %112, double* %"div.i'de", align 8
-  %113 = load double, double* %"div.i'de", align 8
-  %114 = fadd fast double %113, %m1diffediv.i11
+  %113 = load double, double* %"div.i'de", align 8, !node !362
+  %114 = fadd fast double %113, %m1diffediv.i11, !node !362
   store double %114, double* %"div.i'de", align 8
-  %115 = load double, double* %"div19.i'de", align 8
-  %d0diffe = fdiv fast double %115, %7
-  %116 = fdiv fast double %115, %7
-  %117 = fmul fast double %div19.i, %116
-  %118 = fneg fast double %117
+  %115 = load double, double* %"div19.i'de", align 8, !node !362
+  %d0diffe = fdiv fast double %115, %7, !node !362
+  %116 = fdiv fast double %115, %7, !node !362
+  %117 = fmul fast double %div19.i, %116, !node !362
+  %118 = fneg fast double %117, !node !362
   store double 0.000000e+00, double* %"div19.i'de", align 8
-  %119 = load double, double* %"'de12", align 8
-  %120 = fadd fast double %119, %d0diffe
+  %119 = load double, double* %"'de12", align 8, !node !362
+  %120 = fadd fast double %119, %d0diffe, !node !362
   store double %120, double* %"'de12", align 8
-  %121 = load double, double* %"'de13", align 8
-  %122 = fadd fast double %121, %118
+  %121 = load double, double* %"'de13", align 8, !node !362
+  %122 = fadd fast double %121, %118, !node !362
   store double %122, double* %"'de13", align 8
-  %123 = load double, double* %"'de12", align 8
+  %123 = load double, double* %"'de12", align 8, !node !362
   store double 0.000000e+00, double* %"'de12", align 8
-  %124 = load double, double* %"arrayidx17.i'ipg", align 8
-  %125 = fadd fast double %124, %123
+  %124 = load double, double* %"arrayidx17.i'ipg", align 8, !node !362
+  %125 = fadd fast double %124, %123, !node !362
   store double %125, double* %"arrayidx17.i'ipg", align 8
-  %126 = load double, double* %"div.i'de", align 8
-  %d0diffe14 = fdiv fast double %126, %7
-  %127 = fdiv fast double %126, %7
-  %128 = fmul fast double %div.i, %127
-  %129 = fneg fast double %128
+  %126 = load double, double* %"div.i'de", align 8, !node !362
+  %d0diffe14 = fdiv fast double %126, %7, !node !362
+  %127 = fdiv fast double %126, %7, !node !362
+  %128 = fmul fast double %div.i, %127, !node !362
+  %129 = fneg fast double %128, !node !362
   store double 0.000000e+00, double* %"div.i'de", align 8
-  %130 = load double, double* %"'de15", align 8
-  %131 = fadd fast double %130, %d0diffe14
+  %130 = load double, double* %"'de15", align 8, !node !362
+  %131 = fadd fast double %130, %d0diffe14, !node !362
   store double %131, double* %"'de15", align 8
-  %132 = load double, double* %"'de13", align 8
-  %133 = fadd fast double %132, %129
+  %132 = load double, double* %"'de13", align 8, !node !362
+  %133 = fadd fast double %132, %129, !node !362
   store double %133, double* %"'de13", align 8
-  %134 = load double, double* %"'de13", align 8
+  %134 = load double, double* %"'de13", align 8, !node !362
   store double 0.000000e+00, double* %"'de13", align 8
-  %135 = load double, double* %"arrayidx15.i'ipg", align 16
-  %136 = fadd fast double %135, %134
+  %135 = load double, double* %"arrayidx15.i'ipg", align 16, !node !362
+  %136 = fadd fast double %135, %134, !node !362
   store double %136, double* %"arrayidx15.i'ipg", align 16
-  %137 = load double, double* %"'de15", align 8
+  %137 = load double, double* %"'de15", align 8, !node !362
   store double 0.000000e+00, double* %"'de15", align 8
-  %138 = load double, double* %"arraydecay13.i'ipg", align 16
-  %139 = fadd fast double %138, %137
+  %138 = load double, double* %"arraydecay13.i'ipg", align 16, !node !362
+  %139 = fadd fast double %138, %137, !node !362
   store double %139, double* %"arraydecay13.i'ipg", align 16
-  call void @differodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg", { i8*, i8*, i8*, i8*, i8*, double* } %_augmented)
+  call void @differodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg", { i8*, i8*, i8*, i8*, i8*, double* } %_augmented), !node !362
   %140 = load double, double* %"arrayidx11.i'ipg", align 16
   store double 0.000000e+00, double* %"arrayidx11.i'ipg", align 16
   %141 = load double, double* %"sub10.i'de", align 8
@@ -23587,13 +23587,13 @@ invertproject.exit:                               ; preds = %project.exit
   store double %148, double* %"'de17", align 8
   %149 = load double, double* %"'de17", align 8
   store double 0.000000e+00, double* %"'de17", align 8
-  %150 = load double, double* %"arrayidx9.i'ipg", align 8
-  %151 = fadd fast double %150, %149
+  %150 = load double, double* %"arrayidx9.i'ipg", align 8, !node !362
+  %151 = fadd fast double %150, %149, !node !362
   store double %151, double* %"arrayidx9.i'ipg", align 8
   %152 = load double, double* %"'de16", align 8
   store double 0.000000e+00, double* %"'de16", align 8
-  %153 = load double, double* %"arrayidx8.i'ipg", align 8
-  %154 = fadd fast double %153, %152
+  %153 = load double, double* %"arrayidx8.i'ipg", align 8, !node !362
+  %154 = fadd fast double %153, %152, !node !362
   store double %154, double* %"arrayidx8.i'ipg", align 8
   %155 = load double, double* %"arrayidx7.i'ipg", align 8
   store double 0.000000e+00, double* %"arrayidx7.i'ipg", align 8
@@ -23611,13 +23611,13 @@ invertproject.exit:                               ; preds = %project.exit
   store double %163, double* %"'de19", align 8
   %164 = load double, double* %"'de19", align 8
   store double 0.000000e+00, double* %"'de19", align 8
-  %165 = load double, double* %"arrayidx5.i'ipg", align 8
-  %166 = fadd fast double %165, %164
+  %165 = load double, double* %"arrayidx5.i'ipg", align 8, !node !362
+  %166 = fadd fast double %165, %164, !node !362
   store double %166, double* %"arrayidx5.i'ipg", align 8
   %167 = load double, double* %"'de18", align 8
   store double 0.000000e+00, double* %"'de18", align 8
-  %168 = load double, double* %"arrayidx4.i'ipg", align 8
-  %169 = fadd fast double %168, %167
+  %168 = load double, double* %"arrayidx4.i'ipg", align 8, !node !362
+  %169 = fadd fast double %168, %167, !node !362
   store double %169, double* %"arrayidx4.i'ipg", align 8
   %170 = load double, double* %"arrayidx3.i'ipg", align 16
   store double 0.000000e+00, double* %"arrayidx3.i'ipg", align 16
@@ -23635,13 +23635,13 @@ invertproject.exit:                               ; preds = %project.exit
   store double %178, double* %"'de21", align 8
   %179 = load double, double* %"'de21", align 8
   store double 0.000000e+00, double* %"'de21", align 8
-  %180 = load double, double* %"arrayidx.i'ipg", align 8
-  %181 = fadd fast double %180, %179
+  %180 = load double, double* %"arrayidx.i'ipg", align 8, !node !362
+  %181 = fadd fast double %180, %179, !node !362
   store double %181, double* %"arrayidx.i'ipg", align 8
   %182 = load double, double* %"'de20", align 8
   store double 0.000000e+00, double* %"'de20", align 8
-  %183 = load double, double* %"X'", align 8
-  %184 = fadd fast double %183, %182
+  %183 = load double, double* %"X'", align 8, !node !362
+  %184 = fadd fast double %183, %182, !node !362
   store double %184, double* %"X'", align 8
   ret void
 }
@@ -24023,56 +24023,56 @@ entry:
   store double 0.000000e+00, double* %"mul.i'de", align 8
   %"res.012.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"res.012.i'de", align 8
-  %"'de" = alloca double, align 8
+  %"'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
-  %"'de7" = alloca double, align 8
+  %"'de7" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de7", align 8
   %"add.i!manual_lcssa_cache" = alloca double, align 8
-  %"'de8" = alloca double, align 8
+  %"'de8" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de8", align 8
   %"'de10" = alloca double, align 8
   store double 0.000000e+00, double* %"'de10", align 8
   %"'de13" = alloca double, align 8
   store double 0.000000e+00, double* %"'de13", align 8
-  %"add29117'de" = alloca double, align 8
+  %"add29117'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add29117'de", align 8
-  %"add25115'de" = alloca double, align 8
+  %"add25115'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add25115'de", align 8
-  %"mul28116'de" = alloca double, align 8
+  %"mul28116'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul28116'de", align 8
-  %"mul15'de" = alloca double, align 8
+  %"mul15'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul15'de", align 8
-  %"'de21" = alloca double, align 8
+  %"'de21" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de21", align 8
-  %"mul24114'de" = alloca double, align 8
+  %"mul24114'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul24114'de", align 8
-  %"mul21113'de" = alloca double, align 8
+  %"mul21113'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul21113'de", align 8
-  %"sub.i91'de" = alloca double, align 8
+  %"sub.i91'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub.i91'de", align 8
-  %"'de23" = alloca double, align 8
+  %"'de23" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de23", align 8
-  %"'de26" = alloca double, align 8
+  %"'de26" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de26", align 8
-  %"add14'de" = alloca double, align 8
+  %"add14'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add14'de", align 8
-  %"sub'de" = alloca double, align 8
+  %"sub'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %"add'de" = alloca double, align 8
+  %"add'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add'de", align 8
-  %"mul13'de" = alloca double, align 8
+  %"mul13'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul13'de", align 8
-  %"'de29" = alloca double, align 8
+  %"'de29" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de29", align 8
-  %"'de30" = alloca double, align 8
+  %"'de30" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de30", align 8
-  %"mul10'de" = alloca double, align 8
+  %"mul10'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul10'de", align 8
-  %"mul7'de" = alloca double, align 8
+  %"mul7'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul7'de", align 8
-  %"'de33" = alloca double, align 8
+  %"'de33" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de33", align 8
-  %"'de34" = alloca double, align 8
+  %"'de34" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de34", align 8
   %"sub20.i98'de" = alloca double, align 8
   store double 0.000000e+00, double* %"sub20.i98'de", align 8
@@ -24086,31 +24086,31 @@ entry:
   store double 0.000000e+00, double* %"mul8.i92'de", align 8
   %"mul11.i93'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul11.i93'de", align 8
-  %"mul.i87'de" = alloca double, align 8
+  %"mul.i87'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul.i87'de", align 8
-  %"mul4.i90'de" = alloca double, align 8
+  %"mul4.i90'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul4.i90'de", align 8
-  %"add29'de" = alloca double, align 8
+  %"add29'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add29'de", align 8
-  %"add25'de" = alloca double, align 8
+  %"add25'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add25'de", align 8
-  %"mul28'de" = alloca double, align 8
+  %"mul28'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul28'de", align 8
-  %".pre112'de" = alloca double, align 8
+  %".pre112'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %".pre112'de", align 8
-  %"mul24'de" = alloca double, align 8
+  %"mul24'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul24'de", align 8
-  %"mul21'de" = alloca double, align 8
+  %"mul21'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul21'de", align 8
-  %".pre111'de" = alloca double, align 8
+  %".pre111'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %".pre111'de", align 8
-  %".pre110'de" = alloca double, align 8
+  %".pre110'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %".pre110'de", align 8
-  %"add43119'de" = alloca double, align 8
+  %"add43119'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add43119'de", align 8
-  %"sub.i'de" = alloca double, align 8
+  %"sub.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"sub.i'de", align 8
-  %"'de70" = alloca double, align 8
+  %"'de70" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de70", align 8
   %"sub20.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"sub20.i'de", align 8
@@ -24118,11 +24118,11 @@ entry:
   store double 0.000000e+00, double* %"mul16.i'de", align 8
   %"mul19.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul19.i'de", align 8
-  %"'de75" = alloca double, align 8
+  %"'de75" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de75", align 8
-  %"'de80" = alloca double, align 8
+  %"'de80" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de80", align 8
-  %"'de81" = alloca double, align 8
+  %"'de81" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de81", align 8
   %"sub12.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"sub12.i'de", align 8
@@ -24130,19 +24130,19 @@ entry:
   store double 0.000000e+00, double* %"mul8.i'de", align 8
   %"mul11.i'de" = alloca double, align 8
   store double 0.000000e+00, double* %"mul11.i'de", align 8
-  %"'de85" = alloca double, align 8
+  %"'de85" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de85", align 8
-  %"'de89" = alloca double, align 8
+  %"'de89" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"'de89", align 8
-  %"mul.i84'de" = alloca double, align 8
+  %"mul.i84'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul.i84'de", align 8
-  %"mul4.i'de" = alloca double, align 8
+  %"mul4.i'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"mul4.i'de", align 8
-  %"add43'de" = alloca double, align 8
+  %"add43'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %"add43'de", align 8
-  %".pre109'de" = alloca double, align 8
+  %".pre109'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %".pre109'de", align 8
-  %".pre'de" = alloca double, align 8
+  %".pre'de" = alloca double, align 8, !node !362
   store double 0.000000e+00, double* %".pre'de", align 8
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, double* } %tapeArg, 5
   %mdyncache_fromtape_cache = alloca double*, align 8
@@ -24305,23 +24305,23 @@ invertfor.body.i:                                 ; preds = %mergeinvertfor.body
   store double %27, double* %"res.012.i'de", align 8
   %28 = load double, double* %"mul.i'de", align 8
   %29 = load i64, i64* %"iv'ac", align 8
-  %arrayidx.i_unwrap = getelementptr inbounds double, double* %rot, i64 %29
-  %_unwrap = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !68, !invariant.group !367
-  %m0diffe = fmul fast double %28, %_unwrap
-  %m1diffe = fmul fast double %28, %_unwrap
+  %arrayidx.i_unwrap = getelementptr inbounds double, double* %rot, i64 %29, !node !362
+  %_unwrap = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !68, !invariant.group !367, !node !362
+  %m0diffe = fmul fast double %28, %_unwrap, !node !362
+  %m1diffe = fmul fast double %28, %_unwrap, !node !362
   store double 0.000000e+00, double* %"mul.i'de", align 8
-  %30 = load double, double* %"'de", align 8
-  %31 = fadd fast double %30, %m0diffe
+  %30 = load double, double* %"'de", align 8, !node !362
+  %31 = fadd fast double %30, %m0diffe, !node !362
   store double %31, double* %"'de", align 8
-  %32 = load double, double* %"'de", align 8
-  %33 = fadd fast double %32, %m1diffe
+  %32 = load double, double* %"'de", align 8, !node !362
+  %33 = fadd fast double %32, %m1diffe, !node !362
   store double %33, double* %"'de", align 8
-  %34 = load double, double* %"'de", align 8
+  %34 = load double, double* %"'de", align 8, !node !362
   store double 0.000000e+00, double* %"'de", align 8
   %35 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %35
-  %36 = load double, double* %"arrayidx.i'ipg_unwrap", align 8
-  %37 = fadd fast double %36, %34
+  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %35, !node !362
+  %36 = load double, double* %"arrayidx.i'ipg_unwrap", align 8, !node !362
+  %37 = fadd fast double %36, %34, !node !362
   store double %37, double* %"arrayidx.i'ipg_unwrap", align 8
   %38 = load double, double* %"res.012.i'de", align 8
   store double 0.000000e+00, double* %"res.012.i'de", align 8
@@ -24349,25 +24349,25 @@ mergeinvertfor.body.i_sqsum.exit:                 ; preds = %invertsqsum.exit
   br label %invertfor.body.i
 
 invertif.then:                                    ; preds = %invertfor.body
-  %48 = load double, double* %"'de7", align 8
+  %48 = load double, double* %"'de7", align 8, !node !362
   store double 0.000000e+00, double* %"'de7", align 8
   %49 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %50 = tail call fast double @llvm.sqrt.f64(double %49)
   %51 = call fast double @llvm.sin.f64(double %50)
   %52 = fneg fast double %51
-  %53 = fmul fast double %48, %52
-  %54 = load double, double* %"'de8", align 8
-  %55 = fadd fast double %54, %53
+  %53 = fmul fast double %48, %52, !node !362
+  %54 = load double, double* %"'de8", align 8, !node !362
+  %55 = fadd fast double %54, %53, !node !362
   store double %55, double* %"'de8", align 8
-  %56 = load double, double* %"'de8", align 8
+  %56 = load double, double* %"'de8", align 8, !node !362
   store double 0.000000e+00, double* %"'de8", align 8
   %57 = call fast double @llvm.sqrt.f64(double %add.i)
-  %58 = fmul fast double 5.000000e-01, %56
-  %59 = fdiv fast double %58, %57
+  %58 = fmul fast double 5.000000e-01, %56, !node !362
+  %59 = fdiv fast double %58, %57, !node !362
   %60 = fcmp fast oeq double %add.i, 0.000000e+00
   %61 = select fast i1 %60, double 0.000000e+00, double %59
   %62 = load double, double* %"add.i'de", align 8
-  %63 = fadd fast double %62, %59
+  %63 = fadd fast double %62, %59, !node !362
   %64 = select fast i1 %60, double %62, double %63
   store double %64, double* %"add.i'de", align 8
   br label %invertsqsum.exit
@@ -24386,25 +24386,25 @@ invertfor.body:                                   ; preds = %mergeinvertfor.body
   %72 = tail call fast double @llvm.sqrt.f64(double %71)
   %d0diffe = fdiv fast double %69, %72
   %73 = load i64, i64* %"iv1'ac", align 8
-  %arrayidx_unwrap = getelementptr inbounds double, double* %rot, i64 %73
-  %_unwrap11 = load double, double* %arrayidx_unwrap, align 8, !tbaa !68, !invariant.group !371
-  %_unwrap12 = fdiv fast double %_unwrap11, %72
+  %arrayidx_unwrap = getelementptr inbounds double, double* %rot, i64 %73, !node !362
+  %_unwrap11 = load double, double* %arrayidx_unwrap, align 8, !tbaa !68, !invariant.group !371, !node !362
+  %_unwrap12 = fdiv fast double %_unwrap11, %72, !node !362
   %74 = fdiv fast double %69, %72
-  %75 = fmul fast double %_unwrap12, %74
-  %76 = fneg fast double %75
+  %75 = fmul fast double %_unwrap12, %74, !node !362
+  %76 = fneg fast double %75, !node !362
   store double 0.000000e+00, double* %"'de10", align 8
   %77 = load double, double* %"'de13", align 8
   %78 = fadd fast double %77, %d0diffe
   store double %78, double* %"'de13", align 8
-  %79 = load double, double* %"'de8", align 8
-  %80 = fadd fast double %79, %76
+  %79 = load double, double* %"'de8", align 8, !node !362
+  %80 = fadd fast double %79, %76, !node !362
   store double %80, double* %"'de8", align 8
   %81 = load double, double* %"'de13", align 8
   store double 0.000000e+00, double* %"'de13", align 8
   %82 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %82
-  %83 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %84 = fadd fast double %83, %81
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %82, !node !362
+  %83 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !362
+  %84 = fadd fast double %83, %81, !node !362
   store double %84, double* %"arrayidx'ipg_unwrap", align 8
   %85 = load i64, i64* %"iv1'ac", align 8
   %86 = icmp eq i64 %85, 0
@@ -24418,143 +24418,143 @@ incinvertfor.body:                                ; preds = %invertfor.body
   br label %invertfor.body
 
 invertfor.end:                                    ; preds = %invertfor.body18.for.body18_crit_edge
-  %90 = load double, double* %"rotatedPt'", align 8
+  %90 = load double, double* %"rotatedPt'", align 8, !node !362
   store double 0.000000e+00, double* %"rotatedPt'", align 8
-  %91 = load double, double* %"add29117'de", align 8
-  %92 = fadd fast double %91, %90
+  %91 = load double, double* %"add29117'de", align 8, !node !362
+  %92 = fadd fast double %91, %90, !node !362
   store double %92, double* %"add29117'de", align 8
-  %93 = load double, double* %"add29117'de", align 8
+  %93 = load double, double* %"add29117'de", align 8, !node !362
   store double 0.000000e+00, double* %"add29117'de", align 8
-  %94 = load double, double* %"add25115'de", align 8
-  %95 = fadd fast double %94, %93
+  %94 = load double, double* %"add25115'de", align 8, !node !362
+  %95 = fadd fast double %94, %93, !node !362
   store double %95, double* %"add25115'de", align 8
-  %96 = load double, double* %"mul28116'de", align 8
-  %97 = fadd fast double %96, %93
+  %96 = load double, double* %"mul28116'de", align 8, !node !362
+  %97 = fadd fast double %96, %93, !node !362
   store double %97, double* %"mul28116'de", align 8
-  %98 = load double, double* %"mul28116'de", align 8
+  %98 = load double, double* %"mul28116'de", align 8, !node !362
   %arraydecay_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
   %_unwrap14 = load double, double* %arraydecay_unwrap, align 16, !tbaa !68, !invariant.group !377
-  %m0diffemul15 = fmul fast double %98, %_unwrap14
+  %m0diffemul15 = fmul fast double %98, %_unwrap14, !node !362
   %arrayidx.i85_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
   %_unwrap15 = load double, double* %arrayidx.i85_unwrap, align 8, !tbaa !68, !invariant.group !372
-  %arrayidx3.i89_unwrap = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap16 = load double, double* %arrayidx3.i89_unwrap, align 8, !tbaa !68, !invariant.group !375
-  %mul10_unwrap = fmul fast double %_unwrap15, %_unwrap16
-  %_unwrap17 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376
-  %mul7_unwrap = fmul fast double %_unwrap14, %_unwrap17
-  %add_unwrap = fadd fast double %mul10_unwrap, %mul7_unwrap
+  %arrayidx3.i89_unwrap = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %_unwrap16 = load double, double* %arrayidx3.i89_unwrap, align 8, !tbaa !68, !invariant.group !375, !node !362
+  %mul10_unwrap = fmul fast double %_unwrap15, %_unwrap16, !node !362
+  %_unwrap17 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
+  %mul7_unwrap = fmul fast double %_unwrap14, %_unwrap17, !node !362
+  %add_unwrap = fadd fast double %mul10_unwrap, %mul7_unwrap, !node !362
   %arrayidx2.i88_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
   %_unwrap18 = load double, double* %arrayidx2.i88_unwrap, align 16, !tbaa !68, !invariant.group !374
-  %arrayidx1.i86_unwrap = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap19 = load double, double* %arrayidx1.i86_unwrap, align 8, !tbaa !68, !invariant.group !373
-  %mul13_unwrap = fmul fast double %_unwrap18, %_unwrap19
-  %add14_unwrap = fadd fast double %add_unwrap, %mul13_unwrap
+  %arrayidx1.i86_unwrap = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %_unwrap19 = load double, double* %arrayidx1.i86_unwrap, align 8, !tbaa !68, !invariant.group !373, !node !362
+  %mul13_unwrap = fmul fast double %_unwrap18, %_unwrap19, !node !362
+  %add14_unwrap = fadd fast double %add_unwrap, %mul13_unwrap, !node !362
   %99 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %100 = tail call fast double @llvm.sqrt.f64(double %99)
   %101 = tail call fast double @llvm.cos.f64(double %100)
   %sub_unwrap = fsub fast double 1.000000e+00, %101
-  %mul15_unwrap = fmul fast double %add14_unwrap, %sub_unwrap
-  %m1diffe20 = fmul fast double %98, %mul15_unwrap
+  %mul15_unwrap = fmul fast double %add14_unwrap, %sub_unwrap, !node !362
+  %m1diffe20 = fmul fast double %98, %mul15_unwrap, !node !362
   store double 0.000000e+00, double* %"mul28116'de", align 8
-  %102 = load double, double* %"mul15'de", align 8
-  %103 = fadd fast double %102, %m0diffemul15
+  %102 = load double, double* %"mul15'de", align 8, !node !362
+  %103 = fadd fast double %102, %m0diffemul15, !node !362
   store double %103, double* %"mul15'de", align 8
-  %104 = load double, double* %"'de21", align 8
-  %105 = fadd fast double %104, %m1diffe20
+  %104 = load double, double* %"'de21", align 8, !node !362
+  %105 = fadd fast double %104, %m1diffe20, !node !362
   store double %105, double* %"'de21", align 8
-  %106 = load double, double* %"add25115'de", align 8
+  %106 = load double, double* %"add25115'de", align 8, !node !362
   store double 0.000000e+00, double* %"add25115'de", align 8
-  %107 = load double, double* %"mul24114'de", align 8
-  %108 = fadd fast double %107, %106
+  %107 = load double, double* %"mul24114'de", align 8, !node !362
+  %108 = fadd fast double %107, %106, !node !362
   store double %108, double* %"mul24114'de", align 8
-  %109 = load double, double* %"mul21113'de", align 8
-  %110 = fadd fast double %109, %106
+  %109 = load double, double* %"mul21113'de", align 8, !node !362
+  %110 = fadd fast double %109, %106, !node !362
   store double %110, double* %"mul21113'de", align 8
-  %111 = load double, double* %"mul24114'de", align 8
+  %111 = load double, double* %"mul24114'de", align 8, !node !362
   %112 = tail call fast double @llvm.sin.f64(double %100)
-  %m0diffesub.i91 = fmul fast double %111, %112
-  %mul.i87_unwrap = fmul fast double %_unwrap19, %_unwrap15
-  %mul4.i90_unwrap = fmul fast double %_unwrap16, %_unwrap18
-  %sub.i91_unwrap = fsub fast double %mul.i87_unwrap, %mul4.i90_unwrap
-  %m1diffe22 = fmul fast double %111, %sub.i91_unwrap
+  %m0diffesub.i91 = fmul fast double %111, %112, !node !362
+  %mul.i87_unwrap = fmul fast double %_unwrap19, %_unwrap15, !node !362
+  %mul4.i90_unwrap = fmul fast double %_unwrap16, %_unwrap18, !node !362
+  %sub.i91_unwrap = fsub fast double %mul.i87_unwrap, %mul4.i90_unwrap, !node !362
+  %m1diffe22 = fmul fast double %111, %sub.i91_unwrap, !node !362
   store double 0.000000e+00, double* %"mul24114'de", align 8
-  %113 = load double, double* %"sub.i91'de", align 8
-  %114 = fadd fast double %113, %m0diffesub.i91
+  %113 = load double, double* %"sub.i91'de", align 8, !node !362
+  %114 = fadd fast double %113, %m0diffesub.i91, !node !362
   store double %114, double* %"sub.i91'de", align 8
-  %115 = load double, double* %"'de23", align 8
-  %116 = fadd fast double %115, %m1diffe22
+  %115 = load double, double* %"'de23", align 8, !node !362
+  %116 = fadd fast double %115, %m1diffe22, !node !362
   store double %116, double* %"'de23", align 8
-  %117 = load double, double* %"mul21113'de", align 8
-  %m0diffe24 = fmul fast double %117, %101
-  %m1diffe25 = fmul fast double %117, %_unwrap17
+  %117 = load double, double* %"mul21113'de", align 8, !node !362
+  %m0diffe24 = fmul fast double %117, %101, !node !362
+  %m1diffe25 = fmul fast double %117, %_unwrap17, !node !362
   store double 0.000000e+00, double* %"mul21113'de", align 8
-  %118 = load double, double* %"'de26", align 8
-  %119 = fadd fast double %118, %m0diffe24
+  %118 = load double, double* %"'de26", align 8, !node !362
+  %119 = fadd fast double %118, %m0diffe24, !node !362
   store double %119, double* %"'de26", align 8
-  %120 = load double, double* %"'de7", align 8
-  %121 = fadd fast double %120, %m1diffe25
+  %120 = load double, double* %"'de7", align 8, !node !362
+  %121 = fadd fast double %120, %m1diffe25, !node !362
   store double %121, double* %"'de7", align 8
-  %122 = load double, double* %"mul15'de", align 8
-  %m0diffeadd14 = fmul fast double %122, %sub_unwrap
-  %m1diffesub = fmul fast double %122, %add14_unwrap
+  %122 = load double, double* %"mul15'de", align 8, !node !362
+  %m0diffeadd14 = fmul fast double %122, %sub_unwrap, !node !362
+  %m1diffesub = fmul fast double %122, %add14_unwrap, !node !362
   store double 0.000000e+00, double* %"mul15'de", align 8
-  %123 = load double, double* %"add14'de", align 8
-  %124 = fadd fast double %123, %m0diffeadd14
+  %123 = load double, double* %"add14'de", align 8, !node !362
+  %124 = fadd fast double %123, %m0diffeadd14, !node !362
   store double %124, double* %"add14'de", align 8
-  %125 = load double, double* %"sub'de", align 8
-  %126 = fadd fast double %125, %m1diffesub
+  %125 = load double, double* %"sub'de", align 8, !node !362
+  %126 = fadd fast double %125, %m1diffesub, !node !362
   store double %126, double* %"sub'de", align 8
-  %127 = load double, double* %"sub'de", align 8
-  %128 = fneg fast double %127
+  %127 = load double, double* %"sub'de", align 8, !node !362
+  %128 = fneg fast double %127, !node !362
   store double 0.000000e+00, double* %"sub'de", align 8
-  %129 = load double, double* %"'de7", align 8
-  %130 = fadd fast double %129, %128
+  %129 = load double, double* %"'de7", align 8, !node !362
+  %130 = fadd fast double %129, %128, !node !362
   store double %130, double* %"'de7", align 8
-  %131 = load double, double* %"add14'de", align 8
+  %131 = load double, double* %"add14'de", align 8, !node !362
   store double 0.000000e+00, double* %"add14'de", align 8
-  %132 = load double, double* %"add'de", align 8
-  %133 = fadd fast double %132, %131
+  %132 = load double, double* %"add'de", align 8, !node !362
+  %133 = fadd fast double %132, %131, !node !362
   store double %133, double* %"add'de", align 8
-  %134 = load double, double* %"mul13'de", align 8
-  %135 = fadd fast double %134, %131
+  %134 = load double, double* %"mul13'de", align 8, !node !362
+  %135 = fadd fast double %134, %131, !node !362
   store double %135, double* %"mul13'de", align 8
-  %136 = load double, double* %"mul13'de", align 8
-  %m0diffe27 = fmul fast double %136, %_unwrap19
-  %m1diffe28 = fmul fast double %136, %_unwrap18
+  %136 = load double, double* %"mul13'de", align 8, !node !362
+  %m0diffe27 = fmul fast double %136, %_unwrap19, !node !362
+  %m1diffe28 = fmul fast double %136, %_unwrap18, !node !362
   store double 0.000000e+00, double* %"mul13'de", align 8
-  %137 = load double, double* %"'de29", align 8
-  %138 = fadd fast double %137, %m0diffe27
+  %137 = load double, double* %"'de29", align 8, !node !362
+  %138 = fadd fast double %137, %m0diffe27, !node !362
   store double %138, double* %"'de29", align 8
-  %139 = load double, double* %"'de30", align 8
-  %140 = fadd fast double %139, %m1diffe28
+  %139 = load double, double* %"'de30", align 8, !node !362
+  %140 = fadd fast double %139, %m1diffe28, !node !362
   store double %140, double* %"'de30", align 8
-  %141 = load double, double* %"add'de", align 8
+  %141 = load double, double* %"add'de", align 8, !node !362
   store double 0.000000e+00, double* %"add'de", align 8
-  %142 = load double, double* %"mul10'de", align 8
-  %143 = fadd fast double %142, %141
+  %142 = load double, double* %"mul10'de", align 8, !node !362
+  %143 = fadd fast double %142, %141, !node !362
   store double %143, double* %"mul10'de", align 8
-  %144 = load double, double* %"mul7'de", align 8
-  %145 = fadd fast double %144, %141
+  %144 = load double, double* %"mul7'de", align 8, !node !362
+  %145 = fadd fast double %144, %141, !node !362
   store double %145, double* %"mul7'de", align 8
-  %146 = load double, double* %"mul10'de", align 8
-  %m0diffe31 = fmul fast double %146, %_unwrap16
-  %m1diffe32 = fmul fast double %146, %_unwrap15
+  %146 = load double, double* %"mul10'de", align 8, !node !362
+  %m0diffe31 = fmul fast double %146, %_unwrap16, !node !362
+  %m1diffe32 = fmul fast double %146, %_unwrap15, !node !362
   store double 0.000000e+00, double* %"mul10'de", align 8
-  %147 = load double, double* %"'de33", align 8
-  %148 = fadd fast double %147, %m0diffe31
+  %147 = load double, double* %"'de33", align 8, !node !362
+  %148 = fadd fast double %147, %m0diffe31, !node !362
   store double %148, double* %"'de33", align 8
-  %149 = load double, double* %"'de34", align 8
-  %150 = fadd fast double %149, %m1diffe32
+  %149 = load double, double* %"'de34", align 8, !node !362
+  %150 = fadd fast double %149, %m1diffe32, !node !362
   store double %150, double* %"'de34", align 8
-  %151 = load double, double* %"mul7'de", align 8
-  %m0diffe35 = fmul fast double %151, %_unwrap17
-  %m1diffe36 = fmul fast double %151, %_unwrap14
+  %151 = load double, double* %"mul7'de", align 8, !node !362
+  %m0diffe35 = fmul fast double %151, %_unwrap17, !node !362
+  %m1diffe36 = fmul fast double %151, %_unwrap14, !node !362
   store double 0.000000e+00, double* %"mul7'de", align 8
-  %152 = load double, double* %"'de21", align 8
-  %153 = fadd fast double %152, %m0diffe35
+  %152 = load double, double* %"'de21", align 8, !node !362
+  %153 = fadd fast double %152, %m0diffe35, !node !362
   store double %153, double* %"'de21", align 8
-  %154 = load double, double* %"'de26", align 8
-  %155 = fadd fast double %154, %m1diffe36
+  %154 = load double, double* %"'de26", align 8, !node !362
+  %155 = fadd fast double %154, %m1diffe36, !node !362
   store double %155, double* %"'de26", align 8
   %"arrayidx21.i99'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 2
   %156 = load double, double* %"arrayidx21.i99'ipg_unwrap", align 16
@@ -24573,23 +24573,23 @@ invertfor.end:                                    ; preds = %invertfor.body18.fo
   store double %164, double* %"mul19.i97'de", align 8
   %165 = load double, double* %"mul19.i97'de", align 8
   %m0diffe37 = fmul fast double %165, %_unwrap15
-  %m1diffe38 = fmul fast double %165, %_unwrap17
+  %m1diffe38 = fmul fast double %165, %_unwrap17, !node !362
   store double 0.000000e+00, double* %"mul19.i97'de", align 8
-  %166 = load double, double* %"'de26", align 8
-  %167 = fadd fast double %166, %m0diffe37
+  %166 = load double, double* %"'de26", align 8, !node !362
+  %167 = fadd fast double %166, %m0diffe37, !node !362
   store double %167, double* %"'de26", align 8
-  %168 = load double, double* %"'de33", align 8
-  %169 = fadd fast double %168, %m1diffe38
+  %168 = load double, double* %"'de33", align 8, !node !362
+  %169 = fadd fast double %168, %m1diffe38, !node !362
   store double %169, double* %"'de33", align 8
   %170 = load double, double* %"mul16.i96'de", align 8
-  %m0diffe39 = fmul fast double %170, %_unwrap16
+  %m0diffe39 = fmul fast double %170, %_unwrap16, !node !362
   %m1diffe40 = fmul fast double %170, %_unwrap14
   store double 0.000000e+00, double* %"mul16.i96'de", align 8
-  %171 = load double, double* %"'de21", align 8
-  %172 = fadd fast double %171, %m0diffe39
+  %171 = load double, double* %"'de21", align 8, !node !362
+  %172 = fadd fast double %171, %m0diffe39, !node !362
   store double %172, double* %"'de21", align 8
-  %173 = load double, double* %"'de34", align 8
-  %174 = fadd fast double %173, %m1diffe40
+  %173 = load double, double* %"'de34", align 8, !node !362
+  %174 = fadd fast double %173, %m1diffe40, !node !362
   store double %174, double* %"'de34", align 8
   %"arrayidx13.i95'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 1
   %175 = load double, double* %"arrayidx13.i95'ipg_unwrap", align 8
@@ -24607,101 +24607,101 @@ invertfor.end:                                    ; preds = %invertfor.body18.fo
   %183 = fadd fast double %182, %179
   store double %183, double* %"mul11.i93'de", align 8
   %184 = load double, double* %"mul11.i93'de", align 8
-  %m0diffe41 = fmul fast double %184, %_unwrap19
+  %m0diffe41 = fmul fast double %184, %_unwrap19, !node !362
   %m1diffe42 = fmul fast double %184, %_unwrap14
   store double 0.000000e+00, double* %"mul11.i93'de", align 8
-  %185 = load double, double* %"'de21", align 8
-  %186 = fadd fast double %185, %m0diffe41
+  %185 = load double, double* %"'de21", align 8, !node !362
+  %186 = fadd fast double %185, %m0diffe41, !node !362
   store double %186, double* %"'de21", align 8
-  %187 = load double, double* %"'de30", align 8
-  %188 = fadd fast double %187, %m1diffe42
+  %187 = load double, double* %"'de30", align 8, !node !362
+  %188 = fadd fast double %187, %m1diffe42, !node !362
   store double %188, double* %"'de30", align 8
-  %189 = load double, double* %"'de21", align 8
+  %189 = load double, double* %"'de21", align 8, !node !362
   store double 0.000000e+00, double* %"'de21", align 8
-  %"arraydecay'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 0
-  %190 = load double, double* %"arraydecay'ipg_unwrap", align 16
-  %191 = fadd fast double %190, %189
+  %"arraydecay'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 0, !node !362
+  %190 = load double, double* %"arraydecay'ipg_unwrap", align 16, !node !362
+  %191 = fadd fast double %190, %189, !node !362
   store double %191, double* %"arraydecay'ipg_unwrap", align 16
   %192 = load double, double* %"mul8.i92'de", align 8
   %m0diffe43 = fmul fast double %192, %_unwrap18
-  %m1diffe44 = fmul fast double %192, %_unwrap17
+  %m1diffe44 = fmul fast double %192, %_unwrap17, !node !362
   store double 0.000000e+00, double* %"mul8.i92'de", align 8
-  %193 = load double, double* %"'de26", align 8
-  %194 = fadd fast double %193, %m0diffe43
+  %193 = load double, double* %"'de26", align 8, !node !362
+  %194 = fadd fast double %193, %m0diffe43, !node !362
   store double %194, double* %"'de26", align 8
-  %195 = load double, double* %"'de29", align 8
-  %196 = fadd fast double %195, %m1diffe44
+  %195 = load double, double* %"'de29", align 8, !node !362
+  %196 = fadd fast double %195, %m1diffe44, !node !362
   store double %196, double* %"'de29", align 8
-  %197 = load double, double* %"'de26", align 8
+  %197 = load double, double* %"'de26", align 8, !node !362
   store double 0.000000e+00, double* %"'de26", align 8
-  %198 = load double, double* %"pt'", align 8
-  %199 = fadd fast double %198, %197
+  %198 = load double, double* %"pt'", align 8, !node !362
+  %199 = fadd fast double %198, %197, !node !362
   store double %199, double* %"pt'", align 8
   %"arraydecay4'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 0
   %200 = load double, double* %"arraydecay4'ipg_unwrap", align 16
   store double 0.000000e+00, double* %"arraydecay4'ipg_unwrap", align 16
-  %201 = load double, double* %"sub.i91'de", align 8
-  %202 = fadd fast double %201, %200
+  %201 = load double, double* %"sub.i91'de", align 8, !node !362
+  %202 = fadd fast double %201, %200, !node !362
   store double %202, double* %"sub.i91'de", align 8
-  %203 = load double, double* %"sub.i91'de", align 8
-  %204 = fneg fast double %203
+  %203 = load double, double* %"sub.i91'de", align 8, !node !362
+  %204 = fneg fast double %203, !node !362
   store double 0.000000e+00, double* %"sub.i91'de", align 8
-  %205 = load double, double* %"mul.i87'de", align 8
-  %206 = fadd fast double %205, %203
+  %205 = load double, double* %"mul.i87'de", align 8, !node !362
+  %206 = fadd fast double %205, %203, !node !362
   store double %206, double* %"mul.i87'de", align 8
-  %207 = load double, double* %"mul4.i90'de", align 8
-  %208 = fadd fast double %207, %204
+  %207 = load double, double* %"mul4.i90'de", align 8, !node !362
+  %208 = fadd fast double %207, %204, !node !362
   store double %208, double* %"mul4.i90'de", align 8
-  %209 = load double, double* %"mul4.i90'de", align 8
-  %m0diffe45 = fmul fast double %209, %_unwrap18
-  %m1diffe46 = fmul fast double %209, %_unwrap16
+  %209 = load double, double* %"mul4.i90'de", align 8, !node !362
+  %m0diffe45 = fmul fast double %209, %_unwrap18, !node !362
+  %m1diffe46 = fmul fast double %209, %_unwrap16, !node !362
   store double 0.000000e+00, double* %"mul4.i90'de", align 8
-  %210 = load double, double* %"'de34", align 8
-  %211 = fadd fast double %210, %m0diffe45
+  %210 = load double, double* %"'de34", align 8, !node !362
+  %211 = fadd fast double %210, %m0diffe45, !node !362
   store double %211, double* %"'de34", align 8
-  %212 = load double, double* %"'de29", align 8
-  %213 = fadd fast double %212, %m1diffe46
+  %212 = load double, double* %"'de29", align 8, !node !362
+  %213 = fadd fast double %212, %m1diffe46, !node !362
   store double %213, double* %"'de29", align 8
-  %214 = load double, double* %"'de34", align 8
+  %214 = load double, double* %"'de34", align 8, !node !362
   store double 0.000000e+00, double* %"'de34", align 8
-  %"arrayidx3.i89'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1
-  %215 = load double, double* %"arrayidx3.i89'ipg_unwrap", align 8
-  %216 = fadd fast double %215, %214
+  %"arrayidx3.i89'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
+  %215 = load double, double* %"arrayidx3.i89'ipg_unwrap", align 8, !node !362
+  %216 = fadd fast double %215, %214, !node !362
   store double %216, double* %"arrayidx3.i89'ipg_unwrap", align 8
-  %217 = load double, double* %"'de29", align 8
+  %217 = load double, double* %"'de29", align 8, !node !362
   store double 0.000000e+00, double* %"'de29", align 8
-  %"arrayidx2.i88'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 2
-  %218 = load double, double* %"arrayidx2.i88'ipg_unwrap", align 16
-  %219 = fadd fast double %218, %217
+  %"arrayidx2.i88'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 2, !node !362
+  %218 = load double, double* %"arrayidx2.i88'ipg_unwrap", align 16, !node !362
+  %219 = fadd fast double %218, %217, !node !362
   store double %219, double* %"arrayidx2.i88'ipg_unwrap", align 16
-  %220 = load double, double* %"mul.i87'de", align 8
-  %m0diffe47 = fmul fast double %220, %_unwrap15
-  %m1diffe48 = fmul fast double %220, %_unwrap19
+  %220 = load double, double* %"mul.i87'de", align 8, !node !362
+  %m0diffe47 = fmul fast double %220, %_unwrap15, !node !362
+  %m1diffe48 = fmul fast double %220, %_unwrap19, !node !362
   store double 0.000000e+00, double* %"mul.i87'de", align 8
-  %221 = load double, double* %"'de30", align 8
-  %222 = fadd fast double %221, %m0diffe47
+  %221 = load double, double* %"'de30", align 8, !node !362
+  %222 = fadd fast double %221, %m0diffe47, !node !362
   store double %222, double* %"'de30", align 8
-  %223 = load double, double* %"'de33", align 8
-  %224 = fadd fast double %223, %m1diffe48
+  %223 = load double, double* %"'de33", align 8, !node !362
+  %224 = fadd fast double %223, %m1diffe48, !node !362
   store double %224, double* %"'de33", align 8
-  %225 = load double, double* %"'de30", align 8
+  %225 = load double, double* %"'de30", align 8, !node !362
   store double 0.000000e+00, double* %"'de30", align 8
-  %"arrayidx1.i86'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2
-  %226 = load double, double* %"arrayidx1.i86'ipg_unwrap", align 8
-  %227 = fadd fast double %226, %225
+  %"arrayidx1.i86'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
+  %226 = load double, double* %"arrayidx1.i86'ipg_unwrap", align 8, !node !362
+  %227 = fadd fast double %226, %225, !node !362
   store double %227, double* %"arrayidx1.i86'ipg_unwrap", align 8
-  %228 = load double, double* %"'de33", align 8
+  %228 = load double, double* %"'de33", align 8, !node !362
   store double 0.000000e+00, double* %"'de33", align 8
-  %"arrayidx.i85'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 1
-  %229 = load double, double* %"arrayidx.i85'ipg_unwrap", align 8
-  %230 = fadd fast double %229, %228
+  %"arrayidx.i85'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 1, !node !362
+  %229 = load double, double* %"arrayidx.i85'ipg_unwrap", align 8, !node !362
+  %230 = fadd fast double %229, %228, !node !362
   store double %230, double* %"arrayidx.i85'ipg_unwrap", align 8
-  %231 = load double, double* %"'de23", align 8
+  %231 = load double, double* %"'de23", align 8, !node !362
   store double 0.000000e+00, double* %"'de23", align 8
   %232 = call fast double @llvm.cos.f64(double %100)
-  %233 = fmul fast double %231, %232
-  %234 = load double, double* %"'de8", align 8
-  %235 = fadd fast double %234, %233
+  %233 = fmul fast double %231, %232, !node !362
+  %234 = load double, double* %"'de8", align 8, !node !362
+  %235 = fadd fast double %234, %233, !node !362
   store double %235, double* %"'de8", align 8
   br label %mergeinvertfor.body_for.end
 
@@ -24712,111 +24712,111 @@ mergeinvertfor.body_for.end:                      ; preds = %invertfor.end
 invertfor.body18.for.body18_crit_edge:            ; preds = %mergeinvertfor.body18.for.body18_crit_edge_for.end34, %incinvertfor.body18.for.body18_crit_edge
   %236 = load i64, i64* %"iv3'ac", align 8
   %iv.next4_unwrap = add nuw nsw i64 %236, 1
-  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4_unwrap
-  %237 = load double, double* %"arrayidx31'ipg_unwrap", align 8
+  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4_unwrap, !node !362
+  %237 = load double, double* %"arrayidx31'ipg_unwrap", align 8, !node !362
   store double 0.000000e+00, double* %"arrayidx31'ipg_unwrap", align 8
-  %238 = load double, double* %"add29'de", align 8
-  %239 = fadd fast double %238, %237
+  %238 = load double, double* %"add29'de", align 8, !node !362
+  %239 = fadd fast double %238, %237, !node !362
   store double %239, double* %"add29'de", align 8
-  %240 = load double, double* %"add29'de", align 8
+  %240 = load double, double* %"add29'de", align 8, !node !362
   store double 0.000000e+00, double* %"add29'de", align 8
-  %241 = load double, double* %"add25'de", align 8
-  %242 = fadd fast double %241, %240
+  %241 = load double, double* %"add25'de", align 8, !node !362
+  %242 = fadd fast double %241, %240, !node !362
   store double %242, double* %"add25'de", align 8
-  %243 = load double, double* %"mul28'de", align 8
-  %244 = fadd fast double %243, %240
+  %243 = load double, double* %"mul28'de", align 8, !node !362
+  %244 = fadd fast double %243, %240, !node !362
   store double %244, double* %"mul28'de", align 8
-  %245 = load double, double* %"mul28'de", align 8
+  %245 = load double, double* %"mul28'de", align 8, !node !362
   %246 = load i64, i64* %"iv3'ac", align 8
   %arrayidx27.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 %iv.next4_unwrap
   %.pre112_unwrap = load double, double* %arrayidx27.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !380
-  %m0diffemul1549 = fmul fast double %245, %.pre112_unwrap
+  %m0diffemul1549 = fmul fast double %245, %.pre112_unwrap, !node !362
   %247 = load i64, i64* %"iv3'ac", align 8
   %arrayidx.i85_unwrap50 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
   %_unwrap51 = load double, double* %arrayidx.i85_unwrap50, align 8, !tbaa !68, !invariant.group !372
-  %arrayidx3.i89_unwrap52 = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap53 = load double, double* %arrayidx3.i89_unwrap52, align 8, !tbaa !68, !invariant.group !375
-  %mul10_unwrap54 = fmul fast double %_unwrap51, %_unwrap53
+  %arrayidx3.i89_unwrap52 = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %_unwrap53 = load double, double* %arrayidx3.i89_unwrap52, align 8, !tbaa !68, !invariant.group !375, !node !362
+  %mul10_unwrap54 = fmul fast double %_unwrap51, %_unwrap53, !node !362
   %arraydecay_unwrap55 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
   %_unwrap56 = load double, double* %arraydecay_unwrap55, align 16, !tbaa !68, !invariant.group !377
-  %_unwrap57 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376
-  %mul7_unwrap58 = fmul fast double %_unwrap56, %_unwrap57
-  %add_unwrap59 = fadd fast double %mul10_unwrap54, %mul7_unwrap58
+  %_unwrap57 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
+  %mul7_unwrap58 = fmul fast double %_unwrap56, %_unwrap57, !node !362
+  %add_unwrap59 = fadd fast double %mul10_unwrap54, %mul7_unwrap58, !node !362
   %arrayidx2.i88_unwrap60 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
   %_unwrap61 = load double, double* %arrayidx2.i88_unwrap60, align 16, !tbaa !68, !invariant.group !374
-  %arrayidx1.i86_unwrap62 = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap63 = load double, double* %arrayidx1.i86_unwrap62, align 8, !tbaa !68, !invariant.group !373
-  %mul13_unwrap64 = fmul fast double %_unwrap61, %_unwrap63
-  %add14_unwrap65 = fadd fast double %add_unwrap59, %mul13_unwrap64
+  %arrayidx1.i86_unwrap62 = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %_unwrap63 = load double, double* %arrayidx1.i86_unwrap62, align 8, !tbaa !68, !invariant.group !373, !node !362
+  %mul13_unwrap64 = fmul fast double %_unwrap61, %_unwrap63, !node !362
+  %add14_unwrap65 = fadd fast double %add_unwrap59, %mul13_unwrap64, !node !362
   %248 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %249 = tail call fast double @llvm.sqrt.f64(double %248)
   %250 = tail call fast double @llvm.cos.f64(double %249)
   %sub_unwrap66 = fsub fast double 1.000000e+00, %250
-  %mul15_unwrap67 = fmul fast double %add14_unwrap65, %sub_unwrap66
-  %m1diffe.pre112 = fmul fast double %245, %mul15_unwrap67
+  %mul15_unwrap67 = fmul fast double %add14_unwrap65, %sub_unwrap66, !node !362
+  %m1diffe.pre112 = fmul fast double %245, %mul15_unwrap67, !node !362
   store double 0.000000e+00, double* %"mul28'de", align 8
-  %251 = load double, double* %"mul15'de", align 8
-  %252 = fadd fast double %251, %m0diffemul1549
+  %251 = load double, double* %"mul15'de", align 8, !node !362
+  %252 = fadd fast double %251, %m0diffemul1549, !node !362
   store double %252, double* %"mul15'de", align 8
-  %253 = load double, double* %".pre112'de", align 8
-  %254 = fadd fast double %253, %m1diffe.pre112
+  %253 = load double, double* %".pre112'de", align 8, !node !362
+  %254 = fadd fast double %253, %m1diffe.pre112, !node !362
   store double %254, double* %".pre112'de", align 8
-  %255 = load double, double* %"add25'de", align 8
+  %255 = load double, double* %"add25'de", align 8, !node !362
   store double 0.000000e+00, double* %"add25'de", align 8
-  %256 = load double, double* %"mul24'de", align 8
-  %257 = fadd fast double %256, %255
+  %256 = load double, double* %"mul24'de", align 8, !node !362
+  %257 = fadd fast double %256, %255, !node !362
   store double %257, double* %"mul24'de", align 8
-  %258 = load double, double* %"mul21'de", align 8
-  %259 = fadd fast double %258, %255
+  %258 = load double, double* %"mul21'de", align 8, !node !362
+  %259 = fadd fast double %258, %255, !node !362
   store double %259, double* %"mul21'de", align 8
-  %260 = load double, double* %"mul24'de", align 8
+  %260 = load double, double* %"mul24'de", align 8, !node !362
   %261 = load i64, i64* %"iv3'ac", align 8
   %262 = tail call fast double @llvm.sin.f64(double %249)
-  %m0diffe.pre111 = fmul fast double %260, %262
+  %m0diffe.pre111 = fmul fast double %260, %262, !node !362
   %263 = load i64, i64* %"iv3'ac", align 8
   %arrayidx23.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w_cross_pt, i64 0, i64 %iv.next4_unwrap
   %.pre111_unwrap = load double, double* %arrayidx23.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !379
-  %m1diffe68 = fmul fast double %260, %.pre111_unwrap
+  %m1diffe68 = fmul fast double %260, %.pre111_unwrap, !node !362
   store double 0.000000e+00, double* %"mul24'de", align 8
-  %264 = load double, double* %".pre111'de", align 8
-  %265 = fadd fast double %264, %m0diffe.pre111
+  %264 = load double, double* %".pre111'de", align 8, !node !362
+  %265 = fadd fast double %264, %m0diffe.pre111, !node !362
   store double %265, double* %".pre111'de", align 8
-  %266 = load double, double* %"'de23", align 8
-  %267 = fadd fast double %266, %m1diffe68
+  %266 = load double, double* %"'de23", align 8, !node !362
+  %267 = fadd fast double %266, %m1diffe68, !node !362
   store double %267, double* %"'de23", align 8
-  %268 = load double, double* %"mul21'de", align 8
-  %m0diffe.pre110 = fmul fast double %268, %250
+  %268 = load double, double* %"mul21'de", align 8, !node !362
+  %m0diffe.pre110 = fmul fast double %268, %250, !node !362
   %269 = load i64, i64* %"iv3'ac", align 8
-  %arrayidx20.phi.trans.insert_unwrap = getelementptr inbounds double, double* %pt, i64 %iv.next4_unwrap
-  %.pre110_unwrap = load double, double* %arrayidx20.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !378
-  %m1diffe69 = fmul fast double %268, %.pre110_unwrap
+  %arrayidx20.phi.trans.insert_unwrap = getelementptr inbounds double, double* %pt, i64 %iv.next4_unwrap, !node !362
+  %.pre110_unwrap = load double, double* %arrayidx20.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !378, !node !362
+  %m1diffe69 = fmul fast double %268, %.pre110_unwrap, !node !362
   store double 0.000000e+00, double* %"mul21'de", align 8
-  %270 = load double, double* %".pre110'de", align 8
-  %271 = fadd fast double %270, %m0diffe.pre110
+  %270 = load double, double* %".pre110'de", align 8, !node !362
+  %271 = fadd fast double %270, %m0diffe.pre110, !node !362
   store double %271, double* %".pre110'de", align 8
-  %272 = load double, double* %"'de7", align 8
-  %273 = fadd fast double %272, %m1diffe69
+  %272 = load double, double* %"'de7", align 8, !node !362
+  %273 = fadd fast double %272, %m1diffe69, !node !362
   store double %273, double* %"'de7", align 8
-  %274 = load double, double* %".pre112'de", align 8
+  %274 = load double, double* %".pre112'de", align 8, !node !362
   store double 0.000000e+00, double* %".pre112'de", align 8
   %275 = load i64, i64* %"iv3'ac", align 8
-  %"arrayidx27.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv.next4_unwrap
-  %276 = load double, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8
-  %277 = fadd fast double %276, %274
+  %"arrayidx27.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv.next4_unwrap, !node !362
+  %276 = load double, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %277 = fadd fast double %276, %274, !node !362
   store double %277, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8
-  %278 = load double, double* %".pre111'de", align 8
+  %278 = load double, double* %".pre111'de", align 8, !node !362
   store double 0.000000e+00, double* %".pre111'de", align 8
   %279 = load i64, i64* %"iv3'ac", align 8
-  %"arrayidx23.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 %iv.next4_unwrap
-  %280 = load double, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8
-  %281 = fadd fast double %280, %278
+  %"arrayidx23.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 %iv.next4_unwrap, !node !362
+  %280 = load double, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %281 = fadd fast double %280, %278, !node !362
   store double %281, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8
-  %282 = load double, double* %".pre110'de", align 8
+  %282 = load double, double* %".pre110'de", align 8, !node !362
   store double 0.000000e+00, double* %".pre110'de", align 8
   %283 = load i64, i64* %"iv3'ac", align 8
-  %"arrayidx20.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4_unwrap
-  %284 = load double, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8
-  %285 = fadd fast double %284, %282
+  %"arrayidx20.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4_unwrap, !node !362
+  %284 = load double, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %285 = fadd fast double %284, %282, !node !362
   store double %285, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8
   %286 = load i64, i64* %"iv3'ac", align 8
   %287 = icmp eq i64 %286, 0
@@ -24837,18 +24837,18 @@ mergeinvertfor.body18.for.body18_crit_edge_for.end34: ; preds = %invertfor.end34
   br label %invertfor.body18.for.body18_crit_edge
 
 invertif.else:                                    ; preds = %invertfor.body38.for.body38_crit_edge
-  %291 = load double, double* %"rotatedPt'", align 8
+  %291 = load double, double* %"rotatedPt'", align 8, !node !362
   store double 0.000000e+00, double* %"rotatedPt'", align 8
-  %292 = load double, double* %"add43119'de", align 8
-  %293 = fadd fast double %292, %291
+  %292 = load double, double* %"add43119'de", align 8, !node !362
+  %293 = fadd fast double %292, %291, !node !362
   store double %293, double* %"add43119'de", align 8
-  %294 = load double, double* %"add43119'de", align 8
+  %294 = load double, double* %"add43119'de", align 8, !node !362
   store double 0.000000e+00, double* %"add43119'de", align 8
-  %295 = load double, double* %"sub.i'de", align 8
-  %296 = fadd fast double %295, %294
+  %295 = load double, double* %"sub.i'de", align 8, !node !362
+  %296 = fadd fast double %295, %294, !node !362
   store double %296, double* %"sub.i'de", align 8
-  %297 = load double, double* %"'de70", align 8
-  %298 = fadd fast double %297, %294
+  %297 = load double, double* %"'de70", align 8, !node !362
+  %298 = fadd fast double %297, %294, !node !362
   store double %298, double* %"'de70", align 8
   %"arrayidx21.i'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 2
   %299 = load double, double* %"arrayidx21.i'ipg_unwrap", align 16
@@ -24866,30 +24866,30 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   %307 = fadd fast double %306, %303
   store double %307, double* %"mul19.i'de", align 8
   %308 = load double, double* %"mul19.i'de", align 8
-  %arrayidx.i83_unwrap = getelementptr inbounds double, double* %rot, i64 1
-  %_unwrap71 = load double, double* %arrayidx.i83_unwrap, align 8, !tbaa !68, !invariant.group !381
-  %m0diffe72 = fmul fast double %308, %_unwrap71
-  %_unwrap73 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385
-  %m1diffe74 = fmul fast double %308, %_unwrap73
+  %arrayidx.i83_unwrap = getelementptr inbounds double, double* %rot, i64 1, !node !362
+  %_unwrap71 = load double, double* %arrayidx.i83_unwrap, align 8, !tbaa !68, !invariant.group !381, !node !362
+  %m0diffe72 = fmul fast double %308, %_unwrap71, !node !362
+  %_unwrap73 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385, !node !362
+  %m1diffe74 = fmul fast double %308, %_unwrap73, !node !362
   store double 0.000000e+00, double* %"mul19.i'de", align 8
-  %309 = load double, double* %"'de70", align 8
-  %310 = fadd fast double %309, %m0diffe72
+  %309 = load double, double* %"'de70", align 8, !node !362
+  %310 = fadd fast double %309, %m0diffe72, !node !362
   store double %310, double* %"'de70", align 8
-  %311 = load double, double* %"'de75", align 8
-  %312 = fadd fast double %311, %m1diffe74
+  %311 = load double, double* %"'de75", align 8, !node !362
+  %312 = fadd fast double %311, %m1diffe74, !node !362
   store double %312, double* %"'de75", align 8
   %313 = load double, double* %"mul16.i'de", align 8
-  %arrayidx3.i_unwrap = getelementptr inbounds double, double* %pt, i64 1
-  %_unwrap76 = load double, double* %arrayidx3.i_unwrap, align 8, !tbaa !68, !invariant.group !384
-  %m0diffe77 = fmul fast double %313, %_unwrap76
-  %_unwrap78 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386
-  %m1diffe79 = fmul fast double %313, %_unwrap78
+  %arrayidx3.i_unwrap = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %_unwrap76 = load double, double* %arrayidx3.i_unwrap, align 8, !tbaa !68, !invariant.group !384, !node !362
+  %m0diffe77 = fmul fast double %313, %_unwrap76, !node !362
+  %_unwrap78 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386, !node !362
+  %m1diffe79 = fmul fast double %313, %_unwrap78, !node !362
   store double 0.000000e+00, double* %"mul16.i'de", align 8
-  %314 = load double, double* %"'de80", align 8
-  %315 = fadd fast double %314, %m0diffe77
+  %314 = load double, double* %"'de80", align 8, !node !362
+  %315 = fadd fast double %314, %m0diffe77, !node !362
   store double %315, double* %"'de80", align 8
-  %316 = load double, double* %"'de81", align 8
-  %317 = fadd fast double %316, %m1diffe79
+  %316 = load double, double* %"'de81", align 8, !node !362
+  %317 = fadd fast double %316, %m1diffe79, !node !362
   store double %317, double* %"'de81", align 8
   %"arrayidx13.i'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 1
   %318 = load double, double* %"arrayidx13.i'ipg_unwrap", align 8
@@ -24907,130 +24907,130 @@ invertif.else:                                    ; preds = %invertfor.body38.fo
   %326 = fadd fast double %325, %322
   store double %326, double* %"mul11.i'de", align 8
   %327 = load double, double* %"mul11.i'de", align 8
-  %arrayidx1.i_unwrap = getelementptr inbounds double, double* %pt, i64 2
-  %_unwrap82 = load double, double* %arrayidx1.i_unwrap, align 8, !tbaa !68, !invariant.group !382
-  %m0diffe83 = fmul fast double %327, %_unwrap82
-  %m1diffe84 = fmul fast double %327, %_unwrap78
+  %arrayidx1.i_unwrap = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %_unwrap82 = load double, double* %arrayidx1.i_unwrap, align 8, !tbaa !68, !invariant.group !382, !node !362
+  %m0diffe83 = fmul fast double %327, %_unwrap82, !node !362
+  %m1diffe84 = fmul fast double %327, %_unwrap78, !node !362
   store double 0.000000e+00, double* %"mul11.i'de", align 8
-  %328 = load double, double* %"'de80", align 8
-  %329 = fadd fast double %328, %m0diffe83
+  %328 = load double, double* %"'de80", align 8, !node !362
+  %329 = fadd fast double %328, %m0diffe83, !node !362
   store double %329, double* %"'de80", align 8
-  %330 = load double, double* %"'de85", align 8
-  %331 = fadd fast double %330, %m1diffe84
+  %330 = load double, double* %"'de85", align 8, !node !362
+  %331 = fadd fast double %330, %m1diffe84, !node !362
   store double %331, double* %"'de85", align 8
-  %332 = load double, double* %"'de80", align 8
+  %332 = load double, double* %"'de80", align 8, !node !362
   store double 0.000000e+00, double* %"'de80", align 8
-  %333 = load double, double* %"rot'", align 8
-  %334 = fadd fast double %333, %332
+  %333 = load double, double* %"rot'", align 8, !node !362
+  %334 = fadd fast double %333, %332, !node !362
   store double %334, double* %"rot'", align 8
   %335 = load double, double* %"mul8.i'de", align 8
-  %arrayidx2.i_unwrap = getelementptr inbounds double, double* %rot, i64 2
-  %_unwrap86 = load double, double* %arrayidx2.i_unwrap, align 8, !tbaa !68, !invariant.group !383
-  %m0diffe87 = fmul fast double %335, %_unwrap86
-  %m1diffe88 = fmul fast double %335, %_unwrap73
+  %arrayidx2.i_unwrap = getelementptr inbounds double, double* %rot, i64 2, !node !362
+  %_unwrap86 = load double, double* %arrayidx2.i_unwrap, align 8, !tbaa !68, !invariant.group !383, !node !362
+  %m0diffe87 = fmul fast double %335, %_unwrap86, !node !362
+  %m1diffe88 = fmul fast double %335, %_unwrap73, !node !362
   store double 0.000000e+00, double* %"mul8.i'de", align 8
-  %336 = load double, double* %"'de70", align 8
-  %337 = fadd fast double %336, %m0diffe87
+  %336 = load double, double* %"'de70", align 8, !node !362
+  %337 = fadd fast double %336, %m0diffe87, !node !362
   store double %337, double* %"'de70", align 8
-  %338 = load double, double* %"'de89", align 8
-  %339 = fadd fast double %338, %m1diffe88
+  %338 = load double, double* %"'de89", align 8, !node !362
+  %339 = fadd fast double %338, %m1diffe88, !node !362
   store double %339, double* %"'de89", align 8
-  %340 = load double, double* %"'de70", align 8
+  %340 = load double, double* %"'de70", align 8, !node !362
   store double 0.000000e+00, double* %"'de70", align 8
-  %341 = load double, double* %"pt'", align 8
-  %342 = fadd fast double %341, %340
+  %341 = load double, double* %"pt'", align 8, !node !362
+  %342 = fadd fast double %341, %340, !node !362
   store double %342, double* %"pt'", align 8
   %"arraydecay35'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 0
   %343 = load double, double* %"arraydecay35'ipg_unwrap", align 16
   store double 0.000000e+00, double* %"arraydecay35'ipg_unwrap", align 16
-  %344 = load double, double* %"sub.i'de", align 8
-  %345 = fadd fast double %344, %343
+  %344 = load double, double* %"sub.i'de", align 8, !node !362
+  %345 = fadd fast double %344, %343, !node !362
   store double %345, double* %"sub.i'de", align 8
-  %346 = load double, double* %"sub.i'de", align 8
-  %347 = fneg fast double %346
+  %346 = load double, double* %"sub.i'de", align 8, !node !362
+  %347 = fneg fast double %346, !node !362
   store double 0.000000e+00, double* %"sub.i'de", align 8
-  %348 = load double, double* %"mul.i84'de", align 8
-  %349 = fadd fast double %348, %346
+  %348 = load double, double* %"mul.i84'de", align 8, !node !362
+  %349 = fadd fast double %348, %346, !node !362
   store double %349, double* %"mul.i84'de", align 8
-  %350 = load double, double* %"mul4.i'de", align 8
-  %351 = fadd fast double %350, %347
+  %350 = load double, double* %"mul4.i'de", align 8, !node !362
+  %351 = fadd fast double %350, %347, !node !362
   store double %351, double* %"mul4.i'de", align 8
-  %352 = load double, double* %"mul4.i'de", align 8
-  %m0diffe90 = fmul fast double %352, %_unwrap86
-  %m1diffe91 = fmul fast double %352, %_unwrap76
+  %352 = load double, double* %"mul4.i'de", align 8, !node !362
+  %m0diffe90 = fmul fast double %352, %_unwrap86, !node !362
+  %m1diffe91 = fmul fast double %352, %_unwrap76, !node !362
   store double 0.000000e+00, double* %"mul4.i'de", align 8
-  %353 = load double, double* %"'de81", align 8
-  %354 = fadd fast double %353, %m0diffe90
+  %353 = load double, double* %"'de81", align 8, !node !362
+  %354 = fadd fast double %353, %m0diffe90, !node !362
   store double %354, double* %"'de81", align 8
-  %355 = load double, double* %"'de89", align 8
-  %356 = fadd fast double %355, %m1diffe91
+  %355 = load double, double* %"'de89", align 8, !node !362
+  %356 = fadd fast double %355, %m1diffe91, !node !362
   store double %356, double* %"'de89", align 8
-  %357 = load double, double* %"'de81", align 8
+  %357 = load double, double* %"'de81", align 8, !node !362
   store double 0.000000e+00, double* %"'de81", align 8
-  %"arrayidx3.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1
-  %358 = load double, double* %"arrayidx3.i'ipg_unwrap", align 8
-  %359 = fadd fast double %358, %357
+  %"arrayidx3.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
+  %358 = load double, double* %"arrayidx3.i'ipg_unwrap", align 8, !node !362
+  %359 = fadd fast double %358, %357, !node !362
   store double %359, double* %"arrayidx3.i'ipg_unwrap", align 8
-  %360 = load double, double* %"'de89", align 8
+  %360 = load double, double* %"'de89", align 8, !node !362
   store double 0.000000e+00, double* %"'de89", align 8
-  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 2
-  %361 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %362 = fadd fast double %361, %360
+  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 2, !node !362
+  %361 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8, !node !362
+  %362 = fadd fast double %361, %360, !node !362
   store double %362, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %363 = load double, double* %"mul.i84'de", align 8
-  %m0diffe92 = fmul fast double %363, %_unwrap71
-  %m1diffe93 = fmul fast double %363, %_unwrap82
+  %363 = load double, double* %"mul.i84'de", align 8, !node !362
+  %m0diffe92 = fmul fast double %363, %_unwrap71, !node !362
+  %m1diffe93 = fmul fast double %363, %_unwrap82, !node !362
   store double 0.000000e+00, double* %"mul.i84'de", align 8
-  %364 = load double, double* %"'de85", align 8
-  %365 = fadd fast double %364, %m0diffe92
+  %364 = load double, double* %"'de85", align 8, !node !362
+  %365 = fadd fast double %364, %m0diffe92, !node !362
   store double %365, double* %"'de85", align 8
-  %366 = load double, double* %"'de75", align 8
-  %367 = fadd fast double %366, %m1diffe93
+  %366 = load double, double* %"'de75", align 8, !node !362
+  %367 = fadd fast double %366, %m1diffe93, !node !362
   store double %367, double* %"'de75", align 8
-  %368 = load double, double* %"'de85", align 8
+  %368 = load double, double* %"'de85", align 8, !node !362
   store double 0.000000e+00, double* %"'de85", align 8
-  %"arrayidx1.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2
-  %369 = load double, double* %"arrayidx1.i'ipg_unwrap", align 8
-  %370 = fadd fast double %369, %368
+  %"arrayidx1.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
+  %369 = load double, double* %"arrayidx1.i'ipg_unwrap", align 8, !node !362
+  %370 = fadd fast double %369, %368, !node !362
   store double %370, double* %"arrayidx1.i'ipg_unwrap", align 8
-  %371 = load double, double* %"'de75", align 8
+  %371 = load double, double* %"'de75", align 8, !node !362
   store double 0.000000e+00, double* %"'de75", align 8
-  %"arrayidx.i83'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 1
-  %372 = load double, double* %"arrayidx.i83'ipg_unwrap", align 8
-  %373 = fadd fast double %372, %371
+  %"arrayidx.i83'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 1, !node !362
+  %372 = load double, double* %"arrayidx.i83'ipg_unwrap", align 8, !node !362
+  %373 = fadd fast double %372, %371, !node !362
   store double %373, double* %"arrayidx.i83'ipg_unwrap", align 8
   br label %invertsqsum.exit
 
 invertfor.body38.for.body38_crit_edge:            ; preds = %mergeinvertfor.body38.for.body38_crit_edge_for.end48, %incinvertfor.body38.for.body38_crit_edge
   %374 = load i64, i64* %"iv5'ac", align 8
   %iv.next6_unwrap = add nuw nsw i64 %374, 1
-  %"arrayidx45'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6_unwrap
-  %375 = load double, double* %"arrayidx45'ipg_unwrap", align 8
+  %"arrayidx45'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6_unwrap, !node !362
+  %375 = load double, double* %"arrayidx45'ipg_unwrap", align 8, !node !362
   store double 0.000000e+00, double* %"arrayidx45'ipg_unwrap", align 8
-  %376 = load double, double* %"add43'de", align 8
-  %377 = fadd fast double %376, %375
+  %376 = load double, double* %"add43'de", align 8, !node !362
+  %377 = fadd fast double %376, %375, !node !362
   store double %377, double* %"add43'de", align 8
-  %378 = load double, double* %"add43'de", align 8
+  %378 = load double, double* %"add43'de", align 8, !node !362
   store double 0.000000e+00, double* %"add43'de", align 8
-  %379 = load double, double* %".pre109'de", align 8
-  %380 = fadd fast double %379, %378
+  %379 = load double, double* %".pre109'de", align 8, !node !362
+  %380 = fadd fast double %379, %378, !node !362
   store double %380, double* %".pre109'de", align 8
-  %381 = load double, double* %".pre'de", align 8
-  %382 = fadd fast double %381, %378
+  %381 = load double, double* %".pre'de", align 8, !node !362
+  %382 = fadd fast double %381, %378, !node !362
   store double %382, double* %".pre'de", align 8
-  %383 = load double, double* %".pre109'de", align 8
+  %383 = load double, double* %".pre109'de", align 8, !node !362
   store double 0.000000e+00, double* %".pre109'de", align 8
   %384 = load i64, i64* %"iv5'ac", align 8
-  %"arrayidx42.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 %iv.next6_unwrap
-  %385 = load double, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8
-  %386 = fadd fast double %385, %383
+  %"arrayidx42.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 %iv.next6_unwrap, !node !362
+  %385 = load double, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %386 = fadd fast double %385, %383, !node !362
   store double %386, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8
-  %387 = load double, double* %".pre'de", align 8
+  %387 = load double, double* %".pre'de", align 8, !node !362
   store double 0.000000e+00, double* %".pre'de", align 8
   %388 = load i64, i64* %"iv5'ac", align 8
-  %"arrayidx40.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6_unwrap
-  %389 = load double, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8
-  %390 = fadd fast double %389, %387
+  %"arrayidx40.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6_unwrap, !node !362
+  %389 = load double, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %390 = fadd fast double %389, %387, !node !362
   store double %390, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8
   %391 = load i64, i64* %"iv5'ac", align 8
   %392 = icmp eq i64 %391, 0

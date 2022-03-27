@@ -35,20 +35,23 @@ using namespace llvm;
 // This function is of type PassManagerBuilder::ExtensionFn
 static void loadPass(const PassManagerBuilder &Builder,
                      legacy::PassManagerBase &PM) {
+  PM.add(createLoopUnrollPass());
   PM.add(createPreserveNVVMPass(/*Begin=*/true));
   PM.add(createGVNPass());
   PM.add(createSROAPass());
-  PM.add(createEnzymePass(/*PostOpt*/ true));
   PM.add(createPreserveNVVMPass(/*Begin=*/false));
   PM.add(createGVNPass());
   PM.add(createSROAPass());
   PM.add(createLoopDeletionPass());
   PM.add(createGlobalOptimizerPass());
+  PM.add(createEnzymePass(/*PostOpt*/ true));
+
   // PM.add(SimplifyCFGPass());
 }
 
 static void loadNVVMPass(const PassManagerBuilder &Builder,
                          legacy::PassManagerBase &PM) {
+
   PM.add(createPreserveNVVMPass(/*Begin=*/true));
 }
 

@@ -1,0 +1,50 @@
+digraph G {
+	{
+		node [shape=Mrecord, color=green, style=dashed, width=8];
+		Tape
+	}
+	subgraph Forward {
+		"arrayidx6" -> "%4"
+		"mat" -> "arrayidx6"
+		"vec" -> "arrayidx8"
+		"arrayidx8" -> "%5"
+		"arrayidx" -> "arrayidx"
+		"%5" -> "mul9"
+		"add12" -> "arrayidx"
+		"add12" -> "%2"
+		"mul9" -> "add12"
+		"%4" -> "mul9"
+	}
+	subgraph Reverse {
+		"garrayidx6" -> "gmat"
+		"mat" -> Tape
+		Tape -> "garrayidx6"
+		"garrayidx8" -> "gvec"
+		"vec" -> Tape
+		Tape -> "garrayidx8"
+		"garrayidx" -> "garrayidx"
+		"arrayidx" -> Tape
+		Tape -> "garrayidx"
+		"garrayidx" -> "gadd12"
+		"add12" -> Tape
+		Tape -> "garrayidx"
+		"g%5" -> "garrayidx8"
+		"arrayidx8" -> Tape
+		Tape -> "g%5"
+		"gadd12" -> "gmul9"
+		"mul9" -> Tape
+		Tape -> "gadd12"
+		"gmul9" -> "g%5"
+		"%5" -> Tape
+		Tape -> "gmul9"
+		"gmul9" -> "g%4"
+		"%4" -> Tape
+		Tape -> "gmul9"
+		"g%2" -> "gadd12"
+		"add12" -> Tape
+		Tape -> "g%2"
+		"g%4" -> "garrayidx6"
+		"arrayidx6" -> Tape
+		Tape -> "g%4"
+	}
+}

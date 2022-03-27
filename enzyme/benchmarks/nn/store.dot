@@ -5,83 +5,83 @@ digraph G {
 	}
 	subgraph Forward {
 		"conv" -> "mul"
-		"%3" -> "div"
-		"%4" -> "conv"
+		"idxprom18" -> "arrayidx19"
+		"idxprom18" -> "arrayidx19'ipg"
 		"%2" -> "add"
 		"arrayidx9" -> "%3"
-		"idxprom18" -> "arrayidx19'ipg"
-		"idxprom18" -> "arrayidx19"
 		"arrayidx19" -> "%21"
-		"div" -> "mul"
-		"arrayidx2" -> "arrayidx2"
+		"arrayidx11" -> "%4"
 		"mul" -> "add"
 		"image" -> "arrayidx11"
-		"network" -> "arrayidx"
 		"network" -> "arrayidx9"
+		"network" -> "arrayidx"
 		"label" -> "idxprom18"
-		"arrayidx11" -> "%4"
+		"arrayidx2" -> "arrayidx2"
+		"arrayidx" -> "%1"
 		"%1" -> "arrayidx2"
 		"%1" -> "%2"
+		"%4" -> "conv"
 		"%21" -> "%22"
-		"arrayidx" -> "%1"
+		"div" -> "mul"
+		"%3" -> "div"
 	}
 	subgraph Reverse {
 		"gconv" -> "g%4"
 		"%4" -> Tape
 		Tape -> "gconv"
-		"g%3" -> "garrayidx9"
-		"arrayidx9" -> Tape
-		Tape -> "g%3"
-		"g%4" -> "garrayidx11"
-		"arrayidx11" -> Tape
-		Tape -> "g%4"
+		"gidxprom18" -> "glabel"
+		"label" -> Tape
+		Tape -> "gidxprom18"
 		"g%2" -> "g%1"
 		"%1" -> Tape
 		Tape -> "g%2"
 		"garrayidx9" -> "gnetwork"
 		"network" -> Tape
 		Tape -> "garrayidx9"
-		"gidxprom18" -> "glabel"
-		"label" -> Tape
-		Tape -> "gidxprom18"
 		"garrayidx19" -> "gidxprom18"
 		"idxprom18" -> Tape
 		Tape -> "garrayidx19"
 		"g%22" -> "g%21"
 		"%21" -> Tape
 		Tape -> "g%22"
-		"gdiv" -> "g%3"
-		"%3" -> Tape
-		Tape -> "gdiv"
-		"garrayidx2" -> "garrayidx2"
-		"arrayidx2" -> Tape
-		Tape -> "garrayidx2"
-		"garrayidx2" -> "g%1"
-		"%1" -> Tape
-		Tape -> "garrayidx2"
+		"gadd" -> "gmul"
+		"mul" -> Tape
+		Tape -> "gadd"
+		"gadd" -> "g%2"
+		"%2" -> Tape
+		Tape -> "gadd"
+		"garrayidx11" -> "gimage"
+		"image" -> Tape
+		Tape -> "garrayidx11"
 		"gmul" -> "gconv"
 		"conv" -> Tape
 		Tape -> "gmul"
 		"gmul" -> "gdiv"
 		"div" -> Tape
 		Tape -> "gmul"
-		"gadd" -> "g%2"
-		"%2" -> Tape
-		Tape -> "gadd"
-		"gadd" -> "gmul"
-		"mul" -> Tape
-		Tape -> "gadd"
-		"garrayidx11" -> "gimage"
-		"image" -> Tape
-		Tape -> "garrayidx11"
-		"g%1" -> "garrayidx"
-		"arrayidx" -> Tape
-		Tape -> "g%1"
-		"g%21" -> "garrayidx19"
-		"arrayidx19" -> Tape
-		Tape -> "g%21"
+		"garrayidx2" -> "garrayidx2"
+		"arrayidx2" -> Tape
+		Tape -> "garrayidx2"
+		"garrayidx2" -> "g%1"
+		"%1" -> Tape
+		Tape -> "garrayidx2"
 		"garrayidx" -> "gnetwork"
 		"network" -> Tape
 		Tape -> "garrayidx"
+		"g%1" -> "garrayidx"
+		"arrayidx" -> Tape
+		Tape -> "g%1"
+		"g%4" -> "garrayidx11"
+		"arrayidx11" -> Tape
+		Tape -> "g%4"
+		"g%21" -> "garrayidx19"
+		"arrayidx19" -> Tape
+		Tape -> "g%21"
+		"gdiv" -> "g%3"
+		"%3" -> Tape
+		Tape -> "gdiv"
+		"g%3" -> "garrayidx9"
+		"arrayidx9" -> Tape
+		Tape -> "g%3"
 	}
 }

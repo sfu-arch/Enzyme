@@ -63,7 +63,7 @@ Matrix* get_new_matrix(int nrows, int ncols)
 
 
 // return new empty matrix
-Matrix* get_new_empty_matrix()
+inline Matrix* get_new_empty_matrix()
 {
     Matrix* mat = (Matrix*)malloc(sizeof(Matrix));
 
@@ -494,7 +494,7 @@ static inline void get_skinned_vertex_positions(
 //% 5) thumb1, 6)thumb2, 7) thumb3, 8) thumb4
 //%       similarly: index, middle, ring, pinky
 //%       end) forearm
-void to_pose_params(
+inline void to_pose_params(
     int count,
     double const* __restrict theta,
     const char** __restrict bone_names,
@@ -586,6 +586,7 @@ void hand_objective(
 
     delete_matrix(pose_params);
     delete_matrix(vertex_positions);
+    return;
 }
 
 

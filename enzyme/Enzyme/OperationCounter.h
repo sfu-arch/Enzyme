@@ -27,14 +27,6 @@ public:
 
     OPCounterPass();
 
-    uint32_t getLevel(Value *V) {
-        if (!isa<Instruction>(*V))
-            return 0;
-        Instruction &I = cast<Instruction>(*V);
-        auto *N = I.getMetadata("level");
-        auto *S = dyn_cast<MDString>(N->getOperand(0));
-        return stoi(S->getString().str());
-    }
     void UpdateOpCount(Instruction *I);
     void UpdateMemOpCount(Instruction *I);
 
@@ -44,14 +36,15 @@ public:
     void visitLoadInst(LoadInst &I);
     void visitStoreInst(StoreInst &I);
     void visitReturnInst(ReturnInst &I);
-
-
+ 
 private:
     std::map<uint32_t, uint32_t> levelOps;
     int forward_op_count = 0;
     int reverse_op_count = 0;
     int forward_mem_ops_count = 0;
     int reverse_mem_ops_count = 0;
+    int load_id = 0;
+    int store_id = 0;
 
     Instruction *forward_op = nullptr;
     Instruction *reverse_op = nullptr;

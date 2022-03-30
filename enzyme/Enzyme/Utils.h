@@ -64,7 +64,8 @@ extern "C" {
 extern llvm::cl::opt<bool> EnzymePrintPerf;
 }
 void addInstCost(llvm::Function *f);
-void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args);
+void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args, std::string unique_id="");
+bool IsReverseOp(llvm::Value *I);
 
 uint32_t countForwardPassRegisters(llvm::Function *);
 

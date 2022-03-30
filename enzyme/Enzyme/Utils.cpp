@@ -660,12 +660,12 @@ void addInstCost(llvm::Function *f) {
   }
 }
 
-// This function calls the printf before the given instruction.
+// This function calls the printf after the given instruction.
 // HOW TO USE:
 //     std::vector<Value*> args = {arg0, arg1, arg2, ...};
 //     CallPrintf(call_before, format, args);
 // 
-void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args) {
+void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args, std::string unique_id) {
     auto &m = *I->getModule();
     auto &context = m.getContext();
 
@@ -674,9 +674,8 @@ void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> a
     FunctionCallee Printf = m.getOrInsertFunction("printf", PrintfTy);
 
     llvm::Constant *ResultFormatStr = llvm::ConstantDataArray::getString(context, format);
-
     Constant *ResultFormatStrVar =
-        m.getOrInsertGlobal("ResultFormatStrIR", ResultFormatStr->getType());
+        m.getOrInsertGlobal("ResultFormatStrIR" + unique_id, ResultFormatStr->getType());
     dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
 
     Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "");
@@ -684,4 +683,10 @@ void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> a
     std::vector<Value *> print_args = {ResultHeaderStrPtr};
     print_args.insert(print_args.end(), args.begin(), args.end());
     CallInst::Create(Printf, print_args, "", ResultHeaderStrPtr->getNextNode());
+}
+
+bool IsReverseOp(llvm::Value *I) {
+  if (!isa<Instruction>(I))
+    return false;
+  return cast<Instruction>(I)->getParent()->getName().contains("invert");
 }

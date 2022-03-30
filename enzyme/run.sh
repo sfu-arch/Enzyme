@@ -6,5 +6,5 @@ opt output.ll -O2 -o output_opt.ll -S
 # clang++ output_opt.ll -o a.exe
 clang++ output.ll -o a.exe
 clang++ output.ll -o bench.X86 
-./a.exe
+./a.exe > 1.txt
 

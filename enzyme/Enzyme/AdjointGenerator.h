@@ -1651,14 +1651,20 @@ public:
 
     switch (BO.getOpcode()) {
     case Instruction::FMul: {
-      if (!constantval0)
+      if (!constantval0) {
         dif0 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "m0diffe" + orig_op0->getName());
-      if (!constantval1)
+            // ADDED BY ME
+            errs() << dif0->getNameOrAsOperand()<< " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+      }
+      if (!constantval1) {
         dif1 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op0), Builder2),
             "m1diffe" + orig_op1->getName());
+            // ADDED BY ME
+            errs() << dif1->getNameOrAsOperand() << " -> " << orig_op0->getNameOrAsOperand()<< "\n";
+      }
       break;
     }
     case Instruction::FAdd: {
@@ -1737,15 +1743,20 @@ public:
           }
         }
       }
-      if (!constantval0)
+      if (!constantval0) {
         dif0 = Builder2.CreateFDiv(
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "d0diffe" + orig_op0->getName());
+            // ADDED BY ME
+            errs() << dif0->getNameOrAsOperand()<< " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+      }
       if (!constantval1) {
         Value *lop1 = lookup(gutils->getNewFromOriginal(orig_op1), Builder2);
         Value *lastdiv = lookup(gutils->getNewFromOriginal(&BO), Builder2);
         dif1 = Builder2.CreateFNeg(
             Builder2.CreateFMul(lastdiv, Builder2.CreateFDiv(idiff, lop1)));
+            // ADDED BY ME
+            errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
       }
       break;
     }
@@ -2033,7 +2044,10 @@ public:
 
     switch (BO.getOpcode()) {
     case Instruction::FMul: {
+
       if (!constantval0 && !constantval1) {
+        errs() << BO << " : " << *dif0 << ", " << *dif1 << "\n";
+
         Value *idiff0 =
             Builder2.CreateFMul(dif0, gutils->getNewFromOriginal(orig_op1));
         Value *idiff1 =
@@ -2041,10 +2055,14 @@ public:
         Value *diff = Builder2.CreateFAdd(idiff0, idiff1);
         setDiffe(&BO, diff, Builder2);
       } else if (!constantval0) {
+        errs() << BO << " : " << *dif0 << "\n";
+
         Value *idiff0 =
             Builder2.CreateFMul(dif0, gutils->getNewFromOriginal(orig_op1));
         setDiffe(&BO, idiff0, Builder2);
       } else if (!constantval1) {
+        errs() << BO << " : "  << *dif1 << "\n";
+
         Value *idiff1 =
             Builder2.CreateFMul(dif1, gutils->getNewFromOriginal(orig_op0));
         setDiffe(&BO, idiff1, Builder2);

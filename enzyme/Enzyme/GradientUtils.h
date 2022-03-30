@@ -1552,6 +1552,7 @@ public:
     }
     assert(!val->getType()->isPointerTy());
     assert(!val->getType()->isVoidTy());
+
     return BuilderM.CreateLoad(getDifferential(val));
   }
 

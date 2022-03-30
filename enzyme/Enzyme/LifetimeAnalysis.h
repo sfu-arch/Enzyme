@@ -63,11 +63,6 @@ namespace life
 
         LifetimePass();
 
-        virtual void getAnalysisUsage(AnalysisUsage &AU) const override
-        {
-            // AU.addRequired<helpers::LabelUID>();
-        }
-
         bool runOnFunction(llvm::Function &f) override;
 
         void visitInstruction(Instruction &ins);

@@ -1,2 +1,4 @@
-forward_op_count: 18
-reverse_op_count: 109
+forward_op_count: 35
+reverse_op_count: 73
+forward mem ops count: 20
+reverse mem ops count: 134

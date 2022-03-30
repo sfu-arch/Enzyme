@@ -1,6 +1,6 @@
 
-#ifndef ADDRESS_INST_H
-#define ADDRESS_INST_H
+#ifndef NODE_LOGGER_H
+#define NODE_LOGGER_H
 
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
@@ -16,17 +16,15 @@ using namespace llvm;
 
 namespace instrumem
 {
-struct AddressInstPass : public FunctionPass,
-                        InstVisitor<AddressInstPass> {
+struct NodeLogger : public FunctionPass,
+                        InstVisitor<NodeLogger> {
     public:
         static char ID;
-        AddressInstPass();
+        NodeLogger();
         bool runOnFunction(Function &f) override;
 
         void visitLoadInst(LoadInst &inst);
         void visitStoreInst(StoreInst &inst);
-
-        void callPrintf(Instruction *I, char *format, std::vector<Value *> args);
 };
 
 } // namespace instrumem

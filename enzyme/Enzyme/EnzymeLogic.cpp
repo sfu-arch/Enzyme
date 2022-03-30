@@ -67,7 +67,7 @@
 #include "Scheduler.h"
 #include "NodeDetector.h"
 #include "BFSPass.h"
-#include "AddressInst.h"
+#include "NodeLogger.h"
 #include "ForwardNodeInstrument.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
@@ -106,6 +106,10 @@ cl::opt<bool> nonmarkedglobals_inactiveloads(
 cl::opt<bool> EnzymeJuliaAddrLoad(
     "enzyme-julia-addr-load", cl::init(false), cl::Hidden,
     cl::desc("Mark all loads resulting in an addr(13)* to be legal to redo"));
+
+cl::opt<bool>
+    CreateDDDG("milad-create-dddg", cl::init(false), cl::Hidden,
+                         cl::desc("Enables creating a dynamic data dependence graph"));
 }
 
 struct CacheAnalysis {
@@ -3726,7 +3730,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // PM.add(new instrumem::ForwardNodeInstPass());
   // PM.add(new instrumem::SchedulerPass());
   // PM.add(new life::LifetimePass());
-  PM.add(new instrumem::OPCounterPass());
+  if (CreateDDDG)
+    PM.add(new instrumem::NodeLogger());
+  // PM.add(new instrumem::OPCounterPass());
 
   // Builder.populateFunctionPassManager(PM);
   PM.run(*nf);

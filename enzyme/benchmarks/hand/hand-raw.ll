@@ -120,6 +120,7 @@ $_ZNSt6vectorIdSaIdEE17_M_default_appendEm = comdat any
 @str = private unnamed_addr constant [20 x i8] c"manual reverse mode\00", align 1
 @str.31 = private unnamed_addr constant [23 x i8] c"manual ad reverse mode\00", align 1
 @str.32 = private unnamed_addr constant [14 x i8] c"starting main\00", align 1
+@ResultFormatStrIR = global [80 x i8] c"forward ops = %d, reverse ops = %d, forward mem ops = %d, reverse mem ops = %d\0A\00"
 
 ; Function Attrs: nounwind uwtable
 define dso_local void @_Z8getTestsRSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EEPKcS5_(%"class.std::vector"* nonnull align 8 dereferenceable(24) %tests, i8* %name, %"class.std::__cxx11::basic_string"* nocapture readonly %indent) local_unnamed_addr #0 {
@@ -4740,15 +4741,6 @@ entry:
 ; Function Attrs: inaccessiblememonly nofree nounwind willreturn
 declare dso_local noalias noundef i8* @malloc(i64) local_unnamed_addr #14
 
-; Function Attrs: nofree nounwind uwtable willreturn mustprogress
-define dso_local noalias %struct.Matrix* @get_new_empty_matrix() local_unnamed_addr #13 {
-entry:
-  %call = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
-  %0 = bitcast i8* %call to %struct.Matrix*
-  call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call, i8 0, i64 16, i1 false)
-  ret %struct.Matrix* %0
-}
-
 ; Function Attrs: nounwind uwtable willreturn mustprogress
 define dso_local void @delete_matrix(%struct.Matrix* nocapture %mat) local_unnamed_addr #15 {
 entry:
@@ -5943,234 +5935,195 @@ delete_matrix.exit39:                             ; preds = %if.then.i38, %delet
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
-define dso_local void @to_pose_params(i32 %count, double* noalias nocapture readonly %theta, i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params) local_unnamed_addr #5 {
-entry:
-  %theta99 = bitcast double* %theta to i8*
-  %add = add nsw i32 %count, 3
-  %nrows1.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0
-  %0 = load i32, i32* %nrows1.i, align 8, !tbaa !138
-  %ncols2.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 1
-  %1 = load i32, i32* %ncols2.i, align 4, !tbaa !139
-  %mul.i = mul nsw i32 %1, %0
-  %mul3.i = mul i32 %add, 3
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.then.i
-
-if.then.i:                                        ; preds = %entry
-  %data.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %2 = load double*, double** %data.i, align 8, !tbaa !137
-  %cmp4.not.i = icmp eq double* %2, null
-  br i1 %cmp4.not.i, label %if.end.i, label %if.then5.i
-
-if.then5.i:                                       ; preds = %if.then.i
-  %3 = bitcast double* %2 to i8*
-  tail call void @free(i8* %3) #31
-  br label %if.end.i
-
-if.end.i:                                         ; preds = %if.then5.i, %if.then.i
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread87
-
-resize.exit.thread:                               ; preds = %if.end.i
-  %conv31.i = zext i32 %mul3.i to i64
-  %mul11.i = shl nuw nsw i64 %conv31.i, 3
-  %call.i = tail call noalias i8* @malloc(i64 %mul11.i) #31
-  %4 = bitcast double** %data.i to i8**
-  store i8* %call.i, i8** %4, align 8, !tbaa !137
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %5 = bitcast i8* %call.i to double*
-  br label %for.body.lr.ph.i
-
-resize.exit.thread87:                             ; preds = %if.end.i
-  store double* null, double** %data.i, align 8, !tbaa !137
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  br label %fill.exit
-
-resize.exit:                                      ; preds = %entry
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %data.i85.phi.trans.insert = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %.pre = load double*, double** %data.i85.phi.trans.insert, align 8, !tbaa !137
-  br i1 %cmp7.i, label %resize.exit.for.body.lr.ph.i_crit_edge, label %fill.exit
-
-resize.exit.for.body.lr.ph.i_crit_edge:           ; preds = %resize.exit
-  %.pre107 = zext i32 %mul3.i to i64
-  %.pre108 = shl nuw nsw i64 %.pre107, 3
-  br label %for.body.lr.ph.i
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit.for.body.lr.ph.i_crit_edge, %resize.exit.thread
-  %.pre-phi = phi i64 [ %.pre108, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %mul11.i, %resize.exit.thread ]
-  %6 = phi double* [ %.pre, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %5, %resize.exit.thread ]
-  %7 = bitcast double* %6 to i8*
-  call void @llvm.memset.p0i8.i64(i8* align 8 %7, i8 0, i64 %.pre-phi, i1 false)
-  br label %fill.exit
-
-fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread87
-  %8 = phi double* [ %6, %for.body.lr.ph.i ], [ null, %resize.exit.thread87 ], [ %.pre, %resize.exit ]
-  %9 = bitcast double* %8 to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %9, i8* nonnull align 8 dereferenceable(24) %theta99, i64 24, i1 false)
-  br label %for.body
-
-for.cond17.preheader:                             ; preds = %for.body
-  %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %10 = load double*, double** %data, align 8, !tbaa !137
-  br label %for.cond20.preheader
-
-for.body:                                         ; preds = %for.body, %fill.exit
-  %indvars.iv101 = phi i64 [ 0, %fill.exit ], [ %indvars.iv.next102, %for.body ]
-  %11 = add nuw nsw i64 %indvars.iv101, 3
-  %arrayidx7 = getelementptr inbounds double, double* %8, i64 %11
-  store double 1.000000e+00, double* %arrayidx7, align 8, !tbaa !75
-  %arrayidx10 = getelementptr inbounds double, double* %theta, i64 %11
-  %12 = load double, double* %arrayidx10, align 8, !tbaa !75
-  %13 = add nuw nsw i64 %indvars.iv101, 6
-  %arrayidx16 = getelementptr inbounds double, double* %8, i64 %13
-  store double %12, double* %arrayidx16, align 8, !tbaa !75
-  %indvars.iv.next102 = add nuw nsw i64 %indvars.iv101, 1
-  %exitcond105.not = icmp eq i64 %indvars.iv.next102, 3
-  br i1 %exitcond105.not, label %for.cond17.preheader, label %for.body, !llvm.loop !201
-
-for.cond20.preheader:                             ; preds = %for.end45, %for.cond17.preheader
-  %i_finger.094 = phi i32 [ 0, %for.cond17.preheader ], [ %inc48, %for.end45 ]
-  %i_pose_params.093 = phi i32 [ 5, %for.cond17.preheader ], [ %inc46, %for.end45 ]
-  %i_theta.092 = phi i32 [ 6, %for.cond17.preheader ], [ %i_theta.2.lcssa, %for.end45 ]
-  %14 = sext i32 %i_pose_params.093 to i64
-  %15 = add i32 %i_pose_params.093, 3
-  br label %for.body22
-
-for.body22:                                       ; preds = %if.end, %for.cond20.preheader
-  %indvars.iv = phi i64 [ %14, %for.cond20.preheader ], [ %indvars.iv.next, %if.end ]
-  %i.191 = phi i32 [ 2, %for.cond20.preheader ], [ %inc44, %if.end ]
-  %i_theta.189 = phi i32 [ %i_theta.092, %for.cond20.preheader ], [ %i_theta.2, %if.end ]
-  %idxprom23 = sext i32 %i_theta.189 to i64
-  %arrayidx24 = getelementptr inbounds double, double* %theta, i64 %idxprom23
-  %16 = load double, double* %arrayidx24, align 8, !tbaa !75
-  %17 = mul nsw i64 %indvars.iv, 3
-  %arrayidx30 = getelementptr inbounds double, double* %10, i64 %17
-  store double %16, double* %arrayidx30, align 8, !tbaa !75
-  %inc31 = add nsw i32 %i_theta.189, 1
-  %cmp32 = icmp eq i32 %i.191, 2
-  br i1 %cmp32, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body22
-  %idxprom33 = sext i32 %inc31 to i64
-  %arrayidx34 = getelementptr inbounds double, double* %theta, i64 %idxprom33
-  %18 = load double, double* %arrayidx34, align 8, !tbaa !75
-  %19 = add nsw i64 %17, 1
-  %arrayidx40 = getelementptr inbounds double, double* %10, i64 %19
-  store double %18, double* %arrayidx40, align 8, !tbaa !75
-  %inc41 = add nsw i32 %i_theta.189, 2
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body22
-  %i_theta.2 = phi i32 [ %inc41, %if.then ], [ %inc31, %for.body22 ]
-  %indvars.iv.next = add nsw i64 %indvars.iv, 1
-  %inc44 = add nuw nsw i32 %i.191, 1
-  %lftr.wideiv1 = trunc i64 %indvars.iv.next to i32
-  %exitcond = icmp eq i32 %15, %lftr.wideiv1
-  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !202
-
-for.end45:                                        ; preds = %if.end
-  %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
-  %indvars.iv.lcssa = phi i64 [ %indvars.iv, %if.end ]
-  %20 = trunc i64 %indvars.iv.lcssa to i32
-  %inc46 = add nsw i32 %20, 2
-  %inc48 = add nuw nsw i32 %i_finger.094, 1
-  %exitcond98.not = icmp eq i32 %inc48, 5
-  br i1 %exitcond98.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !203
-
-for.end49:                                        ; preds = %for.end45
-  ret void
-}
-
-; Function Attrs: nounwind uwtable mustprogress
 define dso_local void @hand_objective(double* noalias nocapture readonly %theta, i32 %bone_count, i8** noalias nocapture readnone %bone_names, i32* noalias nocapture readonly %parents, %struct.Matrix* noalias nocapture readonly %base_relatives, %struct.Matrix* noalias nocapture readonly %inverse_base_absolutes, %struct.Matrix* noalias nocapture readonly %base_positions, %struct.Matrix* noalias nocapture readonly %weights, %struct.Triangle* noalias nocapture readnone %triangles, i32 %is_mirrored, i32 %corresp_count, i32* noalias nocapture readonly %correspondences, %struct.Matrix* nocapture readonly %points, double* noalias nocapture %err) #5 {
 entry:
   %call.i = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  tail call void @to_pose_params(i32 %bone_count, double* %theta, i8** undef, %struct.Matrix* %0)
-  %call.i39 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
-  %1 = bitcast i8* %call.i39 to %struct.Matrix*
-  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
-  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %1)
-  %cmp45 = icmp sgt i32 %corresp_count, 0
-  br i1 %cmp45, label %for.cond2.preheader.lr.ph, label %for.end19
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !201)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !204)
+  %theta99.i = bitcast double* %theta to i8*
+  %add.i = add nsw i32 %bone_count, 3
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %1 = bitcast i8* %ncols2.i.i to i32*
+  %mul3.i.i = mul i32 %add.i, 3
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
 
-for.cond2.preheader.lr.ph:                        ; preds = %entry
+if.end.i.i:                                       ; preds = %entry
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !206
+  %3 = bitcast i8* %data.i.i to i8**
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  %4 = bitcast i8* %call.i.i to double*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !206
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ]
+  %6 = bitcast double* %5 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %6, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !204
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %indvars.iv101.i = phi i64 [ 0, %fill.exit.i ], [ %indvars.iv.next102.i, %for.body.i ]
+  %7 = add nuw nsw i64 %indvars.iv101.i, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %5, i64 %7
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !206
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %7
+  %8 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %9 = add nuw nsw i64 %indvars.iv101.i, 6
+  %arrayidx16.i = getelementptr inbounds double, double* %5, i64 %9
+  store double %8, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !206
+  %indvars.iv.next102.i = add nuw nsw i64 %indvars.iv101.i, 1
+  %exitcond105.not.i = icmp eq i64 %indvars.iv.next102.i, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i:                           ; preds = %for.body.i, %for.end45.i
+  %i_finger.094.i = phi i32 [ %inc48.i, %for.end45.i ], [ 0, %for.body.i ]
+  %i_pose_params.093.i = phi i32 [ %inc46.i, %for.end45.i ], [ 5, %for.body.i ]
+  %i_theta.092.i = phi i32 [ %i_theta.2.i.lcssa, %for.end45.i ], [ 6, %for.body.i ]
+  %10 = sext i32 %i_pose_params.093.i to i64
+  %11 = add i32 %i_pose_params.093.i, 3
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %indvars.iv.i = phi i64 [ %10, %for.cond20.preheader.i ], [ %indvars.iv.next.i, %if.end.i ]
+  %i.191.i = phi i32 [ 2, %for.cond20.preheader.i ], [ %inc44.i, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i
+  %12 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %13 = mul nsw i64 %indvars.iv.i, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %5, i64 %13
+  store double %12, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !206
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %cmp32.i = icmp eq i32 %i.191.i, 2
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i
+  %14 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %15 = add nsw i64 %13, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %5, i64 %15
+  store double %14, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !206
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %indvars.iv.next.i = add nsw i64 %indvars.iv.i, 1
+  %inc44.i = add nuw nsw i32 %i.191.i, 1
+  %lftr.wideiv1 = trunc i64 %indvars.iv.next.i to i32
+  %exitcond = icmp eq i32 %11, %lftr.wideiv1
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %indvars.iv.i.lcssa = phi i64 [ %indvars.iv.i, %if.end.i ]
+  %16 = trunc i64 %indvars.iv.i.lcssa to i32
+  %inc46.i = add nsw i32 %16, 2
+  %inc48.i = add nuw nsw i32 %i_finger.094.i, 1
+  %exitcond98.not.i = icmp eq i32 %inc48.i, 5
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
+  %call.i39 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
+  %17 = bitcast i8* %call.i39 to %struct.Matrix*
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
+  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %17)
+  %cmp49 = icmp sgt i32 %corresp_count, 0
+  br i1 %cmp49, label %for.cond2.preheader.lr.ph, label %if.then.i41
+
+for.cond2.preheader.lr.ph:                        ; preds = %to_pose_params.exit
   %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 2
-  %2 = load double*, double** %data, align 8, !tbaa !137
+  %18 = load double*, double** %data, align 8, !tbaa !137
   %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 0
-  %3 = load i32, i32* %nrows, align 8, !tbaa !138
+  %19 = load i32, i32* %nrows, align 8, !tbaa !138
   %data5 = getelementptr inbounds i8, i8* %call.i39, i64 8
-  %4 = bitcast i8* %data5 to double**
-  %5 = load double*, double** %4, align 8, !tbaa !137
+  %20 = bitcast i8* %data5 to double**
+  %21 = load double*, double** %20, align 8, !tbaa !137
   %nrows8 = bitcast i8* %call.i39 to i32*
-  %6 = load i32, i32* %nrows8, align 8, !tbaa !138
-  %7 = sext i32 %3 to i64
+  %22 = load i32, i32* %nrows8, align 8, !tbaa !138
+  %23 = sext i32 %19 to i64
   %wide.trip.count = zext i32 %corresp_count to i64
   br label %for.cond2.preheader
 
 for.cond2.preheader:                              ; preds = %for.inc17, %for.cond2.preheader.lr.ph
-  %indvars.iv50 = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %indvars.iv.next51, %for.inc17 ]
-  %8 = mul nsw i64 %indvars.iv50, %7
-  %arrayidx7 = getelementptr inbounds i32, i32* %correspondences, i64 %indvars.iv50
-  %9 = load i32, i32* %arrayidx7, align 4, !tbaa !59
-  %mul9 = mul nsw i32 %6, %9
-  %10 = mul nuw nsw i64 %indvars.iv50, 3
-  %11 = sext i32 %mul9 to i64
+  %indvars.iv54 = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %indvars.iv.next55, %for.inc17 ]
+  %24 = mul nsw i64 %indvars.iv54, %23
+  %arrayidx7 = getelementptr inbounds i32, i32* %correspondences, i64 %indvars.iv54
+  %25 = load i32, i32* %arrayidx7, align 4, !tbaa !59
+  %mul9 = mul nsw i32 %22, %25
+  %26 = mul nuw nsw i64 %indvars.iv54, 3
+  %27 = sext i32 %mul9 to i64
   br label %for.body4
 
 for.body4:                                        ; preds = %for.body4, %for.cond2.preheader
   %indvars.iv = phi i64 [ 0, %for.cond2.preheader ], [ %indvars.iv.next, %for.body4 ]
-  %12 = add nsw i64 %8, %indvars.iv
-  %arrayidx = getelementptr inbounds double, double* %2, i64 %12
-  %13 = load double, double* %arrayidx, align 8, !tbaa !75
-  %14 = add nsw i64 %indvars.iv, %11
-  %arrayidx12 = getelementptr inbounds double, double* %5, i64 %14
-  %15 = load double, double* %arrayidx12, align 8, !tbaa !75
-  %sub = fsub fast double %13, %15
-  %16 = add nuw nsw i64 %indvars.iv, %10
-  %arrayidx16 = getelementptr inbounds double, double* %err, i64 %16
+  %28 = add nsw i64 %24, %indvars.iv
+  %arrayidx = getelementptr inbounds double, double* %18, i64 %28
+  %29 = load double, double* %arrayidx, align 8, !tbaa !75
+  %30 = add nsw i64 %indvars.iv, %27
+  %arrayidx12 = getelementptr inbounds double, double* %21, i64 %30
+  %31 = load double, double* %arrayidx12, align 8, !tbaa !75
+  %sub = fsub fast double %29, %31
+  %32 = add nuw nsw i64 %indvars.iv, %26
+  %arrayidx16 = getelementptr inbounds double, double* %err, i64 %32
   store double %sub, double* %arrayidx16, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.inc17, label %for.body4, !llvm.loop !204
+  br i1 %exitcond.not, label %for.inc17, label %for.body4, !llvm.loop !210
 
 for.inc17:                                        ; preds = %for.body4
-  %indvars.iv.next51 = add nuw nsw i64 %indvars.iv50, 1
-  %exitcond54.not = icmp eq i64 %indvars.iv.next51, %wide.trip.count
-  br i1 %exitcond54.not, label %for.end19, label %for.cond2.preheader, !llvm.loop !205
+  %indvars.iv.next55 = add nuw nsw i64 %indvars.iv54, 1
+  %exitcond58.not = icmp eq i64 %indvars.iv.next55, %wide.trip.count
+  br i1 %exitcond58.not, label %for.end19, label %for.cond2.preheader, !llvm.loop !211
 
-for.end19:                                        ; preds = %for.inc17, %entry
-  %data.i = getelementptr inbounds i8, i8* %call.i, i64 8
-  %17 = bitcast i8* %data.i to double**
-  %18 = load double*, double** %17, align 8, !tbaa !137
-  %cmp.not.i = icmp eq double* %18, null
-  br i1 %cmp.not.i, label %delete_matrix.exit, label %if.then.i
+for.end19:                                        ; preds = %for.inc17
+  %cmp.not.i = icmp eq double* %5, null
+  br i1 %cmp.not.i, label %delete_matrix.exit, label %if.then.i41
 
-if.then.i:                                        ; preds = %for.end19
-  %19 = bitcast double* %18 to i8*
-  tail call void @free(i8* %19) #31
+if.then.i41:                                      ; preds = %for.end19, %to_pose_params.exit
+  tail call void @free(i8* %6) #31
   br label %delete_matrix.exit
 
-delete_matrix.exit:                               ; preds = %if.then.i, %for.end19
-  tail call void @free(i8* nonnull %call.i) #31
-  %data.i40 = getelementptr inbounds i8, i8* %call.i39, i64 8
-  %20 = bitcast i8* %data.i40 to double**
-  %21 = load double*, double** %20, align 8, !tbaa !137
-  %cmp.not.i41 = icmp eq double* %21, null
-  br i1 %cmp.not.i41, label %delete_matrix.exit43, label %if.then.i42
+delete_matrix.exit:                               ; preds = %if.then.i41, %for.end19
+  tail call void @free(i8* %call.i) #31
+  %data.i43 = getelementptr inbounds i8, i8* %call.i39, i64 8
+  %33 = bitcast i8* %data.i43 to double**
+  %34 = load double*, double** %33, align 8, !tbaa !137
+  %cmp.not.i44 = icmp eq double* %34, null
+  br i1 %cmp.not.i44, label %delete_matrix.exit47, label %if.then.i45
 
-if.then.i42:                                      ; preds = %delete_matrix.exit
-  %22 = bitcast double* %21 to i8*
-  tail call void @free(i8* %22) #31
-  br label %delete_matrix.exit43
+if.then.i45:                                      ; preds = %delete_matrix.exit
+  %35 = bitcast double* %34 to i8*
+  tail call void @free(i8* %35) #31
+  br label %delete_matrix.exit47
 
-delete_matrix.exit43:                             ; preds = %if.then.i42, %delete_matrix.exit
+delete_matrix.exit47:                             ; preds = %if.then.i45, %delete_matrix.exit
   tail call void @free(i8* nonnull %call.i39) #31
   ret void
 }
@@ -6221,7 +6174,7 @@ for.body:                                         ; preds = %for.body, %for.body
   tail call void @mat_mult(%struct.Matrix* %arrayidx, %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6)
   %indvars.iv.next100 = add nuw nsw i64 %indvars.iv99, 1
   %exitcond102.not = icmp eq i64 %indvars.iv.next100, %wide.trip.count101
-  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
 
 for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
   %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
@@ -6352,17 +6305,17 @@ for.body20:                                       ; preds = %for.body20, %for.co
   store double %add36, double* %arrayidx35, align 8, !tbaa !75
   %indvars.iv.next83 = add nuw nsw i64 %indvars.iv82, 1
   %exitcond86.not = icmp eq i64 %indvars.iv.next83, 3
-  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
 
 for.inc40:                                        ; preds = %for.body20
   %indvars.iv.next88 = add nuw nsw i64 %indvars.iv87, 1
   %exitcond94.not = icmp eq i64 %indvars.iv.next88, %wide.trip.count93
-  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !208
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
 
 for.inc43:                                        ; preds = %for.inc40, %for.body11
   %indvars.iv.next96 = add nuw nsw i64 %indvars.iv95, 1
   %exitcond98.not = icmp eq i64 %indvars.iv.next96, %wide.trip.count97
-  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !209
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
 
 for.end45:                                        ; preds = %for.inc43, %fill.exit
   %tobool.not = icmp ne i32 %is_mirrored, 0
@@ -6385,7 +6338,7 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
 
 if.then61:                                        ; preds = %for.body49, %for.end45
   tail call void @apply_global_transform(%struct.Matrix* %pose_params, %struct.Matrix* %positions)
@@ -6482,89 +6435,198 @@ entry:
   %call.i = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  tail call void @to_pose_params(i32 %bone_count, double* %theta, i8** undef, %struct.Matrix* %0)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !217)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !220)
+  %theta99.i = bitcast double* %theta to i8*
+  %add.i = add nsw i32 %bone_count, 3
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %1 = bitcast i8* %ncols2.i.i to i32*
+  %mul3.i.i = mul i32 %add.i, 3
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
+
+if.end.i.i:                                       ; preds = %entry
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !222
+  %3 = bitcast i8* %data.i.i to i8**
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  %4 = bitcast i8* %call.i.i to double*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !222
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ]
+  %6 = bitcast double* %5 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %6, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !220
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %indvars.iv101.i = phi i64 [ 0, %fill.exit.i ], [ %indvars.iv.next102.i, %for.body.i ]
+  %7 = add nuw nsw i64 %indvars.iv101.i, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %5, i64 %7
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !222
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %7
+  %8 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %9 = add nuw nsw i64 %indvars.iv101.i, 6
+  %arrayidx16.i = getelementptr inbounds double, double* %5, i64 %9
+  store double %8, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !222
+  %indvars.iv.next102.i = add nuw nsw i64 %indvars.iv101.i, 1
+  %exitcond105.not.i = icmp eq i64 %indvars.iv.next102.i, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i:                           ; preds = %for.body.i, %for.end45.i
+  %i_finger.094.i = phi i32 [ %inc48.i, %for.end45.i ], [ 0, %for.body.i ]
+  %i_pose_params.093.i = phi i32 [ %inc46.i, %for.end45.i ], [ 5, %for.body.i ]
+  %i_theta.092.i = phi i32 [ %i_theta.2.i.lcssa, %for.end45.i ], [ 6, %for.body.i ]
+  %10 = sext i32 %i_pose_params.093.i to i64
+  %11 = add i32 %i_pose_params.093.i, 3
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %indvars.iv.i = phi i64 [ %10, %for.cond20.preheader.i ], [ %indvars.iv.next.i, %if.end.i ]
+  %i.191.i = phi i32 [ 2, %for.cond20.preheader.i ], [ %inc44.i, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i
+  %12 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %13 = mul nsw i64 %indvars.iv.i, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %5, i64 %13
+  store double %12, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !222
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %cmp32.i = icmp eq i32 %i.191.i, 2
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i
+  %14 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %15 = add nsw i64 %13, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %5, i64 %15
+  store double %14, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !222
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %indvars.iv.next.i = add nsw i64 %indvars.iv.i, 1
+  %inc44.i = add nuw nsw i32 %i.191.i, 1
+  %lftr.wideiv1 = trunc i64 %indvars.iv.next.i to i32
+  %exitcond = icmp eq i32 %11, %lftr.wideiv1
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %indvars.iv.i.lcssa = phi i64 [ %indvars.iv.i, %if.end.i ]
+  %16 = trunc i64 %indvars.iv.i.lcssa to i32
+  %inc46.i = add nsw i32 %16, 2
+  %inc48.i = add nuw nsw i32 %i_finger.094.i, 1
+  %exitcond98.not.i = icmp eq i32 %inc48.i, 5
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
   %call.i84 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
-  %1 = bitcast i8* %call.i84 to %struct.Matrix*
+  %17 = bitcast i8* %call.i84 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i84, i8 0, i64 16, i1 false) #31
-  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %1)
+  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %17)
   %cmp89 = icmp sgt i32 %corresp_count, 0
   br i1 %cmp89, label %for.body.lr.ph, label %for.end51
 
-for.body.lr.ph:                                   ; preds = %entry
+for.body.lr.ph:                                   ; preds = %to_pose_params.exit
   %data = getelementptr inbounds i8, i8* %call.i84, i64 8
-  %2 = bitcast i8* %data to double**
-  %3 = load double*, double** %2, align 8, !tbaa !137
+  %18 = bitcast i8* %data to double**
+  %19 = load double*, double** %18, align 8, !tbaa !137
   %nrows = bitcast i8* %call.i84 to i32*
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138
+  %20 = load i32, i32* %nrows, align 8, !tbaa !138
   %data38 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 2
-  %5 = load double*, double** %data38, align 8, !tbaa !137
+  %21 = load double*, double** %data38, align 8, !tbaa !137
   %nrows39 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 0
-  %6 = load i32, i32* %nrows39, align 8, !tbaa !138
-  %7 = sext i32 %6 to i64
+  %22 = load i32, i32* %nrows39, align 8, !tbaa !138
+  %23 = sext i32 %22 to i64
   %wide.trip.count = zext i32 %corresp_count to i64
   br label %for.body
 
 for.body:                                         ; preds = %for.end, %for.body.lr.ph
   %indvars.iv96 = phi i64 [ 0, %for.body.lr.ph ], [ %indvars.iv.next97, %for.end ]
   %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %indvars.iv96
-  %8 = load i32, i32* %arrayidx, align 4, !tbaa !59
-  %idxprom2 = sext i32 %8 to i64
+  %24 = load i32, i32* %arrayidx, align 4, !tbaa !59
+  %idxprom2 = sext i32 %24 to i64
   %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0
-  %9 = shl nuw nsw i64 %indvars.iv96, 1
-  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %9
-  %10 = load i32, i32* %arraydecay, align 4, !tbaa !59
-  %mul12 = mul nsw i32 %4, %10
+  %25 = shl nuw nsw i64 %indvars.iv96, 1
+  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %25
+  %26 = load i32, i32* %arraydecay, align 4, !tbaa !59
+  %mul12 = mul nsw i32 %20, %26
   %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1
   %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1
-  %11 = load i32, i32* %arrayidx18, align 4, !tbaa !59
-  %mul20 = mul nsw i32 %11, %4
+  %27 = load i32, i32* %arrayidx18, align 4, !tbaa !59
+  %mul20 = mul nsw i32 %27, %20
   %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2
-  %12 = load i32, i32* %arrayidx30, align 4, !tbaa !59
-  %mul32 = mul nsw i32 %12, %4
-  %13 = mul nsw i64 %indvars.iv96, %7
-  %14 = mul nuw nsw i64 %indvars.iv96, 3
-  %15 = sext i32 %mul12 to i64
-  %16 = sext i32 %mul20 to i64
-  %17 = sext i32 %mul32 to i64
+  %28 = load i32, i32* %arrayidx30, align 4, !tbaa !59
+  %mul32 = mul nsw i32 %28, %20
+  %29 = mul nsw i64 %indvars.iv96, %23
+  %30 = mul nuw nsw i64 %indvars.iv96, 3
+  %31 = sext i32 %mul12 to i64
+  %32 = sext i32 %mul20 to i64
+  %33 = sext i32 %mul32 to i64
   br label %for.body9
 
 for.body9:                                        ; preds = %for.body9, %for.body
   %indvars.iv = phi i64 [ 0, %for.body ], [ %indvars.iv.next, %for.body9 ]
-  %18 = load double, double* %arrayidx6, align 8, !tbaa !75
-  %19 = add nsw i64 %indvars.iv, %15
-  %arrayidx14 = getelementptr inbounds double, double* %3, i64 %19
-  %20 = load double, double* %arrayidx14, align 8, !tbaa !75
-  %21 = load double, double* %arrayidx16, align 8, !tbaa !75
-  %22 = add nsw i64 %indvars.iv, %16
-  %arrayidx23 = getelementptr inbounds double, double* %3, i64 %22
-  %23 = load double, double* %arrayidx23, align 8, !tbaa !75
-  %24 = fadd fast double %18, %21
-  %sub28 = fsub fast double 1.000000e+00, %24
-  %25 = add nsw i64 %indvars.iv, %17
-  %arrayidx35 = getelementptr inbounds double, double* %3, i64 %25
-  %26 = load double, double* %arrayidx35, align 8, !tbaa !75
-  %27 = add nsw i64 %13, %indvars.iv
-  %arrayidx43 = getelementptr inbounds double, double* %5, i64 %27
-  %28 = load double, double* %arrayidx43, align 8, !tbaa !75
-  %mul15.neg = fmul fast double %20, %18
-  %mul24.neg = fmul fast double %23, %21
-  %mul36.neg = fmul fast double %26, %sub28
+  %34 = load double, double* %arrayidx6, align 8, !tbaa !75
+  %35 = add nsw i64 %indvars.iv, %31
+  %arrayidx14 = getelementptr inbounds double, double* %19, i64 %35
+  %36 = load double, double* %arrayidx14, align 8, !tbaa !75
+  %37 = load double, double* %arrayidx16, align 8, !tbaa !75
+  %38 = add nsw i64 %indvars.iv, %32
+  %arrayidx23 = getelementptr inbounds double, double* %19, i64 %38
+  %39 = load double, double* %arrayidx23, align 8, !tbaa !75
+  %40 = fadd fast double %34, %37
+  %sub28 = fsub fast double 1.000000e+00, %40
+  %41 = add nsw i64 %indvars.iv, %33
+  %arrayidx35 = getelementptr inbounds double, double* %19, i64 %41
+  %42 = load double, double* %arrayidx35, align 8, !tbaa !75
+  %43 = add nsw i64 %29, %indvars.iv
+  %arrayidx43 = getelementptr inbounds double, double* %21, i64 %43
+  %44 = load double, double* %arrayidx43, align 8, !tbaa !75
+  %mul15.neg = fmul fast double %36, %34
+  %mul24.neg = fmul fast double %39, %37
+  %mul36.neg = fmul fast double %42, %sub28
   %reass.add = fadd fast double %mul24.neg, %mul15.neg
   %reass.add87 = fadd fast double %reass.add, %mul36.neg
-  %sub44 = fsub fast double %28, %reass.add87
-  %29 = add nuw nsw i64 %indvars.iv, %14
-  %arrayidx48 = getelementptr inbounds double, double* %err, i64 %29
+  %sub44 = fsub fast double %44, %reass.add87
+  %45 = add nuw nsw i64 %indvars.iv, %30
+  %arrayidx48 = getelementptr inbounds double, double* %err, i64 %45
   store double %sub44, double* %arrayidx48, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !211
+  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !223
 
 for.end:                                          ; preds = %for.body9
   %indvars.iv.next97 = add nuw nsw i64 %indvars.iv96, 1
   %exitcond101.not = icmp eq i64 %indvars.iv.next97, %wide.trip.count
-  br i1 %exitcond101.not, label %for.end51, label %for.body, !llvm.loop !212
+  br i1 %exitcond101.not, label %for.end51, label %for.body, !llvm.loop !224
 
-for.end51:                                        ; preds = %for.end, %entry
+for.end51:                                        ; preds = %for.end, %to_pose_params.exit
   ret void
 }
 
@@ -6583,7 +6645,7 @@ define dso_local void @get_new_matrix_b(i32 %nrows, i32 %ncols, %struct.Matrix_d
 entry:
   %call = tail call noalias dereferenceable_or_null(8) i8* @malloc(i64 8) #31
   %data = bitcast i8* %call to double**
-  store double* null, double** %data, align 8, !tbaa !213
+  store double* null, double** %data, align 8, !tbaa !225
   %call1 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   tail call void @pushPointer8(i8* null) #31
   %mul = mul i32 %ncols, %nrows
@@ -6591,7 +6653,7 @@ entry:
   %mul3 = shl nsw i64 %conv, 3
   %call4 = tail call noalias i8* @malloc(i64 %mul3) #31
   %0 = bitcast i8* %call to i8**
-  store i8* %call4, i8** %0, align 8, !tbaa !213
+  store i8* %call4, i8** %0, align 8, !tbaa !225
   %cmp39 = icmp sgt i32 %mul, 0
   br i1 %cmp39, label %for.body.lr.ph, label %for.end
 
@@ -6749,7 +6811,7 @@ if.then:                                          ; preds = %for.body
 for.inc:                                          ; preds = %if.then, %for.body
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !215
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !227
 
 for.end:                                          ; preds = %for.inc, %entry
   %2 = bitcast %struct.Matrix* %matricies to i8*
@@ -6790,9 +6852,9 @@ if.then:                                          ; preds = %entry
 
 if.then5:                                         ; preds = %if.then
   %8 = bitcast %struct.Matrix_diff* %matb to i8**
-  %9 = load i8*, i8** %8, align 8, !tbaa !213
+  %9 = load i8*, i8** %8, align 8, !tbaa !225
   tail call void @pushPointer8(i8* %9) #31
-  %10 = load i8*, i8** %8, align 8, !tbaa !213
+  %10 = load i8*, i8** %8, align 8, !tbaa !225
   tail call void @free(i8* %10) #31
   %11 = load i8*, i8** %6, align 8, !tbaa !137
   tail call void @pushPointer8(i8* %11) #31
@@ -6809,12 +6871,12 @@ if.end:                                           ; preds = %if.then5, %if.then
 
 if.then12:                                        ; preds = %if.end
   %13 = bitcast %struct.Matrix_diff* %matb to i8**
-  %14 = load i8*, i8** %13, align 8, !tbaa !213
+  %14 = load i8*, i8** %13, align 8, !tbaa !225
   tail call void @pushPointer8(i8* %14) #31
   %conv77 = zext i32 %mul3 to i64
   %mul15 = shl nuw nsw i64 %conv77, 3
   %call = tail call noalias i8* @malloc(i64 %mul15) #31
-  store i8* %call, i8** %13, align 8, !tbaa !213
+  store i8* %call, i8** %13, align 8, !tbaa !225
   call void @llvm.memset.p0i8.i64(i8* align 8 %call, i8 0, i64 %mul15, i1 false)
   %15 = load i8*, i8** %6, align 8, !tbaa !137
   tail call void @pushPointer8(i8* %15) #31
@@ -6822,16 +6884,16 @@ if.then12:                                        ; preds = %if.end
   store i8* %call24, i8** %6, align 8, !tbaa !137
   tail call void @free(i8* %call24) #31
   tail call void @popPointer8(i8** nonnull %6) #31
-  %16 = load i8*, i8** %13, align 8, !tbaa !213
+  %16 = load i8*, i8** %13, align 8, !tbaa !225
   tail call void @free(i8* %16) #31
   br label %if.end34
 
 if.else30:                                        ; preds = %if.end
   %data31 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %matb, i64 0, i32 0
   %17 = bitcast %struct.Matrix_diff* %matb to i8**
-  %18 = load i8*, i8** %17, align 8, !tbaa !213
+  %18 = load i8*, i8** %17, align 8, !tbaa !225
   tail call void @pushPointer8(i8* %18) #31
-  store double* null, double** %data31, align 8, !tbaa !213
+  store double* null, double** %data31, align 8, !tbaa !225
   br label %if.end34
 
 if.end34:                                         ; preds = %if.else30, %if.then12
@@ -6855,7 +6917,7 @@ if.then36:                                        ; preds = %if.end34
   %conv42 = sext i32 %mul41 to i64
   %call43 = call noalias i8* @malloc(i64 %conv42) #31
   %22 = bitcast %struct.Matrix_diff* %matb to i8**
-  store i8* %call43, i8** %22, align 8, !tbaa !213
+  store i8* %call43, i8** %22, align 8, !tbaa !225
   call void @popPointer8(i8** nonnull %diffchunkold) #31
   br label %if.end46
 
@@ -7040,21 +7102,21 @@ for.body26:                                       ; preds = %for.body7, %for.bod
   store double %add46, double* %arrayidx22, align 8, !tbaa !75
   %indvars.iv.next339 = add nuw nsw i64 %indvars.iv338, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next339, %wide.trip.count
-  br i1 %exitcond.not, label %for.inc53, label %for.body26, !llvm.loop !216
+  br i1 %exitcond.not, label %for.inc53, label %for.body26, !llvm.loop !228
 
 for.inc53:                                        ; preds = %for.body26, %for.body7
   %indvars.iv.next344 = add nuw nsw i64 %indvars.iv343, 1
   %exitcond350.not = icmp eq i64 %indvars.iv.next344, %wide.trip.count349
-  br i1 %exitcond350.not, label %for.inc56, label %for.body7, !llvm.loop !217
+  br i1 %exitcond350.not, label %for.inc56, label %for.body7, !llvm.loop !229
 
 for.inc56:                                        ; preds = %for.inc53, %for.cond4.preheader
   %indvars.iv.next352 = add nuw nsw i64 %indvars.iv351, 1
   %exitcond355.not = icmp eq i64 %indvars.iv.next352, %wide.trip.count354
-  br i1 %exitcond355.not, label %for.body62.lr.ph, label %for.cond4.preheader, !llvm.loop !218
+  br i1 %exitcond355.not, label %for.body62.lr.ph, label %for.cond4.preheader, !llvm.loop !230
 
 for.cond60.loopexit:                              ; preds = %for.end126, %for.body62
   %cmp61 = icmp sgt i64 %indvars.iv336, 1
-  br i1 %cmp61, label %for.body62, label %for.end190, !llvm.loop !219
+  br i1 %cmp61, label %for.body62, label %for.end190, !llvm.loop !231
 
 for.body62:                                       ; preds = %for.cond60.loopexit, %for.body62.lr.ph
   %indvars.iv336 = phi i64 [ %wide.trip.count354, %for.body62.lr.ph ], [ %indvars.iv.next337, %for.cond60.loopexit ]
@@ -7064,12 +7126,12 @@ for.body62:                                       ; preds = %for.cond60.loopexit
 for.body67.lr.ph:                                 ; preds = %for.body62
   %32 = load i32, i32* %ncols24, align 4, !tbaa !139
   %cmp71310 = icmp sgt i32 %32, 1
-  %33 = load double*, double** %data73, align 8, !tbaa !213
+  %33 = load double*, double** %data73, align 8, !tbaa !225
   %arrayidx132 = getelementptr inbounds double, double* %33, i64 %indvars.iv.next337
   %34 = load double*, double** %data10, align 8, !tbaa !137
   %35 = load i32, i32* %nrows11, align 8, !tbaa !138
-  %36 = load double*, double** %data85, align 8, !tbaa !213
-  %37 = load double*, double** %data99, align 8, !tbaa !213
+  %36 = load double*, double** %data85, align 8, !tbaa !225
+  %37 = load double*, double** %data99, align 8, !tbaa !225
   %38 = load double*, double** %data8, align 8, !tbaa !137
   %arrayidx164 = getelementptr inbounds double, double* %38, i64 %indvars.iv.next337
   %39 = sext i32 %32 to i64
@@ -7111,7 +7173,7 @@ for.body72:                                       ; preds = %for.body72, %for.bo
   %add118 = fadd fast double %mul117, %50
   store double %add118, double* %arrayidx104, align 8, !tbaa !75
   %cmp71 = icmp sgt i64 %indvars.iv, 2
-  br i1 %cmp71, label %for.body72, label %for.end126, !llvm.loop !220
+  br i1 %cmp71, label %for.body72, label %for.end126, !llvm.loop !232
 
 for.end126:                                       ; preds = %for.body72, %for.body67
   %53 = load double, double* %arrayidx132, align 8, !tbaa !75
@@ -7131,7 +7193,7 @@ for.end126:                                       ; preds = %for.body72, %for.bo
   store double %add172, double* %arrayidx158, align 8, !tbaa !75
   store double 0.000000e+00, double* %arrayidx144, align 8, !tbaa !75
   %cmp66 = icmp sgt i64 %indvars.iv328, 1
-  br i1 %cmp66, label %for.body67, label %for.cond60.loopexit, !llvm.loop !221
+  br i1 %cmp66, label %for.body67, label %for.cond60.loopexit, !llvm.loop !233
 
 for.end190:                                       ; preds = %for.cond60.loopexit, %resize_c.exit
   tail call void @popPointer8(i8** nonnull %2) #31
@@ -7250,17 +7312,17 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !222
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !234
 
 for.inc44:                                        ; preds = %for.body23, %for.body5
   %indvars.iv.next92 = add nuw nsw i64 %indvars.iv91, 1
   %exitcond98.not = icmp eq i64 %indvars.iv.next92, %wide.trip.count97
-  br i1 %exitcond98.not, label %for.inc47, label %for.body5, !llvm.loop !223
+  br i1 %exitcond98.not, label %for.inc47, label %for.body5, !llvm.loop !235
 
 for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
   %indvars.iv.next100 = add nuw nsw i64 %indvars.iv99, 1
   %exitcond103.not = icmp eq i64 %indvars.iv.next100, %wide.trip.count102
-  br i1 %exitcond103.not, label %for.end49, label %for.cond2.preheader, !llvm.loop !224
+  br i1 %exitcond103.not, label %for.end49, label %for.cond2.preheader, !llvm.loop !236
 
 for.end49:                                        ; preds = %for.inc47, %resize_c.exit
   ret void
@@ -7307,7 +7369,7 @@ for.body3:                                        ; preds = %for.cond1.preheader
   %inc = add nuw nsw i32 %i_row.060, 1
   %4 = load i32, i32* %nrows, align 8, !tbaa !138
   %cmp2 = icmp slt i32 %inc, %4
-  br i1 %cmp2, label %for.body3, label %for.inc5.loopexit, !llvm.loop !225
+  br i1 %cmp2, label %for.body3, label %for.inc5.loopexit, !llvm.loop !237
 
 for.inc5.loopexit:                                ; preds = %for.body3
   %.lcssa3 = phi i32 [ %4, %for.body3 ]
@@ -7319,12 +7381,12 @@ for.inc5:                                         ; preds = %for.inc5.loopexit, 
   %6 = phi i32 [ %.lcssa3, %for.inc5.loopexit ], [ %3, %for.cond1.preheader ]
   %inc6 = add nuw nsw i32 %i_col.062, 1
   %cmp = icmp slt i32 %inc6, %5
-  br i1 %cmp, label %for.cond1.preheader, label %for.cond9.preheader, !llvm.loop !226
+  br i1 %cmp, label %for.cond1.preheader, label %for.cond9.preheader, !llvm.loop !238
 
 for.cond9.loopexit:                               ; preds = %for.body16, %for.body11
   %7 = phi i32 [ %8, %for.body11 ], [ %10, %for.body16 ]
   %cmp10 = icmp sgt i32 %i_col.158.in, 1
-  br i1 %cmp10, label %for.body11, label %for.end32, !llvm.loop !227
+  br i1 %cmp10, label %for.body11, label %for.end32, !llvm.loop !239
 
 for.body11:                                       ; preds = %for.cond9.loopexit, %for.body11.lr.ph
   %8 = phi i32 [ %.pre66, %for.body11.lr.ph ], [ %7, %for.cond9.loopexit ]
@@ -7337,7 +7399,7 @@ for.body16:                                       ; preds = %for.body11, %for.bo
   %i_row.155.in = phi i32 [ %i_row.155, %for.body16 ], [ %8, %for.body11 ]
   %i_row.155 = add nsw i32 %i_row.155.in, -1
   call void @popControl1b(i32* nonnull %branch) #31
-  %9 = load double*, double** %data21, align 8, !tbaa !213
+  %9 = load double*, double** %data21, align 8, !tbaa !225
   %10 = load i32, i32* %nrows, align 8, !tbaa !138
   %mul = mul nsw i32 %10, %i_col.158
   %add = add nsw i32 %mul, %i_row.155
@@ -7345,7 +7407,7 @@ for.body16:                                       ; preds = %for.body11, %for.bo
   %arrayidx = getelementptr inbounds double, double* %9, i64 %idxprom
   store double 0.000000e+00, double* %arrayidx, align 8, !tbaa !75
   %cmp15 = icmp sgt i32 %i_row.155.in, 1
-  br i1 %cmp15, label %for.body16, label %for.cond9.loopexit, !llvm.loop !228
+  br i1 %cmp15, label %for.body16, label %for.cond9.loopexit, !llvm.loop !240
 
 for.end32:                                        ; preds = %for.cond9.loopexit, %for.cond9.preheader, %entry
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #31
@@ -7386,12 +7448,12 @@ for.body3:                                        ; preds = %for.body3, %for.bod
   store double %.sink, double* %arrayidx, align 8, !tbaa !75
   %inc = add nuw nsw i32 %i_row.031, 1
   %exitcond.not = icmp eq i32 %inc, %1
-  br i1 %exitcond.not, label %for.inc12, label %for.body3, !llvm.loop !229
+  br i1 %exitcond.not, label %for.inc12, label %for.body3, !llvm.loop !241
 
 for.inc12:                                        ; preds = %for.body3, %for.cond1.preheader
   %inc13 = add nuw nsw i32 %i_col.034, 1
   %exitcond37.not = icmp eq i32 %inc13, %0
-  br i1 %exitcond37.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !230
+  br i1 %exitcond37.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !242
 
 for.end14:                                        ; preds = %for.inc12, %entry
   ret void
@@ -7410,7 +7472,7 @@ entry:
 
 for.body.lr.ph:                                   ; preds = %entry
   %data = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %matb, i64 0, i32 0
-  %2 = load double*, double** %data, align 8, !tbaa !213
+  %2 = load double*, double** %data, align 8, !tbaa !225
   %3 = zext i32 %mul to i64
   %4 = add nsw i32 %mul, -1
   %5 = zext i32 %4 to i64
@@ -7449,7 +7511,7 @@ for.body:                                         ; preds = %for.body, %for.body
   store double %val, double* %arrayidx, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !231
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !243
 
 for.end:                                          ; preds = %for.body, %entry
   ret void
@@ -7478,7 +7540,7 @@ for.body.lr.ph:                                   ; preds = %entry
 
 for.cond.loopexit:                                ; preds = %for.body4, %for.body
   %cmp = icmp sgt i64 %indvars.iv63, 1
-  br i1 %cmp, label %for.body, label %for.end31, !llvm.loop !232
+  br i1 %cmp, label %for.body, label %for.end31, !llvm.loop !244
 
 for.body:                                         ; preds = %for.cond.loopexit, %for.body.lr.ph
   %indvars.iv63 = phi i64 [ %4, %for.body.lr.ph ], [ %indvars.iv.next64, %for.cond.loopexit ]
@@ -7486,9 +7548,9 @@ for.body:                                         ; preds = %for.cond.loopexit, 
   br i1 %cmp353, label %for.body4.lr.ph, label %for.cond.loopexit
 
 for.body4.lr.ph:                                  ; preds = %for.body
-  %6 = load double*, double** %data, align 8, !tbaa !213
+  %6 = load double*, double** %data, align 8, !tbaa !225
   %7 = mul nsw i64 %indvars.iv.next64, %2
-  %8 = load double*, double** %data6, align 8, !tbaa !213
+  %8 = load double*, double** %data6, align 8, !tbaa !225
   %9 = add nsw i64 %indvars.iv.next64, %5
   %10 = load i32, i32* %nrows9, align 8, !tbaa !138
   %11 = sext i32 %10 to i64
@@ -7509,7 +7571,7 @@ for.body4:                                        ; preds = %for.body4, %for.bod
   store double %add14, double* %arrayidx, align 8, !tbaa !75
   store double 0.000000e+00, double* %arrayidx13, align 8, !tbaa !75
   %cmp3 = icmp sgt i64 %indvars.iv, 1
-  br i1 %cmp3, label %for.body4, label %for.cond.loopexit, !llvm.loop !233
+  br i1 %cmp3, label %for.body4, label %for.cond.loopexit, !llvm.loop !245
 
 for.end31:                                        ; preds = %for.cond.loopexit, %entry
   ret void
@@ -7562,12 +7624,12 @@ for.body3:                                        ; preds = %for.body3, %for.bod
   store double %14, double* %arrayidx12, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.inc13, label %for.body3, !llvm.loop !234
+  br i1 %exitcond.not, label %for.inc13, label %for.body3, !llvm.loop !246
 
 for.inc13:                                        ; preds = %for.body3, %for.cond1.preheader
   %indvars.iv.next2 = add nuw nsw i64 %indvars.iv1, 1
   %exitcond37.not = icmp eq i64 %indvars.iv.next2, %5
-  br i1 %exitcond37.not, label %for.end15, label %for.cond1.preheader, !llvm.loop !235
+  br i1 %exitcond37.not, label %for.end15, label %for.cond1.preheader, !llvm.loop !247
 
 for.end15:                                        ; preds = %for.inc13, %entry
   ret void
@@ -7596,9 +7658,9 @@ entry:
 
 if.then:                                          ; preds = %entry
   %6 = bitcast %struct.Matrix_diff* %dstb to i8**
-  %7 = load i8*, i8** %6, align 8, !tbaa !213
+  %7 = load i8*, i8** %6, align 8, !tbaa !225
   tail call void @pushPointer8(i8* %7) #31
-  %8 = load i8*, i8** %6, align 8, !tbaa !213
+  %8 = load i8*, i8** %6, align 8, !tbaa !225
   tail call void @free(i8* %8) #31
   %9 = load i8*, i8** %4, align 8, !tbaa !137
   tail call void @pushPointer8(i8* %9) #31
@@ -7633,7 +7695,7 @@ if.end:                                           ; preds = %if.else, %if.then
   %mul11 = shl nsw i64 %conv, 3
   %call = tail call noalias i8* @malloc(i64 %mul11) #31
   %data12 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %dstb, i64 0, i32 0
-  store i8* %call, i8** %.pre-phi, align 8, !tbaa !213
+  store i8* %call, i8** %.pre-phi, align 8, !tbaa !225
   %cmp16119 = icmp sgt i32 %mul, 0
   br i1 %cmp16119, label %for.body.lr.ph, label %for.end
 
@@ -7658,8 +7720,8 @@ for.end:                                          ; preds = %for.body.lr.ph, %if
 
 for.body31.lr.ph:                                 ; preds = %for.end
   %data32 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %srcb, i64 0, i32 0
-  %21 = load double*, double** %data32, align 8, !tbaa !213
-  %22 = load double*, double** %data12, align 8, !tbaa !213
+  %21 = load double*, double** %data32, align 8, !tbaa !225
+  %22 = load double*, double** %data12, align 8, !tbaa !225
   br label %for.body31
 
 for.body31:                                       ; preds = %for.body31, %for.body31.lr.ph
@@ -7673,12 +7735,12 @@ for.body31:                                       ; preds = %for.body31, %for.bo
   store double %add, double* %arrayidx34, align 8, !tbaa !75
   store double 0.000000e+00, double* %arrayidx37, align 8, !tbaa !75
   %cmp30 = icmp sgt i64 %indvars.iv, 1
-  br i1 %cmp30, label %for.body31, label %for.end45, !llvm.loop !236
+  br i1 %cmp30, label %for.body31, label %for.end45, !llvm.loop !248
 
 for.end45:                                        ; preds = %for.body31, %for.end
   tail call void @free(i8* %call24) #31
   tail call void @popPointer8(i8** nonnull %4) #31
-  %25 = load i8*, i8** %.pre-phi, align 8, !tbaa !213
+  %25 = load i8*, i8** %.pre-phi, align 8, !tbaa !225
   tail call void @free(i8* %25) #31
   tail call void @popInteger4(i32* nonnull %nrows) #31
   tail call void @popInteger4(i32* nonnull %ncols) #31
@@ -7699,7 +7761,7 @@ if.then52:                                        ; preds = %for.end45
   %mul57 = shl nsw i32 %28, 3
   %conv58 = sext i32 %mul57 to i64
   %call59 = call noalias i8* @malloc(i64 %conv58) #31
-  store i8* %call59, i8** %.pre-phi, align 8, !tbaa !213
+  store i8* %call59, i8** %.pre-phi, align 8, !tbaa !225
   call void @popPointer8(i8** nonnull %diffchunkold) #31
   %29 = load i32, i32* %chunklength, align 4, !tbaa !59
   %cmp62114 = icmp sgt i32 %29, 0
@@ -7707,7 +7769,7 @@ if.then52:                                        ; preds = %for.end45
 
 for.body63.lr.ph:                                 ; preds = %if.then52
   %30 = bitcast %struct.Matrix_diff* %dstb to i8**
-  %31 = load i8*, i8** %30, align 8, !tbaa !213
+  %31 = load i8*, i8** %30, align 8, !tbaa !225
   %32 = zext i32 %29 to i64
   %33 = shl nuw nsw i64 %32, 3
   call void @llvm.memset.p0i8.i64(i8* align 8 %31, i8 0, i64 %33, i1 false)
@@ -7766,7 +7828,7 @@ for.body:                                         ; preds = %for.body, %for.body
   store double %6, double* %arrayidx15, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !237
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !249
 
 for.end:                                          ; preds = %for.body, %if.end
   ret void
@@ -7794,7 +7856,7 @@ for.body:                                         ; preds = %for.body, %for.body
   %add = fadd fast double %mul6, %1
   store double %add, double* %arrayidx2, align 8, !tbaa !75
   %cmp = icmp sgt i64 %indvars.iv, 2
-  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !238
+  br i1 %cmp, label %for.body, label %for.end, !llvm.loop !250
 
 for.end:                                          ; preds = %for.body, %entry
   %3 = load double, double* %xb, align 8, !tbaa !75
@@ -7826,7 +7888,7 @@ for.body:                                         ; preds = %for.body, %for.body
   %add = fadd fast double %mul5, %res.017
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !239
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !251
 
 for.end:                                          ; preds = %for.body, %entry
   %res.0.lcssa = phi double [ %mul, %entry ], [ %add, %for.body ]
@@ -7849,7 +7911,7 @@ for.body.i:                                       ; preds = %for.body.i, %entry
   %add.i = fadd fast double %mul5.i, %res.017.i
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 3
-  br i1 %exitcond.not.i, label %square_sum_c.exit, label %for.body.i, !llvm.loop !239
+  br i1 %exitcond.not.i, label %square_sum_c.exit, label %for.body.i, !llvm.loop !251
 
 square_sum_c.exit:                                ; preds = %for.body.i
   %add.i.lcssa = phi double [ %add.i, %for.body.i ]
@@ -7875,7 +7937,7 @@ if.else:                                          ; preds = %square_sum_c.exit
   %mul6 = fmul fast double %mul, %6
   %sub = fsub fast double %mul, %mul6
   %data = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %Rb, i64 0, i32 0
-  %7 = load double*, double** %data, align 8, !tbaa !213
+  %7 = load double*, double** %data, align 8, !tbaa !225
   %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
   %8 = load i32, i32* %nrows, align 8, !tbaa !138
   %mul7 = shl nsw i32 %8, 1
@@ -8047,7 +8109,7 @@ for.body.i649:                                    ; preds = %for.body.i649, %con
   %add.i648 = fadd fast double %mul6.i, %32
   store double %add.i648, double* %arrayidx2.i647, align 8, !tbaa !75
   %cmp.i = icmp ugt i64 %indvars.iv.i645, 2
-  br i1 %cmp.i, label %for.body.i649, label %square_sum_b.exit, !llvm.loop !238
+  br i1 %cmp.i, label %for.body.i649, label %square_sum_b.exit, !llvm.loop !250
 
 square_sum_b.exit:                                ; preds = %for.body.i649
   %34 = load double, double* %angle_axisb, align 8, !tbaa !75
@@ -8074,7 +8136,7 @@ for.body.i:                                       ; preds = %for.body.i, %entry
   %add.i = fadd fast double %mul5.i, %res.017.i
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 3
-  br i1 %exitcond.not.i, label %square_sum_c.exit, label %for.body.i, !llvm.loop !239
+  br i1 %exitcond.not.i, label %square_sum_c.exit, label %for.body.i, !llvm.loop !251
 
 square_sum_c.exit:                                ; preds = %for.body.i
   %add.i.lcssa = phi double [ %add.i, %for.body.i ]
@@ -8116,12 +8178,12 @@ for.body3.i:                                      ; preds = %for.body3.i, %for.b
   store double %.sink, double* %arrayidx11.i, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not.i174 = icmp eq i64 %indvars.iv.next, %5
-  br i1 %exitcond.not.i174, label %for.inc12.i, label %for.body3.i, !llvm.loop !229
+  br i1 %exitcond.not.i174, label %for.inc12.i, label %for.body3.i, !llvm.loop !241
 
 for.inc12.i:                                      ; preds = %for.body3.i, %for.cond1.preheader.i
   %indvars.iv.next177 = add nuw nsw i64 %indvars.iv176, 1
   %exitcond37.not.i = icmp eq i64 %indvars.iv.next177, %6
-  br i1 %exitcond37.not.i, label %cleanup, label %for.cond1.preheader.i, !llvm.loop !230
+  br i1 %exitcond37.not.i, label %cleanup, label %for.cond1.preheader.i, !llvm.loop !242
 
 if.else:                                          ; preds = %square_sum_c.exit
   %div = fdiv fast double %0, %2
@@ -8244,12 +8306,12 @@ for.body3:                                        ; preds = %for.body3, %for.con
   store double %mul17, double* %arrayidx, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.inc24, label %for.body3, !llvm.loop !240
+  br i1 %exitcond.not, label %for.inc24, label %for.body3, !llvm.loop !252
 
 for.inc24:                                        ; preds = %for.body3
   %indvars.iv.next277 = add nuw nsw i64 %indvars.iv276, 1
   %exitcond280.not = icmp eq i64 %indvars.iv.next277, 3
-  br i1 %exitcond280.not, label %if.end, label %for.cond1.preheader, !llvm.loop !241
+  br i1 %exitcond280.not, label %if.end, label %for.cond1.preheader, !llvm.loop !253
 
 if.end:                                           ; preds = %for.inc24
   %call.i272 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
@@ -8278,7 +8340,7 @@ for.body35:                                       ; preds = %for.cond33
   %j.1 = add nsw i32 %j.1.in, -1
   %17 = load i32, i32* %nrows36, align 8, !tbaa !138
   %cmp39 = icmp sgt i32 %17, 0
-  br i1 %cmp39, label %for.body40, label %for.cond33, !llvm.loop !242
+  br i1 %cmp39, label %for.body40, label %for.cond33, !llvm.loop !254
 
 for.body40:                                       ; preds = %for.body35
   tail call void @llvm.trap()
@@ -8355,12 +8417,12 @@ for.body3:                                        ; preds = %for.body3, %for.con
   store double %mul11, double* %arrayidx10, align 8, !tbaa !75
   %indvars.iv.next100 = add nuw nsw i64 %indvars.iv99, 1
   %exitcond102.not = icmp eq i64 %indvars.iv.next100, 3
-  br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !243
+  br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !255
 
 for.inc12:                                        ; preds = %for.body3
   %indvars.iv.next104 = add nuw nsw i64 %indvars.iv103, 1
   %exitcond107.not = icmp eq i64 %indvars.iv.next104, 3
-  br i1 %exitcond107.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !244
+  br i1 %exitcond107.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !256
 
 for.end14:                                        ; preds = %for.inc12
   %call.i81 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
@@ -8416,12 +8478,12 @@ for.body22:                                       ; preds = %for.body22, %for.bo
   store double %add35, double* %arrayidx41, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.inc45, label %for.body22, !llvm.loop !245
+  br i1 %exitcond.not, label %for.inc45, label %for.body22, !llvm.loop !257
 
 for.inc45:                                        ; preds = %for.body22, %for.cond19.preheader
   %indvars.iv.next2 = add nuw nsw i64 %indvars.iv1, 1
   %exitcond98.not = icmp eq i64 %indvars.iv.next2, %18
-  br i1 %exitcond98.not, label %for.end47, label %for.cond19.preheader, !llvm.loop !246
+  br i1 %exitcond98.not, label %for.end47, label %for.cond19.preheader, !llvm.loop !258
 
 for.end47:                                        ; preds = %for.inc45
   %cmp.not.i = icmp eq i8* %call4.i, null
@@ -8518,7 +8580,7 @@ for.body.i:                                       ; preds = %for.body.i, %for.bo
   store double %11, double* %arrayidx15.i, align 8, !tbaa !75
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, %wide.trip.count.i
-  br i1 %exitcond.not.i, label %for.inc, label %for.body.i, !llvm.loop !237
+  br i1 %exitcond.not.i, label %for.inc, label %for.body.i, !llvm.loop !249
 
 if.else:                                          ; preds = %for.body
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %indvars.iv170
@@ -8553,7 +8615,7 @@ for.inc:                                          ; preds = %for.body.i, %if.els
   tail call void @pushControl1b(i32 %.sink) #31
   %indvars.iv.next171 = add nuw nsw i64 %indvars.iv170, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next171, %wide.trip.count
-  br i1 %exitcond.not, label %for.body39, label %for.body, !llvm.loop !247
+  br i1 %exitcond.not, label %for.body39, label %for.body, !llvm.loop !259
 
 for.body39:                                       ; preds = %for.inc, %for.inc94
   %indvars.iv = phi i64 [ %indvars.iv.next, %for.inc94 ], [ %wide.trip.count, %for.inc ]
@@ -8607,7 +8669,7 @@ if.else75:                                        ; preds = %for.body39
 
 for.inc94:                                        ; preds = %if.else75, %if.then41
   %cmp38 = icmp sgt i64 %indvars.iv, 1
-  br i1 %cmp38, label %for.body39, label %for.end95, !llvm.loop !248
+  br i1 %cmp38, label %for.body39, label %for.end95, !llvm.loop !260
 
 for.end95:                                        ; preds = %for.inc94, %entry
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %0) #31
@@ -8674,7 +8736,7 @@ for.body.i:                                       ; preds = %for.body.i, %for.bo
   store double %7, double* %arrayidx15.i, align 8, !tbaa !75
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, %wide.trip.count.i
-  br i1 %exitcond.not.i, label %for.inc, label %for.body.i, !llvm.loop !237
+  br i1 %exitcond.not.i, label %for.inc, label %for.body.i, !llvm.loop !249
 
 if.else:                                          ; preds = %for.body
   %idxprom8 = sext i32 %0 to i64
@@ -8687,7 +8749,7 @@ if.else:                                          ; preds = %for.body
 for.inc:                                          ; preds = %for.body.i, %if.else, %if.end.i
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !249
+  br i1 %exitcond.not, label %for.end, label %for.body, !llvm.loop !261
 
 for.end:                                          ; preds = %for.inc, %entry
   ret void
@@ -8763,12 +8825,12 @@ if.else.i:                                        ; preds = %for.body3.i
 for.inc.i:                                        ; preds = %if.else.i, %if.then.i
   %indvars.iv.next497 = add nuw nsw i64 %indvars.iv496, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next497, 3
-  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !229
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !241
 
 for.inc12.i:                                      ; preds = %for.inc.i
   %indvars.iv.next500 = add nuw nsw i64 %indvars.iv499, 1
   %exitcond37.not.i = icmp eq i64 %indvars.iv.next500, 3
-  br i1 %exitcond37.not.i, label %for.cond1.preheader.lr.ph.i430, label %for.body3.lr.ph.i, !llvm.loop !230
+  br i1 %exitcond37.not.i, label %for.cond1.preheader.lr.ph.i430, label %for.body3.lr.ph.i, !llvm.loop !242
 
 for.cond1.preheader.lr.ph.i430:                   ; preds = %for.inc12.i
   %15 = bitcast i8* %call.i to %struct.Matrix*
@@ -8817,12 +8879,12 @@ if.else.i446:                                     ; preds = %for.body3.i440
 for.inc.i449:                                     ; preds = %if.else.i446, %if.then.i442
   %indvars.iv.next490 = add nuw nsw i64 %indvars.iv489, 1
   %exitcond.not.i448 = icmp eq i64 %indvars.iv.next490, 3
-  br i1 %exitcond.not.i448, label %for.inc12.i452, label %for.body3.i440, !llvm.loop !229
+  br i1 %exitcond.not.i448, label %for.inc12.i452, label %for.body3.i440, !llvm.loop !241
 
 for.inc12.i452:                                   ; preds = %for.inc.i449
   %indvars.iv.next493 = add nuw nsw i64 %indvars.iv492, 1
   %exitcond37.not.i451 = icmp eq i64 %indvars.iv.next493, 3
-  br i1 %exitcond37.not.i451, label %for.cond1.preheader.lr.ph.i459, label %for.body3.lr.ph.i437, !llvm.loop !230
+  br i1 %exitcond37.not.i451, label %for.cond1.preheader.lr.ph.i459, label %for.body3.lr.ph.i437, !llvm.loop !242
 
 for.cond1.preheader.lr.ph.i459:                   ; preds = %for.inc12.i452
   %28 = tail call fast double @llvm.cos.f64(double %1)
@@ -8865,12 +8927,12 @@ if.else.i475:                                     ; preds = %for.body3.i469
 for.inc.i478:                                     ; preds = %if.else.i475, %if.then.i471
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not.i477 = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not.i477, label %for.inc12.i481, label %for.body3.i469, !llvm.loop !229
+  br i1 %exitcond.not.i477, label %for.inc12.i481, label %for.body3.i469, !llvm.loop !241
 
 for.inc12.i481:                                   ; preds = %for.inc.i478
   %indvars.iv.next486 = add nuw nsw i64 %indvars.iv485, 1
   %exitcond37.not.i480 = icmp eq i64 %indvars.iv.next486, 3
-  br i1 %exitcond37.not.i480, label %if.end, label %for.body3.lr.ph.i466, !llvm.loop !230
+  br i1 %exitcond37.not.i480, label %if.end, label %for.body3.lr.ph.i466, !llvm.loop !242
 
 if.end:                                           ; preds = %for.inc12.i481
   %36 = tail call fast double @llvm.cos.f64(double %2)
@@ -8988,12 +9050,12 @@ if.else.i:                                        ; preds = %for.body3.i
 for.inc.i:                                        ; preds = %if.else.i, %if.then.i
   %indvars.iv.next263 = add nuw nsw i64 %indvars.iv262, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next263, 3
-  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !229
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !241
 
 for.inc12.i:                                      ; preds = %for.inc.i
   %indvars.iv.next266 = add nuw nsw i64 %indvars.iv265, 1
   %exitcond37.not.i = icmp eq i64 %indvars.iv.next266, 3
-  br i1 %exitcond37.not.i, label %for.cond1.preheader.lr.ph.i182, label %for.body3.lr.ph.i, !llvm.loop !230
+  br i1 %exitcond37.not.i, label %for.cond1.preheader.lr.ph.i182, label %for.body3.lr.ph.i, !llvm.loop !242
 
 for.cond1.preheader.lr.ph.i182:                   ; preds = %for.inc12.i
   %14 = bitcast i8* %call.i to %struct.Matrix*
@@ -9042,12 +9104,12 @@ if.else.i198:                                     ; preds = %for.body3.i192
 for.inc.i201:                                     ; preds = %if.else.i198, %if.then.i194
   %indvars.iv.next256 = add nuw nsw i64 %indvars.iv255, 1
   %exitcond.not.i200 = icmp eq i64 %indvars.iv.next256, 3
-  br i1 %exitcond.not.i200, label %for.inc12.i204, label %for.body3.i192, !llvm.loop !229
+  br i1 %exitcond.not.i200, label %for.inc12.i204, label %for.body3.i192, !llvm.loop !241
 
 for.inc12.i204:                                   ; preds = %for.inc.i201
   %indvars.iv.next259 = add nuw nsw i64 %indvars.iv258, 1
   %exitcond37.not.i203 = icmp eq i64 %indvars.iv.next259, 3
-  br i1 %exitcond37.not.i203, label %for.cond1.preheader.lr.ph.i211, label %for.body3.lr.ph.i189, !llvm.loop !230
+  br i1 %exitcond37.not.i203, label %for.cond1.preheader.lr.ph.i211, label %for.body3.lr.ph.i189, !llvm.loop !242
 
 for.cond1.preheader.lr.ph.i211:                   ; preds = %for.inc12.i204
   %27 = tail call fast double @llvm.cos.f64(double %1)
@@ -9090,12 +9152,12 @@ if.else.i227:                                     ; preds = %for.body3.i221
 for.inc.i230:                                     ; preds = %if.else.i227, %if.then.i223
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not.i229 = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not.i229, label %for.inc12.i233, label %for.body3.i221, !llvm.loop !229
+  br i1 %exitcond.not.i229, label %for.inc12.i233, label %for.body3.i221, !llvm.loop !241
 
 for.inc12.i233:                                   ; preds = %for.inc.i230
   %indvars.iv.next252 = add nuw nsw i64 %indvars.iv251, 1
   %exitcond37.not.i232 = icmp eq i64 %indvars.iv.next252, 3
-  br i1 %exitcond37.not.i232, label %set_identity_c.exit234, label %for.body3.lr.ph.i218, !llvm.loop !230
+  br i1 %exitcond37.not.i232, label %set_identity_c.exit234, label %for.body3.lr.ph.i218, !llvm.loop !242
 
 set_identity_c.exit234:                           ; preds = %for.inc12.i233
   %35 = tail call fast double @llvm.cos.f64(double %2)
@@ -9214,12 +9276,12 @@ if.else.i:                                        ; preds = %for.body3.i
 for.inc.i:                                        ; preds = %if.else.i, %if.then.i
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next, 4
-  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !229
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !241
 
 for.inc12.i:                                      ; preds = %for.inc.i
   %indvars.iv.next177 = add nuw nsw i64 %indvars.iv176, 1
   %exitcond37.not.i = icmp eq i64 %indvars.iv.next177, 4
-  br i1 %exitcond37.not.i, label %set_identity_c.exit, label %for.body3.lr.ph.i, !llvm.loop !230
+  br i1 %exitcond37.not.i, label %set_identity_c.exit, label %for.body3.lr.ph.i, !llvm.loop !242
 
 set_identity_c.exit:                              ; preds = %for.inc12.i
   %12 = load double*, double** %data, align 8, !tbaa !137
@@ -9291,12 +9353,12 @@ for.body3.i166:                                   ; preds = %for.body3.i166, %fo
   store double %30, double* %arrayidx12.i, align 8, !tbaa !75
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i165 = icmp eq i64 %indvars.iv.next.i, %wide.trip.count.i
-  br i1 %exitcond.not.i165, label %for.inc13.i, label %for.body3.i166, !llvm.loop !234
+  br i1 %exitcond.not.i165, label %for.inc13.i, label %for.body3.i166, !llvm.loop !246
 
 for.inc13.i:                                      ; preds = %for.body3.i166, %for.cond1.preheader.i161
   %indvars.iv.next182 = add nuw nsw i64 %indvars.iv181, 1
   %exitcond37.not.i167 = icmp eq i64 %indvars.iv.next182, %24
-  br i1 %exitcond37.not.i167, label %set_block_c.exit, label %for.cond1.preheader.i161, !llvm.loop !235
+  br i1 %exitcond37.not.i167, label %set_block_c.exit, label %for.cond1.preheader.i161, !llvm.loop !247
 
 set_block_c.exit:                                 ; preds = %for.inc13.i, %if.end8
   %arrayidx = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %indvars.iv185
@@ -9327,7 +9389,7 @@ if.end25:                                         ; preds = %if.then22, %set_blo
   tail call void @mat_mult_c(%struct.Matrix* %arrayidx27, %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %arrayidx)
   %indvars.iv.next186 = add nuw nsw i64 %indvars.iv185, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next186, %wide.trip.count
-  br i1 %exitcond.not, label %for.cond30, label %for.cond1.preheader.lr.ph.i, !llvm.loop !250
+  br i1 %exitcond.not, label %for.cond30, label %for.cond1.preheader.lr.ph.i, !llvm.loop !262
 
 for.cond30:                                       ; preds = %if.end25
   %i.1 = add nsw i32 %bone_count, -1
@@ -9353,7 +9415,7 @@ if.end36:                                         ; preds = %if.then34, %for.con
   %nrows48 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %arrayidx38, i64 0, i32 0
   call void @popInteger4(i32* %nrows48) #31
   %data49 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %base_relativesb, i64 0, i32 0
-  %42 = load double*, double** %data49, align 8, !tbaa !213
+  %42 = load double*, double** %data49, align 8, !tbaa !225
   store double 0.000000e+00, double* %42, align 8, !tbaa !75
   %arrayidx51 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_relatives, i64 %idxprom37
   %arrayidx53 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %base_relativesb, i64 %idxprom37
@@ -9468,12 +9530,12 @@ if.else.i:                                        ; preds = %for.body3.i
 for.inc.i:                                        ; preds = %if.else.i, %if.then.i
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not.i = icmp eq i64 %indvars.iv.next, 4
-  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !229
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !241
 
 for.inc12.i:                                      ; preds = %for.inc.i
   %indvars.iv.next45 = add nuw nsw i64 %indvars.iv44, 1
   %exitcond37.not.i = icmp eq i64 %indvars.iv.next45, 4
-  br i1 %exitcond37.not.i, label %set_identity_c.exit, label %for.body3.lr.ph.i, !llvm.loop !230
+  br i1 %exitcond37.not.i, label %set_identity_c.exit, label %for.body3.lr.ph.i, !llvm.loop !242
 
 set_identity_c.exit:                              ; preds = %for.inc12.i
   %11 = load double*, double** %data, align 8, !tbaa !137
@@ -9516,12 +9578,12 @@ for.body3.i33:                                    ; preds = %for.body3.i33, %for
   store double %23, double* %arrayidx12.i, align 8, !tbaa !75
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
   %exitcond.not.i32 = icmp eq i64 %indvars.iv.next.i, %wide.trip.count.i
-  br i1 %exitcond.not.i32, label %for.inc13.i, label %for.body3.i33, !llvm.loop !234
+  br i1 %exitcond.not.i32, label %for.inc13.i, label %for.body3.i33, !llvm.loop !246
 
 for.inc13.i:                                      ; preds = %for.body3.i33, %for.cond1.preheader.i28
   %indvars.iv.next50 = add nuw nsw i64 %indvars.iv49, 1
   %exitcond37.not.i34 = icmp eq i64 %indvars.iv.next50, %17
-  br i1 %exitcond37.not.i34, label %set_block_c.exit, label %for.cond1.preheader.i28, !llvm.loop !235
+  br i1 %exitcond37.not.i34, label %set_block_c.exit, label %for.cond1.preheader.i28, !llvm.loop !247
 
 set_block_c.exit:                                 ; preds = %for.inc13.i, %set_identity_c.exit
   %arrayidx = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_relatives, i64 %indvars.iv53
@@ -9529,7 +9591,7 @@ set_block_c.exit:                                 ; preds = %for.inc13.i, %set_i
   tail call void @mat_mult_c(%struct.Matrix* %arrayidx, %struct.Matrix* %0, %struct.Matrix* %arrayidx3)
   %indvars.iv.next54 = add nuw nsw i64 %indvars.iv53, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next54, %wide.trip.count
-  br i1 %exitcond.not, label %for.end, label %for.cond1.preheader.lr.ph.i, !llvm.loop !251
+  br i1 %exitcond.not, label %for.end, label %for.cond1.preheader.lr.ph.i, !llvm.loop !263
 
 for.end:                                          ; preds = %set_block_c.exit, %entry
   %cmp.not.i = icmp eq i8* %call4.i, null
@@ -9751,7 +9813,7 @@ for.body124:                                      ; preds = %for.body124, %for.b
   store double %mul131, double* %arrayidx130, align 8, !tbaa !75
   %indvars.iv.next567 = add nuw nsw i64 %indvars.iv566, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next567, %wide.trip.count
-  br i1 %exitcond.not, label %if.end142, label %for.body124, !llvm.loop !252
+  br i1 %exitcond.not, label %if.end142, label %for.body124, !llvm.loop !264
 
 if.end142:                                        ; preds = %for.body124, %for.cond121.preheader, %for.end118
   %.sink582 = phi i32 [ 0, %for.cond121.preheader ], [ 1, %for.end118 ], [ 0, %for.body124 ]
@@ -9819,7 +9881,7 @@ if.then151:                                       ; preds = %if.end149
 
 for.body155.lr.ph:                                ; preds = %if.then151
   %data156 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %positionsb, i64 0, i32 0
-  %51 = load double*, double** %data156, align 8, !tbaa !213
+  %51 = load double*, double** %data156, align 8, !tbaa !225
   %52 = load i32, i32* %nrows1.i, align 8, !tbaa !138
   %53 = zext i32 %50 to i64
   %54 = sext i32 %52 to i64
@@ -9834,7 +9896,7 @@ for.body155:                                      ; preds = %for.body155, %for.b
   %fneg = fneg fast double %56
   store double %fneg, double* %arrayidx161, align 8, !tbaa !75
   %cmp154 = icmp sgt i64 %indvars.iv563, 1
-  br i1 %cmp154, label %for.body155, label %for.end241, !llvm.loop !253
+  br i1 %cmp154, label %for.body155, label %for.end241, !llvm.loop !265
 
 for.end241:                                       ; preds = %for.body155, %if.then151, %if.end149
   %.pre570 = load i32, i32* %ncols52, align 4, !tbaa !139
@@ -9847,7 +9909,7 @@ for.end241:                                       ; preds = %for.body155, %if.th
 
 for.body.lr.ph.i545:                              ; preds = %for.end241
   %data.i544 = getelementptr inbounds %struct.Matrix_diff, %struct.Matrix_diff* %positionsb, i64 0, i32 0
-  %59 = load double*, double** %data.i544, align 8, !tbaa !213
+  %59 = load double*, double** %data.i544, align 8, !tbaa !225
   %60 = zext i32 %mul.i543 to i64
   %61 = add nsw i32 %mul.i543, -1
   %62 = zext i32 %61 to i64
@@ -9953,7 +10015,7 @@ for.body:                                         ; preds = %for.body, %for.body
   tail call void @mat_mult_c(%struct.Matrix* %arrayidx, %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6)
   %indvars.iv.next218 = add nuw nsw i64 %indvars.iv217, 1
   %exitcond220.not = icmp eq i64 %indvars.iv.next218, %wide.trip.count219
-  br i1 %exitcond220.not, label %for.end, label %for.body, !llvm.loop !254
+  br i1 %exitcond220.not, label %for.end, label %for.body, !llvm.loop !266
 
 for.end:                                          ; preds = %for.body, %get_matrix_array_c.exit129
   %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
@@ -10087,17 +10149,17 @@ for.body20:                                       ; preds = %for.body20, %for.co
   store double %add36, double* %arrayidx35, align 8, !tbaa !75
   %indvars.iv.next200 = add nuw nsw i64 %indvars.iv199, 1
   %exitcond203.not = icmp eq i64 %indvars.iv.next200, 3
-  br i1 %exitcond203.not, label %for.inc40, label %for.body20, !llvm.loop !255
+  br i1 %exitcond203.not, label %for.inc40, label %for.body20, !llvm.loop !267
 
 for.inc40:                                        ; preds = %for.body20
   %indvars.iv.next205 = add nuw nsw i64 %indvars.iv204, 1
   %exitcond212.not = icmp eq i64 %indvars.iv.next205, %wide.trip.count211
-  br i1 %exitcond212.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !256
+  br i1 %exitcond212.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !268
 
 for.inc43:                                        ; preds = %for.inc40, %for.body11
   %indvars.iv.next214 = add nuw nsw i64 %indvars.iv213, 1
   %exitcond216.not = icmp eq i64 %indvars.iv.next214, %wide.trip.count215
-  br i1 %exitcond216.not, label %for.end45, label %for.body11, !llvm.loop !257
+  br i1 %exitcond216.not, label %for.end45, label %for.body11, !llvm.loop !269
 
 for.end45:                                        ; preds = %for.inc43, %fill_c.exit
   %tobool.not = icmp eq i32 %is_mirrored, 0
@@ -10125,7 +10187,7 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %if.end, label %for.body49, !llvm.loop !258
+  br i1 %exitcond.not, label %if.end, label %for.body49, !llvm.loop !270
 
 if.end:                                           ; preds = %for.body49, %for.cond46.preheader, %for.end45
   %tobool60.not = icmp eq i32 %apply_global, 0
@@ -10169,7 +10231,7 @@ if.then.i149:                                     ; preds = %for.body.i148
 for.inc.i:                                        ; preds = %if.then.i149, %for.body.i148
   %indvars.iv.next.i150 = add nuw nsw i64 %indvars.iv.i146, 1
   %exitcond.not.i151 = icmp eq i64 %indvars.iv.next.i150, %wide.trip.count.i144
-  br i1 %exitcond.not.i151, label %for.body.preheader.i154, label %for.body.i148, !llvm.loop !215
+  br i1 %exitcond.not.i151, label %for.body.preheader.i154, label %for.body.i148, !llvm.loop !227
 
 for.body.preheader.i154:                          ; preds = %for.inc.i
   tail call void @free(i8* nonnull %call.i) #31
@@ -10190,7 +10252,7 @@ if.then.i159:                                     ; preds = %for.body.i158
 for.inc.i162:                                     ; preds = %if.then.i159, %for.body.i158
   %indvars.iv.next.i160 = add nuw nsw i64 %indvars.iv.i155, 1
   %exitcond.not.i161 = icmp eq i64 %indvars.iv.next.i160, %wide.trip.count.i144
-  br i1 %exitcond.not.i161, label %for.body.preheader.i166, label %for.body.i158, !llvm.loop !215
+  br i1 %exitcond.not.i161, label %for.body.preheader.i166, label %for.body.i158, !llvm.loop !227
 
 delete_light_matrix_array_c.exit163.thread:       ; preds = %delete_matrix_c.exit
   tail call void @free(i8* %call.i) #31
@@ -10216,7 +10278,7 @@ if.then.i171:                                     ; preds = %for.body.i170
 for.inc.i174:                                     ; preds = %if.then.i171, %for.body.i170
   %indvars.iv.next.i172 = add nuw nsw i64 %indvars.iv.i167, 1
   %exitcond.not.i173 = icmp eq i64 %indvars.iv.next.i172, %wide.trip.count.i144
-  br i1 %exitcond.not.i173, label %delete_light_matrix_array_c.exit175, label %for.body.i170, !llvm.loop !215
+  br i1 %exitcond.not.i173, label %delete_light_matrix_array_c.exit175, label %for.body.i170, !llvm.loop !227
 
 delete_light_matrix_array_c.exit175:              ; preds = %for.inc.i174, %delete_light_matrix_array_c.exit163.thread
   tail call void @free(i8* %call.i126183) #31
@@ -10287,7 +10349,7 @@ for.body:                                         ; preds = %for.body, %resize_c
   store double 1.000000e+00, double* %arrayidx7, align 8, !tbaa !75
   %indvars.iv.next247 = add nuw nsw i64 %indvars.iv246, 1
   %exitcond249.not = icmp eq i64 %indvars.iv.next247, 3
-  br i1 %exitcond249.not, label %for.cond11.preheader, label %for.body, !llvm.loop !259
+  br i1 %exitcond249.not, label %for.cond11.preheader, label %for.body, !llvm.loop !271
 
 for.cond11.preheader:                             ; preds = %for.body, %for.end36
   %i_finger.0237 = phi i32 [ %inc39, %for.end36 ], [ 0, %for.body ]
@@ -10330,7 +10392,7 @@ if.end:                                           ; preds = %if.then, %for.body1
   %inc33 = add nsw i32 %i_pose_params.1233, 1
   %inc35 = add nuw nsw i32 %i.1234, 1
   %exitcond.not = icmp eq i32 %inc35, 5
-  br i1 %exitcond.not, label %for.end36, label %for.body13, !llvm.loop !260
+  br i1 %exitcond.not, label %for.end36, label %for.body13, !llvm.loop !272
 
 for.end36:                                        ; preds = %if.end
   %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
@@ -10338,7 +10400,7 @@ for.end36:                                        ; preds = %if.end
   %inc37 = add nsw i32 %i_pose_params.1233.lcssa, 2
   %inc39 = add nuw nsw i32 %i_finger.0237, 1
   %exitcond245.not = icmp eq i32 %inc39, 5
-  br i1 %exitcond245.not, label %for.end40, label %for.cond11.preheader, !llvm.loop !261
+  br i1 %exitcond245.not, label %for.end40, label %for.cond11.preheader, !llvm.loop !273
 
 for.end40:                                        ; preds = %for.end36
   %inc37.lcssa = phi i32 [ %inc37, %for.end36 ]
@@ -10365,7 +10427,7 @@ for.body46:                                       ; preds = %if.end68, %for.body
   br i1 %cmp48, label %if.then49, label %for.body46.if.end68_crit_edge
 
 for.body46.if.end68_crit_edge:                    ; preds = %for.body46
-  %.pre250 = load double*, double** %data53, align 8, !tbaa !213
+  %.pre250 = load double*, double** %data53, align 8, !tbaa !225
   %.pre251 = load i32, i32* %nrows1.i, align 8, !tbaa !138
   %.pre252 = mul nsw i32 %.pre251, %dec47
   br label %if.end68
@@ -10375,7 +10437,7 @@ if.then49:                                        ; preds = %for.body46
   %idxprom51 = sext i32 %dec50 to i64
   %arrayidx52 = getelementptr inbounds double, double* %thetab, i64 %idxprom51
   %14 = load double, double* %arrayidx52, align 8, !tbaa !75
-  %15 = load double*, double** %data53, align 8, !tbaa !213
+  %15 = load double*, double** %data53, align 8, !tbaa !225
   %16 = load i32, i32* %nrows1.i, align 8, !tbaa !138
   %mul55 = mul nsw i32 %16, %dec47
   %add56 = add nsw i32 %mul55, 1
@@ -10404,7 +10466,7 @@ if.end68:                                         ; preds = %if.then49, %for.bod
   store double 0.000000e+00, double* %arrayidx77, align 8, !tbaa !75
   %dec88 = add nsw i32 %i.2228, -1
   %cmp45 = icmp ugt i32 %i.2228, 2
-  br i1 %cmp45, label %for.body46, label %for.inc90, !llvm.loop !262
+  br i1 %cmp45, label %for.body46, label %for.inc90, !llvm.loop !274
 
 for.inc90:                                        ; preds = %if.end68
   %.lcssa2 = phi i32 [ %18, %if.end68 ]
@@ -10413,7 +10475,7 @@ for.inc90:                                        ; preds = %if.end68
   %dec47.lcssa = phi i32 [ %dec47, %if.end68 ]
   %dec91 = add nsw i32 %i_finger.1231, -1
   %cmp42.not = icmp eq i32 %i_finger.1231, 0
-  br i1 %cmp42.not, label %for.end92, label %for.body43, !llvm.loop !263
+  br i1 %cmp42.not, label %for.end92, label %for.body43, !llvm.loop !275
 
 for.end92:                                        ; preds = %for.inc90
   %.lcssa2.lcssa = phi i32 [ %.lcssa2, %for.inc90 ]
@@ -10450,7 +10512,7 @@ for.body97:                                       ; preds = %for.body97, %for.bo
   store double %add128, double* %arrayidx124, align 8, !tbaa !75
   store double 0.000000e+00, double* %arrayidx127, align 8, !tbaa !75
   %cmp96 = icmp sgt i64 %indvars.iv, 1
-  br i1 %cmp96, label %for.body97, label %for.end136, !llvm.loop !264
+  br i1 %cmp96, label %for.body97, label %for.end136, !llvm.loop !276
 
 for.end136:                                       ; preds = %for.body97, %for.end92
   call void @resize_b(%struct.Matrix* %pose_params, %struct.Matrix_diff* %pose_paramsb, i32 3, i32 %add)
@@ -10542,7 +10604,7 @@ for.body:                                         ; preds = %for.body, %fill_c.e
   store double %9, double* %arrayidx16, align 8, !tbaa !75
   %indvars.iv.next102 = add nuw nsw i64 %indvars.iv101, 1
   %exitcond105.not = icmp eq i64 %indvars.iv.next102, 3
-  br i1 %exitcond105.not, label %for.cond20.preheader, label %for.body, !llvm.loop !265
+  br i1 %exitcond105.not, label %for.cond20.preheader, label %for.body, !llvm.loop !277
 
 for.cond20.preheader:                             ; preds = %for.body, %for.end45
   %i_finger.095 = phi i32 [ %inc48, %for.end45 ], [ 0, %for.body ]
@@ -10582,7 +10644,7 @@ if.end:                                           ; preds = %if.then, %for.body2
   %inc44 = add nuw nsw i32 %i.192, 1
   %lftr.wideiv1 = trunc i64 %indvars.iv.next to i32
   %exitcond = icmp eq i32 %12, %lftr.wideiv1
-  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !266
+  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !278
 
 for.end45:                                        ; preds = %if.end
   %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
@@ -10591,7 +10653,7 @@ for.end45:                                        ; preds = %if.end
   %inc46 = add nsw i32 %17, 2
   %inc48 = add nuw nsw i32 %i_finger.095, 1
   %exitcond99.not = icmp eq i32 %inc48, 5
-  br i1 %exitcond99.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !267
+  br i1 %exitcond99.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !279
 
 for.end49:                                        ; preds = %for.end45
   ret void
@@ -10688,7 +10750,7 @@ delete.notnull.i.i.i.i.i.i:                       ; preds = %land.lhs.true.i.i.i
 _ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i.i: ; preds = %delete.notnull.i.i.i.i.i.i, %land.lhs.true.i.i.i.i.i.i, %for.body.i.i.i.i
   %incdec.ptr.i.i.i.i = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__first.addr.04.i.i.i.i, i64 1
   %cmp.not.i.i.i.i = icmp eq %class.LightMatrix* %incdec.ptr.i.i.i.i, %9
-  br i1 %cmp.not.i.i.i.i, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i, label %for.body.i.i.i.i, !llvm.loop !268
+  br i1 %cmp.not.i.i.i.i, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i, label %for.body.i.i.i.i, !llvm.loop !280
 
 _ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i: ; preds = %_ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i.i
   %.pre.i = load %class.LightMatrix*, %class.LightMatrix** %_M_start.i, align 8, !tbaa !143
@@ -10733,7 +10795,7 @@ delete.notnull.i.i.i.i.i.i21:                     ; preds = %land.lhs.true.i.i.i
 _ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i.i24: ; preds = %delete.notnull.i.i.i.i.i.i21, %land.lhs.true.i.i.i.i.i.i20, %for.body.i.i.i.i17
   %incdec.ptr.i.i.i.i22 = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__first.addr.04.i.i.i.i14, i64 1
   %cmp.not.i.i.i.i23 = icmp eq %class.LightMatrix* %incdec.ptr.i.i.i.i22, %16
-  br i1 %cmp.not.i.i.i.i23, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i26, label %for.body.i.i.i.i17, !llvm.loop !268
+  br i1 %cmp.not.i.i.i.i23, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i26, label %for.body.i.i.i.i17, !llvm.loop !280
 
 _ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit.loopexit.i26: ; preds = %_ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i.i24
   %.pre.i25 = load %class.LightMatrix*, %class.LightMatrix** %_M_start.i11, align 8, !tbaa !143
@@ -10784,7 +10846,7 @@ if.then.i.i.i.i.i.i.i:                            ; preds = %for.body.i.i.i.i38
 _ZSt8_DestroyINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEvPT_.exit.i.i.i.i: ; preds = %if.then.i.i.i.i.i.i.i, %for.body.i.i.i.i38
   %incdec.ptr.i.i.i.i39 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__first.addr.04.i.i.i.i37, i64 1
   %cmp.not.i.i.i.i40 = icmp eq %"class.std::__cxx11::basic_string"* %incdec.ptr.i.i.i.i39, %25
-  br i1 %cmp.not.i.i.i.i40, label %_ZSt8_DestroyIPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_EvT_S7_RSaIT0_E.exit.loopexit.i, label %for.body.i.i.i.i38, !llvm.loop !269
+  br i1 %cmp.not.i.i.i.i40, label %_ZSt8_DestroyIPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_EvT_S7_RSaIT0_E.exit.loopexit.i, label %for.body.i.i.i.i38, !llvm.loop !281
 
 _ZSt8_DestroyIPNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_EvT_S7_RSaIT0_E.exit.loopexit.i: ; preds = %_ZSt8_DestroyINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEvPT_.exit.i.i.i.i
   %.pre.i41 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %_M_start.i34, align 8, !tbaa !81
@@ -10936,7 +10998,7 @@ _ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5
   %incdec.ptr.i.i.i.i54 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__first.addr.09.i.i.i.i41, i64 1
   %incdec.ptr2.i.i.i.i55 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__cur.011.i.i.i.i40, i64 1
   %cmp.not.i.i.i.i56 = icmp eq %"class.std::__cxx11::basic_string"* %incdec.ptr.i.i.i.i54, %__position.coerce
-  br i1 %cmp.not.i.i.i.i56, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59, label %for.body.i.i.i.i45, !llvm.loop !270
+  br i1 %cmp.not.i.i.i.i56, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59, label %for.body.i.i.i.i45, !llvm.loop !282
 
 _ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59: ; preds = %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i57, %_ZNSt16allocator_traitsISaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE9constructIS5_JS5_EEEvRS6_PT_DpOT0_.exit
   %__cur.0.lcssa.i.i.i.i58 = phi %"class.std::__cxx11::basic_string"* [ %cond.i62, %_ZNSt16allocator_traitsISaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE9constructIS5_JS5_EEEvRS6_PT_DpOT0_.exit ], [ %incdec.ptr2.i.i.i.i55, %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i57 ]
@@ -10983,7 +11045,7 @@ _ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5
   %incdec.ptr.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__first.addr.09.i.i.i.i, i64 1
   %incdec.ptr2.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__cur.011.i.i.i.i, i64 1
   %cmp.not.i.i.i.i = icmp eq %"class.std::__cxx11::basic_string"* %incdec.ptr.i.i.i.i, %0
-  br i1 %cmp.not.i.i.i.i, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit, label %for.body.i.i.i.i, !llvm.loop !270
+  br i1 %cmp.not.i.i.i.i, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit, label %for.body.i.i.i.i, !llvm.loop !282
 
 _ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit: ; preds = %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i, %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59
   %__cur.0.lcssa.i.i.i.i = phi %"class.std::__cxx11::basic_string"* [ %incdec.ptr, %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59 ], [ %incdec.ptr2.i.i.i.i, %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i ]
@@ -11164,7 +11226,7 @@ _ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5
   %incdec.ptr.i.i.i.i54 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__first.addr.09.i.i.i.i41, i64 1
   %incdec.ptr2.i.i.i.i55 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__cur.011.i.i.i.i40, i64 1
   %cmp.not.i.i.i.i56 = icmp eq %"class.std::__cxx11::basic_string"* %incdec.ptr.i.i.i.i54, %__position.coerce
-  br i1 %cmp.not.i.i.i.i56, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59, label %for.body.i.i.i.i45, !llvm.loop !270
+  br i1 %cmp.not.i.i.i.i56, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59, label %for.body.i.i.i.i45, !llvm.loop !282
 
 _ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59: ; preds = %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i57, %_ZNSt16allocator_traitsISaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE9constructIS5_JRKS5_EEEvRS6_PT_DpOT0_.exit
   %__cur.0.lcssa.i.i.i.i58 = phi %"class.std::__cxx11::basic_string"* [ %cond.i62, %_ZNSt16allocator_traitsISaINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEEE9constructIS5_JRKS5_EEEvRS6_PT_DpOT0_.exit ], [ %incdec.ptr2.i.i.i.i55, %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i57 ]
@@ -11211,7 +11273,7 @@ _ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5
   %incdec.ptr.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__first.addr.09.i.i.i.i, i64 1
   %incdec.ptr2.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %__cur.011.i.i.i.i, i64 1
   %cmp.not.i.i.i.i = icmp eq %"class.std::__cxx11::basic_string"* %incdec.ptr.i.i.i.i, %0
-  br i1 %cmp.not.i.i.i.i, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit, label %for.body.i.i.i.i, !llvm.loop !270
+  br i1 %cmp.not.i.i.i.i, label %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit, label %for.body.i.i.i.i, !llvm.loop !282
 
 _ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit: ; preds = %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i, %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59
   %__cur.0.lcssa.i.i.i.i = phi %"class.std::__cxx11::basic_string"* [ %incdec.ptr, %_ZNSt6vectorINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESaIS5_EE11_S_relocateEPS5_S8_S8_RS6_.exit59 ], [ %incdec.ptr2.i.i.i.i, %_ZSt19__relocate_object_aINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES5_SaIS5_EEvPT_PT0_RT1_.exit.i.i.i.i ]
@@ -11339,7 +11401,7 @@ for.body.i.i.i.i.i.i72:                           ; preds = %for.body.i.i.i.i.i.
   store double %18, double* %arrayidx7.i.i.i.i.i.i69, align 8, !tbaa !75
   %indvars.iv.next.i.i.i.i.i.i70 = add nuw nsw i64 %indvars.iv.i.i.i.i.i.i67, 1
   %exitcond.not.i.i.i.i.i.i71 = icmp eq i64 %indvars.iv.next.i.i.i.i.i.i70, %conv20.i.i.i.i.i.i.i63
-  br i1 %exitcond.not.i.i.i.i.i.i71, label %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77, label %for.body.i.i.i.i.i.i72, !llvm.loop !271
+  br i1 %exitcond.not.i.i.i.i.i.i71, label %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77, label %for.body.i.i.i.i.i.i72, !llvm.loop !283
 
 _ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77: ; preds = %for.body.i.i.i.i.i.i72, %_ZN11LightMatrixIdE6resizeEii.exit.thread.i.i.i.i.i.i62
   %is_data_owner_.i.i.i.i.i.i73 = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__cur.011.i.i.i.i49, i64 0, i32 0
@@ -11347,7 +11409,7 @@ _ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77: ; preds = %f
   %incdec.ptr.i.i.i.i74 = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__first.addr.08.i.i.i.i50, i64 1
   %incdec.ptr1.i.i.i.i75 = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__cur.011.i.i.i.i49, i64 1
   %cmp.not.i.i.i.i76 = icmp eq %class.LightMatrix* %incdec.ptr.i.i.i.i74, %__position.coerce
-  br i1 %cmp.not.i.i.i.i76, label %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit79, label %for.body.i.i.i.i58, !llvm.loop !272
+  br i1 %cmp.not.i.i.i.i76, label %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit79, label %for.body.i.i.i.i58, !llvm.loop !284
 
 _ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit79: ; preds = %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77, %_ZNKSt6vectorI11LightMatrixIdESaIS1_EE12_M_check_lenEmPKc.exit
   %__cur.0.lcssa.i.i.i.i78 = phi %class.LightMatrix* [ %4, %_ZNKSt6vectorI11LightMatrixIdESaIS1_EE12_M_check_lenEmPKc.exit ], [ %incdec.ptr1.i.i.i.i75, %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i77 ]
@@ -11406,7 +11468,7 @@ for.body.i.i.i.i.i.i:                             ; preds = %for.body.i.i.i.i.i.
   store double %25, double* %arrayidx7.i.i.i.i.i.i, align 8, !tbaa !75
   %indvars.iv.next.i.i.i.i.i.i = add nuw nsw i64 %indvars.iv.i.i.i.i.i.i, 1
   %exitcond.not.i.i.i.i.i.i = icmp eq i64 %indvars.iv.next.i.i.i.i.i.i, %conv20.i.i.i.i.i.i.i
-  br i1 %exitcond.not.i.i.i.i.i.i, label %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i, label %for.body.i.i.i.i.i.i, !llvm.loop !271
+  br i1 %exitcond.not.i.i.i.i.i.i, label %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i, label %for.body.i.i.i.i.i.i, !llvm.loop !283
 
 _ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i: ; preds = %for.body.i.i.i.i.i.i, %_ZN11LightMatrixIdE6resizeEii.exit.thread.i.i.i.i.i.i
   %is_data_owner_.i.i.i.i.i.i = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__cur.011.i.i.i.i, i64 0, i32 0
@@ -11414,7 +11476,7 @@ _ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i: ; preds = %for
   %incdec.ptr.i.i.i.i = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__first.addr.08.i.i.i.i, i64 1
   %incdec.ptr1.i.i.i.i = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__cur.011.i.i.i.i, i64 1
   %cmp.not.i.i.i.i = icmp eq %class.LightMatrix* %incdec.ptr.i.i.i.i, %0
-  br i1 %cmp.not.i.i.i.i, label %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit, label %for.body.i.i.i.i, !llvm.loop !272
+  br i1 %cmp.not.i.i.i.i, label %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit, label %for.body.i.i.i.i, !llvm.loop !284
 
 _ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit: ; preds = %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i, %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit79
   %__cur.0.lcssa.i.i.i.i = phi %class.LightMatrix* [ %incdec.ptr, %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit79 ], [ %incdec.ptr1.i.i.i.i, %_ZSt10_ConstructI11LightMatrixIdEJRKS1_EEvPT_DpOT0_.exit.i.i.i.i ]
@@ -11442,7 +11504,7 @@ delete.notnull.i.i.i.i.i:                         ; preds = %land.lhs.true.i.i.i
 _ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i:   ; preds = %delete.notnull.i.i.i.i.i, %land.lhs.true.i.i.i.i.i, %for.body.i.i.i
   %incdec.ptr.i.i.i = getelementptr inbounds %class.LightMatrix, %class.LightMatrix* %__first.addr.04.i.i.i, i64 1
   %cmp.not.i.i.i = icmp eq %class.LightMatrix* %incdec.ptr.i.i.i, %0
-  br i1 %cmp.not.i.i.i, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit, label %for.body.i.i.i, !llvm.loop !268
+  br i1 %cmp.not.i.i.i, label %_ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit, label %for.body.i.i.i, !llvm.loop !280
 
 _ZSt8_DestroyIP11LightMatrixIdES1_EvT_S3_RSaIT0_E.exit: ; preds = %_ZSt8_DestroyI11LightMatrixIdEEvPT_.exit.i.i.i, %_ZSt34__uninitialized_move_if_noexcept_aIP11LightMatrixIdES2_SaIS1_EET0_T_S5_S4_RT1_.exit
   %tobool.not.i = icmp eq %class.LightMatrix* %1, null
@@ -11828,85 +11890,191 @@ entry:
   %call.i = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  tail call void @to_pose_params(i32 %bone_count, double* %theta, i8** undef, %struct.Matrix* %0)
-  %call.i39 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
-  %1 = bitcast i8* %call.i39 to %struct.Matrix*
-  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
-  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %1)
-  %cmp45 = icmp sgt i32 %corresp_count, 0
-  br i1 %cmp45, label %for.cond2.preheader.lr.ph, label %for.end19
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !201)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !204)
+  %theta99.i = bitcast double* %theta to i8*
+  %add.i = add nsw i32 %bone_count, 3
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %1 = bitcast i8* %ncols2.i.i to i32*
+  %mul3.i.i = mul i32 %add.i, 3
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
 
-for.cond2.preheader.lr.ph:                        ; preds = %entry
+if.end.i.i:                                       ; preds = %entry
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !206
+  %3 = bitcast i8* %data.i.i to i8**
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  %4 = bitcast i8* %call.i.i to double*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !206
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ]
+  %6 = bitcast double* %5 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %6, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !204
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %tiv3 = phi i64 [ %tiv.next4, %for.body.i ], [ 0, %fill.exit.i ]
+  %tiv.next4 = add nuw nsw i64 %tiv3, 1
+  %7 = add nuw nsw i64 %tiv3, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %5, i64 %7
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !206
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %7
+  %8 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %9 = add nuw nsw i64 %tiv3, 6
+  %arrayidx16.i = getelementptr inbounds double, double* %5, i64 %9
+  store double %8, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !206
+  %exitcond105.not.i = icmp eq i64 %tiv.next4, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i:                           ; preds = %for.body.i, %for.end45.i
+  %tiv1 = phi i64 [ %tiv.next2, %for.end45.i ], [ 0, %for.body.i ]
+  %i_pose_params.093.i = phi i32 [ %inc46.i, %for.end45.i ], [ 5, %for.body.i ]
+  %i_theta.092.i = phi i32 [ %i_theta.2.i.lcssa, %for.end45.i ], [ 6, %for.body.i ]
+  %10 = trunc i64 %tiv1 to i32
+  %tiv.next2 = add nuw nsw i64 %tiv1, 1
+  %11 = sext i32 %i_pose_params.093.i to i64
+  %12 = add i32 %i_pose_params.093.i, 3
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %indvars.iv.i = phi i64 [ %11, %for.cond20.preheader.i ], [ %indvars.iv.next.i, %if.end.i ]
+  %i.191.i = phi i32 [ 2, %for.cond20.preheader.i ], [ %inc44.i, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i
+  %13 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %14 = mul nsw i64 %indvars.iv.i, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %5, i64 %14
+  store double %13, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !206
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %cmp32.i = icmp eq i32 %i.191.i, 2
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i
+  %15 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204
+  %16 = add nsw i64 %14, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %5, i64 %16
+  store double %15, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !206
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %indvars.iv.next.i = add nsw i64 %indvars.iv.i, 1
+  %inc44.i = add nuw nsw i32 %i.191.i, 1
+  %lftr.wideiv1 = trunc i64 %indvars.iv.next.i to i32
+  %exitcond = icmp eq i32 %12, %lftr.wideiv1
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %indvars.iv.i.lcssa = phi i64 [ %indvars.iv.i, %if.end.i ]
+  %17 = trunc i64 %indvars.iv.i.lcssa to i32
+  %inc46.i = add nsw i32 %17, 2
+  %exitcond98.not.i = icmp eq i32 %10, 4
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
+  %call.i39 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
+  %18 = bitcast i8* %call.i39 to %struct.Matrix*
+  tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
+  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %18)
+  %cmp49 = icmp sgt i32 %corresp_count, 0
+  br i1 %cmp49, label %for.cond2.preheader.lr.ph, label %if.then.i41
+
+for.cond2.preheader.lr.ph:                        ; preds = %to_pose_params.exit
   %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 2
-  %2 = load double*, double** %data, align 8, !tbaa !137
+  %19 = load double*, double** %data, align 8, !tbaa !137
   %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 0
-  %3 = load i32, i32* %nrows, align 8, !tbaa !138
+  %20 = load i32, i32* %nrows, align 8, !tbaa !138
   %data5 = getelementptr inbounds i8, i8* %call.i39, i64 8
-  %4 = bitcast i8* %data5 to double**
-  %5 = load double*, double** %4, align 8, !tbaa !137
+  %21 = bitcast i8* %data5 to double**
+  %22 = load double*, double** %21, align 8, !tbaa !137
   %nrows8 = bitcast i8* %call.i39 to i32*
-  %6 = load i32, i32* %nrows8, align 8, !tbaa !138
-  %7 = sext i32 %3 to i64
+  %23 = load i32, i32* %nrows8, align 8, !tbaa !138
+  %24 = sext i32 %20 to i64
   %wide.trip.count = zext i32 %corresp_count to i64
   br label %for.cond2.preheader
 
 for.cond2.preheader:                              ; preds = %for.inc17, %for.cond2.preheader.lr.ph
   %tiv = phi i64 [ %tiv.next, %for.inc17 ], [ 0, %for.cond2.preheader.lr.ph ]
   %tiv.next = add nuw nsw i64 %tiv, 1
-  %8 = mul nsw i64 %tiv, %7
+  %25 = mul nsw i64 %tiv, %24
   %arrayidx7 = getelementptr inbounds i32, i32* %correspondences, i64 %tiv
-  %9 = load i32, i32* %arrayidx7, align 4, !tbaa !59
-  %mul9 = mul nsw i32 %6, %9
-  %10 = mul nuw nsw i64 %tiv, 3
-  %11 = sext i32 %mul9 to i64
+  %26 = load i32, i32* %arrayidx7, align 4, !tbaa !59
+  %mul9 = mul nsw i32 %23, %26
+  %27 = mul nuw nsw i64 %tiv, 3
+  %28 = sext i32 %mul9 to i64
   br label %for.body4
 
 for.body4:                                        ; preds = %for.body4, %for.cond2.preheader
   %indvars.iv = phi i64 [ 0, %for.cond2.preheader ], [ %indvars.iv.next, %for.body4 ]
-  %12 = add nsw i64 %8, %indvars.iv
-  %arrayidx = getelementptr inbounds double, double* %2, i64 %12
-  %13 = load double, double* %arrayidx, align 8, !tbaa !75
-  %14 = add nsw i64 %indvars.iv, %11
-  %arrayidx12 = getelementptr inbounds double, double* %5, i64 %14
-  %15 = load double, double* %arrayidx12, align 8, !tbaa !75
-  %sub = fsub fast double %13, %15
-  %16 = add nuw nsw i64 %indvars.iv, %10
-  %arrayidx16 = getelementptr inbounds double, double* %err, i64 %16
+  %29 = add nsw i64 %25, %indvars.iv
+  %arrayidx = getelementptr inbounds double, double* %19, i64 %29
+  %30 = load double, double* %arrayidx, align 8, !tbaa !75
+  %31 = add nsw i64 %indvars.iv, %28
+  %arrayidx12 = getelementptr inbounds double, double* %22, i64 %31
+  %32 = load double, double* %arrayidx12, align 8, !tbaa !75
+  %sub = fsub fast double %30, %32
+  %33 = add nuw nsw i64 %indvars.iv, %27
+  %arrayidx16 = getelementptr inbounds double, double* %err, i64 %33
   store double %sub, double* %arrayidx16, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.inc17, label %for.body4, !llvm.loop !204
+  br i1 %exitcond.not, label %for.inc17, label %for.body4, !llvm.loop !210
 
 for.inc17:                                        ; preds = %for.body4
-  %exitcond54.not = icmp eq i64 %tiv.next, %wide.trip.count
-  br i1 %exitcond54.not, label %for.end19, label %for.cond2.preheader, !llvm.loop !205
+  %exitcond58.not = icmp eq i64 %tiv.next, %wide.trip.count
+  br i1 %exitcond58.not, label %for.end19, label %for.cond2.preheader, !llvm.loop !211
 
-for.end19:                                        ; preds = %for.inc17, %entry
-  %data.i = getelementptr inbounds i8, i8* %call.i, i64 8
-  %17 = bitcast i8* %data.i to double**
-  %18 = load double*, double** %17, align 8, !tbaa !137
-  %cmp.not.i = icmp eq double* %18, null
-  br i1 %cmp.not.i, label %delete_matrix.exit, label %if.then.i
+for.end19:                                        ; preds = %for.inc17
+  %cmp.not.i = icmp eq double* %5, null
+  br i1 %cmp.not.i, label %delete_matrix.exit, label %if.then.i41
 
-if.then.i:                                        ; preds = %for.end19
-  %19 = bitcast double* %18 to i8*
-  tail call void @free(i8* %19) #31
+if.then.i41:                                      ; preds = %for.end19, %to_pose_params.exit
+  tail call void @free(i8* %6) #31
   br label %delete_matrix.exit
 
-delete_matrix.exit:                               ; preds = %if.then.i, %for.end19
-  tail call void @free(i8* nonnull %call.i) #31
-  %data.i40 = getelementptr inbounds i8, i8* %call.i39, i64 8
-  %20 = bitcast i8* %data.i40 to double**
-  %21 = load double*, double** %20, align 8, !tbaa !137
-  %cmp.not.i41 = icmp eq double* %21, null
-  br i1 %cmp.not.i41, label %delete_matrix.exit43, label %if.then.i42
+delete_matrix.exit:                               ; preds = %if.then.i41, %for.end19
+  tail call void @free(i8* %call.i) #31
+  %data.i43 = getelementptr inbounds i8, i8* %call.i39, i64 8
+  %34 = bitcast i8* %data.i43 to double**
+  %35 = load double*, double** %34, align 8, !tbaa !137
+  %cmp.not.i44 = icmp eq double* %35, null
+  br i1 %cmp.not.i44, label %delete_matrix.exit47, label %if.then.i45
 
-if.then.i42:                                      ; preds = %delete_matrix.exit
-  %22 = bitcast double* %21 to i8*
-  tail call void @free(i8* %22) #31
-  br label %delete_matrix.exit43
+if.then.i45:                                      ; preds = %delete_matrix.exit
+  %36 = bitcast double* %35 to i8*
+  tail call void @free(i8* %36) #31
+  br label %delete_matrix.exit47
 
-delete_matrix.exit43:                             ; preds = %if.then.i42, %delete_matrix.exit
+delete_matrix.exit47:                             ; preds = %if.then.i45, %delete_matrix.exit
   tail call void @free(i8* nonnull %call.i39) #31
   ret void
 }
@@ -11917,70 +12085,469 @@ entry:
   %call.i = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i'mi", i8 0, i64 16, i1 false)
-  %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
+  %"'ipc29" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  %_augmented7 = call { i8*, i8*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc"), !node !273
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !201)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !204)
+  %theta99.i = bitcast double* %theta to i8*, !node !285
+  %add.i = add nsw i32 %bone_count, 3, !node !285
+  %"nrows1.i.i'ipc" = bitcast i8* %"call.i'mi" to i32*
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %"ncols2.i.i'ipg" = getelementptr inbounds i8, i8* %"call.i'mi", i64 4
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %"'ipc" = bitcast i8* %"ncols2.i.i'ipg" to i32*, !node !285
+  %1 = bitcast i8* %ncols2.i.i to i32*, !node !285
+  %mul3.i.i = mul i32 %add.i, 3, !node !285
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
+
+if.end.i.i:                                       ; preds = %entry
+  %"data.i.i'ipg" = getelementptr inbounds i8, i8* %"call.i'mi", i64 8
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %"'ipc11" = bitcast i8* %"data.i.i'ipg" to double**
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %"'ipc11", align 8
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64, !node !285
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3, !node !285
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !206, !node !285
+  %"call.i.i'mi" = tail call noalias nonnull i8* @malloc(i64 %mul11.i.i) #31, !node !285
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %"call.i.i'mi", i8 0, i64 %mul11.i.i, i1 false), !node !285
+  %"'ipc12" = bitcast i8* %"data.i.i'ipg" to i8**, !node !285
+  %3 = bitcast i8* %data.i.i to i8**, !node !285
+  store i8* %"call.i.i'mi", i8** %"'ipc12", align 8
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !204, !noalias !201
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !204, !noalias !201
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !204, !noalias !201
+  %"'ipc13" = bitcast i8* %"call.i.i'mi" to double*, !node !285
+  %4 = bitcast i8* %call.i.i to double*, !node !285
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !206, !node !285
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %call.i.i_cache.0 = phi i8* [ undef, %resize.exit.fill.exit_crit_edge.i ], [ %call.i.i, %for.body.lr.ph.i.i ], [ undef, %resize.exit.thread87.i ]
+  %"call.i.i'mi_cache.0" = phi i8* [ undef, %resize.exit.fill.exit_crit_edge.i ], [ %"call.i.i'mi", %for.body.lr.ph.i.i ], [ undef, %resize.exit.thread87.i ]
+  %forward_mem.0 = phi i32 [ 9, %resize.exit.fill.exit_crit_edge.i ], [ 13, %for.body.lr.ph.i.i ], [ 11, %resize.exit.thread87.i ]
+  %forward_op.0 = phi i32 [ 2, %resize.exit.fill.exit_crit_edge.i ], [ 3, %for.body.lr.ph.i.i ], [ 2, %resize.exit.thread87.i ]
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %"'ipc13", %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ], !node !285
+  %6 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ], !node !285
+  %7 = bitcast double* %6 to i8*, !node !285
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %7, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !204, !node !285
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %forward_mem.1 = phi i32 [ %forward_mem.0, %fill.exit.i ], [ %inc111, %for.body.i ]
+  %forward_op.1 = phi i32 [ %forward_op.0, %fill.exit.i ], [ %inc109, %for.body.i ]
+  %iv = phi i64 [ 0, %fill.exit.i ], [ %iv.next, %for.body.i ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %8 = add nuw nsw i64 %iv, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %6, i64 %8, !node !285
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !206
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %8, !node !285
+  %9 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204, !node !285
+  %10 = add nuw nsw i64 %iv, 6
+  %inc109 = add i32 %forward_op.1, 3
+  %arrayidx16.i = getelementptr inbounds double, double* %6, i64 %10, !node !285
+  %inc111 = add i32 %forward_mem.1, 3
+  store double %9, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !206
+  %exitcond105.not.i = icmp eq i64 %iv.next, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i.preheader, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i.preheader:                 ; preds = %for.body.i
+  %forward_mem.1.lcssa = phi i32 [ %forward_mem.1, %for.body.i ]
+  %inc109.lcssa = phi i32 [ %inc109, %for.body.i ]
+  %malloccall = tail call noalias nonnull dereferenceable(20) dereferenceable_or_null(20) i8* @malloc(i64 20)
+  %i_pose_params.093.i_malloccache = bitcast i8* %malloccall to i32*
+  %malloccall20 = tail call noalias nonnull dereferenceable(60) dereferenceable_or_null(60) i8* @malloc(i64 60)
+  %i_theta.189.i_malloccache = bitcast i8* %malloccall20 to i32*
+  %inc115 = add i32 %forward_mem.1.lcssa, 5
+  br label %for.cond20.preheader.i
+
+for.cond20.preheader.i:                           ; preds = %for.end45.i, %for.cond20.preheader.i.preheader
+  %forward_mem.2 = phi i32 [ %inc115, %for.cond20.preheader.i.preheader ], [ %forward_mem.4.lcssa, %for.end45.i ]
+  %forward_op.2 = phi i32 [ %inc109.lcssa, %for.cond20.preheader.i.preheader ], [ %inc161, %for.end45.i ]
+  %iv1 = phi i64 [ 0, %for.cond20.preheader.i.preheader ], [ %iv.next2, %for.end45.i ]
+  %i_pose_params.093.i = phi i32 [ 5, %for.cond20.preheader.i.preheader ], [ %inc46.i, %for.end45.i ]
+  %i_theta.092.i = phi i32 [ 6, %for.cond20.preheader.i.preheader ], [ %i_theta.2.i.lcssa, %for.end45.i ]
+  %11 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %iv1
+  %inc119 = add i32 %forward_mem.2, 2
+  store i32 %i_pose_params.093.i, i32* %11, align 4, !invariant.group !286
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %12 = trunc i64 %iv1 to i32
+  %13 = sext i32 %i_pose_params.093.i to i64
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %forward_mem.3 = phi i32 [ %inc119, %for.cond20.preheader.i ], [ %forward_mem.4, %if.end.i ]
+  %forward_op.3.in = phi i32 [ %forward_op.2, %for.cond20.preheader.i ], [ %forward_op.4, %if.end.i ]
+  %iv3 = phi i64 [ 0, %for.cond20.preheader.i ], [ %iv.next4, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %14 = trunc i64 %iv3 to i32
+  %15 = add i64 %iv3, %13
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i, !node !285
+  %16 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204, !node !285
+  %17 = mul nsw i64 %15, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %6, i64 %17, !node !285
+  store double %16, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !206
+  %18 = mul nuw nsw i64 %iv1, 3
+  %19 = add nuw nsw i64 %iv3, %18
+  %20 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %19
+  %inc143 = add i32 %forward_mem.3, 4
+  store i32 %i_theta.189.i, i32* %20, align 4, !invariant.group !287
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %inc145 = add i32 %forward_op.3.in, 9
+  %cmp32.i = icmp eq i32 %14, 0
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i, !node !285
+  %21 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !201, !noalias !204, !node !285
+  %22 = add nsw i64 %17, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %6, i64 %22, !node !285
+  %inc151 = add i32 %forward_mem.3, 6
+  store double %21, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !206
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  %inc153 = add i32 %forward_op.3.in, 11
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %forward_mem.4 = phi i32 [ %inc151, %if.then.i ], [ %inc143, %for.body22.i ]
+  %forward_op.4 = phi i32 [ %inc153, %if.then.i ], [ %inc145, %for.body22.i ]
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %23 = trunc i64 %15 to i32
+  %24 = add nsw i32 %i_pose_params.093.i, 2
+  %exitcond = icmp eq i32 %24, %23
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %forward_mem.4.lcssa = phi i32 [ %forward_mem.4, %if.end.i ]
+  %forward_op.4.lcssa = phi i32 [ %forward_op.4, %if.end.i ]
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %.lcssa = phi i64 [ %15, %if.end.i ]
+  %25 = trunc i64 %.lcssa to i32
+  %inc46.i = add nsw i32 %25, 2
+  %inc161 = add i32 %forward_op.4.lcssa, 4
+  %exitcond98.not.i = icmp eq i32 %12, 4
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
+  %inc161.lcssa = phi i32 [ %inc161, %for.end45.i ]
+  %forward_mem.4.lcssa.lcssa = phi i32 [ %forward_mem.4.lcssa, %for.end45.i ]
+  %forward_op.4.lcssa.lcssa = phi i32 [ %forward_op.4.lcssa, %for.end45.i ]
   %call.i39 = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i39'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i39'mi", i8 0, i64 16, i1 false)
-  %"'ipc6" = bitcast i8* %"call.i39'mi" to %struct.Matrix*
-  %1 = bitcast i8* %call.i39 to %struct.Matrix*
+  %"'ipc30" = bitcast i8* %"call.i39'mi" to %struct.Matrix*
+  %26 = bitcast i8* %call.i39 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i39, i8 0, i64 16, i1 false) #31
-  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc6"), !node !273
-  %cmp45 = icmp sgt i32 %corresp_count, 0
-  br i1 %cmp45, label %for.cond2.preheader.lr.ph, label %invertentry
+  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc29", %struct.Matrix* nonnull %26, %struct.Matrix* nonnull %"'ipc30"), !node !285
+  %cmp49 = icmp sgt i32 %corresp_count, 0
+  br i1 %cmp49, label %for.cond2.preheader.lr.ph, label %if.then.i41
 
-for.cond2.preheader.lr.ph:                        ; preds = %entry
-  %wide.trip.count = zext i32 %corresp_count to i64, !node !273
-  %wide.trip.count_unwrap = zext i32 %corresp_count to i64
-  br label %invertfor.inc17
+for.cond2.preheader.lr.ph:                        ; preds = %to_pose_params.exit
+  %inc165 = add i32 %forward_mem.4.lcssa.lcssa, 2
+  %wide.trip.count = zext i32 %corresp_count to i64, !node !285
+  %inc167 = add i32 %forward_op.4.lcssa.lcssa, 5
+  br label %for.cond2.preheader
 
-invertentry:                                      ; preds = %invertfor.cond2.preheader, %entry
-  call fastcc void @diffe_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc6", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %_augmented)
-  tail call void @free(i8* nonnull %"call.i39'mi")
-  tail call void @free(i8* nonnull %call.i39)
-  call void @diffeto_pose_params(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %_augmented7)
+for.cond2.preheader:                              ; preds = %for.inc17, %for.cond2.preheader.lr.ph
+  %forward_mem.5 = phi i32 [ %inc165, %for.cond2.preheader.lr.ph ], [ %inc171, %for.inc17 ]
+  %forward_op.5 = phi i32 [ %inc167, %for.cond2.preheader.lr.ph ], [ %inc181.lcssa, %for.inc17 ]
+  %iv6 = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next7, %for.inc17 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc171 = add i32 %forward_mem.5, 1
+  %inc175 = add i32 %forward_op.5, 3
+  br label %for.body4
+
+for.body4:                                        ; preds = %for.body4, %for.cond2.preheader
+  %forward_op.6 = phi i32 [ %inc175, %for.cond2.preheader ], [ %inc181, %for.body4 ]
+  %iv8 = phi i64 [ 0, %for.cond2.preheader ], [ %iv.next9, %for.body4 ]
+  %iv.next9 = add nuw nsw i64 %iv8, 1
+  %inc181 = add i32 %forward_op.6, 3
+  %exitcond.not = icmp eq i64 %iv.next9, 3
+  br i1 %exitcond.not, label %for.inc17, label %for.body4, !llvm.loop !210
+
+for.inc17:                                        ; preds = %for.body4
+  %inc181.lcssa = phi i32 [ %inc181, %for.body4 ]
+  %exitcond58.not = icmp eq i64 %iv.next7, %wide.trip.count
+  br i1 %exitcond58.not, label %for.end19, label %for.cond2.preheader, !llvm.loop !211
+
+for.end19:                                        ; preds = %for.inc17
+  %forward_mem.5.lcssa = phi i32 [ %forward_mem.5, %for.inc17 ]
+  %inc181.lcssa.lcssa = phi i32 [ %inc181.lcssa, %for.inc17 ]
+  %cmp.not.i = icmp eq double* %6, null
+  %inc183 = add i32 %forward_mem.5.lcssa, 2
+  br i1 %cmp.not.i, label %invertdelete_matrix.exit47, label %if.then.i41
+
+if.then.i41:                                      ; preds = %for.end19, %to_pose_params.exit
+  %forward_mem.6 = phi i32 [ %inc183, %for.end19 ], [ %forward_mem.4.lcssa.lcssa, %to_pose_params.exit ]
+  %forward_op.7 = phi i32 [ %inc181.lcssa.lcssa, %for.end19 ], [ %inc161.lcssa, %to_pose_params.exit ]
+  %inc185 = add i32 %forward_mem.6, 1
+  br label %invertdelete_matrix.exit47
+
+invertentry:                                      ; preds = %invertfill.exit.i, %invertfor.body.lr.ph.i.i
+  %reverse_mem.0 = phi i32 [ %inc195, %invertfor.body.lr.ph.i.i ], [ %inc229.lcssa, %invertfill.exit.i ]
+  %inc231 = add i32 %reverse_op.0.lcssa, 5
+  %inc187 = add i32 %forward_mem.7, 1
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* nonnull %call.i)
+  %27 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.8, i32 %inc231, i32 %inc187, i32 %reverse_mem.0)
   ret void
 
+invertfor.body.lr.ph.i.i:                         ; preds = %invertfill.exit.i
+  tail call void @free(i8* nonnull %"call.i.i'mi_cache.0"), !node !285
+  %inc195 = add i32 %reverse_mem.2.lcssa, 15
+  tail call void @free(i8* %call.i.i_cache.0), !node !285
+  br label %invertentry
+
+invertfill.exit.i:                                ; preds = %invertfor.body.i
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body.i ]
+  %reverse_op.0.lcssa = phi i32 [ %reverse_op.0, %invertfor.body.i ]
+  %inc229.lcssa = phi i32 [ %inc229, %invertfor.body.i ]
+  call void @__enzyme_memcpyadd_doubleda8sa8(double* %5, double* %"theta'", i64 3), !node !285
+  %cmp.not.i.i.not = xor i1 %cmp.not.i.i, true
+  %cmp8.i.i_unwrap = icmp sgt i32 %mul3.i.i, 0
+  %or.cond = and i1 %cmp.not.i.i.not, %cmp8.i.i_unwrap
+  br i1 %or.cond, label %invertfor.body.lr.ph.i.i, label %invertentry
+
+invertfor.body.i:                                 ; preds = %invertfor.cond20.preheader.i.preheader, %incinvertfor.body.i
+  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond20.preheader.i.preheader ], [ %32, %incinvertfor.body.i ]
+  %reverse_mem.2 = phi i32 [ %inc249, %invertfor.cond20.preheader.i.preheader ], [ %inc237, %incinvertfor.body.i ]
+  %reverse_op.0 = phi i32 [ %inc253.lcssa, %invertfor.cond20.preheader.i.preheader ], [ %inc235, %incinvertfor.body.i ]
+  %_unwrap = add nuw nsw i64 %"iv'ac.0", 6
+  %"arrayidx16.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap, !node !285
+  %28 = load double, double* %"arrayidx16.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx16.i'ipg_unwrap", align 8
+  %_unwrap15 = add nuw nsw i64 %"iv'ac.0", 3
+  %"arrayidx10.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %_unwrap15, !node !285
+  %29 = load double, double* %"arrayidx10.i'ipg_unwrap", align 8, !node !285
+  %30 = fadd fast double %29, %28, !node !285
+  store double %30, double* %"arrayidx10.i'ipg_unwrap", align 8
+  %"arrayidx7.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap15, !node !285
+  store double 0.000000e+00, double* %"arrayidx7.i'ipg_unwrap", align 8
+  %inc229 = add i32 %reverse_mem.2, 13
+  %31 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %31, label %invertfill.exit.i, label %incinvertfor.body.i
+
+incinvertfor.body.i:                              ; preds = %invertfor.body.i
+  %32 = add nsw i64 %"iv'ac.0", -1
+  %inc235 = add i32 %reverse_op.0, 6
+  %inc237 = add i32 %reverse_mem.2, 15
+  br label %invertfor.body.i
+
+invertfor.cond20.preheader.i.preheader:           ; preds = %invertfor.cond20.preheader.i
+  %inc253.lcssa = phi i32 [ %inc253, %invertfor.cond20.preheader.i ]
+  %reverse_mem.3.lcssa.lcssa = phi i32 [ %reverse_mem.3.lcssa, %invertfor.cond20.preheader.i ]
+  tail call void @free(i8* nonnull %malloccall)
+  tail call void @free(i8* nonnull %malloccall20)
+  %inc249 = add i32 %reverse_mem.3.lcssa.lcssa, 27
+  br label %invertfor.body.i
+
+invertfor.cond20.preheader.i:                     ; preds = %invertfor.body22.i
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body22.i ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.body22.i ]
+  %33 = icmp eq i64 %"iv1'ac.0", 0
+  %inc253 = add i32 %reverse_op.1.lcssa, 8
+  br i1 %33, label %invertfor.cond20.preheader.i.preheader, label %incinvertfor.cond20.preheader.i
+
+incinvertfor.cond20.preheader.i:                  ; preds = %invertfor.cond20.preheader.i
+  %34 = add nsw i64 %"iv1'ac.0", -1
+  %inc257 = add i32 %reverse_op.1.lcssa, 9
+  %inc259 = add i32 %reverse_mem.3.lcssa, 23
+  br label %invertfor.end45.i
+
+invertfor.body22.i:                               ; preds = %invertif.end.i, %invertif.then.i
+  %reverse_mem.3 = phi i32 [ %inc373, %invertif.then.i ], [ %inc377, %invertif.end.i ]
+  %reverse_op.1 = phi i32 [ %inc371, %invertif.then.i ], [ %inc379, %invertif.end.i ]
+  %35 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %"iv1'ac.0"
+  %36 = load i32, i32* %35, align 4, !invariant.group !286
+  %_unwrap16 = sext i32 %36 to i64
+  %_unwrap17 = add i64 %"iv3'ac.0", %_unwrap16
+  %_unwrap18 = mul nsw i64 %_unwrap17, 3
+  %"arrayidx30.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap18, !node !285
+  %37 = load double, double* %"arrayidx30.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx30.i'ipg_unwrap", align 8
+  %38 = mul nuw nsw i64 %"iv1'ac.0", 3
+  %39 = add nuw nsw i64 %"iv3'ac.0", %38
+  %40 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %39
+  %41 = load i32, i32* %40, align 4, !invariant.group !287
+  %idxprom23.i_unwrap = sext i32 %41 to i64
+  %"arrayidx24.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23.i_unwrap, !node !285
+  %42 = load double, double* %"arrayidx24.i'ipg_unwrap", align 8, !node !285
+  %43 = fadd fast double %42, %37, !node !285
+  store double %43, double* %"arrayidx24.i'ipg_unwrap", align 8
+  %44 = icmp eq i64 %"iv3'ac.0", 0
+  br i1 %44, label %invertfor.cond20.preheader.i, label %incinvertfor.body22.i
+
+incinvertfor.body22.i:                            ; preds = %invertfor.body22.i
+  %inc315 = add i32 %reverse_mem.3, 21
+  %45 = add nsw i64 %"iv3'ac.0", -1
+  %inc317 = add i32 %reverse_op.1, 8
+  br label %invertif.end.i
+
+invertif.then.i:                                  ; preds = %invertif.end.i
+  %46 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %"iv1'ac.0"
+  %47 = load i32, i32* %46, align 4, !invariant.group !286
+  %_unwrap22 = sext i32 %47 to i64
+  %_unwrap23 = add i64 %"iv3'ac.0", %_unwrap22
+  %_unwrap24 = mul nsw i64 %_unwrap23, 3
+  %_unwrap25 = add nsw i64 %_unwrap24, 1
+  %"arrayidx40.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap25, !node !285
+  %48 = load double, double* %"arrayidx40.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx40.i'ipg_unwrap", align 8
+  %49 = mul nuw nsw i64 %"iv1'ac.0", 3
+  %50 = add nuw nsw i64 %"iv3'ac.0", %49
+  %51 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %50
+  %52 = load i32, i32* %51, align 4, !invariant.group !287
+  %inc31.i_unwrap = add nsw i32 %52, 1
+  %idxprom33.i_unwrap = sext i32 %inc31.i_unwrap to i64
+  %"arrayidx34.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33.i_unwrap, !node !285
+  %53 = load double, double* %"arrayidx34.i'ipg_unwrap", align 8, !node !285
+  %54 = fadd fast double %53, %48, !node !285
+  %inc371 = add i32 %reverse_op.2, 9
+  %inc373 = add i32 %reverse_mem.4.in, 22
+  store double %54, double* %"arrayidx34.i'ipg_unwrap", align 8
+  br label %invertfor.body22.i
+
+invertif.end.i:                                   ; preds = %invertfor.end45.i, %incinvertfor.body22.i
+  %"iv3'ac.0" = phi i64 [ 2, %invertfor.end45.i ], [ %45, %incinvertfor.body22.i ]
+  %reverse_mem.4.in = phi i32 [ %reverse_mem.5, %invertfor.end45.i ], [ %inc315, %incinvertfor.body22.i ]
+  %reverse_op.2 = phi i32 [ %reverse_op.3, %invertfor.end45.i ], [ %inc317, %incinvertfor.body22.i ]
+  %inc377 = add i32 %reverse_mem.4.in, 3
+  %inc379 = add i32 %reverse_op.2, 1
+  %55 = trunc i64 %"iv3'ac.0" to i32
+  %cmp32.i_unwrap = icmp eq i32 %55, 0
+  br i1 %cmp32.i_unwrap, label %invertif.then.i, label %invertfor.body22.i
+
+invertfor.end45.i:                                ; preds = %invertto_pose_params.exit, %incinvertfor.cond20.preheader.i
+  %"iv1'ac.0" = phi i64 [ 4, %invertto_pose_params.exit ], [ %34, %incinvertfor.cond20.preheader.i ]
+  %reverse_mem.5 = phi i32 [ %reverse_mem.6, %invertto_pose_params.exit ], [ %inc259, %incinvertfor.cond20.preheader.i ]
+  %reverse_op.3 = phi i32 [ %reverse_op.4, %invertto_pose_params.exit ], [ %inc257, %incinvertfor.cond20.preheader.i ]
+  br label %invertif.end.i
+
+invertto_pose_params.exit:                        ; preds = %invertdelete_matrix.exit47, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.6 = phi i32 [ %phi.bo, %invertfor.cond2.preheader.lr.ph ], [ 2, %invertdelete_matrix.exit47 ]
+  %reverse_op.4 = phi i32 [ %inc387, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertdelete_matrix.exit47 ]
+  call fastcc void @diffe_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc29", %struct.Matrix* nonnull %26, %struct.Matrix* nonnull %"'ipc30", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %_augmented), !node !285
+  tail call void @free(i8* nonnull %"call.i39'mi")
+  tail call void @free(i8* nonnull %call.i39)
+  br label %invertfor.end45.i
+
+invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
+  %reverse_mem.7.in.lcssa.lcssa = phi i32 [ %reverse_mem.7.in.lcssa, %invertfor.cond2.preheader ]
+  %reverse_op.5.lcssa.lcssa = phi i32 [ %reverse_op.5.lcssa, %invertfor.cond2.preheader ]
+  %inc387 = add i32 %reverse_op.5.lcssa.lcssa, 9
+  %phi.bo = add i32 %reverse_mem.7.in.lcssa.lcssa, 23
+  br label %invertto_pose_params.exit
+
 invertfor.cond2.preheader:                        ; preds = %invertfor.body4
-  %2 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %2, label %invertentry, label %invertfor.inc17
+  %reverse_mem.7.in.lcssa = phi i32 [ %reverse_mem.7.in, %invertfor.body4 ]
+  %reverse_op.5.lcssa = phi i32 [ %reverse_op.5, %invertfor.body4 ]
+  %56 = icmp eq i64 %"iv6'ac.0", 0
+  br i1 %56, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
+
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc391 = add i32 %reverse_op.5.lcssa, 10
+  %inc393 = add i32 %reverse_mem.7.in.lcssa, 24
+  br label %invertfor.inc17
 
 invertfor.body4:                                  ; preds = %invertfor.inc17, %incinvertfor.body4
-  %"iv2'ac.0" = phi i64 [ 2, %invertfor.inc17 ], [ %7, %incinvertfor.body4 ]
-  %_unwrap = mul nuw nsw i64 %"iv'ac.0", 3
-  %_unwrap14 = add nuw nsw i64 %"iv2'ac.0", %_unwrap
-  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %"err'", i64 %_unwrap14
-  %3 = load double, double* %"arrayidx16'ipg_unwrap", align 8
+  %"iv8'ac.0" = phi i64 [ 2, %invertfor.inc17 ], [ %61, %incinvertfor.body4 ]
+  %reverse_mem.7.in = phi i32 [ %reverse_mem.8, %invertfor.inc17 ], [ %inc451, %incinvertfor.body4 ]
+  %reverse_op.5 = phi i32 [ %reverse_op.6, %invertfor.inc17 ], [ %inc453, %incinvertfor.body4 ]
+  %_unwrap37 = mul nuw nsw i64 %"iv6'ac.0", 3, !node !285
+  %_unwrap38 = add nuw nsw i64 %"iv8'ac.0", %_unwrap37, !node !285
+  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %"err'", i64 %_unwrap38, !node !285
+  %57 = load double, double* %"arrayidx16'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx16'ipg_unwrap", align 8
   %"data5'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i39'mi", i64 8
-  %"'ipc8_unwrap" = bitcast i8* %"data5'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !274
+  %"'ipc31_unwrap" = bitcast i8* %"data5'ipg_unwrap" to double**
+  %"'ipl_unwrap" = load double*, double** %"'ipc31_unwrap", align 8, !invariant.group !288
   %nrows8_unwrap = bitcast i8* %call.i39 to i32*
-  %_unwrap15 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !275
-  %arrayidx7_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv'ac.0"
-  %_unwrap16 = load i32, i32* %arrayidx7_unwrap, align 4, !tbaa !59, !invariant.group !276
-  %mul9_unwrap = mul nsw i32 %_unwrap15, %_unwrap16
-  %_unwrap17 = sext i32 %mul9_unwrap to i64
-  %_unwrap18 = add nsw i64 %"iv2'ac.0", %_unwrap17
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap18
-  %4 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %5 = fsub fast double %4, %3
-  store double %5, double* %"arrayidx12'ipg_unwrap", align 8
-  %6 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %6, label %invertfor.cond2.preheader, label %incinvertfor.body4
+  %_unwrap40 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !289
+  %arrayidx7_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv6'ac.0", !node !285
+  %_unwrap41 = load i32, i32* %arrayidx7_unwrap, align 4, !tbaa !59, !invariant.group !290, !node !285
+  %mul9_unwrap = mul nsw i32 %_unwrap40, %_unwrap41, !node !285
+  %_unwrap42 = sext i32 %mul9_unwrap to i64, !node !285
+  %_unwrap43 = add nsw i64 %"iv8'ac.0", %_unwrap42, !node !285
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap43, !node !285
+  %58 = load double, double* %"arrayidx12'ipg_unwrap", align 8, !node !285
+  %59 = fsub fast double %58, %57
+  store double %59, double* %"arrayidx12'ipg_unwrap", align 8
+  %60 = icmp eq i64 %"iv8'ac.0", 0
+  br i1 %60, label %invertfor.cond2.preheader, label %incinvertfor.body4
 
 incinvertfor.body4:                               ; preds = %invertfor.body4
-  %7 = add nsw i64 %"iv2'ac.0", -1
+  %inc451 = add i32 %reverse_mem.7.in, 22
+  %61 = add nsw i64 %"iv8'ac.0", -1
+  %inc453 = add i32 %reverse_op.5, 9
   br label %invertfor.body4
 
-invertfor.inc17:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+invertfor.inc17:                                  ; preds = %mergeinvertfor.cond2.preheader_for.end19, %incinvertfor.cond2.preheader
+  %"iv6'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.cond2.preheader_for.end19 ], [ %"iv6'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.8 = phi i32 [ 2, %mergeinvertfor.cond2.preheader_for.end19 ], [ %inc393, %incinvertfor.cond2.preheader ]
+  %reverse_op.6 = phi i32 [ 1, %mergeinvertfor.cond2.preheader_for.end19 ], [ %inc391, %incinvertfor.cond2.preheader ]
+  %"iv6'ac.0" = add nsw i64 %"iv6'ac.0.in", -1
   br label %invertfor.body4
+
+mergeinvertfor.cond2.preheader_for.end19:         ; preds = %invertdelete_matrix.exit47
+  %wide.trip.count_unwrap = zext i32 %corresp_count to i64, !node !285
+  br label %invertfor.inc17
+
+invertdelete_matrix.exit47:                       ; preds = %if.then.i41, %for.end19
+  %_cache.0 = phi i1 [ false, %for.end19 ], [ true, %if.then.i41 ]
+  %forward_mem.7 = phi i32 [ %inc183, %for.end19 ], [ %inc185, %if.then.i41 ]
+  %forward_op.8 = phi i32 [ %inc181.lcssa.lcssa, %for.end19 ], [ %forward_op.7, %if.then.i41 ]
+  %_cache.0.not = xor i1 %_cache.0, true
+  %brmerge = or i1 %_cache.0.not, %cmp49
+  br i1 %brmerge, label %mergeinvertfor.cond2.preheader_for.end19, label %invertto_pose_params.exit
+}
+
+; Function Attrs: argmemonly nounwind
+define internal void @__enzyme_memcpyadd_doubleda8sa8(double* nocapture %dst, double* nocapture %src, i64 %num) #30 {
+entry:
+  %0 = icmp eq i64 %num, 0
+  br i1 %0, label %for.end, label %for.body
+
+for.body:                                         ; preds = %entry, %for.body
+  %idx = phi i64 [ %idx.next, %for.body ], [ 0, %entry ]
+  %dst.i = getelementptr double, double* %dst, i64 %idx
+  %dst.i.l = load double, double* %dst.i, align 8
+  store double 0.000000e+00, double* %dst.i, align 8
+  %src.i = getelementptr double, double* %src, i64 %idx
+  %src.i.l = load double, double* %src.i, align 8
+  %1 = fadd fast double %src.i.l, %dst.i.l
+  store double %1, double* %src.i, align 8
+  %idx.next = add nuw i64 %idx, 1
+  %2 = icmp eq i64 %idx.next, %num
+  br i1 %2, label %for.end, label %for.body
+
+for.end:                                          ; preds = %for.body, %entry
+  ret void
 }
 
 ; Function Attrs: inlinehint nounwind uwtable mustprogress
@@ -12029,7 +12596,7 @@ for.body:                                         ; preds = %for.body, %for.body
   %arrayidx6 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %4, i64 %tiv9
   tail call void @mat_mult(%struct.Matrix* %arrayidx, %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6)
   %exitcond102.not = icmp eq i64 %tiv.next10, %wide.trip.count101
-  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
 
 for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
   %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
@@ -12161,16 +12728,16 @@ for.body20:                                       ; preds = %for.body20, %for.co
   store double %add36, double* %arrayidx35, align 8, !tbaa !75
   %indvars.iv.next83 = add nuw nsw i64 %indvars.iv82, 1
   %exitcond86.not = icmp eq i64 %indvars.iv.next83, 3
-  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
 
 for.inc40:                                        ; preds = %for.body20
   %indvars.iv.next88 = add nuw nsw i64 %indvars.iv87, 1
   %exitcond94.not = icmp eq i64 %indvars.iv.next88, %wide.trip.count93
-  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !208
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
 
 for.inc43:                                        ; preds = %for.inc40, %for.body11
   %exitcond98.not = icmp eq i64 %tiv.next8, %wide.trip.count97
-  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !209
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
 
 for.end45:                                        ; preds = %for.inc43, %fill.exit
   %tobool.not = icmp ne i32 %is_mirrored, 0
@@ -12193,7 +12760,7 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   %mul56 = fneg fast double %35
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %exitcond.not = icmp eq i64 %tiv.next6, %wide.trip.count
-  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
 
 if.then61:                                        ; preds = %for.body49, %for.end45
   tail call void @apply_global_transform(%struct.Matrix* %pose_params, %struct.Matrix* %positions)
@@ -12625,17 +13192,17 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %35 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %36 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %36, align 8, !invariant.group !277
+  store double* %"'ipl", double** %36, align 8, !invariant.group !291
   %37 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %35, i32* %37, align 4, !invariant.group !278
+  store i32 %35, i32* %37, align 4, !invariant.group !292
   %38 = getelementptr inbounds double*, double** %"'ipl11_malloccache", i64 %iv
-  store double* %"'ipl11", double** %38, align 8, !invariant.group !279
+  store double* %"'ipl11", double** %38, align 8, !invariant.group !293
   %39 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %39, align 8, !invariant.group !280
+  store double* %"'ipl8", double** %39, align 8, !invariant.group !294
   %40 = load double*, double** %data14, align 8, !tbaa !137
   %41 = load i32, i32* %ncols21, align 4, !tbaa !139
   %42 = getelementptr inbounds i32, i32* %_malloccache19, i64 %iv
-  store i32 %41, i32* %42, align 4, !invariant.group !281
+  store i32 %41, i32* %42, align 4, !invariant.group !295
   %cmp2281 = icmp sgt i32 %41, 1
   %43 = sext i32 %35 to i64
   %wide.trip.count = zext i32 %41 to i64
@@ -12656,9 +13223,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %49 = mul nuw nsw i64 %iv, %wide.trip.count96
   %50 = add nuw nsw i64 %iv4, %49
   %51 = getelementptr inbounds double, double* %_malloccache27, i64 %50
-  store double %46, double* %51, align 8, !invariant.group !282
+  store double %46, double* %51, align 8, !invariant.group !296
   %52 = getelementptr inbounds double, double* %_malloccache23, i64 %50
-  store double %44, double* %52, align 8, !invariant.group !283
+  store double %44, double* %52, align 8, !invariant.group !297
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -12688,12 +13255,12 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %63, %61
   %add43 = fadd fast double %58, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %64 = load double*, double** %56, align 8, !dereferenceable !284, !invariant.group !285
+  %64 = load double*, double** %56, align 8, !dereferenceable !298, !invariant.group !299
   %65 = getelementptr inbounds double, double* %64, i64 %iv6
-  store double %63, double* %65, align 8, !invariant.group !286
-  %66 = load double*, double** %53, align 8, !dereferenceable !284, !invariant.group !287
+  store double %63, double* %65, align 8, !invariant.group !300
+  %66 = load double*, double** %53, align 8, !dereferenceable !298, !invariant.group !301
   %67 = getelementptr inbounds double, double* %66, i64 %iv6
-  store double %61, double* %67, align 8, !invariant.group !288
+  store double %61, double* %67, align 8, !invariant.group !302
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -12764,7 +13331,7 @@ for.body:                                         ; preds = %for.inc, %for.body.
   %arrayidx = getelementptr inbounds i32, i32* %parents, i64 %iv
   %14 = load i32, i32* %arrayidx, align 4, !tbaa !59
   %15 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %14, i32* %15, align 4, !invariant.group !289
+  store i32 %14, i32* %15, align 4, !invariant.group !303
   %cmp1 = icmp eq i32 %14, -1
   br i1 %cmp1, label %if.then, label %if.else
 
@@ -12775,7 +13342,7 @@ if.then:                                          ; preds = %for.body
   %cmp.not.i = icmp eq double* %16, null
   %17 = getelementptr inbounds i8, i8* %malloccall12, i64 %iv
   %18 = bitcast i8* %17 to i1*
-  store i1 %cmp.not.i, i1* %18, align 1, !invariant.group !290
+  store i1 %cmp.not.i, i1* %18, align 1, !invariant.group !304
   %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv, i32 1
   %19 = load i32, i32* %ncols.i, align 4, !tbaa !139
   %"ncols2.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %iv, i32 1
@@ -12798,11 +13365,11 @@ if.then:                                          ; preds = %for.body
   %21 = bitcast double** %data.i to i8**
   store i8* %"call.i'mi", i8** %"'ipc", align 8
   %22 = getelementptr inbounds i32, i32* %mul.i_malloccache, i64 %iv
-  store i32 %mul.i, i32* %22, align 4, !invariant.group !291
+  store i32 %mul.i, i32* %22, align 4, !invariant.group !305
   %23 = getelementptr inbounds i8*, i8** %call.i_malloccache, i64 %iv
-  store i8* %call.i, i8** %23, align 8, !invariant.group !292
+  store i8* %call.i, i8** %23, align 8, !invariant.group !306
   %24 = getelementptr inbounds i8*, i8** %"call.i'mi_malloccache", i64 %iv
-  store i8* %"call.i'mi", i8** %24, align 8, !invariant.group !293
+  store i8* %"call.i'mi", i8** %24, align 8, !invariant.group !307
   store i8* %call.i, i8** %21, align 8, !tbaa !137
   %cmp1131.i = icmp sgt i32 %mul.i, 0
   %25 = bitcast i8* %call.i to double*
@@ -12813,7 +13380,7 @@ for.body.lr.ph.i:                                 ; preds = %if.then
   %data12.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv, i32 2
   %"'ipl" = load double*, double** %"data12.i'ipg", align 8
   %26 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %26, align 8, !invariant.group !294
+  store double* %"'ipl", double** %26, align 8, !invariant.group !308
   %27 = load double*, double** %data12.i, align 8, !tbaa !137
   %wide.trip.count.i = zext i32 %mul.i to i64
   br label %for.body.i
@@ -12838,7 +13405,7 @@ if.else:                                          ; preds = %for.body
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %iv
   %_augmented = call { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } @augmented_mat_mult(%struct.Matrix* %arrayidx9, %struct.Matrix* %"arrayidx9'ipg", %struct.Matrix* %arrayidx11, %struct.Matrix* %"arrayidx11'ipg", %struct.Matrix* %arrayidx13, %struct.Matrix* %"arrayidx13'ipg")
   %29 = getelementptr inbounds { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_augmented_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %_augmented, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %29, align 8, !invariant.group !295
+  store { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %_augmented, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %29, align 8, !invariant.group !309
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body.i, %if.else, %if.then
@@ -13351,7 +13918,7 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %28 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %29 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %29, align 8, !invariant.group !296
+  store double* %"'ipl", double** %29, align 8, !invariant.group !310
   %30 = load double*, double** %data14, align 8, !tbaa !137
   %31 = load i32, i32* %ncols21, align 4, !tbaa !139
   %cmp2281 = icmp sgt i32 %31, 1
@@ -13374,9 +13941,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %38 = mul nuw nsw i64 %iv, %wide.trip.count96
   %39 = add nuw nsw i64 %iv4, %38
   %40 = getelementptr inbounds double, double* %_malloccache15, i64 %39
-  store double %35, double* %40, align 8, !invariant.group !297
+  store double %35, double* %40, align 8, !invariant.group !311
   %41 = getelementptr inbounds double, double* %_malloccache, i64 %39
-  store double %33, double* %41, align 8, !invariant.group !298
+  store double %33, double* %41, align 8, !invariant.group !312
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -13398,9 +13965,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %50 = mul nuw nsw i64 %iv, %20
   %51 = add nuw nsw i64 %49, %50
   %52 = getelementptr inbounds double, double* %_malloccache24, i64 %51
-  store double %47, double* %52, align 8, !invariant.group !299
+  store double %47, double* %52, align 8, !invariant.group !313
   %53 = getelementptr inbounds double, double* %_malloccache20, i64 %51
-  store double %45, double* %53, align 8, !invariant.group !300
+  store double %45, double* %53, align 8, !invariant.group !314
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -13549,9 +14116,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %35 = mul nuw nsw i64 %iv, %wide.trip.count96
   %36 = add nuw nsw i64 %iv4, %35
   %37 = getelementptr inbounds double, double* %_malloccache13, i64 %36
-  store double %32, double* %37, align 8, !invariant.group !301
+  store double %32, double* %37, align 8, !invariant.group !315
   %38 = getelementptr inbounds double, double* %_malloccache, i64 %36
-  store double %30, double* %38, align 8, !invariant.group !302
+  store double %30, double* %38, align 8, !invariant.group !316
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -13573,9 +14140,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %47 = mul nuw nsw i64 %iv, %18
   %48 = add nuw nsw i64 %46, %47
   %49 = getelementptr inbounds double, double* %_malloccache22, i64 %48
-  store double %44, double* %49, align 8, !invariant.group !303
+  store double %44, double* %49, align 8, !invariant.group !317
   %50 = getelementptr inbounds double, double* %_malloccache18, i64 %48
-  store double %42, double* %50, align 8, !invariant.group !304
+  store double %42, double* %50, align 8, !invariant.group !318
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14027,11 +14594,11 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %24 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %25 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %25, align 8, !invariant.group !305
+  store double* %"'ipl", double** %25, align 8, !invariant.group !319
   %26 = load double*, double** %data14, align 8, !tbaa !137
   %27 = load i32, i32* %ncols21, align 4, !tbaa !139
   %28 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %27, i32* %28, align 4, !invariant.group !306
+  store i32 %27, i32* %28, align 4, !invariant.group !320
   %cmp2281 = icmp sgt i32 %27, 1
   %29 = sext i32 %24 to i64
   %wide.trip.count = zext i32 %27 to i64
@@ -14052,7 +14619,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %35 = mul nuw nsw i64 %iv, %wide.trip.count96
   %36 = add nuw nsw i64 %iv4, %35
   %37 = getelementptr inbounds double, double* %_malloccache14, i64 %36
-  store double %30, double* %37, align 8, !invariant.group !307
+  store double %30, double* %37, align 8, !invariant.group !321
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14078,9 +14645,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %46, %44
   %add43 = fadd fast double %41, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %47 = load double*, double** %38, align 8, !dereferenceable !284, !invariant.group !308
+  %47 = load double*, double** %38, align 8, !dereferenceable !298, !invariant.group !322
   %48 = getelementptr inbounds double, double* %47, i64 %iv6
-  store double %44, double* %48, align 8, !invariant.group !309
+  store double %44, double* %48, align 8, !invariant.group !323
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14310,7 +14877,7 @@ set_identity.exit:                                ; preds = %for.inc12.i
   store double %_augmented.elt30, double* %.repack29, align 8
   %36 = load i32, i32* %10, align 4, !tbaa !139
   %37 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %36, i32* %37, align 4, !invariant.group !310
+  store i32 %36, i32* %37, align 4, !invariant.group !324
   %cmp30.i = icmp sgt i32 %36, 0
   br i1 %cmp30.i, label %for.cond1.preheader.lr.ph.i26, label %set_block.exit
 
@@ -14326,7 +14893,7 @@ for.cond1.preheader.lr.ph.i26:                    ; preds = %set_identity.exit
   %42 = bitcast double*** %41 to i8**
   store i8* %malloccall20, i8** %42, align 8
   %43 = getelementptr inbounds i32, i32* %_malloccache31, i64 %iv
-  store i32 %38, i32* %43, align 4, !invariant.group !311
+  store i32 %38, i32* %43, align 4, !invariant.group !325
   br label %for.cond1.preheader.i27
 
 for.cond1.preheader.i27:                          ; preds = %for.inc13.i, %for.cond1.preheader.lr.ph.i26
@@ -14336,9 +14903,9 @@ for.cond1.preheader.i27:                          ; preds = %for.inc13.i, %for.c
 
 for.body3.lr.ph.i29:                              ; preds = %for.cond1.preheader.i27
   %"'ipl16" = load double*, double** %"'ipc15", align 8
-  %44 = load double**, double*** %41, align 8, !dereferenceable !284, !invariant.group !312
+  %44 = load double**, double*** %41, align 8, !dereferenceable !298, !invariant.group !326
   %45 = getelementptr inbounds double*, double** %44, i64 %iv5
-  store double* %"'ipl16", double** %45, align 8, !invariant.group !313
+  store double* %"'ipl16", double** %45, align 8, !invariant.group !327
   %46 = load double*, double** %20, align 8, !tbaa !137
   %47 = shl nsw i64 %iv5, 2
   %48 = mul nsw i64 %iv5, %40
@@ -14366,7 +14933,7 @@ set_block.exit:                                   ; preds = %for.inc13.i, %set_i
   %arrayidx3 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %iv
   %_augmented23 = call { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.3(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %3, %struct.Matrix* nonnull %"'ipc22", %struct.Matrix* %arrayidx3, %struct.Matrix* %"arrayidx3'ipg")
   %52 = getelementptr inbounds { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_augmented23_malloccache, i64 %iv
-  store { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %_augmented23, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %52, align 8, !invariant.group !314
+  store { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %_augmented23, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %52, align 8, !invariant.group !328
   %exitcond.not = icmp eq i64 %iv.next, %wide.trip.count
   br i1 %exitcond.not, label %if.then.i35, label %for.cond1.preheader.lr.ph.i, !llvm.loop !200
 
@@ -14495,13 +15062,13 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %27 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %28 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %28, align 8, !invariant.group !315
+  store double* %"'ipl", double** %28, align 8, !invariant.group !329
   %29 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %29, align 8, !invariant.group !316
+  store double* %"'ipl8", double** %29, align 8, !invariant.group !330
   %30 = load double*, double** %data14, align 8, !tbaa !137
   %31 = load i32, i32* %ncols21, align 4, !tbaa !139
   %32 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %31, i32* %32, align 4, !invariant.group !317
+  store i32 %31, i32* %32, align 4, !invariant.group !331
   %cmp2281 = icmp sgt i32 %31, 1
   %33 = sext i32 %27 to i64
   %wide.trip.count = zext i32 %31 to i64
@@ -14522,7 +15089,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %39 = mul nuw nsw i64 %iv, %wide.trip.count96
   %40 = add nuw nsw i64 %iv4, %39
   %41 = getelementptr inbounds double, double* %_malloccache16, i64 %40
-  store double %36, double* %41, align 8, !invariant.group !318
+  store double %36, double* %41, align 8, !invariant.group !332
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14548,9 +15115,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %50, %48
   %add43 = fadd fast double %45, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %51 = load double*, double** %42, align 8, !dereferenceable !284, !invariant.group !319
+  %51 = load double*, double** %42, align 8, !dereferenceable !298, !invariant.group !333
   %52 = getelementptr inbounds double, double* %51, i64 %iv6
-  store double %50, double* %52, align 8, !invariant.group !320
+  store double %50, double* %52, align 8, !invariant.group !334
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -14685,13 +15252,13 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %26 = load i32, i32* %nrows8, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data14'ipg", align 8
   %27 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv
-  store double* %"'ipl", double** %27, align 8, !invariant.group !321
+  store double* %"'ipl", double** %27, align 8, !invariant.group !335
   %28 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %28, align 8, !invariant.group !322
+  store double* %"'ipl8", double** %28, align 8, !invariant.group !336
   %29 = load double*, double** %data14, align 8, !tbaa !137
   %30 = load i32, i32* %ncols21, align 4, !tbaa !139
   %31 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %30, i32* %31, align 4, !invariant.group !323
+  store i32 %30, i32* %31, align 4, !invariant.group !337
   %cmp2281 = icmp sgt i32 %30, 1
   %32 = sext i32 %26 to i64
   %wide.trip.count = zext i32 %30 to i64
@@ -14712,7 +15279,7 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %38 = mul nuw nsw i64 %iv, %wide.trip.count96
   %39 = add nuw nsw i64 %iv4, %38
   %40 = getelementptr inbounds double, double* %_malloccache16, i64 %39
-  store double %35, double* %40, align 8, !invariant.group !324
+  store double %35, double* %40, align 8, !invariant.group !338
   br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
 
 for.body23.preheader:                             ; preds = %for.body5
@@ -14738,9 +15305,9 @@ for.body23:                                       ; preds = %for.body23, %for.bo
   %mul36 = fmul fast double %49, %47
   %add43 = fadd fast double %44, %mul36
   store double %add43, double* %arrayidx19, align 8, !tbaa !75
-  %50 = load double*, double** %41, align 8, !dereferenceable !284, !invariant.group !325
+  %50 = load double*, double** %41, align 8, !dereferenceable !298, !invariant.group !339
   %51 = getelementptr inbounds double, double* %50, i64 %iv6
-  store double %49, double* %51, align 8, !invariant.group !326
+  store double %49, double* %51, align 8, !invariant.group !340
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -15048,7 +15615,7 @@ for.body.i:                                       ; preds = %for.body.i, %entry
   %arrayidx2.i = getelementptr inbounds double, double* %angle_axis, i64 %iv.next
   %5 = load double, double* %arrayidx2.i, align 8, !tbaa !75
   %6 = getelementptr inbounds double, double* %_malloccache, i64 %iv
-  store double %5, double* %6, align 8, !invariant.group !327
+  store double %5, double* %6, align 8, !invariant.group !341
   %mul5.i = fmul fast double %5, %5
   %add.i = fadd fast double %mul5.i, %res.017.i
   %exitcond.not.i = icmp eq i64 %iv, 1
@@ -15321,11 +15888,11 @@ for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
   %arrayidx = getelementptr inbounds double, double* %29, i64 %iv
   %"'ipl8" = load double*, double** %"data7'ipg", align 8
   %30 = getelementptr inbounds double*, double** %"'ipl8_malloccache", i64 %iv
-  store double* %"'ipl8", double** %30, align 8, !invariant.group !328
+  store double* %"'ipl8", double** %30, align 8, !invariant.group !342
   %31 = load double*, double** %data7, align 8, !tbaa !137
   %32 = load i32, i32* %nrows8, align 8, !tbaa !138
   %33 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv
-  store i32 %32, i32* %33, align 4, !invariant.group !329
+  store i32 %32, i32* %33, align 4, !invariant.group !343
   %34 = load double*, double** %data14, align 8, !tbaa !137
   %35 = load i32, i32* %ncols21, align 4, !tbaa !139
   %cmp2281 = icmp sgt i32 %35, 1
@@ -15348,9 +15915,9 @@ for.body5:                                        ; preds = %for.inc44, %for.bod
   %42 = mul nuw nsw i64 %iv, %wide.trip.count96
   %43 = add nuw nsw i64 %iv4, %42
   %44 = getelementptr inbounds double, double* %_malloccache19, i64 %43
-  store double %39, double* %44, align 8, !invariant.group !330
+  store double %39, double* %44, align 8, !invariant.group !344
   %45 = getelementptr inbounds double, double* %_malloccache15, i64 %43
-  store double %37, double* %45, align 8, !invariant.group !331
+  store double %37, double* %45, align 8, !invariant.group !345
   br i1 %cmp2281, label %for.body23, label %for.inc44
 
 for.body23:                                       ; preds = %for.body5, %for.body23
@@ -15372,9 +15939,9 @@ for.body23:                                       ; preds = %for.body5, %for.bod
   %54 = mul nuw nsw i64 %iv, %23
   %55 = add nuw nsw i64 %53, %54
   %56 = getelementptr inbounds double, double* %_malloccache28, i64 %55
-  store double %51, double* %56, align 8, !invariant.group !332
+  store double %51, double* %56, align 8, !invariant.group !346
   %57 = getelementptr inbounds double, double* %_malloccache24, i64 %55
-  store double %49, double* %57, align 8, !invariant.group !333
+  store double %49, double* %57, align 8, !invariant.group !347
   %indvars.iv.next = add nuw nsw i64 %iv6, 2
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
   br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
@@ -15490,9 +16057,9 @@ for.body3:                                        ; preds = %for.body3, %for.con
   %mul11 = fmul fast double %24, %22
   store double %mul11, double* %arrayidx10, align 8, !tbaa !75
   %25 = getelementptr inbounds double, double* %_malloccache23, i64 %23
-  store double %24, double* %25, align 8, !invariant.group !334
+  store double %24, double* %25, align 8, !invariant.group !348
   %26 = getelementptr inbounds double, double* %_malloccache, i64 %23
-  store double %22, double* %26, align 8, !invariant.group !335
+  store double %22, double* %26, align 8, !invariant.group !349
   %exitcond102.not = icmp eq i64 %iv.next3, 3
   br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
 
@@ -15688,9 +16255,9 @@ for.body:                                         ; preds = %for.body, %for.body
   %arrayidx6 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv
   %_augmented26 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %"arrayidx'ipg", %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6, %struct.Matrix* nonnull %"arrayidx6'ipg")
   %21 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented26_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !336
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !350
   %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
-  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
 
 for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
   %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
@@ -15851,17 +16418,17 @@ for.body11:                                       ; preds = %for.inc43, %for.bod
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv1
   %_augmented31 = call { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.5(%struct.Matrix* %arrayidx13, %struct.Matrix* nonnull %"arrayidx13'ipg", %struct.Matrix* %base_positions, %struct.Matrix* nonnull %35, %struct.Matrix* nonnull %"'ipc30")
   %51 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_augmented31_malloccache, i64 %iv1
-  store { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %51, align 64, !invariant.group !337
+  store { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %51, align 64, !invariant.group !351
   br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
 
 for.cond18.preheader.lr.ph:                       ; preds = %for.body11
   %"'ipl35" = load double*, double** %"'ipc34", align 8
   %52 = getelementptr inbounds double*, double** %"'ipl35_malloccache", i64 %iv1
-  store double* %"'ipl35", double** %52, align 8, !invariant.group !338
+  store double* %"'ipl35", double** %52, align 8, !invariant.group !352
   %53 = load double*, double** %40, align 8, !tbaa !137
   %54 = load i32, i32* %nrows1.i17, align 8, !tbaa !138
   %55 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv1
-  store i32 %54, i32* %55, align 4, !invariant.group !339
+  store i32 %54, i32* %55, align 4, !invariant.group !353
   %56 = load double*, double** %data23, align 8, !tbaa !137
   %57 = load i32, i32* %nrows24, align 8, !tbaa !138
   %58 = load double*, double** %data30, align 8, !tbaa !137
@@ -15895,17 +16462,17 @@ for.body20:                                       ; preds = %for.body20, %for.co
   %70 = mul nuw nsw i64 %iv1, %47
   %71 = add nuw nsw i64 %68, %70
   %72 = getelementptr inbounds double, double* %_malloccache49, i64 %71
-  store double %67, double* %72, align 8, !invariant.group !340
+  store double %67, double* %72, align 8, !invariant.group !354
   %exitcond86.not = icmp eq i64 %iv.next9, 3
-  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
 
 for.inc40:                                        ; preds = %for.body20
   %exitcond94.not = icmp eq i64 %iv.next7, %wide.trip.count93
-  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !208
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
 
 for.inc43:                                        ; preds = %for.inc40, %for.body11
   %exitcond98.not = icmp eq i64 %iv.next2, %wide.trip.count97
-  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !209
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
 
 for.end45:                                        ; preds = %for.inc43, %fill.exit
   %tobool.not = icmp ne i32 %is_mirrored, 0
@@ -15934,9 +16501,9 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   %mul56 = fneg fast double %77
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %78 = getelementptr inbounds double, double* %_malloccache53, i64 %iv11
-  store double %77, double* %78, align 8, !invariant.group !341
+  store double %77, double* %78, align 8, !invariant.group !355
   %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
-  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
 
 if.then61:                                        ; preds = %for.body49, %for.end45
   %_augmented39 = call { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } @augmented_apply_global_transform(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'")
@@ -15960,7 +16527,7 @@ for.body.i31:                                     ; preds = %for.body.i31, %for.
   %cmp1.not.i = icmp eq double* %82, null
   %83 = getelementptr inbounds i8, i8* %malloccall54, i64 %iv14
   %84 = bitcast i8* %83 to i1*
-  store i1 %cmp1.not.i, i1* %84, align 1, !invariant.group !342
+  store i1 %cmp1.not.i, i1* %84, align 1, !invariant.group !356
   %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
   br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
 
@@ -15979,7 +16546,7 @@ for.body.i41:                                     ; preds = %for.body.i41, %for.
   %cmp1.not.i40 = icmp eq double* %87, null
   %88 = getelementptr inbounds i8, i8* %malloccall55, i64 %iv17
   %89 = bitcast i8* %88 to i1*
-  store i1 %cmp1.not.i40, i1* %89, align 1, !invariant.group !343
+  store i1 %cmp1.not.i40, i1* %89, align 1, !invariant.group !357
   %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
   br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
 
@@ -15998,7 +16565,7 @@ for.body.i53:                                     ; preds = %for.body.i53, %for.
   %cmp1.not.i52 = icmp eq double* %92, null
   %93 = getelementptr inbounds i8, i8* %malloccall56, i64 %iv20
   %94 = bitcast i8* %93 to i1*
-  store i1 %cmp1.not.i52, i1* %94, align 1, !invariant.group !344
+  store i1 %cmp1.not.i52, i1* %94, align 1, !invariant.group !358
   %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
   br i1 %exitcond.not.i56, label %delete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
@@ -16013,12 +16580,12 @@ entry:
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 12
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 19
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 20
-  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 24
-  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 25
-  %5 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 26
-  %6 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 27
-  %7 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 28
-  %8 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 29
+  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 25
+  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 26
+  %5 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 27
+  %6 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 28
+  %7 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 29
+  %8 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 24
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 1
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 0
   %cmp15.i = icmp sgt i32 %bone_count, 0
@@ -16054,81 +16621,203 @@ get_matrix_array.exit12:                          ; preds = %for.body.preheader.
   br i1 %cmp15.i, label %for.body.preheader, label %for.end
 
 for.body.preheader:                               ; preds = %get_matrix_array.exit12
-  %wide.trip.count101 = zext i32 %bone_count to i64, !node !273
-  br label %for.end
+  %wide.trip.count101 = zext i32 %bone_count to i64, !node !285
+  br label %for.body
 
-for.end:                                          ; preds = %for.body.preheader, %get_matrix_array.exit12
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1, !node !273
-  %14 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+for.body:                                         ; preds = %for.body, %for.body.preheader
+  %forward_mem.0 = phi i32 [ 15, %for.body.preheader ], [ %inc161, %for.body ]
+  %forward_op.0 = phi i32 [ 3, %for.body.preheader ], [ %inc157, %for.body ]
+  %iv = phi i64 [ 0, %for.body.preheader ], [ %iv.next, %for.body ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc157 = add i32 %forward_op.0, 1
+  %inc161 = add i32 %forward_mem.0, 2
+  %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
+
+for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
+  %forward_mem.1 = phi i32 [ 15, %get_matrix_array.exit12 ], [ %inc161, %for.body ]
+  %forward_op.1 = phi i32 [ 1, %get_matrix_array.exit12 ], [ %inc157, %for.body ]
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1, !node !285
+  %inc163 = add i32 %forward_mem.1, 1
+  %14 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
   %mul.i13 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 22
-  %mul3.i = mul i32 %14, 3, !node !273
+  %mul3.i = mul i32 %14, 3, !node !285
+  %inc165 = add i32 %forward_op.1, 1
   %cmp.not.i = icmp eq i32 %mul.i13, %mul3.i
   br i1 %cmp.not.i, label %resize.exit, label %if.end.i
 
 if.end.i:                                         ; preds = %for.end
   %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %for.body.lr.ph.i, label %fill.exit
+  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread69
+
+resize.exit.thread:                               ; preds = %if.end.i
+  %inc167 = add i32 %forward_op.1, 2
+  br label %for.body.lr.ph.i
+
+resize.exit.thread69:                             ; preds = %if.end.i
+  %inc169 = add i32 %forward_mem.1, 2
+  br label %fill.exit
 
 resize.exit:                                      ; preds = %for.end
   %cmp7.i = icmp sgt i32 %mul.i13, 0
+  %inc171 = add i32 %forward_mem.1, 2
   br i1 %cmp7.i, label %for.body.lr.ph.i, label %fill.exit
 
-for.body.lr.ph.i:                                 ; preds = %resize.exit, %if.end.i
+for.body.lr.ph.i:                                 ; preds = %resize.exit, %resize.exit.thread
+  %forward_mem.2 = phi i32 [ %inc163, %resize.exit.thread ], [ %inc171, %resize.exit ]
+  %forward_op.2 = phi i32 [ %inc167, %resize.exit.thread ], [ %inc165, %resize.exit ]
+  %inc173 = add i32 %forward_mem.2, 1
   br label %fill.exit
 
-fill.exit:                                        ; preds = %if.end.i, %for.body.lr.ph.i, %resize.exit
-  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 0, %if.end.i ]
+fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread69
+  %_cache.0 = phi i8 [ 0, %for.body.lr.ph.i ], [ 1, %resize.exit ], [ 2, %resize.exit.thread69 ]
+  %forward_mem.3 = phi i32 [ %inc173, %for.body.lr.ph.i ], [ %inc171, %resize.exit ], [ %inc169, %resize.exit.thread69 ]
+  %forward_op.3 = phi i32 [ %forward_op.2, %for.body.lr.ph.i ], [ %inc165, %resize.exit ], [ %inc165, %resize.exit.thread69 ]
   %call.i16 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 18
   %"call.i16'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 17
   %"'ipc41" = bitcast i8* %"call.i16'mi" to %struct.Matrix*
   %15 = bitcast i8* %call.i16 to %struct.Matrix*
+  %inc177 = add i32 %forward_op.3, 2
   %call4.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 16
   %"call4.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 15
   br i1 %cmp15.i, label %for.body11.lr.ph, label %for.end45
 
 for.body11.lr.ph:                                 ; preds = %fill.exit
   %cmp1674 = icmp sgt i32 %14, 0
-  %wide.trip.count97 = zext i32 %bone_count to i64, !node !273
-  %wide.trip.count93 = zext i32 %14 to i64, !node !273
-  br label %for.end45
+  %wide.trip.count97 = zext i32 %bone_count to i64, !node !285
+  %wide.trip.count93 = zext i32 %14 to i64, !node !285
+  %inc193 = add i32 %forward_op.3, 10
+  br label %for.body11
 
-for.end45:                                        ; preds = %for.body11.lr.ph, %fill.exit
+for.body11:                                       ; preds = %for.inc43, %for.body11.lr.ph
+  %forward_mem.4 = phi i32 [ %forward_mem.3, %for.body11.lr.ph ], [ %forward_mem.7, %for.inc43 ]
+  %forward_op.4 = phi i32 [ %inc193, %for.body11.lr.ph ], [ %forward_op.7, %for.inc43 ]
+  %iv1 = phi i64 [ 0, %for.body11.lr.ph ], [ %iv.next2, %for.inc43 ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %inc195 = add i32 %forward_op.4, 1
+  %inc199 = add i32 %forward_mem.4, 2
+  br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
+
+for.cond18.preheader.lr.ph:                       ; preds = %for.body11
+  %inc209 = add i32 %forward_mem.4, 7
+  br label %for.cond18.preheader
+
+for.cond18.preheader:                             ; preds = %for.inc40, %for.cond18.preheader.lr.ph
+  %forward_mem.5 = phi i32 [ %inc209, %for.cond18.preheader.lr.ph ], [ %inc235.lcssa, %for.inc40 ]
+  %forward_op.5 = phi i32 [ %inc195, %for.cond18.preheader.lr.ph ], [ %inc249.lcssa, %for.inc40 ]
+  %iv6 = phi i64 [ 0, %for.cond18.preheader.lr.ph ], [ %iv.next7, %for.inc40 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc215 = add i32 %forward_op.5, 3
+  br label %for.body20
+
+for.body20:                                       ; preds = %for.body20, %for.cond18.preheader
+  %forward_mem.6 = phi i32 [ %forward_mem.5, %for.cond18.preheader ], [ %inc235, %for.body20 ]
+  %forward_op.6 = phi i32 [ %inc215, %for.cond18.preheader ], [ %inc249, %for.body20 ]
+  %iv8 = phi i64 [ 0, %for.cond18.preheader ], [ %iv.next9, %for.body20 ]
+  %iv.next9 = add nuw nsw i64 %iv8, 1
+  %inc235 = add i32 %forward_mem.6, 2
+  %inc249 = add i32 %forward_op.6, 15
+  %exitcond86.not = icmp eq i64 %iv.next9, 3
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
+
+for.inc40:                                        ; preds = %for.body20
+  %inc235.lcssa = phi i32 [ %inc235, %for.body20 ]
+  %inc249.lcssa = phi i32 [ %inc249, %for.body20 ]
+  %exitcond94.not = icmp eq i64 %iv.next7, %wide.trip.count93
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
+
+for.inc43:                                        ; preds = %for.inc40, %for.body11
+  %forward_mem.7 = phi i32 [ %inc199, %for.body11 ], [ %inc235.lcssa, %for.inc40 ]
+  %forward_op.7 = phi i32 [ %inc195, %for.body11 ], [ %inc249.lcssa, %for.inc40 ]
+  %exitcond98.not = icmp eq i64 %iv.next2, %wide.trip.count97
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
+
+for.end45:                                        ; preds = %for.inc43, %fill.exit
+  %forward_mem.8 = phi i32 [ %forward_mem.3, %fill.exit ], [ %forward_mem.7, %for.inc43 ]
+  %forward_op.8 = phi i32 [ %inc177, %fill.exit ], [ %forward_op.7, %for.inc43 ]
   %tobool.not = icmp ne i32 %is_mirrored, 0
   %cmp4871 = icmp sgt i32 %14, 0
   %or.cond = and i1 %tobool.not, %cmp4871
+  %inc251 = add i32 %forward_op.8, 1
   br i1 %or.cond, label %for.body49.lr.ph, label %if.then61
 
 for.body49.lr.ph:                                 ; preds = %for.end45
-  %wide.trip.count = zext i32 %14 to i64, !node !273
-  br label %if.then61
+  %inc253 = add i32 %forward_mem.8, 1
+  %wide.trip.count = zext i32 %14 to i64, !node !285
+  %inc257 = add i32 %forward_op.8, 3
+  br label %for.body49
 
-if.then61:                                        ; preds = %for.body49.lr.ph, %for.end45
+for.body49:                                       ; preds = %for.body49, %for.body49.lr.ph
+  %forward_mem.9 = phi i32 [ %inc253, %for.body49.lr.ph ], [ %inc265, %for.body49 ]
+  %forward_op.9 = phi i32 [ %inc257, %for.body49.lr.ph ], [ %inc261, %for.body49 ]
+  %iv11 = phi i64 [ 0, %for.body49.lr.ph ], [ %iv.next12, %for.body49 ]
+  %iv.next12 = add nuw nsw i64 %iv11, 1
+  %inc261 = add i32 %forward_op.9, 2
+  %inc265 = add i32 %forward_mem.9, 2
+  %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
+
+if.then61:                                        ; preds = %for.body49, %for.end45
+  %forward_mem.10 = phi i32 [ %forward_mem.8, %for.end45 ], [ %inc265, %for.body49 ]
+  %forward_op.10 = phi i32 [ %inc251, %for.end45 ], [ %inc261, %for.body49 ]
   %tapeArg85 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 21
-  br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_matrix.exit
+  %inc267 = add i32 %forward_mem.10, 1
+  br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_light_matrix_array.exit58
 
 for.body.preheader.i28:                           ; preds = %if.then61
-  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !273
-  %wide.trip.count.i27_unwrap108 = zext i32 %bone_count to i64
-  %_unwrap109 = add nsw i64 %wide.trip.count.i27_unwrap108, -1
-  %16 = bitcast i1* %8 to i8*
-  tail call void @free(i8* nonnull %16)
-  %17 = bitcast i1* %7 to i8*
-  tail call void @free(i8* nonnull %17)
-  %18 = bitcast i1* %6 to i8*
-  tail call void @free(i8* nonnull %18)
-  br label %invertdelete_matrix.exit
+  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !285
+  %inc271 = add i32 %forward_op.10, 2
+  br label %for.body.i31
+
+for.body.i31:                                     ; preds = %for.body.i31, %for.body.preheader.i28
+  %forward_mem.11 = phi i32 [ %inc267, %for.body.preheader.i28 ], [ %inc277, %for.body.i31 ]
+  %forward_op.11 = phi i32 [ %inc271, %for.body.preheader.i28 ], [ %inc273, %for.body.i31 ]
+  %iv14 = phi i64 [ 0, %for.body.preheader.i28 ], [ %iv.next15, %for.body.i31 ]
+  %iv.next15 = add nuw nsw i64 %iv14, 1
+  %inc273 = add i32 %forward_op.11, 1
+  %inc277 = add i32 %forward_mem.11, 2
+  %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
+  br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
+
+for.body.preheader.i37:                           ; preds = %for.body.i31
+  %forward_op.11.lcssa = phi i32 [ %forward_op.11, %for.body.i31 ]
+  %inc277.lcssa = phi i32 [ %inc277, %for.body.i31 ]
+  %inc281 = add i32 %forward_op.11.lcssa, 3
+  br label %for.body.i41
+
+for.body.i41:                                     ; preds = %for.body.i41, %for.body.preheader.i37
+  %forward_mem.12 = phi i32 [ %inc277.lcssa, %for.body.preheader.i37 ], [ %inc287, %for.body.i41 ]
+  %forward_op.12 = phi i32 [ %inc281, %for.body.preheader.i37 ], [ %inc283, %for.body.i41 ]
+  %iv17 = phi i64 [ 0, %for.body.preheader.i37 ], [ %iv.next18, %for.body.i41 ]
+  %iv.next18 = add nuw nsw i64 %iv17, 1
+  %inc283 = add i32 %forward_op.12, 1
+  %inc287 = add i32 %forward_mem.12, 2
+  %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
+  br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
+
+for.body.preheader.i49:                           ; preds = %for.body.i41
+  %forward_op.12.lcssa = phi i32 [ %forward_op.12, %for.body.i41 ]
+  %inc287.lcssa = phi i32 [ %inc287, %for.body.i41 ]
+  %inc291 = add i32 %forward_op.12.lcssa, 3
+  br label %for.body.i53
+
+for.body.i53:                                     ; preds = %for.body.i53, %for.body.preheader.i49
+  %forward_mem.13 = phi i32 [ %inc287.lcssa, %for.body.preheader.i49 ], [ %inc297, %for.body.i53 ]
+  %forward_op.13 = phi i32 [ %inc291, %for.body.preheader.i49 ], [ %inc293, %for.body.i53 ]
+  %iv20 = phi i64 [ 0, %for.body.preheader.i49 ], [ %iv.next21, %for.body.i53 ]
+  %iv.next21 = add nuw nsw i64 %iv20, 1
+  %inc293 = add i32 %forward_op.13, 1
+  %inc297 = add i32 %forward_mem.13, 2
+  %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
+  br i1 %exitcond.not.i56, label %invertdelete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
 invertentry:                                      ; preds = %invertfor.body.preheader.i11, %invertget_matrix_array.exit6
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
+  %16 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.14, i32 %reverse_op.0, i32 %forward_mem.14, i32 %reverse_mem.0)
   ret void
 
-invertget_matrix_array.exit6.critedge:            ; preds = %invertfor.end
-  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %11, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %12, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25)
-  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %11, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26)
-  br label %invertget_matrix_array.exit6
-
-invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_array.exit6.critedge, %invertfor.body.preheader
+invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_array.exit12
   %"call.i9'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 2
   tail call void @free(i8* nonnull %"call.i9'mi_unwrap")
   %call.i9_unwrap = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 3
@@ -16139,7 +16828,7 @@ invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_ar
   tail call void @free(i8* %call.i3_unwrap)
   br label %invertentry
 
-invertfor.body.preheader.i11:                     ; preds = %invertfor.body.preheader
+invertfor.body.preheader.i11:                     ; preds = %invertget_matrix_array.exit12
   %"call.i963'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 6
   tail call void @free(i8* nonnull %"call.i963'mi_unwrap")
   %call.i963_unwrap = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 7
@@ -16150,33 +16839,49 @@ invertfor.body.preheader.i11:                     ; preds = %invertfor.body.preh
   tail call void @free(i8* %call.i359_unwrap)
   br label %invertentry
 
-invertfor.body.preheader:                         ; preds = %invertfor.body
-  %19 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0 to i8*
-  tail call void @free(i8* nonnull %19)
-  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %11, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %12, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25)
-  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %11, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26)
+invertget_matrix_array.exit12:                    ; preds = %invertfor.end, %invertfor.body.preheader
+  %reverse_mem.0 = phi i32 [ %inc305, %invertfor.body.preheader ], [ %inc337, %invertfor.end ]
+  %reverse_op.0 = phi i32 [ %inc325.lcssa, %invertfor.body.preheader ], [ %reverse_op.2, %invertfor.end ]
+  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %11, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %12, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25), !node !285
+  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %11, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26), !node !285
   br i1 %cmp15.i, label %invertfor.body.preheader.i11, label %invertget_matrix_array.exit6
 
-invertfor.body:                                   ; preds = %invertfor.body, %mergeinvertfor.body_for.end.loopexit
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count101_unwrap, %mergeinvertfor.body_for.end.loopexit ], [ %"iv'ac.0", %invertfor.body ]
+invertfor.body.preheader:                         ; preds = %invertfor.body
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.body ]
+  %inc325.lcssa = phi i32 [ %inc325, %invertfor.body ]
+  %inc305 = add i32 %reverse_mem.1.lcssa, 11
+  %17 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0 to i8*
+  tail call void @free(i8* nonnull %17)
+  br label %invertget_matrix_array.exit12
+
+invertfor.body:                                   ; preds = %mergeinvertfor.body_for.end.loopexit, %incinvertfor.body
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count101_unwrap, %mergeinvertfor.body_for.end.loopexit ], [ %"iv'ac.0", %incinvertfor.body ]
+  %reverse_mem.1 = phi i32 [ %inc335, %mergeinvertfor.body_for.end.loopexit ], [ %inc331, %incinvertfor.body ]
+  %reverse_op.1.in = phi i32 [ %reverse_op.2, %mergeinvertfor.body_for.end.loopexit ], [ %inc325, %incinvertfor.body ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
-  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %12, i64 %"iv'ac.0"
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc24", i64 %"iv'ac.0"
-  %arrayidx4_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %inverse_base_absolutes, i64 %"iv'ac.0"
-  %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv'ac.0"
-  %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0"
-  %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0"
-  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !345
-  call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap)
-  %20 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %20, label %invertfor.body.preheader, label %invertfor.body
+  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %12, i64 %"iv'ac.0", !node !285
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc24", i64 %"iv'ac.0", !node !285
+  %arrayidx4_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %inverse_base_absolutes, i64 %"iv'ac.0", !node !285
+  %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv'ac.0", !node !285
+  %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0", !node !285
+  %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0", !node !285
+  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !359, !node !285
+  call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap), !node !285
+  %18 = icmp eq i64 %"iv'ac.0", 0
+  %inc325 = add i32 %reverse_op.1.in, 2
+  br i1 %18, label %invertfor.body.preheader, label %incinvertfor.body
+
+incinvertfor.body:                                ; preds = %invertfor.body
+  %inc331 = add i32 %reverse_mem.1, 11
+  br label %invertfor.body
 
 mergeinvertfor.body_for.end.loopexit:             ; preds = %invertfor.end
-  %wide.trip.count101_unwrap = zext i32 %bone_count to i64
+  %wide.trip.count101_unwrap = zext i32 %bone_count to i64, !node !285
+  %inc335 = add i32 %reverse_mem.2, 2
   br label %invertfor.body
 
 invertfor.end:                                    ; preds = %invertfill.exit, %invertresize.exit.thread
-  br i1 %cmp15.i, label %mergeinvertfor.body_for.end.loopexit, label %invertget_matrix_array.exit6.critedge
+  br i1 %cmp15.i, label %mergeinvertfor.body_for.end.loopexit, label %invertget_matrix_array.exit12
 
 invertresize.exit.thread:                         ; preds = %invertfill.exit
   %"call.i14'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }*, double**, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* }, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 13
@@ -16186,119 +16891,247 @@ invertresize.exit.thread:                         ; preds = %invertfill.exit
   br label %invertfor.end
 
 invertfill.exit:                                  ; preds = %invertfor.end45, %invertfor.body11.lr.ph
+  %reverse_mem.2 = phi i32 [ %inc365, %invertfor.body11.lr.ph ], [ %reverse_mem.7, %invertfor.end45 ]
+  %reverse_op.2 = phi i32 [ %inc379.lcssa, %invertfor.body11.lr.ph ], [ %reverse_op.7, %invertfor.end45 ]
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* %call4.i)
   tail call void @free(i8* nonnull %"call.i16'mi")
   tail call void @free(i8* %call.i16)
-  %cond = icmp eq i8 %_cache.0, 1
+  %inc337 = add i32 %reverse_mem.2, 1
+  %cond = icmp eq i8 %_cache.0, 0
   %cond.not = xor i1 %cond, true
   %brmerge = or i1 %cond.not, %cmp.not.i
   br i1 %brmerge, label %invertfor.end, label %invertresize.exit.thread
 
 invertfor.body11.lr.ph:                           ; preds = %invertfor.body11
-  %21 = bitcast { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %1 to i8*
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body11 ]
+  %inc379.lcssa = phi i32 [ %inc379, %invertfor.body11 ]
+  %19 = bitcast { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %1 to i8*
+  tail call void @free(i8* nonnull %19)
+  %20 = bitcast double** %2 to i8*
+  tail call void @free(i8* nonnull %20)
+  %21 = bitcast double* %3 to i8*
   tail call void @free(i8* nonnull %21)
-  %22 = bitcast double** %2 to i8*
+  %inc365 = add i32 %reverse_mem.3.lcssa, 20
+  %22 = bitcast i32* %8 to i8*
   tail call void @free(i8* nonnull %22)
-  %23 = bitcast i32* %3 to i8*
-  tail call void @free(i8* nonnull %23)
-  %24 = bitcast double* %4 to i8*
-  tail call void @free(i8* nonnull %24)
   br label %invertfill.exit
 
-invertfor.body11:                                 ; preds = %invertfor.cond18.preheader, %invertfor.inc43
-  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv1'ac.0"
-  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0"
-  %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0"
-  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 64, !invariant.group !346
-  call void @diffemat_mult.11(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %15, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap)
-  %25 = icmp eq i64 %"iv1'ac.0", 0
-  br i1 %25, label %invertfor.body11.lr.ph, label %invertfor.inc43
+invertfor.body11:                                 ; preds = %invertfor.inc43, %invertfor.cond18.preheader.lr.ph
+  %reverse_mem.3 = phi i32 [ %inc387, %invertfor.cond18.preheader.lr.ph ], [ %inc545, %invertfor.inc43 ]
+  %reverse_op.3 = phi i32 [ %inc389, %invertfor.cond18.preheader.lr.ph ], [ %reverse_op.6, %invertfor.inc43 ]
+  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv1'ac.0", !node !285
+  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0", !node !285
+  %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0", !node !285
+  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 64, !invariant.group !360, !node !285
+  call void @diffemat_mult.11(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %15, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap), !node !285
+  %23 = icmp eq i64 %"iv1'ac.0", 0
+  %inc379 = add i32 %reverse_op.3, 1
+  br i1 %23, label %invertfor.body11.lr.ph, label %incinvertfor.body11
+
+incinvertfor.body11:                              ; preds = %invertfor.body11
+  %inc381 = add i32 %reverse_mem.3, 7
+  br label %invertfor.inc43
+
+invertfor.cond18.preheader.lr.ph:                 ; preds = %invertfor.cond18.preheader
+  %reverse_mem.4.in.lcssa.lcssa = phi i32 [ %reverse_mem.4.in.lcssa, %invertfor.cond18.preheader ]
+  %reverse_op.4.lcssa.lcssa = phi i32 [ %reverse_op.4.lcssa, %invertfor.cond18.preheader ]
+  %inc389 = add i32 %reverse_op.4.lcssa.lcssa, 26
+  %inc387 = add i32 %reverse_mem.4.in.lcssa.lcssa, 44
+  br label %invertfor.body11
 
 invertfor.cond18.preheader:                       ; preds = %invertfor.body20
-  %26 = icmp eq i64 %"iv6'ac.1", 0
-  br i1 %26, label %invertfor.body11, label %invertfor.inc40
+  %reverse_mem.4.in.lcssa = phi i32 [ %reverse_mem.4.in, %invertfor.body20 ]
+  %reverse_op.4.lcssa = phi i32 [ %reverse_op.4, %invertfor.body20 ]
+  %24 = icmp eq i64 %"iv6'ac.1", 0
+  br i1 %24, label %invertfor.cond18.preheader.lr.ph, label %incinvertfor.cond18.preheader
+
+incinvertfor.cond18.preheader:                    ; preds = %invertfor.cond18.preheader
+  %inc393 = add i32 %reverse_op.4.lcssa, 27
+  %inc395 = add i32 %reverse_mem.4.in.lcssa, 46
+  br label %invertfor.inc40
 
 invertfor.body20:                                 ; preds = %invertfor.inc40, %incinvertfor.body20
-  %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %38, %incinvertfor.body20 ]
-  %"data30'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data30'ipg_unwrap", align 8, !invariant.group !347
-  %_unwrap56 = mul nuw nsw i64 %"iv6'ac.1", 3
-  %_unwrap57 = add nuw nsw i64 %"iv8'ac.1", %_unwrap56
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap57
-  %27 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %_unwrap62 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count93_unwrap = zext i32 %_unwrap62 to i64
-  %28 = mul nuw nsw i64 %wide.trip.count93_unwrap, 3
-  %29 = mul nuw nsw i64 %"iv1'ac.0", %28
-  %30 = add nuw nsw i64 %_unwrap57, %29
-  %31 = getelementptr inbounds double, double* %4, i64 %30
-  %32 = load double, double* %31, align 8, !invariant.group !348
-  %m1diffe = fmul fast double %27, %32
-  %_unwrap66 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap66, align 8, !invariant.group !349
-  %33 = getelementptr inbounds i32, i32* %3, i64 %"iv1'ac.0"
-  %34 = load i32, i32* %33, align 4, !invariant.group !350
-  %_unwrap72 = sext i32 %34 to i64
-  %_unwrap73 = mul nsw i64 %"iv6'ac.1", %_unwrap72
-  %_unwrap74 = add nsw i64 %_unwrap73, %"iv8'ac.1"
-  %"arrayidx22'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap74
-  %35 = load double, double* %"arrayidx22'ipg_unwrap", align 8
-  %36 = fadd fast double %35, %m1diffe
-  store double %36, double* %"arrayidx22'ipg_unwrap", align 8
-  %37 = icmp eq i64 %"iv8'ac.1", 0
-  br i1 %37, label %invertfor.cond18.preheader, label %incinvertfor.body20
+  %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %36, %incinvertfor.body20 ]
+  %reverse_mem.4.in = phi i32 [ %reverse_mem.5, %invertfor.inc40 ], [ %inc531, %incinvertfor.body20 ]
+  %reverse_op.4 = phi i32 [ %reverse_op.5, %invertfor.inc40 ], [ %inc533, %incinvertfor.body20 ]
+  %"data30'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data30'ipg_unwrap", align 8, !invariant.group !361, !node !285
+  %_unwrap56 = mul nuw nsw i64 %"iv6'ac.1", 3, !node !285
+  %_unwrap57 = add nuw nsw i64 %"iv8'ac.1", %_unwrap56, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap57, !node !285
+  %25 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %_unwrap62 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count93_unwrap = zext i32 %_unwrap62 to i64, !node !285
+  %26 = mul nuw nsw i64 %wide.trip.count93_unwrap, 3, !node !285
+  %27 = mul nuw nsw i64 %"iv1'ac.0", %26, !node !285
+  %28 = add nuw nsw i64 %_unwrap57, %27, !node !285
+  %29 = getelementptr inbounds double, double* %3, i64 %28, !node !285
+  %30 = load double, double* %29, align 8, !invariant.group !362, !node !285
+  %m1diffe = fmul fast double %25, %30, !node !285
+  %_unwrap66 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0", !node !285
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap66, align 8, !invariant.group !363, !node !285
+  %31 = getelementptr inbounds i32, i32* %8, i64 %"iv1'ac.0", !node !285
+  %32 = load i32, i32* %31, align 4, !invariant.group !364, !node !285
+  %_unwrap72 = sext i32 %32 to i64, !node !285
+  %_unwrap73 = mul nsw i64 %"iv6'ac.1", %_unwrap72, !node !285
+  %_unwrap74 = add nsw i64 %_unwrap73, %"iv8'ac.1", !node !285
+  %"arrayidx22'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap74, !node !285
+  %33 = load double, double* %"arrayidx22'ipg_unwrap", align 8, !node !285
+  %34 = fadd fast double %33, %m1diffe, !node !285
+  store double %34, double* %"arrayidx22'ipg_unwrap", align 8
+  %35 = icmp eq i64 %"iv8'ac.1", 0
+  br i1 %35, label %invertfor.cond18.preheader, label %incinvertfor.body20
 
 incinvertfor.body20:                              ; preds = %invertfor.body20
-  %38 = add nsw i64 %"iv8'ac.1", -1
+  %inc531 = add i32 %reverse_mem.4.in, 44
+  %36 = add nsw i64 %"iv8'ac.1", -1
+  %inc533 = add i32 %reverse_op.4, 26
   br label %invertfor.body20
 
-invertfor.inc40:                                  ; preds = %invertfor.cond18.preheader, %mergeinvertfor.cond18.preheader_for.inc43.loopexit
-  %"iv6'ac.1.in" = phi i64 [ %wide.trip.count93_unwrap76, %mergeinvertfor.cond18.preheader_for.inc43.loopexit ], [ %"iv6'ac.1", %invertfor.cond18.preheader ]
+invertfor.inc40:                                  ; preds = %mergeinvertfor.cond18.preheader_for.inc43.loopexit, %incinvertfor.cond18.preheader
+  %"iv6'ac.1.in" = phi i64 [ %wide.trip.count93_unwrap76, %mergeinvertfor.cond18.preheader_for.inc43.loopexit ], [ %"iv6'ac.1", %incinvertfor.cond18.preheader ]
+  %reverse_mem.5 = phi i32 [ %inc543, %mergeinvertfor.cond18.preheader_for.inc43.loopexit ], [ %inc395, %incinvertfor.cond18.preheader ]
+  %reverse_op.5 = phi i32 [ %inc541, %mergeinvertfor.cond18.preheader_for.inc43.loopexit ], [ %inc393, %incinvertfor.cond18.preheader ]
   %"iv6'ac.1" = add nsw i64 %"iv6'ac.1.in", -1
   br label %invertfor.body20
 
 mergeinvertfor.cond18.preheader_for.inc43.loopexit: ; preds = %invertfor.inc43
-  %wide.trip.count93_unwrap76 = zext i32 %14 to i64
+  %inc541 = add i32 %reverse_op.6.in, 2
+  %wide.trip.count93_unwrap76 = zext i32 %14 to i64, !node !285
+  %inc543 = add i32 %reverse_mem.6.in, 4
   br label %invertfor.inc40
 
-invertfor.inc43:                                  ; preds = %invertfor.body11, %mergeinvertfor.body11_for.end45.loopexit
-  %"iv1'ac.0.in" = phi i64 [ %wide.trip.count97_unwrap78, %mergeinvertfor.body11_for.end45.loopexit ], [ %"iv1'ac.0", %invertfor.body11 ]
+invertfor.inc43:                                  ; preds = %mergeinvertfor.body11_for.end45.loopexit, %incinvertfor.body11
+  %"iv1'ac.0.in" = phi i64 [ %wide.trip.count97_unwrap78, %mergeinvertfor.body11_for.end45.loopexit ], [ %"iv1'ac.0", %incinvertfor.body11 ]
+  %reverse_mem.6.in = phi i32 [ %reverse_mem.7, %mergeinvertfor.body11_for.end45.loopexit ], [ %inc381, %incinvertfor.body11 ]
+  %reverse_op.6.in = phi i32 [ %reverse_op.7, %mergeinvertfor.body11_for.end45.loopexit ], [ %inc379, %incinvertfor.body11 ]
+  %reverse_op.6 = add i32 %reverse_op.6.in, 1
   %"iv1'ac.0" = add nsw i64 %"iv1'ac.0.in", -1
+  %inc545 = add i32 %reverse_mem.6.in, 2
   br i1 %cmp4871, label %mergeinvertfor.cond18.preheader_for.inc43.loopexit, label %invertfor.body11
 
 mergeinvertfor.body11_for.end45.loopexit:         ; preds = %invertfor.end45
-  %wide.trip.count97_unwrap78 = zext i32 %bone_count to i64
+  %wide.trip.count97_unwrap78 = zext i32 %bone_count to i64, !node !285
   br label %invertfor.inc43
 
 invertfor.end45:                                  ; preds = %invertdelete_matrix.exit, %invertfor.body49.lr.ph
+  %reverse_mem.7 = phi i32 [ %inc553, %invertfor.body49.lr.ph ], [ %reverse_mem.9, %invertdelete_matrix.exit ]
+  %reverse_op.7 = phi i32 [ %inc593.lcssa, %invertfor.body49.lr.ph ], [ %reverse_op.9, %invertdelete_matrix.exit ]
   br i1 %cmp15.i, label %mergeinvertfor.body11_for.end45.loopexit, label %invertfill.exit
 
 invertfor.body49.lr.ph:                           ; preds = %invertfor.body49
-  %39 = bitcast double* %5 to i8*
-  tail call void @free(i8* nonnull %39)
+  %reverse_mem.8.in.lcssa = phi i32 [ %reverse_mem.8.in, %invertfor.body49 ]
+  %inc593.lcssa = phi i32 [ %inc593, %invertfor.body49 ]
+  %inc553 = add i32 %reverse_mem.8.in.lcssa, 18
+  %37 = bitcast double* %4 to i8*
+  tail call void @free(i8* nonnull %37)
   br label %invertfor.end45
 
-invertfor.body49:                                 ; preds = %invertfor.body49, %mergeinvertfor.body49_if.then61.loopexit
-  %"iv11'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body49_if.then61.loopexit ], [ %"iv11'ac.0", %invertfor.body49 ]
+invertfor.body49:                                 ; preds = %mergeinvertfor.body49_if.then61.loopexit, %incinvertfor.body49
+  %"iv11'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body49_if.then61.loopexit ], [ %"iv11'ac.0", %incinvertfor.body49 ]
+  %reverse_mem.8.in = phi i32 [ %reverse_mem.9, %mergeinvertfor.body49_if.then61.loopexit ], [ %inc595, %incinvertfor.body49 ]
+  %reverse_op.8.in = phi i32 [ %reverse_op.9, %mergeinvertfor.body49_if.then61.loopexit ], [ %inc593, %incinvertfor.body49 ]
   %"iv11'ac.0" = add nsw i64 %"iv11'ac.0.in", -1
-  %"data50'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl80_unwrap" = load double*, double** %"data50'ipg_unwrap", align 8, !invariant.group !351
-  %_unwrap82 = mul nuw nsw i64 %"iv11'ac.0", 3
-  %"arrayidx55'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl80_unwrap", i64 %_unwrap82
-  %40 = load double, double* %"arrayidx55'ipg_unwrap", align 8
-  %41 = fneg fast double %40
-  store double %41, double* %"arrayidx55'ipg_unwrap", align 8
-  %42 = icmp eq i64 %"iv11'ac.0", 0
-  br i1 %42, label %invertfor.body49.lr.ph, label %invertfor.body49
+  %"data50'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2, !node !285
+  %"'ipl80_unwrap" = load double*, double** %"data50'ipg_unwrap", align 8, !invariant.group !365, !node !285
+  %_unwrap82 = mul nuw nsw i64 %"iv11'ac.0", 3, !node !285
+  %"arrayidx55'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl80_unwrap", i64 %_unwrap82, !node !285
+  %38 = load double, double* %"arrayidx55'ipg_unwrap", align 8, !node !285
+  %39 = fneg fast double %38, !node !285
+  store double %39, double* %"arrayidx55'ipg_unwrap", align 8
+  %40 = icmp eq i64 %"iv11'ac.0", 0
+  %inc593 = add i32 %reverse_op.8.in, 6
+  br i1 %40, label %invertfor.body49.lr.ph, label %incinvertfor.body49
 
-mergeinvertfor.body49_if.then61.loopexit:         ; preds = %invertdelete_matrix.exit
-  %wide.trip.count_unwrap = zext i32 %14 to i64
+incinvertfor.body49:                              ; preds = %invertfor.body49
+  %inc595 = add i32 %reverse_mem.8.in, 17
   br label %invertfor.body49
 
-invertdelete_matrix.exit:                         ; preds = %if.then61, %for.body.preheader.i28
-  call void @diffeapply_global_transform(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'", { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg85)
+mergeinvertfor.body49_if.then61.loopexit:         ; preds = %invertdelete_matrix.exit
+  %wide.trip.count_unwrap = zext i32 %14 to i64, !node !285
+  br label %invertfor.body49
+
+invertdelete_matrix.exit:                         ; preds = %invertdelete_light_matrix_array.exit58, %invertfor.body.preheader.i28
+  %reverse_mem.9 = phi i32 [ %inc609, %invertfor.body.preheader.i28 ], [ 0, %invertdelete_light_matrix_array.exit58 ]
+  %reverse_op.9 = phi i32 [ %inc613, %invertfor.body.preheader.i28 ], [ 0, %invertdelete_light_matrix_array.exit58 ]
+  call void @diffeapply_global_transform(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'", { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg85), !node !285
   br i1 %or.cond, label %mergeinvertfor.body49_if.then61.loopexit, label %invertfor.end45
+
+invertfor.body.preheader.i28:                     ; preds = %invertfor.inc.i
+  %reverse_mem.10.lcssa = phi i32 [ %reverse_mem.10, %invertfor.inc.i ]
+  %reverse_op.10.lcssa = phi i32 [ %reverse_op.10, %invertfor.inc.i ]
+  %inc613 = add i32 %reverse_op.10.lcssa, 3
+  %inc609 = add i32 %reverse_mem.10.lcssa, 7
+  %41 = bitcast i1* %5 to i8*
+  tail call void @free(i8* nonnull %41)
+  br label %invertdelete_matrix.exit
+
+incinvertfor.body.i31:                            ; preds = %invertfor.inc.i
+  %42 = add nsw i64 %"iv14'ac.0", -1, !node !285
+  %inc617 = add i32 %reverse_op.10, 4
+  %inc619 = add i32 %reverse_mem.10, 6
+  br label %invertfor.inc.i
+
+invertfor.inc.i:                                  ; preds = %invertfor.body.preheader.i37, %incinvertfor.body.i31
+  %"iv14'ac.0" = phi i64 [ %_unwrap109, %invertfor.body.preheader.i37 ], [ %42, %incinvertfor.body.i31 ]
+  %reverse_mem.10 = phi i32 [ %inc639, %invertfor.body.preheader.i37 ], [ %inc619, %incinvertfor.body.i31 ]
+  %reverse_op.10 = phi i32 [ %inc631, %invertfor.body.preheader.i37 ], [ %inc617, %incinvertfor.body.i31 ]
+  %43 = icmp eq i64 %"iv14'ac.0", 0
+  br i1 %43, label %invertfor.body.preheader.i28, label %incinvertfor.body.i31
+
+invertfor.body.preheader.i37:                     ; preds = %invertfor.inc.i45
+  %reverse_mem.11.lcssa = phi i32 [ %reverse_mem.11, %invertfor.inc.i45 ]
+  %reverse_op.11.in.lcssa = phi i32 [ %reverse_op.11.in, %invertfor.inc.i45 ]
+  %44 = bitcast i1* %6 to i8*
+  tail call void @free(i8* nonnull %44)
+  %inc631 = add i32 %reverse_op.11.in.lcssa, 8
+  %inc639 = add i32 %reverse_mem.11.lcssa, 8
+  br label %invertfor.inc.i
+
+incinvertfor.body.i41:                            ; preds = %invertfor.inc.i45
+  %45 = add nsw i64 %"iv17'ac.0", -1, !node !285
+  %inc649 = add i32 %reverse_mem.11, 6
+  br label %invertfor.inc.i45
+
+invertfor.inc.i45:                                ; preds = %invertfor.body.preheader.i49, %incinvertfor.body.i41
+  %"iv17'ac.0" = phi i64 [ %_unwrap109, %invertfor.body.preheader.i49 ], [ %45, %incinvertfor.body.i41 ]
+  %reverse_mem.11 = phi i32 [ %inc669, %invertfor.body.preheader.i49 ], [ %inc649, %incinvertfor.body.i41 ]
+  %reverse_op.11.in = phi i32 [ %reverse_op.12.lcssa, %invertfor.body.preheader.i49 ], [ %reverse_op.11, %incinvertfor.body.i41 ]
+  %reverse_op.11 = add i32 %reverse_op.11.in, 4
+  %46 = icmp eq i64 %"iv17'ac.0", 0
+  br i1 %46, label %invertfor.body.preheader.i37, label %incinvertfor.body.i41
+
+invertfor.body.preheader.i49:                     ; preds = %invertfor.inc.i57
+  %reverse_mem.12.lcssa = phi i32 [ %reverse_mem.12, %invertfor.inc.i57 ]
+  %reverse_op.12.lcssa = phi i32 [ %reverse_op.12, %invertfor.inc.i57 ]
+  %47 = bitcast i1* %7 to i8*
+  tail call void @free(i8* nonnull %47)
+  %inc669 = add i32 %reverse_mem.12.lcssa, 8
+  br label %invertfor.inc.i45
+
+incinvertfor.body.i53:                            ; preds = %invertfor.inc.i57
+  %48 = add nsw i64 %"iv20'ac.0", -1, !node !285
+  %inc677 = add i32 %reverse_op.12, 4
+  %inc679 = add i32 %reverse_mem.12, 6
+  br label %invertfor.inc.i57
+
+invertfor.inc.i57:                                ; preds = %invertdelete_light_matrix_array.exit58.loopexit, %incinvertfor.body.i53
+  %"iv20'ac.0" = phi i64 [ %_unwrap109, %invertdelete_light_matrix_array.exit58.loopexit ], [ %48, %incinvertfor.body.i53 ]
+  %reverse_mem.12 = phi i32 [ 1, %invertdelete_light_matrix_array.exit58.loopexit ], [ %inc679, %incinvertfor.body.i53 ]
+  %reverse_op.12 = phi i32 [ 1, %invertdelete_light_matrix_array.exit58.loopexit ], [ %inc677, %incinvertfor.body.i53 ]
+  %49 = icmp eq i64 %"iv20'ac.0", 0
+  br i1 %49, label %invertfor.body.preheader.i49, label %incinvertfor.body.i53
+
+invertdelete_light_matrix_array.exit58.loopexit:  ; preds = %invertdelete_light_matrix_array.exit58
+  %wide.trip.count.i27_unwrap108 = zext i32 %bone_count to i64, !node !285
+  %_unwrap109 = add nsw i64 %wide.trip.count.i27_unwrap108, -1, !node !285
+  br label %invertfor.inc.i57
+
+invertdelete_light_matrix_array.exit58:           ; preds = %for.body.i53, %if.then61
+  %forward_mem.14 = phi i32 [ %inc267, %if.then61 ], [ %inc297, %for.body.i53 ]
+  %forward_op.14 = phi i32 [ %forward_op.10, %if.then61 ], [ %inc293, %for.body.i53 ]
+  br i1 %cmp15.i, label %invertdelete_light_matrix_array.exit58.loopexit, label %invertdelete_matrix.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -16308,97 +17141,184 @@ entry:
   %1 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 1
   %2 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 2
   %3 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 3
-  %4 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 4
-  %5 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 5
-  %6 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 6
+  %4 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 6
+  %5 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 4
+  %6 = extractvalue { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg, 5
   %cmp26 = icmp sgt i32 %count, 0
-  br i1 %cmp26, label %for.body.preheader, label %invertentry
+  br i1 %cmp26, label %for.body.preheader, label %invertfor.end
 
 for.body.preheader:                               ; preds = %entry
-  %wide.trip.count = zext i32 %count to i64, !node !273
-  %wide.trip.count_unwrap42 = zext i32 %count to i64
-  br label %invertfor.inc
+  %wide.trip.count = zext i32 %count to i64, !node !285
+  br label %for.body
 
-invertentry:                                      ; preds = %entry, %invertfor.body.preheader
+for.body:                                         ; preds = %for.inc, %for.body.preheader
+  %forward_mem.0 = phi i32 [ 8, %for.body.preheader ], [ %forward_mem.1, %for.inc ]
+  %forward_op.0 = phi i32 [ 4, %for.body.preheader ], [ %forward_op.2, %for.inc ]
+  %iv = phi i64 [ 0, %for.body.preheader ], [ %iv.next, %for.inc ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %7 = getelementptr inbounds i32, i32* %5, i64 %iv
+  %8 = load i32, i32* %7, align 4, !invariant.group !366
+  %cmp1 = icmp eq i32 %8, -1
+  br i1 %cmp1, label %if.end.i, label %if.else
+
+if.end.i:                                         ; preds = %for.body
+  %9 = getelementptr inbounds i32, i32* %4, i64 %iv
+  %mul.i = load i32, i32* %9, align 4, !invariant.group !367
+  %inc87 = add i32 %forward_op.0, 2
+  %inc95 = add i32 %forward_mem.0, 10
+  %cmp1131.i = icmp sgt i32 %mul.i, 0
+  br i1 %cmp1131.i, label %for.body.lr.ph.i, label %for.inc
+
+for.body.lr.ph.i:                                 ; preds = %if.end.i
+  %inc99 = add i32 %forward_mem.0, 12
+  %wide.trip.count.i = zext i32 %mul.i to i64
+  %inc101 = add i32 %forward_op.0, 3
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %for.body.lr.ph.i
+  %forward_op.1 = phi i32 [ %inc101, %for.body.lr.ph.i ], [ %inc103, %for.body.i ]
+  %iv2 = phi i64 [ 0, %for.body.lr.ph.i ], [ %iv.next3, %for.body.i ]
+  %iv.next3 = add nuw nsw i64 %iv2, 1
+  %inc103 = add i32 %forward_op.1, 1
+  %exitcond.not.i = icmp eq i64 %iv.next3, %wide.trip.count.i
+  br i1 %exitcond.not.i, label %for.inc, label %for.body.i, !llvm.loop !193
+
+if.else:                                          ; preds = %for.body
+  %inc73 = add i32 %forward_op.0, 1
+  %inc107 = add i32 %forward_mem.0, 4
+  br label %for.inc
+
+for.inc:                                          ; preds = %for.body.i, %if.else, %if.end.i
+  %forward_mem.1 = phi i32 [ %inc95, %if.end.i ], [ %inc107, %if.else ], [ %inc99, %for.body.i ]
+  %forward_op.2 = phi i32 [ %inc87, %if.end.i ], [ %inc73, %if.else ], [ %inc103, %for.body.i ]
+  %exitcond.not = icmp eq i64 %iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %invertfor.end, label %for.body, !llvm.loop !199
+
+invertentry:                                      ; preds = %invertfor.end, %invertfor.body.preheader
+  %reverse_mem.0 = phi i32 [ %inc145, %invertfor.body.preheader ], [ 0, %invertfor.end ]
+  %reverse_op.0 = phi i32 [ %inc149, %invertfor.body.preheader ], [ 0, %invertfor.end ]
+  %10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.3, i32 %reverse_op.0, i32 %forward_mem.2, i32 %reverse_mem.0)
   ret void
 
 invertfor.body.preheader:                         ; preds = %invertfor.body
-  %7 = bitcast i8** %0 to i8*
-  tail call void @free(i8* nonnull %7)
-  %8 = bitcast i8** %1 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double** %2 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %3 to i8*
-  tail call void @free(i8* nonnull %10)
-  %11 = bitcast i32* %4 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.body ]
+  %reverse_op.1.in.lcssa = phi i32 [ %reverse_op.1.in, %invertfor.body ]
+  %inc149 = add i32 %reverse_op.1.in.lcssa, 6
+  %11 = bitcast i8** %0 to i8*
   tail call void @free(i8* nonnull %11)
-  %12 = bitcast i1* %5 to i8*
+  %12 = bitcast i8** %1 to i8*
   tail call void @free(i8* nonnull %12)
-  %13 = bitcast i32* %6 to i8*
+  %13 = bitcast double** %2 to i8*
   tail call void @free(i8* nonnull %13)
+  %14 = bitcast { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %3 to i8*
+  tail call void @free(i8* nonnull %14)
+  %15 = bitcast i32* %4 to i8*
+  tail call void @free(i8* nonnull %15)
+  %16 = bitcast i32* %5 to i8*
+  tail call void @free(i8* nonnull %16)
+  %inc145 = add i32 %reverse_mem.1.lcssa, 18
+  %17 = bitcast i1* %6 to i8*
+  tail call void @free(i8* nonnull %17)
   br label %invertentry
 
 invertfor.body:                                   ; preds = %invertif.else, %invertif.end.i
-  %14 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %14, label %invertfor.body.preheader, label %invertfor.inc
+  %reverse_mem.1 = phi i32 [ %inc177, %invertif.end.i ], [ %inc249, %invertif.else ]
+  %reverse_op.1.in = phi i32 [ %reverse_op.2.in, %invertif.end.i ], [ %reverse_op.4, %invertif.else ]
+  %18 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %18, label %invertfor.body.preheader, label %incinvertfor.body
 
-invertif.end.i:                                   ; preds = %invertfor.body.i, %staging
-  %_unwrap7 = getelementptr inbounds i8*, i8** %0, i64 %"iv'ac.0"
-  %"call.i'mi_unwrap" = load i8*, i8** %_unwrap7, align 8, !invariant.group !352
-  tail call void @free(i8* nonnull %"call.i'mi_unwrap")
-  %_unwrap11 = getelementptr inbounds i8*, i8** %1, i64 %"iv'ac.0"
-  %call.i_unwrap = load i8*, i8** %_unwrap11, align 8, !invariant.group !353
-  tail call void @free(i8* %call.i_unwrap)
+incinvertfor.body:                                ; preds = %invertfor.body
+  %inc153 = add i32 %reverse_op.1.in, 7
+  %inc155 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc
+
+invertif.end.i:                                   ; preds = %staging, %invertfor.body.lr.ph.i
+  %reverse_mem.2 = phi i32 [ %inc215, %invertfor.body.lr.ph.i ], [ %inc281, %staging ]
+  %reverse_op.2.in = phi i32 [ %reverse_op.3.lcssa, %invertfor.body.lr.ph.i ], [ %reverse_op.4, %staging ]
+  %_unwrap7 = getelementptr inbounds i8*, i8** %0, i64 %"iv'ac.0", !node !285
+  %"call.i'mi_unwrap" = load i8*, i8** %_unwrap7, align 8, !invariant.group !368, !node !285
+  tail call void @free(i8* nonnull %"call.i'mi_unwrap"), !node !285
+  %_unwrap11 = getelementptr inbounds i8*, i8** %1, i64 %"iv'ac.0", !node !285
+  %call.i_unwrap = load i8*, i8** %_unwrap11, align 8, !invariant.group !369, !node !285
+  tail call void @free(i8* %call.i_unwrap), !node !285
+  %inc177 = add i32 %reverse_mem.2, 9
   br label %invertfor.body
 
-invertfor.body.i:                                 ; preds = %invertfor.body.i, %mergeinvertfor.body.i_for.inc.loopexit
-  %"iv2'ac.0.in" = phi i64 [ %wide.trip.count.i_unwrap, %mergeinvertfor.body.i_for.inc.loopexit ], [ %"iv2'ac.0", %invertfor.body.i ]
+invertfor.body.lr.ph.i:                           ; preds = %invertfor.body.i
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body.i ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body.i ]
+  %inc215 = add i32 %reverse_mem.3.lcssa, 17
+  br label %invertif.end.i
+
+invertfor.body.i:                                 ; preds = %mergeinvertfor.body.i_for.inc.loopexit, %incinvertfor.body.i
+  %"iv2'ac.0.in" = phi i64 [ %wide.trip.count.i_unwrap, %mergeinvertfor.body.i_for.inc.loopexit ], [ %"iv2'ac.0", %incinvertfor.body.i ]
+  %reverse_mem.3 = phi i32 [ %inc263, %mergeinvertfor.body.i_for.inc.loopexit ], [ %inc223, %incinvertfor.body.i ]
+  %reverse_op.3 = phi i32 [ %inc261, %mergeinvertfor.body.i_for.inc.loopexit ], [ %inc221, %incinvertfor.body.i ]
   %"iv2'ac.0" = add nsw i64 %"iv2'ac.0.in", -1
-  %_unwrap20 = getelementptr inbounds i8*, i8** %0, i64 %"iv'ac.0"
-  %15 = bitcast i8** %_unwrap20 to double**
-  %"call.i'mi_unwrap2150" = load double*, double** %15, align 8
-  %"arrayidx15.i'ipg_unwrap" = getelementptr inbounds double, double* %"call.i'mi_unwrap2150", i64 %"iv2'ac.0"
-  %16 = load double, double* %"arrayidx15.i'ipg_unwrap", align 8
+  %_unwrap20 = getelementptr inbounds i8*, i8** %0, i64 %"iv'ac.0", !node !285
+  %19 = bitcast i8** %_unwrap20 to double**
+  %"call.i'mi_unwrap21286" = load double*, double** %19, align 8
+  %"arrayidx15.i'ipg_unwrap" = getelementptr inbounds double, double* %"call.i'mi_unwrap21286", i64 %"iv2'ac.0", !node !285
+  %20 = load double, double* %"arrayidx15.i'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx15.i'ipg_unwrap", align 8
-  %_unwrap23 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap23, align 8, !invariant.group !354
-  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv2'ac.0"
-  %17 = load double, double* %"arrayidx.i'ipg_unwrap", align 8
-  %18 = fadd fast double %17, %16
-  store double %18, double* %"arrayidx.i'ipg_unwrap", align 8
-  %19 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %19, label %invertif.end.i, label %invertfor.body.i
+  %_unwrap23 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0", !node !285
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap23, align 8, !invariant.group !370, !node !285
+  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv2'ac.0", !node !285
+  %21 = load double, double* %"arrayidx.i'ipg_unwrap", align 8, !node !285
+  %22 = fadd fast double %21, %20, !node !285
+  store double %22, double* %"arrayidx.i'ipg_unwrap", align 8
+  %23 = icmp eq i64 %"iv2'ac.0", 0
+  br i1 %23, label %invertfor.body.lr.ph.i, label %incinvertfor.body.i
+
+incinvertfor.body.i:                              ; preds = %invertfor.body.i
+  %inc221 = add i32 %reverse_op.3, 4
+  %inc223 = add i32 %reverse_mem.3, 19
+  br label %invertfor.body.i
 
 invertif.else:                                    ; preds = %invertfor.inc
-  %idxprom8_unwrap = sext i32 %21 to i64
-  %arrayidx9_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %idxprom8_unwrap
-  %"arrayidx9'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %idxprom8_unwrap
-  %arrayidx11_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %"iv'ac.0"
-  %"arrayidx11'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"relatives'", i64 %"iv'ac.0"
-  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %"iv'ac.0"
-  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %"iv'ac.0"
-  %_unwrap33 = getelementptr inbounds { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %3, i64 %"iv'ac.0"
-  %tapeArg29_unwrap = load { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_unwrap33, align 8, !invariant.group !355
-  call void @diffemat_mult(%struct.Matrix* %arrayidx9_unwrap, %struct.Matrix* %"arrayidx9'ipg_unwrap", %struct.Matrix* %arrayidx11_unwrap, %struct.Matrix* %"arrayidx11'ipg_unwrap", %struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %tapeArg29_unwrap)
+  %idxprom8_unwrap = sext i32 %25 to i64, !node !285
+  %arrayidx9_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %idxprom8_unwrap, !node !285
+  %"arrayidx9'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %idxprom8_unwrap, !node !285
+  %arrayidx11_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %"iv'ac.0", !node !285
+  %"arrayidx11'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"relatives'", i64 %"iv'ac.0", !node !285
+  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %absolutes, i64 %"iv'ac.0", !node !285
+  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"absolutes'", i64 %"iv'ac.0", !node !285
+  %_unwrap33 = getelementptr inbounds { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %3, i64 %"iv'ac.0", !node !285
+  %inc249 = add i32 %reverse_mem.4, 17
+  %tapeArg29_unwrap = load { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }* %_unwrap33, align 8, !invariant.group !371, !node !285
+  call void @diffemat_mult(%struct.Matrix* %arrayidx9_unwrap, %struct.Matrix* %"arrayidx9'ipg_unwrap", %struct.Matrix* %arrayidx11_unwrap, %struct.Matrix* %"arrayidx11'ipg_unwrap", %struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %tapeArg29_unwrap), !node !285
   br label %invertfor.body
 
 mergeinvertfor.body.i_for.inc.loopexit:           ; preds = %staging
-  %wide.trip.count.i_unwrap = zext i32 %23 to i64
+  %inc261 = add i32 %reverse_op.4, 6
+  %wide.trip.count.i_unwrap = zext i32 %27 to i64, !node !285
+  %inc263 = add i32 %reverse_mem.4, 10
   br label %invertfor.body.i
 
-invertfor.inc:                                    ; preds = %invertfor.body, %for.body.preheader
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap42, %for.body.preheader ], [ %"iv'ac.0", %invertfor.body ]
+invertfor.inc:                                    ; preds = %mergeinvertfor.body_for.end.loopexit, %incinvertfor.body
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap42, %mergeinvertfor.body_for.end.loopexit ], [ %"iv'ac.0", %incinvertfor.body ]
+  %reverse_mem.4 = phi i32 [ 1, %mergeinvertfor.body_for.end.loopexit ], [ %inc155, %incinvertfor.body ]
+  %reverse_op.4 = phi i32 [ 1, %mergeinvertfor.body_for.end.loopexit ], [ %inc153, %incinvertfor.body ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
-  %20 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %21 = load i32, i32* %20, align 4, !invariant.group !356
-  %cmp1_unwrap = icmp eq i32 %21, -1
-  %22 = getelementptr inbounds i32, i32* %6, i64 %"iv'ac.0"
-  %23 = load i32, i32* %22, align 4, !invariant.group !357
+  %24 = getelementptr inbounds i32, i32* %5, i64 %"iv'ac.0", !node !285
+  %25 = load i32, i32* %24, align 4, !invariant.group !372, !node !285
+  %cmp1_unwrap = icmp eq i32 %25, -1
+  %26 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0", !node !285
+  %27 = load i32, i32* %26, align 4, !invariant.group !373, !node !285
   br i1 %cmp1_unwrap, label %staging, label %invertif.else
 
+mergeinvertfor.body_for.end.loopexit:             ; preds = %invertfor.end
+  %wide.trip.count_unwrap42 = zext i32 %count to i64, !node !285
+  br label %invertfor.inc
+
+invertfor.end:                                    ; preds = %for.inc, %entry
+  %forward_mem.2 = phi i32 [ 8, %entry ], [ %forward_mem.1, %for.inc ]
+  %forward_op.3 = phi i32 [ 0, %entry ], [ %forward_op.2, %for.inc ]
+  br i1 %cmp26, label %mergeinvertfor.body_for.end.loopexit, label %invertentry
+
 staging:                                          ; preds = %invertfor.inc
-  %cmp1131.i_unwrap = icmp sgt i32 %23, 0
+  %inc281 = add i32 %reverse_mem.4, 6
+  %cmp1131.i_unwrap = icmp sgt i32 %27, 0
   br i1 %cmp1131.i_unwrap, label %mergeinvertfor.body.i_for.inc.loopexit, label %invertif.end.i
 }
 
@@ -16418,17 +17338,76 @@ entry:
   %10 = extractvalue { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %tapeArg, 6
   %mul3.i = mul nsw i32 %10, %9
   %cmp.not.i = extractvalue { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** } %tapeArg, 7
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %9, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %10, 0
   %11 = zext i32 %9 to i64
   %wide.trip.count96 = zext i32 %10 to i64
-  %wide.trip.count100_unwrap121 = zext i32 %9 to i64
-  br label %invertfor.inc47
+  %inc201 = or i32 %forward_op.0, 4
+  %inc215 = add nuw nsw i32 %inc201, 7
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 17, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc215, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc217 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %12 = getelementptr inbounds i32, i32* %5, i64 %iv
+  %inc237 = add i32 %forward_mem.0, 10
+  %13 = load i32, i32* %12, align 4, !invariant.group !374
+  %cmp2281 = icmp sgt i32 %13, 1
+  %wide.trip.count = zext i32 %13 to i64
+  %inc239 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc237, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc239, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc269 = add i32 %forward_mem.1, 4
+  %inc279 = add i32 %forward_op.2, 16
+  br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
+
+for.body23.preheader:                             ; preds = %for.body5
+  %inc311 = add i32 %forward_op.2, 31
+  %inc313 = add i32 %forward_mem.1, 6
+  br label %for.body23
+
+for.body23:                                       ; preds = %for.body23, %for.body23.preheader
+  %forward_mem.2 = phi i32 [ %inc313, %for.body23.preheader ], [ %inc351, %for.body23 ]
+  %forward_op.3 = phi i32 [ %inc311, %for.body23.preheader ], [ %inc359, %for.body23 ]
+  %iv6 = phi i64 [ 0, %for.body23.preheader ], [ %iv.next7, %for.body23 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc351 = add i32 %forward_mem.2, 6
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc359 = add i32 %forward_op.3, 17
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc269, %for.body5 ], [ %inc351, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc279, %for.body5 ], [ %inc359, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc217, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %11
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %14 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -16438,167 +17417,221 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc427, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc431, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %12 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %12)
-  %13 = bitcast double** %1 to i8*
-  tail call void @free(i8* nonnull %13)
-  %14 = bitcast double** %2 to i8*
-  tail call void @free(i8* nonnull %14)
-  %15 = bitcast double** %3 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc431 = add i32 %reverse_op.1.lcssa, 1
+  %15 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %15)
-  %16 = bitcast i32* %4 to i8*
+  %16 = bitcast double** %1 to i8*
   tail call void @free(i8* nonnull %16)
-  %17 = bitcast i32* %5 to i8*
+  %17 = bitcast double** %2 to i8*
   tail call void @free(i8* nonnull %17)
-  %18 = bitcast double* %6 to i8*
+  %18 = bitcast double** %3 to i8*
   tail call void @free(i8* nonnull %18)
-  %19 = bitcast double* %7 to i8*
+  %19 = bitcast i32* %4 to i8*
   tail call void @free(i8* nonnull %19)
-  %20 = bitcast double** %8 to i8*
+  %20 = bitcast i32* %5 to i8*
   tail call void @free(i8* nonnull %20)
+  %21 = bitcast double* %6 to i8*
+  tail call void @free(i8* nonnull %21)
+  %22 = bitcast double* %7 to i8*
+  tail call void @free(i8* nonnull %22)
+  %inc427 = add i32 %reverse_mem.1.lcssa, 33
+  %23 = bitcast double** %8 to i8*
+  tail call void @free(i8* nonnull %23)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %21 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %21, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc573, %invertfor.body5.lr.ph ], [ %inc875, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc575.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %24 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %24, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
+
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc435 = add i32 %reverse_op.1, 2
+  %inc437 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc575.lcssa = phi i32 [ %inc575, %invertfor.body5 ]
+  %inc573 = add i32 %reverse_mem.2.lcssa, 43
+  br label %invertfor.cond2.preheader
 
 invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
-  %"add43'de.1" = phi double [ %.lcssa160, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"add43'de.1" = phi double [ %.lcssa883, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc617, %invertfor.body23.preheader ], [ %inc867, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc615, %invertfor.body23.preheader ], [ %inc863, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !358
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !375
   %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap121
   %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
-  %22 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+  %25 = load double, double* %"arrayidx19'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %23 = fadd fast double %"mul13'de.1", %22
-  %24 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap119
-  %25 = add nuw nsw i64 %"iv4'ac.1", %24
-  %26 = getelementptr inbounds double, double* %6, i64 %25
-  %27 = load double, double* %26, align 8, !invariant.group !359
-  %m0diffe = fmul fast double %23, %27
-  %28 = getelementptr inbounds double, double* %7, i64 %25
-  %29 = load double, double* %28, align 8, !invariant.group !360
-  %m1diffe = fmul fast double %23, %29
+  %26 = fadd fast double %"mul13'de.1", %25
+  %27 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap119
+  %28 = add nuw nsw i64 %"iv4'ac.1", %27
+  %29 = getelementptr inbounds double, double* %6, i64 %28
+  %30 = load double, double* %29, align 8, !invariant.group !376
+  %m0diffe = fmul fast double %26, %30
+  %31 = getelementptr inbounds double, double* %7, i64 %28
+  %32 = load double, double* %31, align 8, !invariant.group !377
+  %m1diffe = fmul fast double %26, %32
   %_unwrap34 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap" = load double*, double** %_unwrap34, align 8, !invariant.group !361
-  %30 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %31 = load i32, i32* %30, align 4, !invariant.group !362
-  %_unwrap40 = sext i32 %31 to i64
+  %"'il_phi2_unwrap" = load double*, double** %_unwrap34, align 8, !invariant.group !378
+  %33 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
+  %34 = load i32, i32* %33, align 4, !invariant.group !379
+  %_unwrap40 = sext i32 %34 to i64
   %_unwrap41 = mul nsw i64 %"iv4'ac.1", %_unwrap40
   %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap", i64 %_unwrap41
-  %32 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %33 = fadd fast double %32, %m0diffe
-  store double %33, double* %"arrayidx12'ipg_unwrap", align 8
+  %35 = load double, double* %"arrayidx12'ipg_unwrap", align 8
+  %36 = fadd fast double %35, %m0diffe
+  store double %36, double* %"arrayidx12'ipg_unwrap", align 8
   %_unwrap43 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap43, align 8, !invariant.group !363
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap43, align 8, !invariant.group !380
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
-  %34 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %35 = fadd fast double %34, %m1diffe
-  store double %35, double* %"arrayidx'ipg_unwrap", align 8
-  %36 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %36, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %37 = load double, double* %"arrayidx'ipg_unwrap", align 8
+  %38 = fadd fast double %37, %m1diffe
+  store double %38, double* %"arrayidx'ipg_unwrap", align 8
+  %39 = icmp eq i64 %"iv4'ac.1", 0
+  %inc575 = add i32 %reverse_op.2, 26
+  br i1 %39, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc581 = add i32 %reverse_mem.2, 45
+  br label %invertfor.inc44
 
 invertfor.body23.preheader:                       ; preds = %invertfor.body23
-  %.lcssa162 = phi double** [ %60, %invertfor.body23 ]
-  %.lcssa161 = phi double** [ %61, %invertfor.body23 ]
-  %.lcssa160 = phi double [ %54, %invertfor.body23 ]
-  %.lcssa = phi double [ %56, %invertfor.body23 ]
-  %37 = bitcast double** %.lcssa161 to i8**
-  %forfree129158 = load i8*, i8** %37, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree129158)
-  %38 = bitcast double** %.lcssa162 to i8**
-  %forfree144159 = load i8*, i8** %38, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree144159)
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa885 = phi double** [ %46, %invertfor.body23 ]
+  %.lcssa884 = phi double** [ %50, %invertfor.body23 ]
+  %.lcssa883 = phi double [ %61, %invertfor.body23 ]
+  %.lcssa = phi double [ %63, %invertfor.body23 ]
+  %40 = bitcast double** %.lcssa884 to i8**
+  %forfree129880 = load i8*, i8** %40, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree129880)
+  %inc615 = add i32 %reverse_op.3.lcssa, 44
+  %inc617 = add i32 %reverse_mem.3.lcssa, 82
+  %41 = bitcast double** %.lcssa885 to i8**
+  %forfree144881 = load i8*, i8** %41, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree144881)
   br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %54, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %56, %incinvertfor.body23 ]
-  %"iv6'ac.0" = phi i64 [ %_unwrap115, %mergeinvertfor.body23_for.inc44.loopexit ], [ %57, %incinvertfor.body23 ]
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %61, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %63, %incinvertfor.body23 ]
+  %"iv6'ac.0" = phi i64 [ %_unwrap115, %mergeinvertfor.body23_for.inc44.loopexit ], [ %64, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc855, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc839, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc853, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc837, %incinvertfor.body23 ]
   %_unwrap45 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap46" = load double*, double** %_unwrap45, align 8, !invariant.group !358
+  %"'il_phi3_unwrap46" = load double*, double** %_unwrap45, align 8, !invariant.group !375
   %_unwrap48 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap121
   %_unwrap49 = add nuw nsw i64 %_unwrap48, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap50" = getelementptr inbounds double, double* %"'il_phi3_unwrap46", i64 %_unwrap49
-  %39 = load double, double* %"arrayidx19'ipg_unwrap50", align 8
+  %42 = load double, double* %"arrayidx19'ipg_unwrap50", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap50", align 8
-  %40 = fadd fast double %"add43'de.2", %39
-  %41 = load double*, double** %60, align 8, !dereferenceable !284, !invariant.group !364
-  %42 = getelementptr inbounds double, double* %41, i64 %"iv6'ac.0"
-  %43 = load double, double* %42, align 8, !invariant.group !365
-  %m0diffe76 = fmul fast double %40, %43
-  %44 = load double*, double** %61, align 8, !dereferenceable !284, !invariant.group !366
-  %45 = getelementptr inbounds double, double* %44, i64 %"iv6'ac.0"
-  %46 = load double, double* %45, align 8, !invariant.group !367
-  %m1diffe90 = fmul fast double %40, %46
+  %43 = fadd fast double %"add43'de.2", %42
+  %44 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap119
+  %45 = add nuw nsw i64 %"iv4'ac.1", %44
+  %46 = getelementptr inbounds double*, double** %8, i64 %45
+  %47 = load double*, double** %46, align 8, !dereferenceable !298, !invariant.group !381
+  %48 = getelementptr inbounds double, double* %47, i64 %"iv6'ac.0"
+  %49 = load double, double* %48, align 8, !invariant.group !382
+  %m0diffe76 = fmul fast double %43, %49
+  %50 = getelementptr inbounds double*, double** %3, i64 %45
+  %51 = load double*, double** %50, align 8, !dereferenceable !298, !invariant.group !383
+  %52 = getelementptr inbounds double, double* %51, i64 %"iv6'ac.0"
+  %53 = load double, double* %52, align 8, !invariant.group !384
+  %m1diffe90 = fmul fast double %43, %53
   %_unwrap94 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap95" = load double*, double** %_unwrap94, align 8, !invariant.group !361
+  %"'il_phi2_unwrap95" = load double*, double** %_unwrap94, align 8, !invariant.group !378
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
-  %47 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %48 = load i32, i32* %47, align 4, !invariant.group !362
-  %_unwrap96 = sext i32 %48 to i64
+  %54 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
+  %55 = load i32, i32* %54, align 4, !invariant.group !379
+  %_unwrap96 = sext i32 %55 to i64
   %_unwrap97 = mul nsw i64 %"iv4'ac.1", %_unwrap96
   %_unwrap98 = add nsw i64 %iv.next7_unwrap, %_unwrap97
   %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap95", i64 %_unwrap98
-  %49 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %50 = fadd fast double %49, %m0diffe76
-  store double %50, double* %"arrayidx35'ipg_unwrap", align 8
+  %56 = load double, double* %"arrayidx35'ipg_unwrap", align 8
+  %57 = fadd fast double %56, %m0diffe76
+  store double %57, double* %"arrayidx35'ipg_unwrap", align 8
   %_unwrap100 = getelementptr inbounds double*, double** %2, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap101" = load double*, double** %_unwrap100, align 8, !invariant.group !363
+  %"'il_phi1_unwrap101" = load double*, double** %_unwrap100, align 8, !invariant.group !380
   %_unwrap102 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap121
   %_unwrap103 = add nuw nsw i64 %_unwrap102, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap101", i64 %_unwrap103
-  %51 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %52 = fadd fast double %51, %m1diffe90
-  store double %52, double* %"arrayidx29'ipg_unwrap", align 8
-  %53 = icmp eq i64 %"iv6'ac.0", 0
-  %54 = select fast i1 %53, double 0.000000e+00, double %40
-  %55 = fadd fast double %"mul13'de.2", %40
-  %56 = select fast i1 %53, double %55, double %"mul13'de.2"
-  br i1 %53, label %invertfor.body23.preheader, label %incinvertfor.body23
+  %58 = load double, double* %"arrayidx29'ipg_unwrap", align 8
+  %59 = fadd fast double %58, %m1diffe90
+  store double %59, double* %"arrayidx29'ipg_unwrap", align 8
+  %60 = icmp eq i64 %"iv6'ac.0", 0
+  %61 = select fast i1 %60, double 0.000000e+00, double %43
+  %62 = fadd fast double %"mul13'de.2", %43
+  %63 = select fast i1 %60, double %62, double %"mul13'de.2"
+  br i1 %60, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %57 = add nsw i64 %"iv6'ac.0", -1
+  %64 = add nsw i64 %"iv6'ac.0", -1
+  %inc837 = add i32 %reverse_op.3, 39
+  %inc839 = add i32 %reverse_mem.3, 72
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap114 = zext i32 %63 to i64
+  %inc853 = add i32 %reverse_op.4.in, 6
+  %wide.trip.count_unwrap114 = zext i32 %66 to i64
   %_unwrap115 = add nsw i64 %wide.trip.count_unwrap114, -2
-  %58 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap119
-  %59 = add nuw nsw i64 %"iv4'ac.1", %58
-  %60 = getelementptr inbounds double*, double** %8, i64 %59
-  %61 = getelementptr inbounds double*, double** %3, i64 %59
+  %inc855 = add i32 %reverse_mem.4, 9
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %invertfor.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap119, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %invertfor.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap119, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc873, %invertfor.inc47.loopexit ], [ %inc581, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %invertfor.inc47.loopexit ], [ %inc575, %incinvertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %62 = getelementptr inbounds i32, i32* %5, i64 %"iv'ac.0"
-  %63 = load i32, i32* %62, align 4, !invariant.group !368
-  %cmp2281_unwrap = icmp sgt i32 %63, 1
+  %inc863 = add i32 %reverse_op.4.in, 3
+  %65 = getelementptr inbounds i32, i32* %5, i64 %"iv'ac.0"
+  %inc867 = add i32 %reverse_mem.4, 4
+  %66 = load i32, i32* %65, align 4, !invariant.group !385
+  %cmp2281_unwrap = icmp sgt i32 %66, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 invertfor.inc47.loopexit:                         ; preds = %invertfor.inc47
   %wide.trip.count96_unwrap119 = zext i32 %10 to i64
+  %inc873 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap121, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap121, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc437, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc435, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc875 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %10, 0
   br i1 %cmp483_unwrap, label %invertfor.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap121 = zext i32 %9 to i64
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 17, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -16607,8 +17640,8 @@ entry:
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 8
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 9
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 10
-  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 14
-  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 13
+  %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 13
+  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 14
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 6
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 5
   %"'ipc59" = bitcast i8* %"call.i'mi" to %struct.Matrix*
@@ -16620,14 +17653,105 @@ entry:
   %6 = bitcast i8* %call.i18 to %struct.Matrix*
   %cmp40 = icmp sgt i32 %bone_count, 0
   %"'ipc" = bitcast i8* %"call4.i'mi" to double*
-  br i1 %cmp40, label %for.body.lr.ph, label %invertentry
+  br i1 %cmp40, label %for.body.lr.ph, label %invertdelete_matrix.exit39
 
 for.body.lr.ph:                                   ; preds = %entry
-  %wide.trip.count = zext i32 %bone_count to i64, !node !273
-  %wide.trip.count_unwrap67 = zext i32 %bone_count to i64
-  br label %invertset_block.exit
+  %wide.trip.count = zext i32 %bone_count to i64, !node !285
+  br label %for.cond1.preheader.lr.ph.i
 
-invertentry:                                      ; preds = %entry, %invertfor.body.lr.ph
+for.cond1.preheader.lr.ph.i:                      ; preds = %set_block.exit, %for.body.lr.ph
+  %forward_mem.0 = phi i32 [ 6, %for.body.lr.ph ], [ %inc154, %set_block.exit ]
+  %forward_op.0 = phi i32 [ 4, %for.body.lr.ph ], [ %forward_op.7, %set_block.exit ]
+  %iv = phi i64 [ 0, %for.body.lr.ph ], [ %iv.next, %set_block.exit ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc96 = add i32 %forward_op.0, 1
+  br label %for.body3.lr.ph.i
+
+for.body3.lr.ph.i:                                ; preds = %for.inc12.i, %for.cond1.preheader.lr.ph.i
+  %forward_op.1 = phi i32 [ %inc96, %for.cond1.preheader.lr.ph.i ], [ %forward_op.3.lcssa, %for.inc12.i ]
+  %iv1 = phi i64 [ 0, %for.cond1.preheader.lr.ph.i ], [ %iv.next2, %for.inc12.i ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %inc104 = add i32 %forward_op.1, 4
+  br label %for.body3.i
+
+for.body3.i:                                      ; preds = %for.body3.i, %for.body3.lr.ph.i
+  %forward_op.2 = phi i32 [ %inc104, %for.body3.lr.ph.i ], [ %forward_op.3, %for.body3.i ]
+  %iv3 = phi i64 [ 0, %for.body3.lr.ph.i ], [ %iv.next4, %for.body3.i ]
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %cmp4.i = icmp eq i64 %iv1, %iv3
+  %inc106 = add i32 %forward_op.2, 1
+  %inc108 = add i32 %forward_op.2, 2
+  %forward_op.3 = select i1 %cmp4.i, i32 %inc106, i32 %inc108
+  %exitcond.not.i = icmp eq i64 %iv.next4, 4
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !188
+
+for.inc12.i:                                      ; preds = %for.body3.i
+  %forward_op.3.lcssa = phi i32 [ %forward_op.3, %for.body3.i ]
+  %exitcond37.not.i = icmp eq i64 %iv.next2, 4
+  br i1 %exitcond37.not.i, label %set_identity.exit, label %for.body3.lr.ph.i, !llvm.loop !189
+
+set_identity.exit:                                ; preds = %for.inc12.i
+  %forward_op.3.lcssa.lcssa = phi i32 [ %forward_op.3.lcssa, %for.inc12.i ]
+  %inc112 = add i32 %forward_op.3.lcssa.lcssa, 2
+  %7 = getelementptr inbounds i32, i32* %3, i64 %iv
+  %inc120 = add i32 %forward_mem.0, 4
+  %8 = load i32, i32* %7, align 4, !invariant.group !386
+  %cmp30.i = icmp sgt i32 %8, 0
+  br i1 %cmp30.i, label %for.cond1.preheader.lr.ph.i26, label %set_block.exit
+
+for.cond1.preheader.lr.ph.i26:                    ; preds = %set_identity.exit
+  %9 = getelementptr inbounds i32, i32* %4, i64 %iv
+  %10 = load i32, i32* %9, align 4, !invariant.group !387
+  %cmp228.i = icmp sgt i32 %10, 0
+  %wide.trip.count.i = zext i32 %10 to i64
+  %11 = zext i32 %8 to i64
+  %inc130 = add i32 %forward_op.3.lcssa.lcssa, 5
+  %inc132 = add i32 %forward_mem.0, 7
+  br label %for.cond1.preheader.i27
+
+for.cond1.preheader.i27:                          ; preds = %for.inc13.i, %for.cond1.preheader.lr.ph.i26
+  %forward_mem.1 = phi i32 [ %inc132, %for.cond1.preheader.lr.ph.i26 ], [ %forward_mem.2, %for.inc13.i ]
+  %forward_op.4 = phi i32 [ %inc130, %for.cond1.preheader.lr.ph.i26 ], [ %forward_op.6, %for.inc13.i ]
+  %iv5 = phi i64 [ 0, %for.cond1.preheader.lr.ph.i26 ], [ %iv.next6, %for.inc13.i ]
+  %iv.next6 = add nuw nsw i64 %iv5, 1
+  %inc134 = add i32 %forward_op.4, 1
+  br i1 %cmp228.i, label %for.body3.lr.ph.i29, label %for.inc13.i
+
+for.body3.lr.ph.i29:                              ; preds = %for.cond1.preheader.i27
+  %inc140 = add i32 %forward_mem.1, 3
+  %inc144 = add i32 %forward_op.4, 3
+  br label %for.body3.i32
+
+for.body3.i32:                                    ; preds = %for.body3.i32, %for.body3.lr.ph.i29
+  %forward_op.5 = phi i32 [ %inc144, %for.body3.lr.ph.i29 ], [ %inc150, %for.body3.i32 ]
+  %iv8 = phi i64 [ 0, %for.body3.lr.ph.i29 ], [ %iv.next9, %for.body3.i32 ]
+  %iv.next9 = add nuw nsw i64 %iv8, 1
+  %inc150 = add i32 %forward_op.5, 3
+  %exitcond.not.i31 = icmp eq i64 %iv.next9, %wide.trip.count.i
+  br i1 %exitcond.not.i31, label %for.inc13.i, label %for.body3.i32, !llvm.loop !191
+
+for.inc13.i:                                      ; preds = %for.body3.i32, %for.cond1.preheader.i27
+  %forward_mem.2 = phi i32 [ %forward_mem.1, %for.cond1.preheader.i27 ], [ %inc140, %for.body3.i32 ]
+  %forward_op.6 = phi i32 [ %inc134, %for.cond1.preheader.i27 ], [ %inc150, %for.body3.i32 ]
+  %exitcond37.not.i33 = icmp eq i64 %iv.next6, %11
+  br i1 %exitcond37.not.i33, label %set_block.exit, label %for.cond1.preheader.i27, !llvm.loop !192
+
+set_block.exit:                                   ; preds = %for.inc13.i, %set_identity.exit
+  %forward_mem.3 = phi i32 [ %inc120, %set_identity.exit ], [ %forward_mem.2, %for.inc13.i ]
+  %forward_op.7 = phi i32 [ %inc112, %set_identity.exit ], [ %forward_op.6, %for.inc13.i ]
+  %inc154 = add i32 %forward_mem.3, 2
+  %exitcond.not = icmp eq i64 %iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.end.loopexit, label %for.cond1.preheader.lr.ph.i, !llvm.loop !200
+
+for.end.loopexit:                                 ; preds = %set_block.exit
+  %forward_mem.3.lcssa = phi i32 [ %forward_mem.3, %set_block.exit ]
+  %forward_op.7.lcssa = phi i32 [ %forward_op.7, %set_block.exit ]
+  %phi.bo = add i32 %forward_mem.3.lcssa, 3
+  br label %invertdelete_matrix.exit39
+
+invertentry:                                      ; preds = %invertdelete_matrix.exit39, %invertfor.body.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc184, %invertfor.body.lr.ph ], [ 0, %invertdelete_matrix.exit39 ]
+  %reverse_op.0 = phi i32 [ %inc188, %invertfor.body.lr.ph ], [ 0, %invertdelete_matrix.exit39 ]
   %"call4.i21'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 0
   %call4.i21 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 1
   tail call void @free(i8* nonnull %"call4.i21'mi")
@@ -16637,39 +17761,57 @@ invertentry:                                      ; preds = %entry, %invertfor.b
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
+  %12 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.8, i32 %reverse_op.0, i32 %forward_mem.4, i32 %reverse_mem.0)
   ret void
 
 invertfor.body.lr.ph:                             ; preds = %invertfor.cond1.preheader.lr.ph.i
-  %7 = bitcast { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0 to i8*
-  tail call void @free(i8* nonnull %7)
-  %8 = bitcast double*** %1 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %2 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast i32* %3 to i8*
-  tail call void @free(i8* nonnull %10)
-  %11 = bitcast i32* %4 to i8*
-  tail call void @free(i8* nonnull %11)
+  %reverse_mem.2.in.lcssa.lcssa.lcssa = phi i32 [ %reverse_mem.2.in.lcssa.lcssa, %invertfor.cond1.preheader.lr.ph.i ]
+  %reverse_op.2.lcssa.lcssa.lcssa = phi i32 [ %reverse_op.2.lcssa.lcssa, %invertfor.cond1.preheader.lr.ph.i ]
+  %inc188 = add i32 %reverse_op.2.lcssa.lcssa.lcssa, 5
+  %13 = bitcast { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0 to i8*
+  tail call void @free(i8* nonnull %13)
+  %14 = bitcast double*** %1 to i8*
+  tail call void @free(i8* nonnull %14)
+  %15 = bitcast { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %2 to i8*
+  tail call void @free(i8* nonnull %15)
+  %16 = bitcast i32* %3 to i8*
+  tail call void @free(i8* nonnull %16)
+  %inc184 = add i32 %reverse_mem.2.in.lcssa.lcssa.lcssa, 23
+  %17 = bitcast i32* %4 to i8*
+  tail call void @free(i8* nonnull %17)
   br label %invertentry
 
 invertfor.cond1.preheader.lr.ph.i:                ; preds = %invertfor.body3.lr.ph.i
-  %12 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %12, label %invertfor.body.lr.ph, label %invertset_block.exit
+  %reverse_mem.2.in.lcssa.lcssa = phi i32 [ %reverse_mem.2.in.lcssa, %invertfor.body3.lr.ph.i ]
+  %reverse_op.2.lcssa.lcssa = phi i32 [ %reverse_op.2.lcssa, %invertfor.body3.lr.ph.i ]
+  %18 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %18, label %invertfor.body.lr.ph, label %incinvertfor.cond1.preheader.lr.ph.i
+
+incinvertfor.cond1.preheader.lr.ph.i:             ; preds = %invertfor.cond1.preheader.lr.ph.i
+  %inc192 = add i32 %reverse_op.2.lcssa.lcssa, 6
+  %inc194 = add i32 %reverse_mem.2.in.lcssa.lcssa, 13
+  br label %invertset_block.exit
 
 invertfor.body3.lr.ph.i:                          ; preds = %invertfor.body3.i
-  %13 = icmp eq i64 %"iv1'ac.0", 0
-  br i1 %13, label %invertfor.cond1.preheader.lr.ph.i, label %incinvertfor.body3.lr.ph.i
+  %reverse_mem.2.in.lcssa = phi i32 [ %reverse_mem.2.in, %invertfor.body3.i ]
+  %reverse_op.2.lcssa = phi i32 [ %reverse_op.2, %invertfor.body3.i ]
+  %19 = icmp eq i64 %"iv1'ac.0", 0
+  br i1 %19, label %invertfor.cond1.preheader.lr.ph.i, label %incinvertfor.body3.lr.ph.i
 
 incinvertfor.body3.lr.ph.i:                       ; preds = %invertfor.body3.lr.ph.i
-  %14 = add nsw i64 %"iv1'ac.0", -1
+  %20 = add nsw i64 %"iv1'ac.0", -1
+  %inc202 = add i32 %reverse_op.2.lcssa, 5
+  %inc204 = add i32 %reverse_mem.2.in.lcssa, 12
   br label %invertfor.inc12.i
 
 invertfor.body3.i:                                ; preds = %invertif.else.i, %invertif.then.i
-  %15 = icmp eq i64 %"iv3'ac.0", 0
-  br i1 %15, label %invertfor.body3.lr.ph.i, label %incinvertfor.body3.i
+  %21 = icmp eq i64 %"iv3'ac.0", 0
+  br i1 %21, label %invertfor.body3.lr.ph.i, label %incinvertfor.body3.i
 
 incinvertfor.body3.i:                             ; preds = %invertfor.body3.i
-  %16 = add nsw i64 %"iv3'ac.0", -1
+  %inc210 = add i32 %reverse_mem.2.in, 10
+  %22 = add nsw i64 %"iv3'ac.0", -1
+  %inc212 = add i32 %reverse_op.2, 4
   br label %invertfor.inc.i
 
 invertif.then.i:                                  ; preds = %invertfor.inc.i
@@ -16686,147 +17828,201 @@ invertif.else.i:                                  ; preds = %invertfor.inc.i
   br label %invertfor.body3.i
 
 invertfor.inc.i:                                  ; preds = %invertfor.inc12.i, %incinvertfor.body3.i
-  %"iv3'ac.0" = phi i64 [ 3, %invertfor.inc12.i ], [ %16, %incinvertfor.body3.i ]
+  %"iv3'ac.0" = phi i64 [ 3, %invertfor.inc12.i ], [ %22, %incinvertfor.body3.i ]
+  %reverse_mem.2.in = phi i32 [ %reverse_mem.3, %invertfor.inc12.i ], [ %inc210, %incinvertfor.body3.i ]
+  %reverse_op.2 = phi i32 [ %reverse_op.3, %invertfor.inc12.i ], [ %inc212, %incinvertfor.body3.i ]
   %cmp4.i_unwrap = icmp eq i64 %"iv1'ac.0", %"iv3'ac.0"
   br i1 %cmp4.i_unwrap, label %invertif.then.i, label %invertif.else.i
 
 invertfor.inc12.i:                                ; preds = %invertset_identity.exit, %incinvertfor.body3.lr.ph.i
-  %"iv1'ac.0" = phi i64 [ 3, %invertset_identity.exit ], [ %14, %incinvertfor.body3.lr.ph.i ]
+  %"iv1'ac.0" = phi i64 [ 3, %invertset_identity.exit ], [ %20, %incinvertfor.body3.lr.ph.i ]
+  %reverse_mem.3 = phi i32 [ %inc262, %invertset_identity.exit ], [ %inc204, %incinvertfor.body3.lr.ph.i ]
+  %reverse_op.3 = phi i32 [ %inc252, %invertset_identity.exit ], [ %inc202, %incinvertfor.body3.lr.ph.i ]
   br label %invertfor.inc.i
 
 invertset_identity.exit:                          ; preds = %invertset_block.exit, %invertfor.cond1.preheader.lr.ph.i26
-  %_unwrap75 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 11
-  %_unwrap76 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 12
-  %_unwrap20 = trunc i64 %"iv'ac.0" to i32
-  %_unwrap21 = add i32 %_unwrap20, 3
-  %mul_unwrap = mul nsw i32 %_unwrap76, %_unwrap21
-  %idx.ext_unwrap = sext i32 %mul_unwrap to i64
-  %add.ptr_unwrap = getelementptr inbounds double, double* %_unwrap75, i64 %idx.ext_unwrap
+  %reverse_mem.4 = phi i32 [ %inc270, %invertfor.cond1.preheader.lr.ph.i26 ], [ %inc408, %invertset_block.exit ]
+  %reverse_op.4 = phi i32 [ %inc274, %invertfor.cond1.preheader.lr.ph.i26 ], [ %inc404, %invertset_block.exit ]
+  %_unwrap76 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 11
+  %_unwrap75 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 12
+  %_unwrap20 = trunc i64 %"iv'ac.0" to i32, !node !285
+  %_unwrap21 = add i32 %_unwrap20, 3, !node !285
+  %mul_unwrap = mul nsw i32 %_unwrap75, %_unwrap21, !node !285
+  %idx.ext_unwrap = sext i32 %mul_unwrap to i64, !node !285
+  %add.ptr_unwrap = getelementptr inbounds double, double* %_unwrap76, i64 %idx.ext_unwrap, !node !285
   %"'il_phi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg, 7
-  %"add.ptr'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi_unwrap", i64 %idx.ext_unwrap
+  %"add.ptr'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi_unwrap", i64 %idx.ext_unwrap, !node !285
   %tapeArg23_unwrap.elt = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 0
   %tapeArg23_unwrap.unpack = load i8*, i8** %tapeArg23_unwrap.elt, align 8
-  %17 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } undef, i8* %tapeArg23_unwrap.unpack, 0
-  %tapeArg23_unwrap.elt77 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 1
-  %tapeArg23_unwrap.unpack78 = load i8*, i8** %tapeArg23_unwrap.elt77, align 8
-  %18 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %17, i8* %tapeArg23_unwrap.unpack78, 1
-  %tapeArg23_unwrap.elt79 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 2
-  %tapeArg23_unwrap.unpack80 = load i8*, i8** %tapeArg23_unwrap.elt79, align 8
-  %19 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %18, i8* %tapeArg23_unwrap.unpack80, 2
-  %tapeArg23_unwrap.elt81 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 3
-  %tapeArg23_unwrap.unpack82 = load i8*, i8** %tapeArg23_unwrap.elt81, align 8
-  %20 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %19, i8* %tapeArg23_unwrap.unpack82, 3
-  %tapeArg23_unwrap.elt83 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 4
-  %tapeArg23_unwrap.unpack84 = load i8*, i8** %tapeArg23_unwrap.elt83, align 8
-  %21 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %20, i8* %tapeArg23_unwrap.unpack84, 4
-  %tapeArg23_unwrap.elt85 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 5
-  %tapeArg23_unwrap.unpack86 = load i8*, i8** %tapeArg23_unwrap.elt85, align 8
-  %22 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %21, i8* %tapeArg23_unwrap.unpack86, 5
-  %tapeArg23_unwrap.elt87 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 6
-  %tapeArg23_unwrap.unpack88 = load i8*, i8** %tapeArg23_unwrap.elt87, align 8
-  %23 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %22, i8* %tapeArg23_unwrap.unpack88, 6
-  %tapeArg23_unwrap.elt89 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 7
-  %tapeArg23_unwrap.unpack90 = load i8*, i8** %tapeArg23_unwrap.elt89, align 8
-  %24 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %23, i8* %tapeArg23_unwrap.unpack90, 7
-  %tapeArg23_unwrap.elt91 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 8
-  %tapeArg23_unwrap.unpack92 = load i8*, i8** %tapeArg23_unwrap.elt91, align 8
-  %25 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %24, i8* %tapeArg23_unwrap.unpack92, 8
-  %tapeArg23_unwrap.elt93 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 9
-  %tapeArg23_unwrap.unpack94 = load { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }* %tapeArg23_unwrap.elt93, align 8
-  %26 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %25, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg23_unwrap.unpack94, 9
-  %tapeArg23_unwrap.elt95 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 10
-  %tapeArg23_unwrap.unpack96 = load { i8*, i8*, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }* %tapeArg23_unwrap.elt95, align 8
-  %27 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %26, { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg23_unwrap.unpack96, 10
-  %tapeArg23_unwrap.elt97 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 11
-  %tapeArg23_unwrap.unpack98 = load i8*, i8** %tapeArg23_unwrap.elt97, align 8
-  %28 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %27, i8* %tapeArg23_unwrap.unpack98, 11
-  %tapeArg23_unwrap.elt99 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 12
-  %tapeArg23_unwrap.unpack100 = load i8*, i8** %tapeArg23_unwrap.elt99, align 8
-  %29 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %28, i8* %tapeArg23_unwrap.unpack100, 12
-  %tapeArg23_unwrap.elt101 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 13
-  %tapeArg23_unwrap.unpack102 = load double, double* %tapeArg23_unwrap.elt101, align 8
-  %30 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %29, double %tapeArg23_unwrap.unpack102, 13
-  %tapeArg23_unwrap.elt103 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 14
-  %tapeArg23_unwrap.unpack104 = load double, double* %tapeArg23_unwrap.elt103, align 8
-  %31 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %30, double %tapeArg23_unwrap.unpack104, 14
-  %tapeArg23_unwrap.elt105 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 15
-  %tapeArg23_unwrap.unpack106 = load double, double* %tapeArg23_unwrap.elt105, align 8
-  %tapeArg23_unwrap107 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %31, double %tapeArg23_unwrap.unpack106, 15
-  call void @diffeeuler_angles_to_rotation_matrix(double* %add.ptr_unwrap, double* %"add.ptr'ipg_unwrap", %struct.Matrix* %6, %struct.Matrix* %"'ipc22", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg23_unwrap107)
+  %23 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } undef, i8* %tapeArg23_unwrap.unpack, 0
+  %tapeArg23_unwrap.elt413 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 1
+  %tapeArg23_unwrap.unpack414 = load i8*, i8** %tapeArg23_unwrap.elt413, align 8
+  %24 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %23, i8* %tapeArg23_unwrap.unpack414, 1
+  %tapeArg23_unwrap.elt415 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 2
+  %tapeArg23_unwrap.unpack416 = load i8*, i8** %tapeArg23_unwrap.elt415, align 8
+  %25 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %24, i8* %tapeArg23_unwrap.unpack416, 2
+  %tapeArg23_unwrap.elt417 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 3
+  %tapeArg23_unwrap.unpack418 = load i8*, i8** %tapeArg23_unwrap.elt417, align 8
+  %26 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %25, i8* %tapeArg23_unwrap.unpack418, 3
+  %tapeArg23_unwrap.elt419 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 4
+  %tapeArg23_unwrap.unpack420 = load i8*, i8** %tapeArg23_unwrap.elt419, align 8
+  %27 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %26, i8* %tapeArg23_unwrap.unpack420, 4
+  %tapeArg23_unwrap.elt421 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 5
+  %tapeArg23_unwrap.unpack422 = load i8*, i8** %tapeArg23_unwrap.elt421, align 8
+  %28 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %27, i8* %tapeArg23_unwrap.unpack422, 5
+  %tapeArg23_unwrap.elt423 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 6
+  %tapeArg23_unwrap.unpack424 = load i8*, i8** %tapeArg23_unwrap.elt423, align 8
+  %29 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %28, i8* %tapeArg23_unwrap.unpack424, 6
+  %tapeArg23_unwrap.elt425 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 7
+  %tapeArg23_unwrap.unpack426 = load i8*, i8** %tapeArg23_unwrap.elt425, align 8
+  %30 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %29, i8* %tapeArg23_unwrap.unpack426, 7
+  %tapeArg23_unwrap.elt427 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 8
+  %tapeArg23_unwrap.unpack428 = load i8*, i8** %tapeArg23_unwrap.elt427, align 8
+  %31 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %30, i8* %tapeArg23_unwrap.unpack428, 8
+  %tapeArg23_unwrap.elt429 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 9
+  %tapeArg23_unwrap.unpack430 = load { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }* %tapeArg23_unwrap.elt429, align 8
+  %32 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %31, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg23_unwrap.unpack430, 9
+  %tapeArg23_unwrap.elt431 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 10
+  %tapeArg23_unwrap.unpack432 = load { i8*, i8*, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }* %tapeArg23_unwrap.elt431, align 8
+  %33 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %32, { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg23_unwrap.unpack432, 10
+  %tapeArg23_unwrap.elt433 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 11
+  %tapeArg23_unwrap.unpack434 = load i8*, i8** %tapeArg23_unwrap.elt433, align 8
+  %34 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %33, i8* %tapeArg23_unwrap.unpack434, 11
+  %tapeArg23_unwrap.elt435 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 12
+  %tapeArg23_unwrap.unpack436 = load i8*, i8** %tapeArg23_unwrap.elt435, align 8
+  %35 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %34, i8* %tapeArg23_unwrap.unpack436, 12
+  %tapeArg23_unwrap.elt437 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 13
+  %tapeArg23_unwrap.unpack438 = load double, double* %tapeArg23_unwrap.elt437, align 8
+  %36 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %35, double %tapeArg23_unwrap.unpack438, 13
+  %tapeArg23_unwrap.elt439 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 14
+  %tapeArg23_unwrap.unpack440 = load double, double* %tapeArg23_unwrap.elt439, align 8
+  %37 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %36, double %tapeArg23_unwrap.unpack440, 14
+  %tapeArg23_unwrap.elt441 = getelementptr inbounds { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }* %0, i64 %"iv'ac.0", i32 15
+  %tapeArg23_unwrap.unpack442 = load double, double* %tapeArg23_unwrap.elt441, align 8
+  %tapeArg23_unwrap443 = insertvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %37, double %tapeArg23_unwrap.unpack442, 15
+  call void @diffeeuler_angles_to_rotation_matrix(double* %add.ptr_unwrap, double* %"add.ptr'ipg_unwrap", %struct.Matrix* %6, %struct.Matrix* %"'ipc22", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg23_unwrap443), !node !285
+  %inc252 = add i32 %reverse_op.4, 2
+  %inc262 = add i32 %reverse_mem.4, 6
   br label %invertfor.inc12.i
 
 invertfor.cond1.preheader.lr.ph.i26:              ; preds = %invertfor.cond1.preheader.i27
-  %_unwrap29 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0"
-  %32 = bitcast double*** %_unwrap29 to i8**
-  %forfree30108 = load i8*, i8** %32, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree30108)
+  %reverse_mem.5.lcssa = phi i32 [ %reverse_mem.5, %invertfor.cond1.preheader.i27 ]
+  %reverse_op.5.lcssa = phi i32 [ %reverse_op.5, %invertfor.cond1.preheader.i27 ]
+  %inc274 = add i32 %reverse_op.5.lcssa, 1
+  %_unwrap29 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0", !node !285
+  %inc270 = add i32 %reverse_mem.5.lcssa, 5
+  %38 = bitcast double*** %_unwrap29 to i8**
+  %forfree30444 = load i8*, i8** %38, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree30444), !node !285
   br label %invertset_identity.exit
 
-invertfor.cond1.preheader.i27:                    ; preds = %invertfor.body3.i32, %invertfor.inc13.i
-  %33 = icmp eq i64 %"iv5'ac.0", 0
-  br i1 %33, label %invertfor.cond1.preheader.lr.ph.i26, label %invertfor.inc13.i
+invertfor.cond1.preheader.i27:                    ; preds = %invertfor.inc13.i, %invertfor.body3.lr.ph.i29
+  %reverse_mem.5 = phi i32 [ %inc336, %invertfor.body3.lr.ph.i29 ], [ %inc372, %invertfor.inc13.i ]
+  %reverse_op.5 = phi i32 [ %inc338, %invertfor.body3.lr.ph.i29 ], [ %inc368, %invertfor.inc13.i ]
+  %39 = icmp eq i64 %"iv5'ac.0", 0
+  br i1 %39, label %invertfor.cond1.preheader.lr.ph.i26, label %incinvertfor.cond1.preheader.i27
 
-invertfor.body3.i32:                              ; preds = %invertfor.body3.i32, %mergeinvertfor.body3.i32_for.inc13.i.loopexit
-  %"iv8'ac.0.in" = phi i64 [ %wide.trip.count.i_unwrap, %mergeinvertfor.body3.i32_for.inc13.i.loopexit ], [ %"iv8'ac.0", %invertfor.body3.i32 ]
+incinvertfor.cond1.preheader.i27:                 ; preds = %invertfor.cond1.preheader.i27
+  %inc278 = add i32 %reverse_op.5, 2
+  %inc280 = add i32 %reverse_mem.5, 3
+  br label %invertfor.inc13.i
+
+invertfor.body3.lr.ph.i29:                        ; preds = %invertfor.body3.i32
+  %reverse_mem.6.lcssa = phi i32 [ %reverse_mem.6, %invertfor.body3.i32 ]
+  %reverse_op.6.lcssa = phi i32 [ %reverse_op.6, %invertfor.body3.i32 ]
+  %inc338 = add i32 %reverse_op.6.lcssa, 9
+  %inc336 = add i32 %reverse_mem.6.lcssa, 20
+  br label %invertfor.cond1.preheader.i27
+
+invertfor.body3.i32:                              ; preds = %mergeinvertfor.body3.i32_for.inc13.i.loopexit, %incinvertfor.body3.i32
+  %"iv8'ac.0.in" = phi i64 [ %wide.trip.count.i_unwrap, %mergeinvertfor.body3.i32_for.inc13.i.loopexit ], [ %"iv8'ac.0", %incinvertfor.body3.i32 ]
+  %reverse_mem.6 = phi i32 [ %inc360, %mergeinvertfor.body3.i32_for.inc13.i.loopexit ], [ %inc344, %incinvertfor.body3.i32 ]
+  %reverse_op.6 = phi i32 [ %inc358, %mergeinvertfor.body3.i32_for.inc13.i.loopexit ], [ %inc342, %incinvertfor.body3.i32 ]
   %"iv8'ac.0" = add nsw i64 %"iv8'ac.0.in", -1
-  %_unwrap32 = shl nsw i64 %"iv5'ac.0", 2
-  %_unwrap33 = add nuw nsw i64 %"iv8'ac.0", %_unwrap32
-  %"arrayidx12.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %_unwrap33
-  %34 = load double, double* %"arrayidx12.i'ipg_unwrap", align 8
+  %_unwrap32 = shl nsw i64 %"iv5'ac.0", 2, !node !285
+  %_unwrap33 = add nuw nsw i64 %"iv8'ac.0", %_unwrap32, !node !285
+  %"arrayidx12.i'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc", i64 %_unwrap33, !node !285
+  %40 = load double, double* %"arrayidx12.i'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx12.i'ipg_unwrap", align 8
-  %_unwrap35 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0"
-  %_unwrap36 = load double**, double*** %_unwrap35, align 8, !invariant.group !369
-  %_unwrap37 = getelementptr inbounds double*, double** %_unwrap36, i64 %"iv5'ac.0"
-  %"'il_phi7_unwrap" = load double*, double** %_unwrap37, align 8, !invariant.group !370
-  %35 = load i32, i32* %39, align 4, !invariant.group !371
-  %_unwrap41 = sext i32 %35 to i64
-  %_unwrap42 = mul nsw i64 %"iv5'ac.0", %_unwrap41
-  %_unwrap43 = add nsw i64 %"iv8'ac.0", %_unwrap42
-  %"arrayidx.i30'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi7_unwrap", i64 %_unwrap43
-  %36 = load double, double* %"arrayidx.i30'ipg_unwrap", align 8
-  %37 = fadd fast double %36, %34
-  store double %37, double* %"arrayidx.i30'ipg_unwrap", align 8
-  %38 = icmp eq i64 %"iv8'ac.0", 0
-  br i1 %38, label %invertfor.cond1.preheader.i27, label %invertfor.body3.i32
+  %_unwrap35 = getelementptr inbounds double**, double*** %1, i64 %"iv'ac.0", !node !285
+  %_unwrap36 = load double**, double*** %_unwrap35, align 8, !invariant.group !388, !node !285
+  %_unwrap37 = getelementptr inbounds double*, double** %_unwrap36, i64 %"iv5'ac.0", !node !285
+  %"'il_phi7_unwrap" = load double*, double** %_unwrap37, align 8, !invariant.group !389, !node !285
+  %41 = load i32, i32* %45, align 4, !invariant.group !390, !node !285
+  %_unwrap41 = sext i32 %41 to i64, !node !285
+  %_unwrap42 = mul nsw i64 %"iv5'ac.0", %_unwrap41, !node !285
+  %_unwrap43 = add nsw i64 %"iv8'ac.0", %_unwrap42, !node !285
+  %"arrayidx.i30'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi7_unwrap", i64 %_unwrap43, !node !285
+  %42 = load double, double* %"arrayidx.i30'ipg_unwrap", align 8, !node !285
+  %43 = fadd fast double %42, %40, !node !285
+  store double %43, double* %"arrayidx.i30'ipg_unwrap", align 8
+  %44 = icmp eq i64 %"iv8'ac.0", 0
+  br i1 %44, label %invertfor.body3.lr.ph.i29, label %incinvertfor.body3.i32
 
-mergeinvertfor.body3.i32_for.inc13.i.loopexit:    ; preds = %invertfor.inc13.i
-  %wide.trip.count.i_unwrap = zext i32 %40 to i64
+incinvertfor.body3.i32:                           ; preds = %invertfor.body3.i32
+  %inc342 = add i32 %reverse_op.6, 10
+  %inc344 = add i32 %reverse_mem.6, 22
   br label %invertfor.body3.i32
 
-invertfor.inc13.i:                                ; preds = %invertfor.cond1.preheader.i27, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit
-  %"iv5'ac.0.in" = phi i64 [ %_unwrap57, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit ], [ %"iv5'ac.0", %invertfor.cond1.preheader.i27 ]
+mergeinvertfor.body3.i32_for.inc13.i.loopexit:    ; preds = %invertfor.inc13.i
+  %inc358 = add i32 %reverse_op.7, 5
+  %wide.trip.count.i_unwrap = zext i32 %46 to i64, !node !285
+  %inc360 = add i32 %reverse_mem.7, 9
+  br label %invertfor.body3.i32
+
+invertfor.inc13.i:                                ; preds = %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit, %incinvertfor.cond1.preheader.i27
+  %"iv5'ac.0.in" = phi i64 [ %_unwrap57, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit ], [ %"iv5'ac.0", %incinvertfor.cond1.preheader.i27 ]
+  %reverse_mem.7 = phi i32 [ %inc386, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit ], [ %inc280, %incinvertfor.cond1.preheader.i27 ]
+  %reverse_op.7 = phi i32 [ %inc384, %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit ], [ %inc278, %incinvertfor.cond1.preheader.i27 ]
   %"iv5'ac.0" = add nsw i64 %"iv5'ac.0.in", -1
-  %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !371
-  %cmp228.i_unwrap = icmp sgt i32 %40, 0
+  %inc368 = add i32 %reverse_op.7, 2
+  %45 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0", !node !285
+  %inc372 = add i32 %reverse_mem.7, 4
+  %46 = load i32, i32* %45, align 4, !invariant.group !390, !node !285
+  %cmp228.i_unwrap = icmp sgt i32 %46, 0
   br i1 %cmp228.i_unwrap, label %mergeinvertfor.body3.i32_for.inc13.i.loopexit, label %invertfor.cond1.preheader.i27
 
 mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit: ; preds = %invertset_block.exit
-  %_unwrap57 = zext i32 %42 to i64
+  %inc384 = add i32 %reverse_op.8, 5
+  %_unwrap57 = zext i32 %48 to i64, !node !285
+  %inc386 = add i32 %reverse_mem.8, 13
   br label %invertfor.inc13.i
 
-invertset_block.exit:                             ; preds = %invertfor.cond1.preheader.lr.ph.i, %for.body.lr.ph
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap67, %for.body.lr.ph ], [ %"iv'ac.0", %invertfor.cond1.preheader.lr.ph.i ]
+invertset_block.exit:                             ; preds = %mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit, %incinvertfor.cond1.preheader.lr.ph.i
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap67, %mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit ], [ %"iv'ac.0", %incinvertfor.cond1.preheader.lr.ph.i ]
+  %reverse_mem.8 = phi i32 [ 1, %mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit ], [ %inc194, %incinvertfor.cond1.preheader.lr.ph.i ]
+  %reverse_op.8 = phi i32 [ 1, %mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit ], [ %inc192, %incinvertfor.cond1.preheader.lr.ph.i ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
-  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_relatives, i64 %"iv'ac.0"
-  %arrayidx3_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %"iv'ac.0"
-  %"arrayidx3'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"relatives'", i64 %"iv'ac.0"
-  %_unwrap64 = getelementptr inbounds { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %2, i64 %"iv'ac.0"
-  %tapeArg60_unwrap = load { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap64, align 8, !invariant.group !372
-  call void @diffemat_mult.9(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %5, %struct.Matrix* %"'ipc59", %struct.Matrix* %arrayidx3_unwrap, %struct.Matrix* %"arrayidx3'ipg_unwrap", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg60_unwrap)
-  %41 = getelementptr inbounds i32, i32* %4, i64 %"iv'ac.0"
-  %42 = load i32, i32* %41, align 4, !invariant.group !373
-  %cmp30.i_unwrap = icmp sgt i32 %42, 0
+  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_relatives, i64 %"iv'ac.0", !node !285
+  %arrayidx3_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %relatives, i64 %"iv'ac.0", !node !285
+  %"arrayidx3'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"relatives'", i64 %"iv'ac.0", !node !285
+  %_unwrap64 = getelementptr inbounds { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %2, i64 %"iv'ac.0", !node !285
+  %tapeArg60_unwrap = load { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }* %_unwrap64, align 8, !invariant.group !391, !node !285
+  call void @diffemat_mult.9(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %5, %struct.Matrix* %"'ipc59", %struct.Matrix* %arrayidx3_unwrap, %struct.Matrix* %"arrayidx3'ipg_unwrap", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg60_unwrap), !node !285
+  %inc404 = add i32 %reverse_op.8, 2
+  %47 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0", !node !285
+  %inc408 = add i32 %reverse_mem.8, 9
+  %48 = load i32, i32* %47, align 4, !invariant.group !392, !node !285
+  %cmp30.i_unwrap = icmp sgt i32 %48, 0
   br i1 %cmp30.i_unwrap, label %mergeinvertfor.cond1.preheader.i27_set_block.exit.loopexit, label %invertset_identity.exit
+
+mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit: ; preds = %invertdelete_matrix.exit39
+  %wide.trip.count_unwrap67 = zext i32 %bone_count to i64, !node !285
+  br label %invertset_block.exit
+
+invertdelete_matrix.exit39:                       ; preds = %for.end.loopexit, %entry
+  %forward_mem.4 = phi i32 [ %phi.bo, %for.end.loopexit ], [ 7, %entry ]
+  %forward_op.8 = phi i32 [ %forward_op.7.lcssa, %for.end.loopexit ], [ 0, %entry ]
+  br i1 %cmp40, label %mergeinvertfor.cond1.preheader.lr.ph.i_for.end.loopexit, label %invertentry
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
 define internal void @diffeeuler_angles_to_rotation_matrix(double* noalias nocapture readonly %xzy, double* nocapture %"xzy'", %struct.Matrix* noalias nocapture %R, %struct.Matrix* nocapture %"R'", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg) local_unnamed_addr #5 {
 for.cond1.preheader.lr.ph.i:
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 13
-  %"arrayidx1'ipg" = getelementptr inbounds double, double* %"xzy'", i64 2, !node !273
+  %"arrayidx1'ipg" = getelementptr inbounds double, double* %"xzy'", i64 2, !node !285
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 14
-  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"xzy'", i64 1, !node !273
+  %"arrayidx2'ipg" = getelementptr inbounds double, double* %"xzy'", i64 1, !node !285
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 15
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 8
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 7
@@ -16839,6 +18035,33 @@ for.cond1.preheader.lr.ph.i:
   %"call4.i175'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 0
   %"'ipc" = bitcast i8* %"call4.i'mi" to double*
   %"'ipc35" = bitcast i8* %"call4.i170'mi" to double*
+  br label %for.body3.lr.ph.i
+
+for.body3.lr.ph.i:                                ; preds = %for.inc12.i, %for.cond1.preheader.lr.ph.i
+  %forward_op.0 = phi i32 [ 0, %for.cond1.preheader.lr.ph.i ], [ %forward_op.2.lcssa, %for.inc12.i ]
+  %iv = phi i64 [ 0, %for.cond1.preheader.lr.ph.i ], [ %iv.next, %for.inc12.i ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc99 = add i32 %forward_op.0, 4
+  br label %for.body3.i
+
+for.body3.i:                                      ; preds = %for.body3.i, %for.body3.lr.ph.i
+  %forward_op.1 = phi i32 [ %inc99, %for.body3.lr.ph.i ], [ %forward_op.2, %for.body3.i ]
+  %iv1 = phi i64 [ 0, %for.body3.lr.ph.i ], [ %iv.next2, %for.body3.i ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %cmp4.i = icmp eq i64 %iv, %iv1
+  %inc101 = add i32 %forward_op.1, 1
+  %inc103 = add i32 %forward_op.1, 2
+  %forward_op.2 = select i1 %cmp4.i, i32 %inc101, i32 %inc103
+  %exitcond.not.i = icmp eq i64 %iv.next2, 3
+  br i1 %exitcond.not.i, label %for.inc12.i, label %for.body3.i, !llvm.loop !188
+
+for.inc12.i:                                      ; preds = %for.body3.i
+  %forward_op.2.lcssa = phi i32 [ %forward_op.2, %for.body3.i ]
+  %exitcond37.not.i = icmp eq i64 %iv.next, 3
+  br i1 %exitcond37.not.i, label %for.cond1.preheader.lr.ph.i182, label %for.body3.lr.ph.i, !llvm.loop !189
+
+for.cond1.preheader.lr.ph.i182:                   ; preds = %for.inc12.i
+  %forward_op.2.lcssa.lcssa = phi i32 [ %forward_op.2.lcssa, %for.inc12.i ]
   %"'ipc55" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %3 = bitcast i8* %call.i to %struct.Matrix*
   %"'ipc58" = bitcast i8* %"call.i167'mi" to %struct.Matrix*
@@ -16854,12 +18077,66 @@ for.cond1.preheader.lr.ph.i:
   %"'ipc26" = bitcast i8* %"arrayidx23'ipg" to double*
   %"arrayidx35'ipg" = getelementptr inbounds i8, i8* %"call4.i'mi", i64 64
   %"'ipc23" = bitcast i8* %"arrayidx35'ipg" to double*
+  br label %for.body3.lr.ph.i189
+
+for.body3.lr.ph.i189:                             ; preds = %for.inc12.i204, %for.cond1.preheader.lr.ph.i182
+  %forward_op.3 = phi i32 [ %forward_op.2.lcssa.lcssa, %for.cond1.preheader.lr.ph.i182 ], [ %forward_op.5.lcssa, %for.inc12.i204 ]
+  %iv3 = phi i64 [ 0, %for.cond1.preheader.lr.ph.i182 ], [ %iv.next4, %for.inc12.i204 ]
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %inc111 = add i32 %forward_op.3, 4
+  br label %for.body3.i192
+
+for.body3.i192:                                   ; preds = %for.body3.i192, %for.body3.lr.ph.i189
+  %forward_op.4 = phi i32 [ %inc111, %for.body3.lr.ph.i189 ], [ %forward_op.5, %for.body3.i192 ]
+  %iv5 = phi i64 [ 0, %for.body3.lr.ph.i189 ], [ %iv.next6, %for.body3.i192 ]
+  %iv.next6 = add nuw nsw i64 %iv5, 1
+  %cmp4.i191 = icmp eq i64 %iv3, %iv5
+  %inc113 = add i32 %forward_op.4, 1
+  %inc115 = add i32 %forward_op.4, 2
+  %forward_op.5 = select i1 %cmp4.i191, i32 %inc113, i32 %inc115
+  %exitcond.not.i200 = icmp eq i64 %iv.next6, 3
+  br i1 %exitcond.not.i200, label %for.inc12.i204, label %for.body3.i192, !llvm.loop !188
+
+for.inc12.i204:                                   ; preds = %for.body3.i192
+  %forward_op.5.lcssa = phi i32 [ %forward_op.5, %for.body3.i192 ]
+  %exitcond37.not.i203 = icmp eq i64 %iv.next4, 3
+  br i1 %exitcond37.not.i203, label %for.cond1.preheader.lr.ph.i211, label %for.body3.lr.ph.i189, !llvm.loop !189
+
+for.cond1.preheader.lr.ph.i211:                   ; preds = %for.inc12.i204
+  %forward_op.5.lcssa.lcssa = phi i32 [ %forward_op.5.lcssa, %for.inc12.i204 ]
   %"arrayidx47'ipg" = getelementptr inbounds i8, i8* %"call4.i170'mi", i64 48
   %"'ipc46" = bitcast i8* %"arrayidx47'ipg" to double*
   %"arrayidx60'ipg" = getelementptr inbounds i8, i8* %"call4.i170'mi", i64 16
   %"'ipc43" = bitcast i8* %"arrayidx60'ipg" to double*
   %"arrayidx72'ipg" = getelementptr inbounds i8, i8* %"call4.i170'mi", i64 64
   %"'ipc40" = bitcast i8* %"arrayidx72'ipg" to double*
+  br label %for.body3.lr.ph.i218
+
+for.body3.lr.ph.i218:                             ; preds = %for.inc12.i233, %for.cond1.preheader.lr.ph.i211
+  %forward_op.6 = phi i32 [ %forward_op.5.lcssa.lcssa, %for.cond1.preheader.lr.ph.i211 ], [ %forward_op.8.lcssa, %for.inc12.i233 ]
+  %iv7 = phi i64 [ 0, %for.cond1.preheader.lr.ph.i211 ], [ %iv.next8, %for.inc12.i233 ]
+  %iv.next8 = add nuw nsw i64 %iv7, 1
+  %inc123 = add i32 %forward_op.6, 4
+  br label %for.body3.i221
+
+for.body3.i221:                                   ; preds = %for.body3.i221, %for.body3.lr.ph.i218
+  %forward_op.7 = phi i32 [ %inc123, %for.body3.lr.ph.i218 ], [ %forward_op.8, %for.body3.i221 ]
+  %iv9 = phi i64 [ 0, %for.body3.lr.ph.i218 ], [ %iv.next10, %for.body3.i221 ]
+  %iv.next10 = add nuw nsw i64 %iv9, 1
+  %cmp4.i220 = icmp eq i64 %iv7, %iv9
+  %inc125 = add i32 %forward_op.7, 1
+  %inc127 = add i32 %forward_op.7, 2
+  %forward_op.8 = select i1 %cmp4.i220, i32 %inc125, i32 %inc127
+  %exitcond.not.i229 = icmp eq i64 %iv.next10, 3
+  br i1 %exitcond.not.i229, label %for.inc12.i233, label %for.body3.i221, !llvm.loop !188
+
+for.inc12.i233:                                   ; preds = %for.body3.i221
+  %forward_op.8.lcssa = phi i32 [ %forward_op.8, %for.body3.i221 ]
+  %exitcond37.not.i232 = icmp eq i64 %iv.next8, 3
+  br i1 %exitcond37.not.i232, label %set_identity.exit234, label %for.body3.lr.ph.i218, !llvm.loop !189
+
+set_identity.exit234:                             ; preds = %for.inc12.i233
+  %forward_op.8.lcssa.lcssa = phi i32 [ %forward_op.8.lcssa, %for.inc12.i233 ]
   %"arrayidx84'ipg" = getelementptr inbounds i8, i8* %"call4.i175'mi", i64 8
   %"'ipc66" = bitcast i8* %"arrayidx84'ipg" to double*
   %"arrayidx97'ipg" = getelementptr inbounds i8, i8* %"call4.i175'mi", i64 24
@@ -16872,7 +18149,7 @@ for.cond1.preheader.lr.ph.i:
   %6 = bitcast i8* %call.i235 to %struct.Matrix*
   %tapeArg59 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 10
   %tapeArg56 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double } %tapeArg, 9
-  call void @diffemat_mult.7(%struct.Matrix* %6, %struct.Matrix* %"'ipc54", %struct.Matrix* %3, %struct.Matrix* %"'ipc55", %struct.Matrix* %R, %struct.Matrix* %"R'", { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg56)
+  call void @diffemat_mult.7(%struct.Matrix* %6, %struct.Matrix* %"'ipc54", %struct.Matrix* %3, %struct.Matrix* %"'ipc55", %struct.Matrix* %R, %struct.Matrix* %"R'", { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg56), !node !285
   call void @diffemat_mult.8(%struct.Matrix* %5, %struct.Matrix* %"'ipc57", %struct.Matrix* %4, %struct.Matrix* %"'ipc58", %struct.Matrix* %6, %struct.Matrix* %"'ipc54", { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg59)
   tail call void @free(i8* nonnull %"call.i235'mi")
   tail call void @free(i8* %call.i235)
@@ -16887,18 +18164,20 @@ for.cond1.preheader.lr.ph.i:
   br label %invertfor.inc12.i233
 
 invertfor.cond1.preheader.lr.ph.i:                ; preds = %invertfor.body3.lr.ph.i
-  %11 = fsub fast double %44, %43
+  %reverse_mem.1.in.lcssa.lcssa = phi i32 [ %reverse_mem.1.in.lcssa, %invertfor.body3.lr.ph.i ]
+  %reverse_op.1.lcssa.lcssa = phi i32 [ %reverse_op.1.lcssa, %invertfor.body3.lr.ph.i ]
+  %11 = fsub fast double %45, %44
   %12 = call fast double @llvm.cos.f64(double %0)
   %13 = fmul fast double %11, %12
   %14 = call fast double @llvm.sin.f64(double %0)
-  %15 = fadd fast double %42, %45
+  %15 = fadd fast double %43, %46
   %16 = fmul fast double %14, %15
   %17 = fsub fast double %13, %16
-  %18 = fsub fast double %52, %51
+  %18 = fsub fast double %53, %52
   %19 = call fast double @llvm.cos.f64(double %1)
   %20 = fmul fast double %18, %19
   %21 = call fast double @llvm.sin.f64(double %1)
-  %22 = fadd fast double %50, %53
+  %22 = fadd fast double %51, %54
   %23 = fmul fast double %21, %22
   %24 = fsub fast double %20, %23
   %25 = fsub fast double %9, %8
@@ -16917,31 +18196,40 @@ invertfor.cond1.preheader.lr.ph.i:                ; preds = %invertfor.body3.lr.
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
-  %32 = load double, double* %"arrayidx2'ipg", align 8
-  %33 = fadd fast double %32, %31
+  %32 = load double, double* %"arrayidx2'ipg", align 8, !node !285
+  %33 = fadd fast double %32, %31, !node !285
   store double %33, double* %"arrayidx2'ipg", align 8
-  %34 = load double, double* %"arrayidx1'ipg", align 8
-  %35 = fadd fast double %34, %24
+  %34 = load double, double* %"arrayidx1'ipg", align 8, !node !285
+  %35 = fadd fast double %34, %24, !node !285
   store double %35, double* %"arrayidx1'ipg", align 8
-  %36 = load double, double* %"xzy'", align 8
-  %37 = fadd fast double %36, %17
+  %36 = load double, double* %"xzy'", align 8, !node !285
+  %37 = fadd fast double %36, %17, !node !285
+  %inc157 = add i32 %reverse_op.1.lcssa.lcssa, 7
+  %inc159 = add i32 %reverse_mem.1.in.lcssa.lcssa, 20
   store double %37, double* %"xzy'", align 8
+  %38 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.8.lcssa.lcssa, i32 %inc157, i32 13, i32 %inc159)
   ret void
 
 invertfor.body3.lr.ph.i:                          ; preds = %invertfor.body3.i
-  %38 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %38, label %invertfor.cond1.preheader.lr.ph.i, label %incinvertfor.body3.lr.ph.i
+  %reverse_mem.1.in.lcssa = phi i32 [ %reverse_mem.1.in, %invertfor.body3.i ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.body3.i ]
+  %39 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %39, label %invertfor.cond1.preheader.lr.ph.i, label %incinvertfor.body3.lr.ph.i
 
 incinvertfor.body3.lr.ph.i:                       ; preds = %invertfor.body3.lr.ph.i
-  %39 = add nsw i64 %"iv'ac.0", -1
+  %40 = add nsw i64 %"iv'ac.0", -1
+  %inc171 = add i32 %reverse_op.1.lcssa, 5
+  %inc173 = add i32 %reverse_mem.1.in.lcssa, 10
   br label %invertfor.inc12.i
 
 invertfor.body3.i:                                ; preds = %invertif.else.i, %invertif.then.i
-  %40 = icmp eq i64 %"iv1'ac.0", 0
-  br i1 %40, label %invertfor.body3.lr.ph.i, label %incinvertfor.body3.i
+  %41 = icmp eq i64 %"iv1'ac.0", 0
+  br i1 %41, label %invertfor.body3.lr.ph.i, label %incinvertfor.body3.i
 
 incinvertfor.body3.i:                             ; preds = %invertfor.body3.i
-  %41 = add nsw i64 %"iv1'ac.0", -1
+  %inc179 = add i32 %reverse_mem.1.in, 8
+  %42 = add nsw i64 %"iv1'ac.0", -1
+  %inc181 = add i32 %reverse_op.1, 4
   br label %invertfor.inc.i
 
 invertif.then.i:                                  ; preds = %invertfor.inc.i
@@ -16958,39 +18246,53 @@ invertif.else.i:                                  ; preds = %invertfor.inc.i
   br label %invertfor.body3.i
 
 invertfor.inc.i:                                  ; preds = %invertfor.inc12.i, %incinvertfor.body3.i
-  %"iv1'ac.0" = phi i64 [ 2, %invertfor.inc12.i ], [ %41, %incinvertfor.body3.i ]
+  %"iv1'ac.0" = phi i64 [ 2, %invertfor.inc12.i ], [ %42, %incinvertfor.body3.i ]
+  %reverse_mem.1.in = phi i32 [ %reverse_mem.2, %invertfor.inc12.i ], [ %inc179, %incinvertfor.body3.i ]
+  %reverse_op.1 = phi i32 [ %reverse_op.2, %invertfor.inc12.i ], [ %inc181, %incinvertfor.body3.i ]
   %cmp4.i_unwrap = icmp eq i64 %"iv'ac.0", %"iv1'ac.0"
   br i1 %cmp4.i_unwrap, label %invertif.then.i, label %invertif.else.i
 
 invertfor.inc12.i:                                ; preds = %invertfor.cond1.preheader.lr.ph.i182, %incinvertfor.body3.lr.ph.i
-  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond1.preheader.lr.ph.i182 ], [ %39, %incinvertfor.body3.lr.ph.i ]
+  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond1.preheader.lr.ph.i182 ], [ %40, %incinvertfor.body3.lr.ph.i ]
+  %reverse_mem.2 = phi i32 [ %inc285, %invertfor.cond1.preheader.lr.ph.i182 ], [ %inc173, %incinvertfor.body3.lr.ph.i ]
+  %reverse_op.2 = phi i32 [ %inc281, %invertfor.cond1.preheader.lr.ph.i182 ], [ %inc171, %incinvertfor.body3.lr.ph.i ]
   br label %invertfor.inc.i
 
 invertfor.cond1.preheader.lr.ph.i182:             ; preds = %invertfor.body3.lr.ph.i189
-  %42 = load double, double* %"'ipc23", align 8
+  %reverse_mem.4.in.lcssa.lcssa = phi i32 [ %reverse_mem.4.in.lcssa, %invertfor.body3.lr.ph.i189 ]
+  %reverse_op.4.lcssa.lcssa = phi i32 [ %reverse_op.4.lcssa, %invertfor.body3.lr.ph.i189 ]
+  %43 = load double, double* %"'ipc23", align 8
   store double 0.000000e+00, double* %"'ipc23", align 8
-  %43 = load double, double* %"'ipc26", align 8
+  %44 = load double, double* %"'ipc26", align 8
   store double 0.000000e+00, double* %"'ipc26", align 8
-  %44 = load double, double* %"'ipc29", align 8
+  %45 = load double, double* %"'ipc29", align 8
   store double 0.000000e+00, double* %"'ipc29", align 8
-  %45 = load double, double* %"'ipc31", align 8
+  %46 = load double, double* %"'ipc31", align 8
   store double 0.000000e+00, double* %"'ipc31", align 8
+  %inc281 = add i32 %reverse_op.4.lcssa.lcssa, 13
+  %inc285 = add i32 %reverse_mem.4.in.lcssa.lcssa, 37
   br label %invertfor.inc12.i
 
 invertfor.body3.lr.ph.i189:                       ; preds = %invertfor.body3.i192
-  %46 = icmp eq i64 %"iv3'ac.0", 0
-  br i1 %46, label %invertfor.cond1.preheader.lr.ph.i182, label %incinvertfor.body3.lr.ph.i189
+  %reverse_mem.4.in.lcssa = phi i32 [ %reverse_mem.4.in, %invertfor.body3.i192 ]
+  %reverse_op.4.lcssa = phi i32 [ %reverse_op.4, %invertfor.body3.i192 ]
+  %47 = icmp eq i64 %"iv3'ac.0", 0
+  br i1 %47, label %invertfor.cond1.preheader.lr.ph.i182, label %incinvertfor.body3.lr.ph.i189
 
 incinvertfor.body3.lr.ph.i189:                    ; preds = %invertfor.body3.lr.ph.i189
-  %47 = add nsw i64 %"iv3'ac.0", -1
+  %48 = add nsw i64 %"iv3'ac.0", -1
+  %inc293 = add i32 %reverse_op.4.lcssa, 5
+  %inc295 = add i32 %reverse_mem.4.in.lcssa, 10
   br label %invertfor.inc12.i204
 
 invertfor.body3.i192:                             ; preds = %invertif.else.i198, %invertif.then.i194
-  %48 = icmp eq i64 %"iv5'ac.0", 0
-  br i1 %48, label %invertfor.body3.lr.ph.i189, label %incinvertfor.body3.i192
+  %49 = icmp eq i64 %"iv5'ac.0", 0
+  br i1 %49, label %invertfor.body3.lr.ph.i189, label %incinvertfor.body3.i192
 
 incinvertfor.body3.i192:                          ; preds = %invertfor.body3.i192
-  %49 = add nsw i64 %"iv5'ac.0", -1
+  %inc301 = add i32 %reverse_mem.4.in, 8
+  %50 = add nsw i64 %"iv5'ac.0", -1
+  %inc303 = add i32 %reverse_op.4, 4
   br label %invertfor.inc.i201
 
 invertif.then.i194:                               ; preds = %invertfor.inc.i201
@@ -17007,39 +18309,53 @@ invertif.else.i198:                               ; preds = %invertfor.inc.i201
   br label %invertfor.body3.i192
 
 invertfor.inc.i201:                               ; preds = %invertfor.inc12.i204, %incinvertfor.body3.i192
-  %"iv5'ac.0" = phi i64 [ 2, %invertfor.inc12.i204 ], [ %49, %incinvertfor.body3.i192 ]
+  %"iv5'ac.0" = phi i64 [ 2, %invertfor.inc12.i204 ], [ %50, %incinvertfor.body3.i192 ]
+  %reverse_mem.4.in = phi i32 [ %reverse_mem.5, %invertfor.inc12.i204 ], [ %inc301, %incinvertfor.body3.i192 ]
+  %reverse_op.4 = phi i32 [ %reverse_op.5, %invertfor.inc12.i204 ], [ %inc303, %incinvertfor.body3.i192 ]
   %cmp4.i191_unwrap = icmp eq i64 %"iv3'ac.0", %"iv5'ac.0"
   br i1 %cmp4.i191_unwrap, label %invertif.then.i194, label %invertif.else.i198
 
 invertfor.inc12.i204:                             ; preds = %invertfor.cond1.preheader.lr.ph.i211, %incinvertfor.body3.lr.ph.i189
-  %"iv3'ac.0" = phi i64 [ 2, %invertfor.cond1.preheader.lr.ph.i211 ], [ %47, %incinvertfor.body3.lr.ph.i189 ]
+  %"iv3'ac.0" = phi i64 [ 2, %invertfor.cond1.preheader.lr.ph.i211 ], [ %48, %incinvertfor.body3.lr.ph.i189 ]
+  %reverse_mem.5 = phi i32 [ %inc407, %invertfor.cond1.preheader.lr.ph.i211 ], [ %inc295, %incinvertfor.body3.lr.ph.i189 ]
+  %reverse_op.5 = phi i32 [ %inc403, %invertfor.cond1.preheader.lr.ph.i211 ], [ %inc293, %incinvertfor.body3.lr.ph.i189 ]
   br label %invertfor.inc.i201
 
 invertfor.cond1.preheader.lr.ph.i211:             ; preds = %invertfor.body3.lr.ph.i218
-  %50 = load double, double* %"'ipc40", align 8
+  %reverse_mem.7.in.lcssa.lcssa = phi i32 [ %reverse_mem.7.in.lcssa, %invertfor.body3.lr.ph.i218 ]
+  %reverse_op.7.lcssa.lcssa = phi i32 [ %reverse_op.7.lcssa, %invertfor.body3.lr.ph.i218 ]
+  %51 = load double, double* %"'ipc40", align 8
   store double 0.000000e+00, double* %"'ipc40", align 8
-  %51 = load double, double* %"'ipc43", align 8
+  %52 = load double, double* %"'ipc43", align 8
   store double 0.000000e+00, double* %"'ipc43", align 8
-  %52 = load double, double* %"'ipc46", align 8
+  %53 = load double, double* %"'ipc46", align 8
   store double 0.000000e+00, double* %"'ipc46", align 8
-  %53 = load double, double* %"'ipc35", align 8
+  %54 = load double, double* %"'ipc35", align 8
   store double 0.000000e+00, double* %"'ipc35", align 8
+  %inc403 = add i32 %reverse_op.7.lcssa.lcssa, 13
+  %inc407 = add i32 %reverse_mem.7.in.lcssa.lcssa, 37
   br label %invertfor.inc12.i204
 
 invertfor.body3.lr.ph.i218:                       ; preds = %invertfor.body3.i221
-  %54 = icmp eq i64 %"iv7'ac.0", 0
-  br i1 %54, label %invertfor.cond1.preheader.lr.ph.i211, label %incinvertfor.body3.lr.ph.i218
+  %reverse_mem.7.in.lcssa = phi i32 [ %reverse_mem.7.in, %invertfor.body3.i221 ]
+  %reverse_op.7.lcssa = phi i32 [ %reverse_op.7, %invertfor.body3.i221 ]
+  %55 = icmp eq i64 %"iv7'ac.0", 0
+  br i1 %55, label %invertfor.cond1.preheader.lr.ph.i211, label %incinvertfor.body3.lr.ph.i218
 
 incinvertfor.body3.lr.ph.i218:                    ; preds = %invertfor.body3.lr.ph.i218
-  %55 = add nsw i64 %"iv7'ac.0", -1
+  %56 = add nsw i64 %"iv7'ac.0", -1
+  %inc415 = add i32 %reverse_op.7.lcssa, 5
+  %inc417 = add i32 %reverse_mem.7.in.lcssa, 10
   br label %invertfor.inc12.i233
 
 invertfor.body3.i221:                             ; preds = %invertif.else.i227, %invertif.then.i223
-  %56 = icmp eq i64 %"iv9'ac.0", 0
-  br i1 %56, label %invertfor.body3.lr.ph.i218, label %incinvertfor.body3.i221
+  %57 = icmp eq i64 %"iv9'ac.0", 0
+  br i1 %57, label %invertfor.body3.lr.ph.i218, label %incinvertfor.body3.i221
 
 incinvertfor.body3.i221:                          ; preds = %invertfor.body3.i221
-  %57 = add nsw i64 %"iv9'ac.0", -1
+  %inc423 = add i32 %reverse_mem.7.in, 8
+  %58 = add nsw i64 %"iv9'ac.0", -1
+  %inc425 = add i32 %reverse_op.7, 4
   br label %invertfor.inc.i230
 
 invertif.then.i223:                               ; preds = %invertfor.inc.i230
@@ -17056,12 +18372,16 @@ invertif.else.i227:                               ; preds = %invertfor.inc.i230
   br label %invertfor.body3.i221
 
 invertfor.inc.i230:                               ; preds = %invertfor.inc12.i233, %incinvertfor.body3.i221
-  %"iv9'ac.0" = phi i64 [ 2, %invertfor.inc12.i233 ], [ %57, %incinvertfor.body3.i221 ]
+  %"iv9'ac.0" = phi i64 [ 2, %invertfor.inc12.i233 ], [ %58, %incinvertfor.body3.i221 ]
+  %reverse_mem.7.in = phi i32 [ %reverse_mem.8, %invertfor.inc12.i233 ], [ %inc423, %incinvertfor.body3.i221 ]
+  %reverse_op.7 = phi i32 [ %reverse_op.8, %invertfor.inc12.i233 ], [ %inc425, %incinvertfor.body3.i221 ]
   %cmp4.i220_unwrap = icmp eq i64 %"iv7'ac.0", %"iv9'ac.0"
   br i1 %cmp4.i220_unwrap, label %invertif.then.i223, label %invertif.else.i227
 
-invertfor.inc12.i233:                             ; preds = %for.cond1.preheader.lr.ph.i, %incinvertfor.body3.lr.ph.i218
-  %"iv7'ac.0" = phi i64 [ 2, %for.cond1.preheader.lr.ph.i ], [ %55, %incinvertfor.body3.lr.ph.i218 ]
+invertfor.inc12.i233:                             ; preds = %set_identity.exit234, %incinvertfor.body3.lr.ph.i218
+  %"iv7'ac.0" = phi i64 [ 2, %set_identity.exit234 ], [ %56, %incinvertfor.body3.lr.ph.i218 ]
+  %reverse_mem.8 = phi i32 [ 29, %set_identity.exit234 ], [ %inc417, %incinvertfor.body3.lr.ph.i218 ]
+  %reverse_op.8 = phi i32 [ 9, %set_identity.exit234 ], [ %inc415, %incinvertfor.body3.lr.ph.i218 ]
   br label %invertfor.inc.i230
 }
 
@@ -17073,24 +18393,77 @@ entry:
   %2 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 5
   %3 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 6
   %4 = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 7
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
-  %5 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
-  %mul3.i = mul nsw i32 %6, %5, !node !273
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !285
+  %5 = load i32, i32* %nrows, align 8, !tbaa !138, !node !285
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !285
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %mul3.i = mul nsw i32 %6, %5, !node !285
   %cmp.not.i = extractvalue { i8*, i8*, double**, i1, i1, double*, double*, double*, double* } %tapeArg, 3
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %5, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %6, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
-  %7 = zext i32 %5 to i64, !node !273
-  %wide.trip.count96 = zext i32 %6 to i64, !node !273
-  %wide.trip.count100_unwrap90 = zext i32 %5 to i64
-  br label %invertfor.inc47
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %7 = zext i32 %5 to i64, !node !285
+  %wide.trip.count96 = zext i32 %6 to i64, !node !285
+  %inc157 = or i32 %forward_op.0, 12
+  %inc159 = add nuw nsw i32 %inc157, 1
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 16, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc159, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc161 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %inc173 = add i32 %forward_mem.0, 6
+  %8 = load i32, i32* %ncols21, align 4, !tbaa !139, !invariant.group !393, !node !285
+  %cmp2281 = icmp sgt i32 %8, 1
+  %wide.trip.count = zext i32 %8 to i64, !node !285
+  %inc175 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc173, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc175, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc205 = add i32 %forward_mem.1, 4
+  %inc215 = add i32 %forward_op.2, 16
+  br i1 %cmp2281, label %for.body23, label %for.inc44
+
+for.body23:                                       ; preds = %for.body5, %for.body23
+  %forward_mem.2 = phi i32 [ %inc267, %for.body23 ], [ %inc205, %for.body5 ]
+  %forward_op.3 = phi i32 [ %inc281, %for.body23 ], [ %inc215, %for.body5 ]
+  %iv6 = phi i64 [ %iv.next7, %for.body23 ], [ 0, %for.body5 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc267 = add i32 %forward_mem.2, 4
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc281 = add i32 %forward_op.3, 29
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc205, %for.body5 ], [ %inc267, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc215, %for.body5 ], [ %inc281, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc161, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %7
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %9 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -17100,152 +18473,211 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc337, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc341, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %8 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double* %1 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast double* %2 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc341 = add i32 %reverse_op.1.lcssa, 1
+  %10 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %10)
-  %11 = bitcast double* %3 to i8*
+  %11 = bitcast double* %1 to i8*
   tail call void @free(i8* nonnull %11)
-  %12 = bitcast double* %4 to i8*
+  %12 = bitcast double* %2 to i8*
   tail call void @free(i8* nonnull %12)
+  %13 = bitcast double* %3 to i8*
+  tail call void @free(i8* nonnull %13)
+  %inc337 = add i32 %reverse_mem.1.lcssa, 27
+  %14 = bitcast double* %4 to i8*
+  tail call void @free(i8* nonnull %14)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %13 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %13, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc479, %invertfor.body5.lr.ph ], [ %inc729, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc481.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %15 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %15, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
 
-invertfor.body5:                                  ; preds = %invertfor.body23, %invertfor.inc44
-  %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %44, %invertfor.body23 ]
-  %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %46, %invertfor.body23 ]
-  %_unwrap16 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap16, align 8, !invariant.group !374
-  %_unwrap18 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
-  %_unwrap19 = add nuw nsw i64 %_unwrap18, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap19
-  %14 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc345 = add i32 %reverse_op.1, 2
+  %inc347 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc481.lcssa = phi i32 [ %inc481, %invertfor.body5 ]
+  %inc479 = add i32 %reverse_mem.2.lcssa, 42
+  br label %invertfor.cond2.preheader
+
+invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
+  %"add43'de.1" = phi double [ %.lcssa735, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc699, %invertfor.body23.preheader ], [ %inc721, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc697, %invertfor.body23.preheader ], [ %reverse_op.4, %invertfor.inc44 ]
+  %_unwrap16 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0", !node !285
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap16, align 8, !invariant.group !394, !node !285
+  %_unwrap18 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90, !node !285
+  %_unwrap19 = add nuw nsw i64 %_unwrap18, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap19, !node !285
+  %16 = load double, double* %"arrayidx19'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %15 = fadd fast double %"mul13'de.1", %14
-  %_unwrap23 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap = zext i32 %_unwrap23 to i64
-  %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
-  %17 = add nuw nsw i64 %"iv4'ac.1", %16
-  %18 = getelementptr inbounds double, double* %2, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !375
-  %m0diffe = fmul fast double %15, %19
-  %20 = getelementptr inbounds double, double* %3, i64 %17
-  %21 = load double, double* %20, align 8, !invariant.group !376
-  %m1diffe = fmul fast double %15, %21
-  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !377
-  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap31 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !378
-  %_unwrap32 = sext i32 %_unwrap31 to i64
-  %_unwrap33 = mul nsw i64 %"iv4'ac.1", %_unwrap32
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap33
-  %22 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %23 = fadd fast double %22, %m0diffe
-  store double %23, double* %"arrayidx12'ipg_unwrap", align 8
-  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !379
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0"
-  %24 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %25 = fadd fast double %24, %m1diffe
-  store double %25, double* %"arrayidx'ipg_unwrap", align 8
-  %26 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %26, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %17 = fadd fast double %"mul13'de.1", %16, !node !285
+  %_unwrap23 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap = zext i32 %_unwrap23 to i64, !node !285
+  %18 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap, !node !285
+  %19 = add nuw nsw i64 %"iv4'ac.1", %18, !node !285
+  %20 = getelementptr inbounds double, double* %2, i64 %19, !node !285
+  %21 = load double, double* %20, align 8, !invariant.group !395, !node !285
+  %m0diffe = fmul fast double %17, %21, !node !285
+  %22 = getelementptr inbounds double, double* %3, i64 %19, !node !285
+  %23 = load double, double* %22, align 8, !invariant.group !396, !node !285
+  %m1diffe = fmul fast double %17, %23, !node !285
+  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !397, !node !285
+  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap31 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !398, !node !285
+  %_unwrap32 = sext i32 %_unwrap31 to i64, !node !285
+  %_unwrap33 = mul nsw i64 %"iv4'ac.1", %_unwrap32, !node !285
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap33, !node !285
+  %24 = load double, double* %"arrayidx12'ipg_unwrap", align 8, !node !285
+  %25 = fadd fast double %24, %m0diffe, !node !285
+  store double %25, double* %"arrayidx12'ipg_unwrap", align 8
+  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !399, !node !285
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0", !node !285
+  %26 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !285
+  %27 = fadd fast double %26, %m1diffe, !node !285
+  store double %27, double* %"arrayidx'ipg_unwrap", align 8
+  %28 = icmp eq i64 %"iv4'ac.1", 0
+  %inc481 = add i32 %reverse_op.2, 25
+  br i1 %28, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc487 = add i32 %reverse_mem.2, 44
+  br label %invertfor.inc44
+
+invertfor.body23.preheader:                       ; preds = %invertfor.body23
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa735 = phi double [ %46, %invertfor.body23 ]
+  %.lcssa = phi double [ %48, %invertfor.body23 ]
+  %inc697 = add i32 %reverse_op.3.lcssa, 44
+  %inc699 = add i32 %reverse_mem.3.lcssa, 62
+  br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %44, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %46, %incinvertfor.body23 ]
-  %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %47, %incinvertfor.body23 ]
-  %_unwrap35 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap36" = load double*, double** %_unwrap35, align 8, !invariant.group !374
-  %_unwrap38 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
-  %_unwrap39 = add nuw nsw i64 %_unwrap38, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap40" = getelementptr inbounds double, double* %"'il_phi3_unwrap36", i64 %_unwrap39
-  %27 = load double, double* %"arrayidx19'ipg_unwrap40", align 8
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %46, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %48, %incinvertfor.body23 ]
+  %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %49, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc715, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc705, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc713, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc703, %incinvertfor.body23 ]
+  %_unwrap35 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0", !node !285
+  %"'il_phi3_unwrap36" = load double*, double** %_unwrap35, align 8, !invariant.group !394, !node !285
+  %_unwrap38 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90, !node !285
+  %_unwrap39 = add nuw nsw i64 %_unwrap38, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap40" = getelementptr inbounds double, double* %"'il_phi3_unwrap36", i64 %_unwrap39, !node !285
+  %29 = load double, double* %"arrayidx19'ipg_unwrap40", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap40", align 8
-  %28 = fadd fast double %"add43'de.2", %27
-  %_unwrap54 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap55 = zext i32 %_unwrap54 to i64
-  %_unwrap57 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139
-  %wide.trip.count_unwrap58 = zext i32 %_unwrap57 to i64
-  %29 = add nsw i64 %wide.trip.count_unwrap58, -1
-  %30 = mul nuw nsw i64 %29, %wide.trip.count96_unwrap55
-  %31 = mul nuw nsw i64 %"iv4'ac.1", %29
-  %32 = add nuw nsw i64 %"iv6'ac.2", %31
-  %33 = mul nuw nsw i64 %"iv'ac.0", %30
-  %34 = add nuw nsw i64 %32, %33
-  %35 = getelementptr inbounds double, double* %4, i64 %34
-  %36 = load double, double* %35, align 8, !invariant.group !380
-  %m0diffe60 = fmul fast double %28, %36
-  %37 = getelementptr inbounds double, double* %1, i64 %34
-  %38 = load double, double* %37, align 8, !invariant.group !381
-  %m1diffe66 = fmul fast double %28, %38
-  %"data7'ipg_unwrap69" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap70" = load double*, double** %"data7'ipg_unwrap69", align 8, !invariant.group !377
-  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
-  %nrows8_unwrap71 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap72 = load i32, i32* %nrows8_unwrap71, align 8, !tbaa !138, !invariant.group !378
-  %_unwrap73 = sext i32 %_unwrap72 to i64
-  %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73
-  %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap70", i64 %_unwrap75
-  %39 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %40 = fadd fast double %39, %m0diffe60
-  store double %40, double* %"arrayidx35'ipg_unwrap", align 8
-  %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !379
-  %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90
-  %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0"
-  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79
-  %41 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %42 = fadd fast double %41, %m1diffe66
-  store double %42, double* %"arrayidx29'ipg_unwrap", align 8
-  %43 = icmp eq i64 %"iv6'ac.2", 0
-  %44 = select fast i1 %43, double 0.000000e+00, double %28
-  %45 = fadd fast double %"mul13'de.2", %28
-  %46 = select fast i1 %43, double %45, double %"mul13'de.2"
-  br i1 %43, label %invertfor.body5, label %incinvertfor.body23
+  %30 = fadd fast double %"add43'de.2", %29, !node !285
+  %_unwrap54 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap55 = zext i32 %_unwrap54 to i64, !node !285
+  %_unwrap57 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !node !285
+  %wide.trip.count_unwrap58 = zext i32 %_unwrap57 to i64, !node !285
+  %31 = add nsw i64 %wide.trip.count_unwrap58, -1, !node !285
+  %32 = mul nuw nsw i64 %31, %wide.trip.count96_unwrap55, !node !285
+  %33 = mul nuw nsw i64 %"iv4'ac.1", %31, !node !285
+  %34 = add nuw nsw i64 %"iv6'ac.2", %33, !node !285
+  %35 = mul nuw nsw i64 %"iv'ac.0", %32, !node !285
+  %36 = add nuw nsw i64 %34, %35, !node !285
+  %37 = getelementptr inbounds double, double* %4, i64 %36, !node !285
+  %38 = load double, double* %37, align 8, !invariant.group !400, !node !285
+  %m0diffe60 = fmul fast double %30, %38, !node !285
+  %39 = getelementptr inbounds double, double* %1, i64 %36, !node !285
+  %40 = load double, double* %39, align 8, !invariant.group !401, !node !285
+  %m1diffe66 = fmul fast double %30, %40, !node !285
+  %"data7'ipg_unwrap69" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap70" = load double*, double** %"data7'ipg_unwrap69", align 8, !invariant.group !397, !node !285
+  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1, !node !285
+  %nrows8_unwrap71 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap72 = load i32, i32* %nrows8_unwrap71, align 8, !tbaa !138, !invariant.group !398, !node !285
+  %_unwrap73 = sext i32 %_unwrap72 to i64, !node !285
+  %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73, !node !285
+  %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap70", i64 %_unwrap75, !node !285
+  %41 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %42 = fadd fast double %41, %m0diffe60, !node !285
+  store double %42, double* %"arrayidx35'ipg_unwrap", align 8
+  %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !399, !node !285
+  %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90, !node !285
+  %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0", !node !285
+  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79, !node !285
+  %43 = load double, double* %"arrayidx29'ipg_unwrap", align 8, !node !285
+  %44 = fadd fast double %43, %m1diffe66, !node !285
+  store double %44, double* %"arrayidx29'ipg_unwrap", align 8
+  %45 = icmp eq i64 %"iv6'ac.2", 0
+  %46 = select fast i1 %45, double 0.000000e+00, double %30
+  %47 = fadd fast double %"mul13'de.2", %30, !node !285
+  %48 = select fast i1 %45, double %47, double %"mul13'de.2"
+  br i1 %45, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %47 = add nsw i64 %"iv6'ac.2", -1
+  %49 = add nsw i64 %"iv6'ac.2", -1, !node !285
+  %inc703 = add i32 %reverse_op.3, 45
+  %inc705 = add i32 %reverse_mem.3, 64
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap84 = zext i32 %_unwrap87 to i64
-  %_unwrap85 = add nsw i64 %wide.trip.count_unwrap84, -2
+  %inc713 = add i32 %reverse_op.4.in, 2
+  %wide.trip.count_unwrap84 = zext i32 %_unwrap87 to i64, !node !285
+  %_unwrap85 = add nsw i64 %wide.trip.count_unwrap84, -2, !node !285
+  %inc715 = add i32 %reverse_mem.4, 7
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %mergeinvertfor.body5_for.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %mergeinvertfor.body5_for.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc727, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc487, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc481, %incinvertfor.body5 ]
+  %reverse_op.4 = add i32 %reverse_op.4.in, 1
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !382
+  %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %inc721 = add i32 %reverse_mem.4, 3
+  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !393, !node !285
   %cmp2281_unwrap = icmp sgt i32 %_unwrap87, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 mergeinvertfor.body5_for.inc47.loopexit:          ; preds = %invertfor.inc47
-  %wide.trip.count96_unwrap88 = zext i32 %6 to i64
+  %wide.trip.count96_unwrap88 = zext i32 %6 to i64, !node !285
+  %inc727 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap90, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap90, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc347, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc345, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc729 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %6, 0
   br i1 %cmp483_unwrap, label %mergeinvertfor.body5_for.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap90 = zext i32 %5 to i64, !node !285
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 15, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -17255,24 +18687,77 @@ entry:
   %1 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 4
   %2 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 5
   %3 = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 6
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
-  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
-  %mul3.i = mul nsw i32 %5, %4, !node !273
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !285
+  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !node !285
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !285
+  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %mul3.i = mul nsw i32 %5, %4, !node !285
   %cmp.not.i = extractvalue { i8*, i8*, i1, i1, double*, double*, double*, double* } %tapeArg, 2
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %4, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %5, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
-  %6 = zext i32 %4 to i64, !node !273
-  %wide.trip.count96 = zext i32 %5 to i64, !node !273
-  %wide.trip.count100_unwrap87 = zext i32 %4 to i64
-  br label %invertfor.inc47
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %6 = zext i32 %4 to i64, !node !285
+  %wide.trip.count96 = zext i32 %5 to i64, !node !285
+  %inc150 = or i32 %forward_op.0, 12
+  %inc152 = add nuw nsw i32 %inc150, 1
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 15, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc152, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc154 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %inc164 = add i32 %forward_mem.0, 5
+  %7 = load i32, i32* %ncols21, align 4, !tbaa !139, !invariant.group !402, !node !285
+  %cmp2281 = icmp sgt i32 %7, 1
+  %wide.trip.count = zext i32 %7 to i64, !node !285
+  %inc166 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc164, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc166, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc196 = add i32 %forward_mem.1, 4
+  %inc206 = add i32 %forward_op.2, 16
+  br i1 %cmp2281, label %for.body23, label %for.inc44
+
+for.body23:                                       ; preds = %for.body5, %for.body23
+  %forward_mem.2 = phi i32 [ %inc258, %for.body23 ], [ %inc196, %for.body5 ]
+  %forward_op.3 = phi i32 [ %inc272, %for.body23 ], [ %inc206, %for.body5 ]
+  %iv6 = phi i64 [ %iv.next7, %for.body23 ], [ 0, %for.body5 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc258 = add i32 %forward_mem.2, 4
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc272 = add i32 %forward_op.3, 29
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc196, %for.body5 ], [ %inc258, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc206, %for.body5 ], [ %inc272, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc154, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %6
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %8 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -17282,150 +18767,209 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc324, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc328, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %7 = bitcast double* %0 to i8*
-  tail call void @free(i8* nonnull %7)
-  %8 = bitcast double* %1 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double* %2 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc328 = add i32 %reverse_op.1.lcssa, 1
+  %9 = bitcast double* %0 to i8*
   tail call void @free(i8* nonnull %9)
-  %10 = bitcast double* %3 to i8*
+  %10 = bitcast double* %1 to i8*
   tail call void @free(i8* nonnull %10)
+  %11 = bitcast double* %2 to i8*
+  tail call void @free(i8* nonnull %11)
+  %inc324 = add i32 %reverse_mem.1.lcssa, 25
+  %12 = bitcast double* %3 to i8*
+  tail call void @free(i8* nonnull %12)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %11 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %11, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc464, %invertfor.body5.lr.ph ], [ %inc712, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc466.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %13 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %13, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
 
-invertfor.body5:                                  ; preds = %invertfor.body23, %invertfor.inc44
-  %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %42, %invertfor.body23 ]
-  %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %44, %invertfor.body23 ]
-  %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !383
-  %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87
-  %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap18
-  %12 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc332 = add i32 %reverse_op.1, 2
+  %inc334 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc466.lcssa = phi i32 [ %inc466, %invertfor.body5 ]
+  %inc464 = add i32 %reverse_mem.2.lcssa, 41
+  br label %invertfor.cond2.preheader
+
+invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
+  %"add43'de.1" = phi double [ %.lcssa718, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc682, %invertfor.body23.preheader ], [ %inc704, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc680, %invertfor.body23.preheader ], [ %reverse_op.4, %invertfor.inc44 ]
+  %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !403, !node !285
+  %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87, !node !285
+  %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap18, !node !285
+  %14 = load double, double* %"arrayidx19'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %13 = fadd fast double %"mul13'de.1", %12
-  %_unwrap21 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap = zext i32 %_unwrap21 to i64
-  %14 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
-  %15 = add nuw nsw i64 %"iv4'ac.1", %14
-  %16 = getelementptr inbounds double, double* %1, i64 %15
-  %17 = load double, double* %16, align 8, !invariant.group !384
-  %m0diffe = fmul fast double %13, %17
-  %18 = getelementptr inbounds double, double* %2, i64 %15
-  %19 = load double, double* %18, align 8, !invariant.group !385
-  %m1diffe = fmul fast double %13, %19
-  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl13_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !386
-  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap29 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !387
-  %_unwrap30 = sext i32 %_unwrap29 to i64
-  %_unwrap31 = mul nsw i64 %"iv4'ac.1", %_unwrap30
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl13_unwrap", i64 %_unwrap31
-  %20 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %21 = fadd fast double %20, %m0diffe
-  store double %21, double* %"arrayidx12'ipg_unwrap", align 8
-  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl15_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !388
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap", i64 %"iv'ac.0"
-  %22 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %23 = fadd fast double %22, %m1diffe
-  store double %23, double* %"arrayidx'ipg_unwrap", align 8
-  %24 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %24, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %15 = fadd fast double %"mul13'de.1", %14, !node !285
+  %_unwrap21 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap = zext i32 %_unwrap21 to i64, !node !285
+  %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap, !node !285
+  %17 = add nuw nsw i64 %"iv4'ac.1", %16, !node !285
+  %18 = getelementptr inbounds double, double* %1, i64 %17, !node !285
+  %19 = load double, double* %18, align 8, !invariant.group !404, !node !285
+  %m0diffe = fmul fast double %15, %19, !node !285
+  %20 = getelementptr inbounds double, double* %2, i64 %17, !node !285
+  %21 = load double, double* %20, align 8, !invariant.group !405, !node !285
+  %m1diffe = fmul fast double %15, %21, !node !285
+  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl13_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !406, !node !285
+  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap29 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !407, !node !285
+  %_unwrap30 = sext i32 %_unwrap29 to i64, !node !285
+  %_unwrap31 = mul nsw i64 %"iv4'ac.1", %_unwrap30, !node !285
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl13_unwrap", i64 %_unwrap31, !node !285
+  %22 = load double, double* %"arrayidx12'ipg_unwrap", align 8, !node !285
+  %23 = fadd fast double %22, %m0diffe, !node !285
+  store double %23, double* %"arrayidx12'ipg_unwrap", align 8
+  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl15_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !408, !node !285
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap", i64 %"iv'ac.0", !node !285
+  %24 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !285
+  %25 = fadd fast double %24, %m1diffe, !node !285
+  store double %25, double* %"arrayidx'ipg_unwrap", align 8
+  %26 = icmp eq i64 %"iv4'ac.1", 0
+  %inc466 = add i32 %reverse_op.2, 25
+  br i1 %26, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc472 = add i32 %reverse_mem.2, 43
+  br label %invertfor.inc44
+
+invertfor.body23.preheader:                       ; preds = %invertfor.body23
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa718 = phi double [ %44, %invertfor.body23 ]
+  %.lcssa = phi double [ %46, %invertfor.body23 ]
+  %inc680 = add i32 %reverse_op.3.lcssa, 44
+  %inc682 = add i32 %reverse_mem.3.lcssa, 61
+  br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %42, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %44, %incinvertfor.body23 ]
-  %"iv6'ac.2" = phi i64 [ %_unwrap82, %mergeinvertfor.body23_for.inc44.loopexit ], [ %45, %incinvertfor.body23 ]
-  %"data14'ipg_unwrap32" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap33" = load double*, double** %"data14'ipg_unwrap32", align 8, !invariant.group !383
-  %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87
-  %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'ipl_unwrap33", i64 %_unwrap36
-  %25 = load double, double* %"arrayidx19'ipg_unwrap37", align 8
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %44, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %46, %incinvertfor.body23 ]
+  %"iv6'ac.2" = phi i64 [ %_unwrap82, %mergeinvertfor.body23_for.inc44.loopexit ], [ %47, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc698, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc688, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc696, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc686, %incinvertfor.body23 ]
+  %"data14'ipg_unwrap32" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap33" = load double*, double** %"data14'ipg_unwrap32", align 8, !invariant.group !403, !node !285
+  %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap87, !node !285
+  %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'ipl_unwrap33", i64 %_unwrap36, !node !285
+  %27 = load double, double* %"arrayidx19'ipg_unwrap37", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap37", align 8
-  %26 = fadd fast double %"add43'de.2", %25
-  %_unwrap51 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap52 = zext i32 %_unwrap51 to i64
-  %_unwrap54 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139
-  %wide.trip.count_unwrap55 = zext i32 %_unwrap54 to i64
-  %27 = add nsw i64 %wide.trip.count_unwrap55, -1
-  %28 = mul nuw nsw i64 %27, %wide.trip.count96_unwrap52
-  %29 = mul nuw nsw i64 %"iv4'ac.1", %27
-  %30 = add nuw nsw i64 %"iv6'ac.2", %29
-  %31 = mul nuw nsw i64 %"iv'ac.0", %28
-  %32 = add nuw nsw i64 %30, %31
-  %33 = getelementptr inbounds double, double* %3, i64 %32
-  %34 = load double, double* %33, align 8, !invariant.group !389
-  %m0diffe57 = fmul fast double %26, %34
-  %35 = getelementptr inbounds double, double* %0, i64 %32
-  %36 = load double, double* %35, align 8, !invariant.group !390
-  %m1diffe63 = fmul fast double %26, %36
-  %"data7'ipg_unwrap66" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl13_unwrap67" = load double*, double** %"data7'ipg_unwrap66", align 8, !invariant.group !386
-  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
-  %nrows8_unwrap68 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap69 = load i32, i32* %nrows8_unwrap68, align 8, !tbaa !138, !invariant.group !387
-  %_unwrap70 = sext i32 %_unwrap69 to i64
-  %_unwrap71 = mul nsw i64 %"iv4'ac.1", %_unwrap70
-  %_unwrap72 = add nsw i64 %iv.next7_unwrap, %_unwrap71
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl13_unwrap67", i64 %_unwrap72
-  %37 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %38 = fadd fast double %37, %m0diffe57
-  store double %38, double* %"arrayidx35'ipg_unwrap", align 8
-  %"data'ipg_unwrap73" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl15_unwrap74" = load double*, double** %"data'ipg_unwrap73", align 8, !invariant.group !388
-  %_unwrap75 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap87
-  %_unwrap76 = add nuw nsw i64 %_unwrap75, %"iv'ac.0"
-  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap74", i64 %_unwrap76
-  %39 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %40 = fadd fast double %39, %m1diffe63
-  store double %40, double* %"arrayidx29'ipg_unwrap", align 8
-  %41 = icmp eq i64 %"iv6'ac.2", 0
-  %42 = select fast i1 %41, double 0.000000e+00, double %26
-  %43 = fadd fast double %"mul13'de.2", %26
-  %44 = select fast i1 %41, double %43, double %"mul13'de.2"
-  br i1 %41, label %invertfor.body5, label %incinvertfor.body23
+  %28 = fadd fast double %"add43'de.2", %27, !node !285
+  %_unwrap51 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap52 = zext i32 %_unwrap51 to i64, !node !285
+  %_unwrap54 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139, !node !285
+  %wide.trip.count_unwrap55 = zext i32 %_unwrap54 to i64, !node !285
+  %29 = add nsw i64 %wide.trip.count_unwrap55, -1, !node !285
+  %30 = mul nuw nsw i64 %29, %wide.trip.count96_unwrap52, !node !285
+  %31 = mul nuw nsw i64 %"iv4'ac.1", %29, !node !285
+  %32 = add nuw nsw i64 %"iv6'ac.2", %31, !node !285
+  %33 = mul nuw nsw i64 %"iv'ac.0", %30, !node !285
+  %34 = add nuw nsw i64 %32, %33, !node !285
+  %35 = getelementptr inbounds double, double* %3, i64 %34, !node !285
+  %36 = load double, double* %35, align 8, !invariant.group !409, !node !285
+  %m0diffe57 = fmul fast double %28, %36, !node !285
+  %37 = getelementptr inbounds double, double* %0, i64 %34, !node !285
+  %38 = load double, double* %37, align 8, !invariant.group !410, !node !285
+  %m1diffe63 = fmul fast double %28, %38, !node !285
+  %"data7'ipg_unwrap66" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl13_unwrap67" = load double*, double** %"data7'ipg_unwrap66", align 8, !invariant.group !406, !node !285
+  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1, !node !285
+  %nrows8_unwrap68 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap69 = load i32, i32* %nrows8_unwrap68, align 8, !tbaa !138, !invariant.group !407, !node !285
+  %_unwrap70 = sext i32 %_unwrap69 to i64, !node !285
+  %_unwrap71 = mul nsw i64 %"iv4'ac.1", %_unwrap70, !node !285
+  %_unwrap72 = add nsw i64 %iv.next7_unwrap, %_unwrap71, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl13_unwrap67", i64 %_unwrap72, !node !285
+  %39 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %40 = fadd fast double %39, %m0diffe57, !node !285
+  store double %40, double* %"arrayidx35'ipg_unwrap", align 8
+  %"data'ipg_unwrap73" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl15_unwrap74" = load double*, double** %"data'ipg_unwrap73", align 8, !invariant.group !408, !node !285
+  %_unwrap75 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap87, !node !285
+  %_unwrap76 = add nuw nsw i64 %_unwrap75, %"iv'ac.0", !node !285
+  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl15_unwrap74", i64 %_unwrap76, !node !285
+  %41 = load double, double* %"arrayidx29'ipg_unwrap", align 8, !node !285
+  %42 = fadd fast double %41, %m1diffe63, !node !285
+  store double %42, double* %"arrayidx29'ipg_unwrap", align 8
+  %43 = icmp eq i64 %"iv6'ac.2", 0
+  %44 = select fast i1 %43, double 0.000000e+00, double %28
+  %45 = fadd fast double %"mul13'de.2", %28, !node !285
+  %46 = select fast i1 %43, double %45, double %"mul13'de.2"
+  br i1 %43, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %45 = add nsw i64 %"iv6'ac.2", -1
+  %47 = add nsw i64 %"iv6'ac.2", -1, !node !285
+  %inc686 = add i32 %reverse_op.3, 45
+  %inc688 = add i32 %reverse_mem.3, 63
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap81 = zext i32 %_unwrap84 to i64
-  %_unwrap82 = add nsw i64 %wide.trip.count_unwrap81, -2
+  %inc696 = add i32 %reverse_op.4.in, 2
+  %wide.trip.count_unwrap81 = zext i32 %_unwrap84 to i64, !node !285
+  %_unwrap82 = add nsw i64 %wide.trip.count_unwrap81, -2, !node !285
+  %inc698 = add i32 %reverse_mem.4, 7
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %mergeinvertfor.body5_for.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap85, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %mergeinvertfor.body5_for.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap85, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc710, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc472, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc466, %incinvertfor.body5 ]
+  %reverse_op.4 = add i32 %reverse_op.4.in, 1
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %ncols21_unwrap83 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap84 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139, !invariant.group !391
+  %ncols21_unwrap83 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %inc704 = add i32 %reverse_mem.4, 3
+  %_unwrap84 = load i32, i32* %ncols21_unwrap83, align 4, !tbaa !139, !invariant.group !402, !node !285
   %cmp2281_unwrap = icmp sgt i32 %_unwrap84, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 mergeinvertfor.body5_for.inc47.loopexit:          ; preds = %invertfor.inc47
-  %wide.trip.count96_unwrap85 = zext i32 %5 to i64
+  %wide.trip.count96_unwrap85 = zext i32 %5 to i64, !node !285
+  %inc710 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap87, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap87, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc334, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc332, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc712 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %5, 0
   br i1 %cmp483_unwrap, label %mergeinvertfor.body5_for.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap87 = zext i32 %4 to i64, !node !285
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 14, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -17436,21 +18980,80 @@ entry:
   %2 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 7
   %3 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 8
   %4 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 3
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
-  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
-  %mul3.i = mul nsw i32 %5, %4, !node !273
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !285
+  %5 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %mul3.i = mul nsw i32 %5, %4, !node !285
   %cmp.not.i = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 4
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %4, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %5, 0
   %6 = zext i32 %4 to i64
-  %wide.trip.count96 = zext i32 %5 to i64, !node !273
-  %wide.trip.count100_unwrap91 = zext i32 %4 to i64
-  br label %invertfor.inc47
+  %wide.trip.count96 = zext i32 %5 to i64, !node !285
+  %inc145 = or i32 %forward_op.0, 4
+  %inc153 = add nuw nsw i32 %inc145, 4
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 11, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc153, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc155 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %7 = getelementptr inbounds i32, i32* %1, i64 %iv
+  %inc167 = add i32 %forward_mem.0, 6
+  %8 = load i32, i32* %7, align 4, !invariant.group !411
+  %cmp2281 = icmp sgt i32 %8, 1
+  %wide.trip.count = zext i32 %8 to i64
+  %inc169 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc167, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc169, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc181 = add i32 %forward_mem.1, 2
+  %inc193 = add i32 %forward_op.2, 10
+  br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
+
+for.body23.preheader:                             ; preds = %for.body5
+  %inc209 = add i32 %forward_op.2, 18
+  %inc211 = add i32 %forward_mem.1, 3
+  br label %for.body23
+
+for.body23:                                       ; preds = %for.body23, %for.body23.preheader
+  %forward_mem.2 = phi i32 [ %inc211, %for.body23.preheader ], [ %inc225, %for.body23 ]
+  %forward_op.3 = phi i32 [ %inc209, %for.body23.preheader ], [ %inc235, %for.body23 ]
+  %iv6 = phi i64 [ 0, %for.body23.preheader ], [ %iv.next7, %for.body23 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc225 = add i32 %forward_mem.2, 3
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc235 = add i32 %forward_op.3, 9
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc181, %for.body5 ], [ %inc225, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc193, %for.body5 ], [ %inc235, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc155, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %6
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %9 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -17460,139 +19063,193 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc269, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc273, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %7 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %7)
-  %8 = bitcast i32* %1 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double* %2 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast double** %3 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc273 = add i32 %reverse_op.1.lcssa, 1
+  %10 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %10)
+  %11 = bitcast i32* %1 to i8*
+  tail call void @free(i8* nonnull %11)
+  %12 = bitcast double* %2 to i8*
+  tail call void @free(i8* nonnull %12)
+  %inc269 = add i32 %reverse_mem.1.lcssa, 16
+  %13 = bitcast double** %3 to i8*
+  tail call void @free(i8* nonnull %13)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %11 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %11, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc363, %invertfor.body5.lr.ph ], [ %inc581, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc365.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %14 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %14, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
+
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc277 = add i32 %reverse_op.1, 2
+  %inc279 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc365.lcssa = phi i32 [ %inc365, %invertfor.body5 ]
+  %inc363 = add i32 %reverse_mem.2.lcssa, 27
+  br label %invertfor.cond2.preheader
 
 invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
-  %"add43'de.1" = phi double [ %.lcssa115, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"add43'de.1" = phi double [ %.lcssa588, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc393, %invertfor.body23.preheader ], [ %inc573, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc391, %invertfor.body23.preheader ], [ %inc569, %invertfor.inc44 ]
   %_unwrap15 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap15, align 8, !invariant.group !392
-  %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91
-  %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap18
-  %12 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap15, align 8, !invariant.group !412
+  %_unwrap17 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91, !node !285
+  %_unwrap18 = add nuw nsw i64 %_unwrap17, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap18, !node !285
+  %15 = load double, double* %"arrayidx19'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %13 = fadd fast double %"mul13'de.1", %12
-  %_unwrap21 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap = zext i32 %_unwrap21 to i64
-  %14 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
-  %15 = add nuw nsw i64 %"iv4'ac.1", %14
-  %16 = getelementptr inbounds double, double* %2, i64 %15
-  %17 = load double, double* %16, align 8, !invariant.group !393
-  %m0diffe = fmul fast double %13, %17
-  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !394
-  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap23 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !395
-  %_unwrap24 = sext i32 %_unwrap23 to i64
-  %_unwrap25 = mul nsw i64 %"iv4'ac.1", %_unwrap24
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap25
-  %18 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %19 = fadd fast double %18, %m0diffe
-  store double %19, double* %"arrayidx12'ipg_unwrap", align 8
-  %20 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %20, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %16 = fadd fast double %"mul13'de.1", %15, !node !285
+  %_unwrap21 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap = zext i32 %_unwrap21 to i64, !node !285
+  %17 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap, !node !285
+  %18 = add nuw nsw i64 %"iv4'ac.1", %17, !node !285
+  %19 = getelementptr inbounds double, double* %2, i64 %18, !node !285
+  %20 = load double, double* %19, align 8, !invariant.group !413, !node !285
+  %m0diffe = fmul fast double %16, %20, !node !285
+  %"data7'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data7'ipg_unwrap", align 8, !invariant.group !414, !node !285
+  %nrows8_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap23 = load i32, i32* %nrows8_unwrap, align 8, !tbaa !138, !invariant.group !415, !node !285
+  %_unwrap24 = sext i32 %_unwrap23 to i64, !node !285
+  %_unwrap25 = mul nsw i64 %"iv4'ac.1", %_unwrap24, !node !285
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap25, !node !285
+  %21 = load double, double* %"arrayidx12'ipg_unwrap", align 8, !node !285
+  %22 = fadd fast double %21, %m0diffe, !node !285
+  store double %22, double* %"arrayidx12'ipg_unwrap", align 8
+  %23 = icmp eq i64 %"iv4'ac.1", 0
+  %inc365 = add i32 %reverse_op.2, 16
+  br i1 %23, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc371 = add i32 %reverse_mem.2, 29
+  br label %invertfor.inc44
 
 invertfor.body23.preheader:                       ; preds = %invertfor.body23
-  %.lcssa115 = phi double [ %33, %invertfor.body23 ]
-  %.lcssa = phi double [ %35, %invertfor.body23 ]
-  %_unwrap45 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap46 = zext i32 %_unwrap45 to i64
-  %_unwrap100 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap46
-  %_unwrap101 = add nuw nsw i64 %"iv4'ac.1", %_unwrap100
-  %_unwrap102 = getelementptr inbounds double*, double** %3, i64 %_unwrap101
-  %21 = bitcast double** %_unwrap102 to i8**
-  %forfree103114 = load i8*, i8** %21, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree103114)
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa588 = phi double [ %36, %invertfor.body23 ]
+  %.lcssa = phi double [ %38, %invertfor.body23 ]
+  %_unwrap45 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap46 = zext i32 %_unwrap45 to i64, !node !285
+  %_unwrap100 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap46, !node !285
+  %_unwrap101 = add nuw nsw i64 %"iv4'ac.1", %_unwrap100, !node !285
+  %inc391 = add i32 %reverse_op.3.lcssa, 29
+  %_unwrap102 = getelementptr inbounds double*, double** %3, i64 %_unwrap101, !node !285
+  %inc393 = add i32 %reverse_mem.3.lcssa, 55
+  %24 = bitcast double** %_unwrap102 to i8**
+  %forfree103586 = load i8*, i8** %24, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree103586), !node !285
   br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %33, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %35, %incinvertfor.body23 ]
-  %"iv6'ac.0" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %36, %incinvertfor.body23 ]
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %36, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %38, %incinvertfor.body23 ]
+  %"iv6'ac.0" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %39, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc561, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc545, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc559, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc543, %incinvertfor.body23 ]
   %_unwrap28 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap29" = load double*, double** %_unwrap28, align 8, !invariant.group !392
-  %_unwrap31 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91
-  %_unwrap32 = add nuw nsw i64 %_unwrap31, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap33" = getelementptr inbounds double, double* %"'il_phi3_unwrap29", i64 %_unwrap32
-  %22 = load double, double* %"arrayidx19'ipg_unwrap33", align 8
+  %"'il_phi3_unwrap29" = load double*, double** %_unwrap28, align 8, !invariant.group !412
+  %_unwrap31 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap91, !node !285
+  %_unwrap32 = add nuw nsw i64 %_unwrap31, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap33" = getelementptr inbounds double, double* %"'il_phi3_unwrap29", i64 %_unwrap32, !node !285
+  %25 = load double, double* %"arrayidx19'ipg_unwrap33", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap33", align 8
-  %23 = fadd fast double %"add43'de.2", %22
-  %_unwrap57 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap58 = zext i32 %_unwrap57 to i64
-  %24 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap58
-  %25 = add nuw nsw i64 %"iv4'ac.1", %24
-  %26 = getelementptr inbounds double*, double** %3, i64 %25
-  %27 = load double*, double** %26, align 8, !dereferenceable !284, !invariant.group !396
-  %28 = getelementptr inbounds double, double* %27, i64 %"iv6'ac.0"
-  %29 = load double, double* %28, align 8, !invariant.group !397
-  %m0diffe62 = fmul fast double %23, %29
-  %"data7'ipg_unwrap64" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2
-  %"'ipl_unwrap65" = load double*, double** %"data7'ipg_unwrap64", align 8, !invariant.group !394
+  %26 = fadd fast double %"add43'de.2", %25, !node !285
+  %_unwrap57 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap58 = zext i32 %_unwrap57 to i64, !node !285
+  %27 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap58, !node !285
+  %28 = add nuw nsw i64 %"iv4'ac.1", %27, !node !285
+  %29 = getelementptr inbounds double*, double** %3, i64 %28, !node !285
+  %30 = load double*, double** %29, align 8, !dereferenceable !298, !invariant.group !416, !node !285
+  %31 = getelementptr inbounds double, double* %30, i64 %"iv6'ac.0", !node !285
+  %32 = load double, double* %31, align 8, !invariant.group !417, !node !285
+  %m0diffe62 = fmul fast double %26, %32, !node !285
+  %"data7'ipg_unwrap64" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"rhs'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap65" = load double*, double** %"data7'ipg_unwrap64", align 8, !invariant.group !414, !node !285
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
-  %nrows8_unwrap66 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0
-  %_unwrap67 = load i32, i32* %nrows8_unwrap66, align 8, !tbaa !138, !invariant.group !395
-  %_unwrap68 = sext i32 %_unwrap67 to i64
-  %_unwrap69 = mul nsw i64 %"iv4'ac.1", %_unwrap68
-  %_unwrap70 = add nsw i64 %iv.next7_unwrap, %_unwrap69
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap65", i64 %_unwrap70
-  %30 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %31 = fadd fast double %30, %m0diffe62
-  store double %31, double* %"arrayidx35'ipg_unwrap", align 8
-  %32 = icmp eq i64 %"iv6'ac.0", 0
-  %33 = select fast i1 %32, double 0.000000e+00, double %23
-  %34 = fadd fast double %"mul13'de.2", %23
-  %35 = select fast i1 %32, double %34, double %"mul13'de.2"
-  br i1 %32, label %invertfor.body23.preheader, label %incinvertfor.body23
+  %nrows8_unwrap66 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 0, !node !285
+  %_unwrap67 = load i32, i32* %nrows8_unwrap66, align 8, !tbaa !138, !invariant.group !415, !node !285
+  %_unwrap68 = sext i32 %_unwrap67 to i64, !node !285
+  %_unwrap69 = mul nsw i64 %"iv4'ac.1", %_unwrap68, !node !285
+  %_unwrap70 = add nsw i64 %iv.next7_unwrap, %_unwrap69, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap65", i64 %_unwrap70, !node !285
+  %33 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %34 = fadd fast double %33, %m0diffe62, !node !285
+  store double %34, double* %"arrayidx35'ipg_unwrap", align 8
+  %35 = icmp eq i64 %"iv6'ac.0", 0
+  %36 = select fast i1 %35, double 0.000000e+00, double %26
+  %37 = fadd fast double %"mul13'de.2", %26, !node !285
+  %38 = select fast i1 %35, double %37, double %"mul13'de.2"
+  br i1 %35, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %36 = add nsw i64 %"iv6'ac.0", -1
+  %39 = add nsw i64 %"iv6'ac.0", -1
+  %inc543 = add i32 %reverse_op.3, 26
+  %inc545 = add i32 %reverse_mem.3, 50
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap84 = zext i32 %38 to i64
+  %inc559 = add i32 %reverse_op.4.in, 6
+  %wide.trip.count_unwrap84 = zext i32 %41 to i64
   %_unwrap85 = add nsw i64 %wide.trip.count_unwrap84, -2
+  %inc561 = add i32 %reverse_mem.4, 9
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %mergeinvertfor.body5_for.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap89, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %mergeinvertfor.body5_for.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap89, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc579, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc371, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc365, %incinvertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %37 = getelementptr inbounds i32, i32* %1, i64 %"iv'ac.0"
-  %38 = load i32, i32* %37, align 4, !invariant.group !398
-  %cmp2281_unwrap = icmp sgt i32 %38, 1
+  %inc569 = add i32 %reverse_op.4.in, 3
+  %40 = getelementptr inbounds i32, i32* %1, i64 %"iv'ac.0"
+  %inc573 = add i32 %reverse_mem.4, 4
+  %41 = load i32, i32* %40, align 4, !invariant.group !418
+  %cmp2281_unwrap = icmp sgt i32 %41, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 mergeinvertfor.body5_for.inc47.loopexit:          ; preds = %invertfor.inc47
-  %wide.trip.count96_unwrap89 = zext i32 %5 to i64
+  %wide.trip.count96_unwrap89 = zext i32 %5 to i64, !node !285
+  %inc579 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap91, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap91, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc279, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc277, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc581 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %5, 0
   br i1 %cmp483_unwrap, label %mergeinvertfor.body5_for.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap91 = zext i32 %4 to i64
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 11, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -17607,17 +19264,76 @@ entry:
   %6 = extractvalue { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg, 5
   %mul3.i = mul nsw i32 %6, %5
   %cmp.not.i = extractvalue { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg, 6
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %5, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %6, 0
   %7 = zext i32 %5 to i64
   %wide.trip.count96 = zext i32 %6 to i64
-  %wide.trip.count100_unwrap89 = zext i32 %5 to i64
-  br label %invertfor.inc47
+  %inc146 = or i32 %forward_op.0, 4
+  %inc154 = add nuw nsw i32 %inc146, 4
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 11, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc154, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc156 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %8 = getelementptr inbounds i32, i32* %3, i64 %iv
+  %inc168 = add i32 %forward_mem.0, 6
+  %9 = load i32, i32* %8, align 4, !invariant.group !419
+  %cmp2281 = icmp sgt i32 %9, 1
+  %wide.trip.count = zext i32 %9 to i64
+  %inc170 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc168, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc170, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc182 = add i32 %forward_mem.1, 2
+  %inc192 = add i32 %forward_op.2, 9
+  br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
+
+for.body23.preheader:                             ; preds = %for.body5
+  %inc208 = add i32 %forward_op.2, 17
+  %inc210 = add i32 %forward_mem.1, 3
+  br label %for.body23
+
+for.body23:                                       ; preds = %for.body23, %for.body23.preheader
+  %forward_mem.2 = phi i32 [ %inc210, %for.body23.preheader ], [ %inc228, %for.body23 ]
+  %forward_op.3 = phi i32 [ %inc208, %for.body23.preheader ], [ %inc236, %for.body23 ]
+  %iv6 = phi i64 [ 0, %for.body23.preheader ], [ %iv.next7, %for.body23 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc228 = add i32 %forward_mem.2, 3
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc236 = add i32 %forward_op.3, 10
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc182, %for.body5 ], [ %inc228, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc192, %for.body5 ], [ %inc236, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc156, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %7
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -17627,126 +19343,180 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc274, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc278, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %8 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double** %1 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast double** %2 to i8*
-  tail call void @free(i8* nonnull %10)
-  %11 = bitcast i32* %3 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc278 = add i32 %reverse_op.1.lcssa, 1
+  %11 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %11)
-  %12 = bitcast double* %4 to i8*
+  %12 = bitcast double** %1 to i8*
   tail call void @free(i8* nonnull %12)
+  %13 = bitcast double** %2 to i8*
+  tail call void @free(i8* nonnull %13)
+  %14 = bitcast i32* %3 to i8*
+  tail call void @free(i8* nonnull %14)
+  %inc274 = add i32 %reverse_mem.1.lcssa, 18
+  %15 = bitcast double* %4 to i8*
+  tail call void @free(i8* nonnull %15)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %13 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %13, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc364, %invertfor.body5.lr.ph ], [ %inc578, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc366.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %16 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %16, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
+
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc282 = add i32 %reverse_op.1, 2
+  %inc284 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc366.lcssa = phi i32 [ %inc366, %invertfor.body5 ]
+  %inc364 = add i32 %reverse_mem.2.lcssa, 26
+  br label %invertfor.cond2.preheader
 
 invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
-  %"add43'de.1" = phi double [ %.lcssa116, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"add43'de.1" = phi double [ %.lcssa585, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc392, %invertfor.body23.preheader ], [ %inc570, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc390, %invertfor.body23.preheader ], [ %inc566, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !399
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !420
   %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap89
   %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
-  %14 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+  %17 = load double, double* %"arrayidx19'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %15 = fadd fast double %"mul13'de.1", %14
-  %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap87
-  %17 = add nuw nsw i64 %"iv4'ac.1", %16
-  %18 = getelementptr inbounds double, double* %4, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !400
-  %m1diffe = fmul fast double %15, %19
+  %18 = fadd fast double %"mul13'de.1", %17
+  %19 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap87
+  %20 = add nuw nsw i64 %"iv4'ac.1", %19
+  %21 = getelementptr inbounds double, double* %4, i64 %20
+  %22 = load double, double* %21, align 8, !invariant.group !421
+  %m1diffe = fmul fast double %18, %22
   %_unwrap29 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !401
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !422
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
-  %20 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %21 = fadd fast double %20, %m1diffe
-  store double %21, double* %"arrayidx'ipg_unwrap", align 8
-  %22 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %22, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %23 = load double, double* %"arrayidx'ipg_unwrap", align 8
+  %24 = fadd fast double %23, %m1diffe
+  store double %24, double* %"arrayidx'ipg_unwrap", align 8
+  %25 = icmp eq i64 %"iv4'ac.1", 0
+  %inc366 = add i32 %reverse_op.2, 15
+  br i1 %25, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc372 = add i32 %reverse_mem.2, 28
+  br label %invertfor.inc44
 
 invertfor.body23.preheader:                       ; preds = %invertfor.body23
-  %.lcssa117 = phi double** [ %38, %invertfor.body23 ]
-  %.lcssa116 = phi double [ %32, %invertfor.body23 ]
-  %.lcssa = phi double [ %34, %invertfor.body23 ]
-  %23 = bitcast double** %.lcssa117 to i8**
-  %forfree97115 = load i8*, i8** %23, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree97115)
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa586 = phi double** [ %31, %invertfor.body23 ]
+  %.lcssa585 = phi double [ %38, %invertfor.body23 ]
+  %.lcssa = phi double [ %40, %invertfor.body23 ]
+  %inc390 = add i32 %reverse_op.3.lcssa, 29
+  %inc392 = add i32 %reverse_mem.3.lcssa, 53
+  %26 = bitcast double** %.lcssa586 to i8**
+  %forfree97583 = load i8*, i8** %26, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree97583)
   br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %32, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %34, %incinvertfor.body23 ]
-  %"iv6'ac.0" = phi i64 [ %_unwrap83, %mergeinvertfor.body23_for.inc44.loopexit ], [ %35, %incinvertfor.body23 ]
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %38, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %40, %incinvertfor.body23 ]
+  %"iv6'ac.0" = phi i64 [ %_unwrap83, %mergeinvertfor.body23_for.inc44.loopexit ], [ %41, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc558, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc542, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc556, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc540, %incinvertfor.body23 ]
   %_unwrap32 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !399
+  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !420
   %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap89
   %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
   %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'il_phi3_unwrap33", i64 %_unwrap36
-  %24 = load double, double* %"arrayidx19'ipg_unwrap37", align 8
+  %27 = load double, double* %"arrayidx19'ipg_unwrap37", align 8
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap37", align 8
-  %25 = fadd fast double %"add43'de.2", %24
-  %26 = load double*, double** %38, align 8, !dereferenceable !284, !invariant.group !402
-  %27 = getelementptr inbounds double, double* %26, i64 %"iv6'ac.0"
-  %28 = load double, double* %27, align 8, !invariant.group !403
-  %m1diffe63 = fmul fast double %25, %28
+  %28 = fadd fast double %"add43'de.2", %27
+  %29 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap87
+  %30 = add nuw nsw i64 %"iv4'ac.1", %29
+  %31 = getelementptr inbounds double*, double** %2, i64 %30
+  %32 = load double*, double** %31, align 8, !dereferenceable !298, !invariant.group !423
+  %33 = getelementptr inbounds double, double* %32, i64 %"iv6'ac.0"
+  %34 = load double, double* %33, align 8, !invariant.group !424
+  %m1diffe63 = fmul fast double %28, %34
   %_unwrap67 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap68" = load double*, double** %_unwrap67, align 8, !invariant.group !401
+  %"'il_phi1_unwrap68" = load double*, double** %_unwrap67, align 8, !invariant.group !422
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %_unwrap69 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap89
   %_unwrap70 = add nuw nsw i64 %_unwrap69, %"iv'ac.0"
   %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap68", i64 %_unwrap70
-  %29 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %30 = fadd fast double %29, %m1diffe63
-  store double %30, double* %"arrayidx29'ipg_unwrap", align 8
-  %31 = icmp eq i64 %"iv6'ac.0", 0
-  %32 = select fast i1 %31, double 0.000000e+00, double %25
-  %33 = fadd fast double %"mul13'de.2", %25
-  %34 = select fast i1 %31, double %33, double %"mul13'de.2"
-  br i1 %31, label %invertfor.body23.preheader, label %incinvertfor.body23
+  %35 = load double, double* %"arrayidx29'ipg_unwrap", align 8
+  %36 = fadd fast double %35, %m1diffe63
+  store double %36, double* %"arrayidx29'ipg_unwrap", align 8
+  %37 = icmp eq i64 %"iv6'ac.0", 0
+  %38 = select fast i1 %37, double 0.000000e+00, double %28
+  %39 = fadd fast double %"mul13'de.2", %28
+  %40 = select fast i1 %37, double %39, double %"mul13'de.2"
+  br i1 %37, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %35 = add nsw i64 %"iv6'ac.0", -1
+  %41 = add nsw i64 %"iv6'ac.0", -1
+  %inc540 = add i32 %reverse_op.3, 26
+  %inc542 = add i32 %reverse_mem.3, 49
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap82 = zext i32 %40 to i64
+  %inc556 = add i32 %reverse_op.4.in, 6
+  %wide.trip.count_unwrap82 = zext i32 %43 to i64
   %_unwrap83 = add nsw i64 %wide.trip.count_unwrap82, -2
-  %36 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap87
-  %37 = add nuw nsw i64 %"iv4'ac.1", %36
-  %38 = getelementptr inbounds double*, double** %2, i64 %37
+  %inc558 = add i32 %reverse_mem.4, 9
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %invertfor.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap87, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %invertfor.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap87, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc576, %invertfor.inc47.loopexit ], [ %inc372, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %invertfor.inc47.loopexit ], [ %inc366, %incinvertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !404
-  %cmp2281_unwrap = icmp sgt i32 %40, 1
+  %inc566 = add i32 %reverse_op.4.in, 3
+  %42 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
+  %inc570 = add i32 %reverse_mem.4, 4
+  %43 = load i32, i32* %42, align 4, !invariant.group !425
+  %cmp2281_unwrap = icmp sgt i32 %43, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 invertfor.inc47.loopexit:                         ; preds = %invertfor.inc47
   %wide.trip.count96_unwrap87 = zext i32 %6 to i64
+  %inc576 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap89, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap89, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc284, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc282, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc578 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %6, 0
   br i1 %cmp483_unwrap, label %invertfor.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap89 = zext i32 %5 to i64
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 11, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -17758,21 +19528,80 @@ entry:
   %3 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 7
   %4 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 8
   %5 = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 4
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !273
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
-  %mul3.i = mul nsw i32 %6, %5, !node !273
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %rhs, i64 0, i32 1, !node !285
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %mul3.i = mul nsw i32 %6, %5, !node !285
   %cmp.not.i = extractvalue { i8*, i8*, double**, double**, i32, i1, i1, i32*, double*, double** } %tapeArg, 5
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %5, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %6, 0
   %7 = zext i32 %5 to i64
-  %wide.trip.count96 = zext i32 %6 to i64, !node !273
-  %wide.trip.count100_unwrap92 = zext i32 %5 to i64
-  br label %invertfor.inc47
+  %wide.trip.count96 = zext i32 %6 to i64, !node !285
+  %inc148 = or i32 %forward_op.0, 4
+  %inc156 = add nuw nsw i32 %inc148, 4
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 12, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc156, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc158 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %8 = getelementptr inbounds i32, i32* %3, i64 %iv
+  %inc170 = add i32 %forward_mem.0, 6
+  %9 = load i32, i32* %8, align 4, !invariant.group !426
+  %cmp2281 = icmp sgt i32 %9, 1
+  %wide.trip.count = zext i32 %9 to i64
+  %inc172 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc170, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc172, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc184 = add i32 %forward_mem.1, 2
+  %inc194 = add i32 %forward_op.2, 9
+  br i1 %cmp2281, label %for.body23.preheader, label %for.inc44
+
+for.body23.preheader:                             ; preds = %for.body5
+  %inc210 = add i32 %forward_op.2, 17
+  %inc212 = add i32 %forward_mem.1, 3
+  br label %for.body23
+
+for.body23:                                       ; preds = %for.body23, %for.body23.preheader
+  %forward_mem.2 = phi i32 [ %inc212, %for.body23.preheader ], [ %inc230, %for.body23 ]
+  %forward_op.3 = phi i32 [ %inc210, %for.body23.preheader ], [ %inc238, %for.body23 ]
+  %iv6 = phi i64 [ 0, %for.body23.preheader ], [ %iv.next7, %for.body23 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc230 = add i32 %forward_mem.2, 3
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc238 = add i32 %forward_op.3, 10
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc184, %for.body5 ], [ %inc230, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc194, %for.body5 ], [ %inc238, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc158, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %7
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -17782,172 +19611,291 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc276, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc280, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %8 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %8)
-  %9 = bitcast double** %1 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast double** %2 to i8*
-  tail call void @free(i8* nonnull %10)
-  %11 = bitcast i32* %3 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc280 = add i32 %reverse_op.1.lcssa, 1
+  %11 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %11)
-  %12 = bitcast double* %4 to i8*
+  %12 = bitcast double** %1 to i8*
   tail call void @free(i8* nonnull %12)
+  %13 = bitcast double** %2 to i8*
+  tail call void @free(i8* nonnull %13)
+  %14 = bitcast i32* %3 to i8*
+  tail call void @free(i8* nonnull %14)
+  %inc276 = add i32 %reverse_mem.1.lcssa, 18
+  %15 = bitcast double* %4 to i8*
+  tail call void @free(i8* nonnull %15)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %13 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %13, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc368, %invertfor.body5.lr.ph ], [ %inc586, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc370.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %16 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %16, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
+
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc284 = add i32 %reverse_op.1, 2
+  %inc286 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc370.lcssa = phi i32 [ %inc370, %invertfor.body5 ]
+  %inc368 = add i32 %reverse_mem.2.lcssa, 27
+  br label %invertfor.cond2.preheader
 
 invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
-  %"add43'de.1" = phi double [ %.lcssa116, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"add43'de.1" = phi double [ %.lcssa593, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
   %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc398, %invertfor.body23.preheader ], [ %inc578, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc396, %invertfor.body23.preheader ], [ %inc574, %invertfor.inc44 ]
   %_unwrap19 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !405
-  %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92
-  %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22
-  %14 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap19, align 8, !invariant.group !427
+  %_unwrap21 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92, !node !285
+  %_unwrap22 = add nuw nsw i64 %_unwrap21, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap22, !node !285
+  %17 = load double, double* %"arrayidx19'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %15 = fadd fast double %"mul13'de.1", %14
-  %_unwrap25 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap = zext i32 %_unwrap25 to i64
-  %16 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap
-  %17 = add nuw nsw i64 %"iv4'ac.1", %16
-  %18 = getelementptr inbounds double, double* %4, i64 %17
-  %19 = load double, double* %18, align 8, !invariant.group !406
-  %m1diffe = fmul fast double %15, %19
+  %18 = fadd fast double %"mul13'de.1", %17, !node !285
+  %_unwrap25 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap = zext i32 %_unwrap25 to i64, !node !285
+  %19 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap, !node !285
+  %20 = add nuw nsw i64 %"iv4'ac.1", %19, !node !285
+  %21 = getelementptr inbounds double, double* %4, i64 %20, !node !285
+  %22 = load double, double* %21, align 8, !invariant.group !428, !node !285
+  %m1diffe = fmul fast double %18, %22, !node !285
   %_unwrap29 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !407
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0"
-  %20 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %21 = fadd fast double %20, %m1diffe
-  store double %21, double* %"arrayidx'ipg_unwrap", align 8
-  %22 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %22, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %"'il_phi1_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !429
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap", i64 %"iv'ac.0", !node !285
+  %23 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !285
+  %24 = fadd fast double %23, %m1diffe, !node !285
+  store double %24, double* %"arrayidx'ipg_unwrap", align 8
+  %25 = icmp eq i64 %"iv4'ac.1", 0
+  %inc370 = add i32 %reverse_op.2, 15
+  br i1 %25, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc376 = add i32 %reverse_mem.2, 29
+  br label %invertfor.inc44
 
 invertfor.body23.preheader:                       ; preds = %invertfor.body23
-  %.lcssa116 = phi double [ %35, %invertfor.body23 ]
-  %.lcssa = phi double [ %37, %invertfor.body23 ]
-  %_unwrap49 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap50 = zext i32 %_unwrap49 to i64
-  %_unwrap97 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap50
-  %_unwrap98 = add nuw nsw i64 %"iv4'ac.1", %_unwrap97
-  %_unwrap99 = getelementptr inbounds double*, double** %2, i64 %_unwrap98
-  %23 = bitcast double** %_unwrap99 to i8**
-  %forfree100115 = load i8*, i8** %23, align 8, !dereferenceable !284
-  tail call void @free(i8* nonnull %forfree100115)
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa593 = phi double [ %38, %invertfor.body23 ]
+  %.lcssa = phi double [ %40, %invertfor.body23 ]
+  %_unwrap49 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap50 = zext i32 %_unwrap49 to i64, !node !285
+  %_unwrap97 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap50, !node !285
+  %_unwrap98 = add nuw nsw i64 %"iv4'ac.1", %_unwrap97, !node !285
+  %inc396 = add i32 %reverse_op.3.lcssa, 29
+  %_unwrap99 = getelementptr inbounds double*, double** %2, i64 %_unwrap98, !node !285
+  %inc398 = add i32 %reverse_mem.3.lcssa, 55
+  %26 = bitcast double** %_unwrap99 to i8**
+  %forfree100591 = load i8*, i8** %26, align 8, !dereferenceable !298
+  tail call void @free(i8* nonnull %forfree100591), !node !285
   br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %35, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %37, %incinvertfor.body23 ]
-  %"iv6'ac.0" = phi i64 [ %_unwrap86, %mergeinvertfor.body23_for.inc44.loopexit ], [ %38, %incinvertfor.body23 ]
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %38, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %40, %incinvertfor.body23 ]
+  %"iv6'ac.0" = phi i64 [ %_unwrap86, %mergeinvertfor.body23_for.inc44.loopexit ], [ %41, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc566, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc550, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc564, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc548, %incinvertfor.body23 ]
   %_unwrap32 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !405
-  %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92
-  %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'il_phi3_unwrap33", i64 %_unwrap36
-  %24 = load double, double* %"arrayidx19'ipg_unwrap37", align 8
+  %"'il_phi3_unwrap33" = load double*, double** %_unwrap32, align 8, !invariant.group !427
+  %_unwrap35 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap92, !node !285
+  %_unwrap36 = add nuw nsw i64 %_unwrap35, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap37" = getelementptr inbounds double, double* %"'il_phi3_unwrap33", i64 %_unwrap36, !node !285
+  %27 = load double, double* %"arrayidx19'ipg_unwrap37", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap37", align 8
-  %25 = fadd fast double %"add43'de.2", %24
-  %_unwrap61 = load i32, i32* %ncols, align 4, !tbaa !139
-  %wide.trip.count96_unwrap62 = zext i32 %_unwrap61 to i64
-  %26 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap62
-  %27 = add nuw nsw i64 %"iv4'ac.1", %26
-  %28 = getelementptr inbounds double*, double** %2, i64 %27
-  %29 = load double*, double** %28, align 8, !dereferenceable !284, !invariant.group !408
-  %30 = getelementptr inbounds double, double* %29, i64 %"iv6'ac.0"
-  %31 = load double, double* %30, align 8, !invariant.group !409
-  %m1diffe66 = fmul fast double %25, %31
+  %28 = fadd fast double %"add43'de.2", %27, !node !285
+  %_unwrap61 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
+  %wide.trip.count96_unwrap62 = zext i32 %_unwrap61 to i64, !node !285
+  %29 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap62, !node !285
+  %30 = add nuw nsw i64 %"iv4'ac.1", %29, !node !285
+  %31 = getelementptr inbounds double*, double** %2, i64 %30, !node !285
+  %32 = load double*, double** %31, align 8, !dereferenceable !298, !invariant.group !430, !node !285
+  %33 = getelementptr inbounds double, double* %32, i64 %"iv6'ac.0", !node !285
+  %34 = load double, double* %33, align 8, !invariant.group !431, !node !285
+  %m1diffe66 = fmul fast double %28, %34, !node !285
   %_unwrap70 = getelementptr inbounds double*, double** %1, i64 %"iv'ac.0"
-  %"'il_phi1_unwrap71" = load double*, double** %_unwrap70, align 8, !invariant.group !407
+  %"'il_phi1_unwrap71" = load double*, double** %_unwrap70, align 8, !invariant.group !429
   %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.0", 1
   %_unwrap72 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap92
   %_unwrap73 = add nuw nsw i64 %_unwrap72, %"iv'ac.0"
-  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap71", i64 %_unwrap73
-  %32 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %33 = fadd fast double %32, %m1diffe66
-  store double %33, double* %"arrayidx29'ipg_unwrap", align 8
-  %34 = icmp eq i64 %"iv6'ac.0", 0
-  %35 = select fast i1 %34, double 0.000000e+00, double %25
-  %36 = fadd fast double %"mul13'de.2", %25
-  %37 = select fast i1 %34, double %36, double %"mul13'de.2"
-  br i1 %34, label %invertfor.body23.preheader, label %incinvertfor.body23
+  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1_unwrap71", i64 %_unwrap73, !node !285
+  %35 = load double, double* %"arrayidx29'ipg_unwrap", align 8, !node !285
+  %36 = fadd fast double %35, %m1diffe66, !node !285
+  store double %36, double* %"arrayidx29'ipg_unwrap", align 8
+  %37 = icmp eq i64 %"iv6'ac.0", 0
+  %38 = select fast i1 %37, double 0.000000e+00, double %28
+  %39 = fadd fast double %"mul13'de.2", %28, !node !285
+  %40 = select fast i1 %37, double %39, double %"mul13'de.2"
+  br i1 %37, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %38 = add nsw i64 %"iv6'ac.0", -1
+  %41 = add nsw i64 %"iv6'ac.0", -1
+  %inc548 = add i32 %reverse_op.3, 26
+  %inc550 = add i32 %reverse_mem.3, 50
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap85 = zext i32 %40 to i64
+  %inc564 = add i32 %reverse_op.4.in, 6
+  %wide.trip.count_unwrap85 = zext i32 %43 to i64
   %_unwrap86 = add nsw i64 %wide.trip.count_unwrap85, -2
+  %inc566 = add i32 %reverse_mem.4, 9
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %mergeinvertfor.body5_for.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap90, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %mergeinvertfor.body5_for.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %mergeinvertfor.body5_for.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap90, %mergeinvertfor.body5_for.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc584, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc376, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body5_for.inc47.loopexit ], [ %inc370, %incinvertfor.body5 ]
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %39 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
-  %40 = load i32, i32* %39, align 4, !invariant.group !410
-  %cmp2281_unwrap = icmp sgt i32 %40, 1
+  %inc574 = add i32 %reverse_op.4.in, 3
+  %42 = getelementptr inbounds i32, i32* %3, i64 %"iv'ac.0"
+  %inc578 = add i32 %reverse_mem.4, 4
+  %43 = load i32, i32* %42, align 4, !invariant.group !432
+  %cmp2281_unwrap = icmp sgt i32 %43, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 mergeinvertfor.body5_for.inc47.loopexit:          ; preds = %invertfor.inc47
-  %wide.trip.count96_unwrap90 = zext i32 %6 to i64
+  %wide.trip.count96_unwrap90 = zext i32 %6 to i64, !node !285
+  %inc584 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap92, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap92, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc286, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc284, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc586 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %6, 0
   br i1 %cmp483_unwrap, label %mergeinvertfor.body5_for.inc47.loopexit, label %invertfor.cond2.preheader
+
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap92 = zext i32 %5 to i64
+  br label %invertfor.inc47
+
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 12, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
 define internal void @diffeapply_global_transform(%struct.Matrix* nocapture readonly %pose_params, %struct.Matrix* nocapture %"pose_params'", %struct.Matrix* nocapture readonly %positions, %struct.Matrix* nocapture %"positions'", { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg) local_unnamed_addr #5 {
 entry:
-  %0 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 12
-  %1 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 11
+  %0 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 11
+  %1 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 12
   %call.i = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 5
   %"call.i'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 4
   %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %2 = bitcast i8* %call.i to %struct.Matrix*
   %"call4.i'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 3
-  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2, !node !273
+  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2, !node !285
   %"'il_phi1" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 0
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0, !node !273
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0, !node !285
   %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 10
   %"'ipc16" = bitcast i8* %"call4.i'mi" to double*
   %4 = sext i32 %3 to i64
+  br label %for.cond1.preheader
+
+for.cond1.preheader:                              ; preds = %for.inc12, %entry
+  %forward_mem.0 = phi i32 [ 8, %entry ], [ %inc101.lcssa, %for.inc12 ]
+  %forward_op.0 = phi i32 [ 0, %entry ], [ %inc105.lcssa, %for.inc12 ]
+  %iv = phi i64 [ 0, %entry ], [ %iv.next, %for.inc12 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc77 = add i32 %forward_op.0, 3
+  br label %for.body3
+
+for.body3:                                        ; preds = %for.body3, %for.cond1.preheader
+  %forward_mem.1 = phi i32 [ %forward_mem.0, %for.cond1.preheader ], [ %inc101, %for.body3 ]
+  %forward_op.1 = phi i32 [ %inc77, %for.cond1.preheader ], [ %inc105, %for.body3 ]
+  %iv2 = phi i64 [ 0, %for.cond1.preheader ], [ %iv.next3, %for.body3 ]
+  %iv.next3 = add nuw nsw i64 %iv2, 1
+  %inc101 = add i32 %forward_mem.1, 4
+  %inc105 = add i32 %forward_op.1, 10
+  %exitcond102.not = icmp eq i64 %iv.next3, 3
+  br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
+
+for.inc12:                                        ; preds = %for.body3
+  %forward_mem.1.lcssa = phi i32 [ %forward_mem.1, %for.body3 ]
+  %forward_op.1.lcssa = phi i32 [ %forward_op.1, %for.body3 ]
+  %inc101.lcssa = phi i32 [ %inc101, %for.body3 ]
+  %inc105.lcssa = phi i32 [ %inc105, %for.body3 ]
+  %exitcond107.not = icmp eq i64 %iv.next, 3
+  br i1 %exitcond107.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !196
+
+for.end14:                                        ; preds = %for.inc12
+  %forward_mem.1.lcssa.lcssa = phi i32 [ %forward_mem.1.lcssa, %for.inc12 ]
+  %forward_op.1.lcssa.lcssa = phi i32 [ %forward_op.1.lcssa, %for.inc12 ]
+  %inc105.lcssa.lcssa = phi i32 [ %inc105.lcssa, %for.inc12 ]
   %call.i81 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 8
   %"call.i81'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 7
   %"'ipc24" = bitcast i8* %"call.i81'mi" to %struct.Matrix*
   %5 = bitcast i8* %call.i81 to %struct.Matrix*
   %tapeArg25 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 6
-  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 1, !node !273
-  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !273
+  %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 1, !node !285
+  %inc107 = add i32 %forward_mem.1.lcssa.lcssa, 5
+  %6 = load i32, i32* %ncols, align 4, !tbaa !139, !node !285
   %cmp1789 = icmp sgt i32 %6, 0
-  br i1 %cmp1789, label %for.cond19.preheader.lr.ph, label %invertfor.end14
+  br i1 %cmp1789, label %for.cond19.preheader.lr.ph, label %invertdelete_matrix.exit86
 
-for.cond19.preheader.lr.ph:                       ; preds = %entry
-  %nrows20 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0, !node !273
-  %7 = load i32, i32* %nrows20, align 8, !tbaa !138, !invariant.group !411, !node !273
+for.cond19.preheader.lr.ph:                       ; preds = %for.end14
+  %nrows20 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0, !node !285
+  %inc109 = add i32 %forward_mem.1.lcssa.lcssa, 6
+  %7 = load i32, i32* %nrows20, align 8, !tbaa !138, !invariant.group !433, !node !285
   %cmp2187 = icmp sgt i32 %7, 0
-  %wide.trip.count = zext i32 %7 to i64, !node !273
-  %8 = zext i32 %6 to i64, !node !273
-  %_unwrap53 = zext i32 %6 to i64
-  br label %invertfor.inc45
+  %wide.trip.count = zext i32 %7 to i64, !node !285
+  %8 = zext i32 %6 to i64, !node !285
+  %inc113 = add i32 %forward_op.1.lcssa.lcssa, 12
+  br label %for.cond19.preheader
+
+for.cond19.preheader:                             ; preds = %for.inc45, %for.cond19.preheader.lr.ph
+  %forward_mem.2 = phi i32 [ %inc109, %for.cond19.preheader.lr.ph ], [ %forward_mem.3, %for.inc45 ]
+  %forward_op.2 = phi i32 [ %inc113, %for.cond19.preheader.lr.ph ], [ %forward_op.4, %for.inc45 ]
+  %iv4 = phi i64 [ 0, %for.cond19.preheader.lr.ph ], [ %iv.next5, %for.inc45 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc115 = add i32 %forward_op.2, 1
+  br i1 %cmp2187, label %for.body22.lr.ph, label %for.inc45
+
+for.body22.lr.ph:                                 ; preds = %for.cond19.preheader
+  %inc129 = add i32 %forward_mem.2, 5
+  %inc131 = add i32 %forward_op.2, 4
+  br label %for.body22
+
+for.body22:                                       ; preds = %for.body22, %for.body22.lr.ph
+  %forward_op.3 = phi i32 [ %inc131, %for.body22.lr.ph ], [ %inc139, %for.body22 ]
+  %iv9 = phi i64 [ 0, %for.body22.lr.ph ], [ %iv.next10, %for.body22 ]
+  %iv.next10 = add nuw nsw i64 %iv9, 1
+  %inc139 = add i32 %forward_op.3, 4
+  %exitcond.not = icmp eq i64 %iv.next10, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc45, label %for.body22, !llvm.loop !197
+
+for.inc45:                                        ; preds = %for.body22, %for.cond19.preheader
+  %forward_mem.3 = phi i32 [ %forward_mem.2, %for.cond19.preheader ], [ %inc129, %for.body22 ]
+  %forward_op.4 = phi i32 [ %inc115, %for.cond19.preheader ], [ %inc139, %for.body22 ]
+  %exitcond98.not = icmp eq i64 %iv.next5, %8
+  br i1 %exitcond98.not, label %invertdelete_matrix.exit86, label %for.cond19.preheader, !llvm.loop !198
 
 invertentry:                                      ; preds = %invertfor.cond1.preheader
+  %reverse_mem.0.in.lcssa.lcssa = phi i32 [ %reverse_mem.0.in.lcssa, %invertfor.cond1.preheader ]
+  %reverse_op.0.lcssa.lcssa = phi i32 [ %reverse_op.0.lcssa, %invertfor.cond1.preheader ]
+  %inc169 = add i32 %reverse_op.0.lcssa.lcssa, 16
+  %inc141 = add i32 %forward_mem.4, 1
   %tapeArg13 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 1
   %9 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 9
   %"'il_phi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double*, i32, double*, double* } %tapeArg, 2
@@ -17957,105 +19905,159 @@ invertentry:                                      ; preds = %invertfor.cond1.pre
   tail call void @free(i8* %call.i)
   %10 = bitcast double* %0 to i8*
   tail call void @free(i8* nonnull %10)
+  %inc161 = add i32 %reverse_mem.0.in.lcssa.lcssa, 45
   %11 = bitcast double* %1 to i8*
   tail call void @free(i8* nonnull %11)
+  %12 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.5, i32 %inc169, i32 %inc141, i32 %inc161)
   ret void
 
 invertfor.cond1.preheader:                        ; preds = %invertfor.body3
-  %12 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %12, label %invertentry, label %incinvertfor.cond1.preheader
+  %reverse_mem.0.in.lcssa = phi i32 [ %reverse_mem.0.in, %invertfor.body3 ]
+  %reverse_op.0.lcssa = phi i32 [ %reverse_op.0, %invertfor.body3 ]
+  %13 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %13, label %invertentry, label %incinvertfor.cond1.preheader
 
 incinvertfor.cond1.preheader:                     ; preds = %invertfor.cond1.preheader
-  %13 = add nsw i64 %"iv'ac.0", -1
+  %14 = add nsw i64 %"iv'ac.0", -1
+  %inc173 = add i32 %reverse_op.0.lcssa, 17
+  %inc175 = add i32 %reverse_mem.0.in.lcssa, 37
   br label %invertfor.inc12
 
 invertfor.body3:                                  ; preds = %invertfor.inc12, %incinvertfor.body3
-  %"iv2'ac.0" = phi i64 [ 2, %invertfor.inc12 ], [ %22, %incinvertfor.body3 ]
+  %"iv2'ac.0" = phi i64 [ 2, %invertfor.inc12 ], [ %23, %incinvertfor.body3 ]
+  %reverse_mem.0.in = phi i32 [ %reverse_mem.1, %invertfor.inc12 ], [ %inc273, %incinvertfor.body3 ]
+  %reverse_op.0 = phi i32 [ %reverse_op.1, %invertfor.inc12 ], [ %inc275, %incinvertfor.body3 ]
   %_unwrap = mul nuw nsw i64 %"iv'ac.0", 3
   %_unwrap17 = add nuw nsw i64 %_unwrap, %"iv2'ac.0"
   %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc16", i64 %_unwrap17
-  %14 = load double, double* %"arrayidx10'ipg_unwrap", align 8
+  %15 = load double, double* %"arrayidx10'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx10'ipg_unwrap", align 8
-  %15 = getelementptr inbounds double, double* %1, i64 %_unwrap17
-  %16 = load double, double* %15, align 8, !invariant.group !412
-  %m0diffe = fmul fast double %14, %16
-  %17 = getelementptr inbounds double, double* %0, i64 %_unwrap17
-  %18 = load double, double* %17, align 8, !invariant.group !413
-  %m1diffe = fmul fast double %14, %18
+  %16 = getelementptr inbounds double, double* %0, i64 %_unwrap17
+  %17 = load double, double* %16, align 8, !invariant.group !434
+  %m0diffe = fmul fast double %15, %17
+  %18 = getelementptr inbounds double, double* %1, i64 %_unwrap17
+  %19 = load double, double* %18, align 8, !invariant.group !435
+  %m1diffe = fmul fast double %15, %19
   store double %m0diffe, double* %"arrayidx10'ipg_unwrap", align 8
   %_unwrap23 = add nsw i64 %"iv'ac.0", %4
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1", i64 %_unwrap23
-  %19 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %20 = fadd fast double %19, %m1diffe
-  store double %20, double* %"arrayidx'ipg_unwrap", align 8
-  %21 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %21, label %invertfor.cond1.preheader, label %incinvertfor.body3
+  %20 = load double, double* %"arrayidx'ipg_unwrap", align 8
+  %21 = fadd fast double %20, %m1diffe
+  store double %21, double* %"arrayidx'ipg_unwrap", align 8
+  %22 = icmp eq i64 %"iv2'ac.0", 0
+  br i1 %22, label %invertfor.cond1.preheader, label %incinvertfor.body3
 
 incinvertfor.body3:                               ; preds = %invertfor.body3
-  %22 = add nsw i64 %"iv2'ac.0", -1
+  %inc273 = add i32 %reverse_mem.0.in, 35
+  %23 = add nsw i64 %"iv2'ac.0", -1
+  %inc275 = add i32 %reverse_op.0, 16
   br label %invertfor.body3
 
 invertfor.inc12:                                  ; preds = %invertfor.end14, %incinvertfor.cond1.preheader
-  %"iv'ac.0" = phi i64 [ 2, %invertfor.end14 ], [ %13, %incinvertfor.cond1.preheader ]
+  %"iv'ac.0" = phi i64 [ 2, %invertfor.end14 ], [ %14, %incinvertfor.cond1.preheader ]
+  %reverse_mem.1 = phi i32 [ %reverse_mem.2, %invertfor.end14 ], [ %inc175, %incinvertfor.cond1.preheader ]
+  %reverse_op.1 = phi i32 [ %reverse_op.2, %invertfor.end14 ], [ %inc173, %incinvertfor.cond1.preheader ]
   br label %invertfor.body3
 
-invertfor.end14:                                  ; preds = %invertfor.cond19.preheader, %entry
-  call void @diffemat_mult.12(%struct.Matrix* %2, %struct.Matrix* %"'ipc", %struct.Matrix* %positions, %struct.Matrix* %"positions'", %struct.Matrix* %5, %struct.Matrix* %"'ipc24", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg25)
+invertfor.end14:                                  ; preds = %invertdelete_matrix.exit86, %invertfor.cond19.preheader.lr.ph
+  %reverse_mem.2 = phi i32 [ %phi.bo, %invertfor.cond19.preheader.lr.ph ], [ 1, %invertdelete_matrix.exit86 ]
+  %reverse_op.2 = phi i32 [ %inc285, %invertfor.cond19.preheader.lr.ph ], [ 0, %invertdelete_matrix.exit86 ]
+  call void @diffemat_mult.12(%struct.Matrix* %2, %struct.Matrix* %"'ipc", %struct.Matrix* %positions, %struct.Matrix* %"positions'", %struct.Matrix* %5, %struct.Matrix* %"'ipc24", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg25), !node !285
   tail call void @free(i8* nonnull %"call.i81'mi")
   tail call void @free(i8* %call.i81)
   br label %invertfor.inc12
 
-invertfor.cond19.preheader:                       ; preds = %invertfor.body22, %invertfor.inc45
-  %23 = icmp eq i64 %"iv4'ac.0", 0
-  br i1 %23, label %invertfor.end14, label %invertfor.inc45
+invertfor.cond19.preheader.lr.ph:                 ; preds = %invertfor.cond19.preheader
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.cond19.preheader ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.cond19.preheader ]
+  %inc285 = add i32 %reverse_op.3.lcssa, 1
+  %phi.bo = add i32 %reverse_mem.3.lcssa, 2
+  br label %invertfor.end14
 
-invertfor.body22:                                 ; preds = %invertfor.body22, %mergeinvertfor.body22_for.inc45.loopexit
-  %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %invertfor.body22 ]
+invertfor.cond19.preheader:                       ; preds = %invertfor.inc45, %invertfor.body22.lr.ph
+  %reverse_mem.3 = phi i32 [ %inc375, %invertfor.body22.lr.ph ], [ %inc395, %invertfor.inc45 ]
+  %reverse_op.3 = phi i32 [ %inc377.lcssa, %invertfor.body22.lr.ph ], [ %reverse_op.5, %invertfor.inc45 ]
+  %24 = icmp eq i64 %"iv4'ac.0", 0
+  br i1 %24, label %invertfor.cond19.preheader.lr.ph, label %incinvertfor.cond19.preheader
+
+incinvertfor.cond19.preheader:                    ; preds = %invertfor.cond19.preheader
+  %inc289 = add i32 %reverse_op.3, 2
+  %inc291 = add i32 %reverse_mem.3, 3
+  br label %invertfor.inc45
+
+invertfor.body22.lr.ph:                           ; preds = %invertfor.body22
+  %reverse_mem.4.lcssa = phi i32 [ %reverse_mem.4, %invertfor.body22 ]
+  %inc377.lcssa = phi i32 [ %inc377, %invertfor.body22 ]
+  %inc375 = add i32 %reverse_mem.4.lcssa, 31
+  br label %invertfor.cond19.preheader
+
+invertfor.body22:                                 ; preds = %mergeinvertfor.body22_for.inc45.loopexit, %incinvertfor.body22
+  %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %incinvertfor.body22 ]
+  %reverse_mem.4 = phi i32 [ %inc391, %mergeinvertfor.body22_for.inc45.loopexit ], [ %inc383, %incinvertfor.body22 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body22_for.inc45.loopexit ], [ %inc377, %incinvertfor.body22 ]
   %"iv9'ac.0" = add nsw i64 %"iv9'ac.0.in", -1
-  %"data36'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data36'ipg_unwrap", align 8, !invariant.group !414
-  %_unwrap33 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !411
-  %_unwrap34 = sext i32 %_unwrap33 to i64
-  %_unwrap35 = mul nsw i64 %"iv4'ac.0", %_unwrap34
-  %_unwrap36 = add nsw i64 %"iv9'ac.0", %_unwrap35
-  %"arrayidx41'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap36
-  %24 = load double, double* %"arrayidx41'ipg_unwrap", align 8
+  %"data36'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"positions'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data36'ipg_unwrap", align 8, !invariant.group !436, !node !285
+  %_unwrap33 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !433, !node !285
+  %_unwrap34 = sext i32 %_unwrap33 to i64, !node !285
+  %_unwrap35 = mul nsw i64 %"iv4'ac.0", %_unwrap34, !node !285
+  %_unwrap36 = add nsw i64 %"iv9'ac.0", %_unwrap35, !node !285
+  %"arrayidx41'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap36, !node !285
+  %25 = load double, double* %"arrayidx41'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx41'ipg_unwrap", align 8
-  %"'ipl28_unwrap" = load double*, double** %"data'ipg", align 8, !invariant.group !415
-  %_unwrap39 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !416
-  %mul31_unwrap = shl nsw i32 %_unwrap39, 1
-  %_unwrap40 = sext i32 %mul31_unwrap to i64
-  %_unwrap41 = add nsw i64 %"iv9'ac.0", %_unwrap40
-  %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl28_unwrap", i64 %_unwrap41
-  %25 = load double, double* %"arrayidx34'ipg_unwrap", align 8
-  %26 = fadd fast double %25, %24
-  store double %26, double* %"arrayidx34'ipg_unwrap", align 8
+  %"'ipl28_unwrap" = load double*, double** %"data'ipg", align 8, !invariant.group !437, !node !285
+  %_unwrap39 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !438, !node !285
+  %mul31_unwrap = shl nsw i32 %_unwrap39, 1, !node !285
+  %_unwrap40 = sext i32 %mul31_unwrap to i64, !node !285
+  %_unwrap41 = add nsw i64 %"iv9'ac.0", %_unwrap40, !node !285
+  %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl28_unwrap", i64 %_unwrap41, !node !285
+  %26 = load double, double* %"arrayidx34'ipg_unwrap", align 8, !node !285
+  %27 = fadd fast double %26, %25, !node !285
+  store double %27, double* %"arrayidx34'ipg_unwrap", align 8
   %"data23'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i81'mi", i64 8
   %"'ipc30_unwrap" = bitcast i8* %"data23'ipg_unwrap" to double**
-  %"'ipl31_unwrap" = load double*, double** %"'ipc30_unwrap", align 8, !invariant.group !417
+  %"'ipl31_unwrap" = load double*, double** %"'ipc30_unwrap", align 8, !invariant.group !439
   %nrows24_unwrap = bitcast i8* %call.i81 to i32*
-  %_unwrap43 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !418
+  %_unwrap43 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !440
   %_unwrap44 = sext i32 %_unwrap43 to i64
-  %_unwrap45 = mul nsw i64 %"iv4'ac.0", %_unwrap44
-  %_unwrap46 = add nsw i64 %"iv9'ac.0", %_unwrap45
-  %"arrayidx28'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl31_unwrap", i64 %_unwrap46
-  %27 = load double, double* %"arrayidx28'ipg_unwrap", align 8
-  %28 = fadd fast double %27, %24
-  store double %28, double* %"arrayidx28'ipg_unwrap", align 8
-  %29 = icmp eq i64 %"iv9'ac.0", 0
-  br i1 %29, label %invertfor.cond19.preheader, label %invertfor.body22
+  %_unwrap45 = mul nsw i64 %"iv4'ac.0", %_unwrap44, !node !285
+  %_unwrap46 = add nsw i64 %"iv9'ac.0", %_unwrap45, !node !285
+  %"arrayidx28'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl31_unwrap", i64 %_unwrap46, !node !285
+  %28 = load double, double* %"arrayidx28'ipg_unwrap", align 8, !node !285
+  %29 = fadd fast double %28, %25, !node !285
+  store double %29, double* %"arrayidx28'ipg_unwrap", align 8
+  %30 = icmp eq i64 %"iv9'ac.0", 0
+  %inc377 = add i32 %reverse_op.4.in, 13
+  br i1 %30, label %invertfor.body22.lr.ph, label %incinvertfor.body22
 
-mergeinvertfor.body22_for.inc45.loopexit:         ; preds = %invertfor.inc45
-  %wide.trip.count_unwrap = zext i32 %_unwrap52 to i64
+incinvertfor.body22:                              ; preds = %invertfor.body22
+  %inc383 = add i32 %reverse_mem.4, 33
   br label %invertfor.body22
 
-invertfor.inc45:                                  ; preds = %invertfor.cond19.preheader, %for.cond19.preheader.lr.ph
-  %"iv4'ac.0.in" = phi i64 [ %_unwrap53, %for.cond19.preheader.lr.ph ], [ %"iv4'ac.0", %invertfor.cond19.preheader ]
+mergeinvertfor.body22_for.inc45.loopexit:         ; preds = %invertfor.inc45
+  %wide.trip.count_unwrap = zext i32 %_unwrap52 to i64, !node !285
+  %inc391 = add i32 %reverse_mem.5, 5
+  br label %invertfor.body22
+
+invertfor.inc45:                                  ; preds = %mergeinvertfor.cond19.preheader_for.end47, %incinvertfor.cond19.preheader
+  %"iv4'ac.0.in" = phi i64 [ %_unwrap53, %mergeinvertfor.cond19.preheader_for.end47 ], [ %"iv4'ac.0", %incinvertfor.cond19.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %mergeinvertfor.cond19.preheader_for.end47 ], [ %inc291, %incinvertfor.cond19.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %mergeinvertfor.cond19.preheader_for.end47 ], [ %inc289, %incinvertfor.cond19.preheader ]
   %"iv4'ac.0" = add nsw i64 %"iv4'ac.0.in", -1
-  %nrows20_unwrap51 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0
-  %_unwrap52 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !411
+  %nrows20_unwrap51 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %positions, i64 0, i32 0, !node !285
+  %inc395 = add i32 %reverse_mem.5, 2
+  %_unwrap52 = load i32, i32* %nrows20_unwrap51, align 8, !tbaa !138, !invariant.group !433, !node !285
   %cmp2187_unwrap = icmp sgt i32 %_unwrap52, 0
   br i1 %cmp2187_unwrap, label %mergeinvertfor.body22_for.inc45.loopexit, label %invertfor.cond19.preheader
+
+mergeinvertfor.cond19.preheader_for.end47:        ; preds = %invertdelete_matrix.exit86
+  %_unwrap53 = zext i32 %6 to i64, !node !285
+  br label %invertfor.inc45
+
+invertdelete_matrix.exit86:                       ; preds = %for.inc45, %for.end14
+  %forward_mem.4 = phi i32 [ %inc107, %for.end14 ], [ %forward_mem.3, %for.inc45 ]
+  %forward_op.5 = phi i32 [ %inc105.lcssa.lcssa, %for.end14 ], [ %forward_op.4, %for.inc45 ]
+  br i1 %cmp1789, label %mergeinvertfor.cond19.preheader_for.end47, label %invertfor.end14
 }
 
 ; Function Attrs: nofree nounwind uwtable mustprogress
@@ -18063,241 +20065,339 @@ define internal void @diffeangle_axis_to_rotation_matrix(double* nocapture reado
 entry:
   %0 = extractvalue { double, double*, double, double, double } %tapeArg, 1
   %1 = extractvalue { double, double*, double, double, double } %tapeArg, 0
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %entry
+  %forward_mem.0 = phi i32 [ 43, %entry ], [ %inc147, %for.body.i ]
+  %forward_op.0 = phi i32 [ 0, %entry ], [ %inc149, %for.body.i ]
+  %iv = phi i64 [ 0, %entry ], [ %iv.next, %for.body.i ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc147 = add i32 %forward_mem.0, 2
+  %inc149 = add i32 %forward_op.0, 2
+  %exitcond.not.i = icmp eq i64 %iv, 1
+  br i1 %exitcond.not.i, label %square_sum.exit, label %for.body.i, !llvm.loop !194
+
+square_sum.exit:                                  ; preds = %for.body.i
+  %forward_mem.0.lcssa = phi i32 [ %forward_mem.0, %for.body.i ]
+  %forward_op.0.lcssa = phi i32 [ %forward_op.0, %for.body.i ]
+  %inc149.lcssa = phi i32 [ %inc149, %for.body.i ]
   %add.i.lcssa = extractvalue { double, double*, double, double, double } %tapeArg, 2
   %2 = tail call fast double @llvm.sqrt.f64(double %add.i.lcssa)
   %cmp = fcmp fast olt double %2, 1.000000e-04
-  br i1 %cmp, label %if.then, label %invertcleanup
+  br i1 %cmp, label %if.then, label %if.end
 
-if.then:                                          ; preds = %entry
-  %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1, !node !273
-  %3 = load i32, i32* %ncols.i, align 4, !tbaa !139, !invariant.group !419, !node !273
+if.then:                                          ; preds = %square_sum.exit
+  %ncols.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1, !node !285
+  %inc151 = add i32 %forward_mem.0.lcssa, 3
+  %3 = load i32, i32* %ncols.i, align 4, !tbaa !139, !invariant.group !441, !node !285
   %cmp33.i = icmp sgt i32 %3, 0
   br i1 %cmp33.i, label %for.cond1.preheader.lr.ph.i, label %invertcleanup
 
 for.cond1.preheader.lr.ph.i:                      ; preds = %if.then
-  %nrows.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0, !node !273
-  %4 = load i32, i32* %nrows.i, align 8, !tbaa !138, !invariant.group !420, !node !273
+  %nrows.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0, !node !285
+  %inc153 = add i32 %forward_mem.0.lcssa, 4
+  %4 = load i32, i32* %nrows.i, align 8, !tbaa !138, !invariant.group !442, !node !285
   %cmp230.i = icmp sgt i32 %4, 0
-  %5 = zext i32 %4 to i64, !node !273
-  %6 = zext i32 %3 to i64, !node !273
+  %5 = zext i32 %4 to i64, !node !285
+  %6 = zext i32 %3 to i64, !node !285
+  %inc157 = add i32 %forward_op.0.lcssa, 4
+  br label %for.cond1.preheader.i
+
+for.cond1.preheader.i:                            ; preds = %for.inc12.i, %for.cond1.preheader.lr.ph.i
+  %forward_mem.1 = phi i32 [ %inc153, %for.cond1.preheader.lr.ph.i ], [ %forward_mem.3, %for.inc12.i ]
+  %forward_op.1 = phi i32 [ %inc157, %for.cond1.preheader.lr.ph.i ], [ %forward_op.3, %for.inc12.i ]
+  %iv1 = phi i64 [ 0, %for.cond1.preheader.lr.ph.i ], [ %iv.next2, %for.inc12.i ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %inc159 = add i32 %forward_op.1, 1
+  br i1 %cmp230.i, label %for.body3.lr.ph.i, label %for.inc12.i
+
+for.body3.lr.ph.i:                                ; preds = %for.cond1.preheader.i
+  %inc165 = add i32 %forward_op.1, 4
+  br label %for.body3.i
+
+for.body3.i:                                      ; preds = %for.body3.i, %for.body3.lr.ph.i
+  %forward_mem.2 = phi i32 [ %forward_mem.1, %for.body3.lr.ph.i ], [ %inc169, %for.body3.i ]
+  %forward_op.2 = phi i32 [ %inc165, %for.body3.lr.ph.i ], [ %inc171, %for.body3.i ]
+  %iv3 = phi i64 [ 0, %for.body3.lr.ph.i ], [ %iv.next4, %for.body3.i ]
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %inc169 = add i32 %forward_mem.2, 1
+  %inc171 = add i32 %forward_op.2, 2
+  %exitcond.not.i172 = icmp eq i64 %iv.next4, %5
+  br i1 %exitcond.not.i172, label %for.inc12.i, label %for.body3.i, !llvm.loop !188
+
+for.inc12.i:                                      ; preds = %for.body3.i, %for.cond1.preheader.i
+  %forward_mem.3 = phi i32 [ %forward_mem.1, %for.cond1.preheader.i ], [ %inc169, %for.body3.i ]
+  %forward_op.3 = phi i32 [ %inc159, %for.cond1.preheader.i ], [ %inc171, %for.body3.i ]
+  %exitcond37.not.i = icmp eq i64 %iv.next2, %6
+  br i1 %exitcond37.not.i, label %invertcleanup, label %for.cond1.preheader.i, !llvm.loop !189
+
+if.end:                                           ; preds = %square_sum.exit
+  %inc189 = add i32 %forward_mem.0.lcssa, 4
+  %inc209 = add i32 %forward_op.0.lcssa, 19
   br label %invertcleanup
 
 invertentry:                                      ; preds = %invertfor.body.i
-  %.lcssa = phi double [ %19, %invertfor.body.i ]
+  %reverse_mem.0.lcssa = phi i32 [ %reverse_mem.0, %invertfor.body.i ]
+  %reverse_op.0.lcssa = phi i32 [ %reverse_op.0, %invertfor.body.i ]
+  %.lcssa = phi double [ %20, %invertfor.body.i ]
   %m0diffe = fmul fast double %.lcssa, %1
-  %7 = fadd fast double %"'de.0", %m0diffe
-  %8 = fadd fast double %7, %m0diffe
-  %9 = load double, double* %"angle_axis'", align 8
-  %10 = fadd fast double %9, %8
+  %7 = fadd fast double %"'de.0", %m0diffe, !node !285
+  %8 = fadd fast double %7, %m0diffe, !node !285
+  %9 = load double, double* %"angle_axis'", align 8, !node !285
+  %10 = fadd fast double %9, %8, !node !285
+  %inc237 = add i32 %reverse_op.0.lcssa, 16
   store double %10, double* %"angle_axis'", align 8
+  %inc245 = add i32 %reverse_mem.0.lcssa, 40
   %11 = bitcast double* %0 to i8*
   tail call void @free(i8* nonnull %11)
+  %12 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.4, i32 %inc237, i32 %forward_mem.4, i32 %inc245)
   ret void
 
 invertfor.body.i:                                 ; preds = %mergeinvertfor.body.i_square_sum.exit, %incinvertfor.body.i
-  %"mul.i'de.0" = phi double [ 0.000000e+00, %mergeinvertfor.body.i_square_sum.exit ], [ %19, %incinvertfor.body.i ]
-  %"iv'ac.0" = phi i64 [ 1, %mergeinvertfor.body.i_square_sum.exit ], [ %20, %incinvertfor.body.i ]
-  %12 = getelementptr inbounds double, double* %0, i64 %"iv'ac.0"
-  %13 = load double, double* %12, align 8, !invariant.group !421
-  %m0diffe6 = fmul fast double %24, %13
-  %14 = fadd fast double %m0diffe6, %m0diffe6
+  %"mul.i'de.0" = phi double [ 0.000000e+00, %mergeinvertfor.body.i_square_sum.exit ], [ %20, %incinvertfor.body.i ]
+  %"iv'ac.0" = phi i64 [ 1, %mergeinvertfor.body.i_square_sum.exit ], [ %21, %incinvertfor.body.i ]
+  %reverse_mem.0 = phi i32 [ %inc357, %mergeinvertfor.body.i_square_sum.exit ], [ %inc331, %incinvertfor.body.i ]
+  %reverse_op.0 = phi i32 [ %inc353, %mergeinvertfor.body.i_square_sum.exit ], [ %inc329, %incinvertfor.body.i ]
+  %13 = getelementptr inbounds double, double* %0, i64 %"iv'ac.0"
+  %14 = load double, double* %13, align 8, !invariant.group !443
+  %m0diffe6 = fmul fast double %25, %14
+  %15 = fadd fast double %m0diffe6, %m0diffe6
   %iv.next_unwrap = add nuw nsw i64 %"iv'ac.0", 1
-  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 %iv.next_unwrap
-  %15 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %16 = fadd fast double %15, %14
-  store double %16, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %17 = icmp eq i64 %"iv'ac.0", 0
-  %18 = fadd fast double %"mul.i'de.0", %24
-  %19 = select fast i1 %17, double %18, double %"mul.i'de.0"
-  br i1 %17, label %invertentry, label %incinvertfor.body.i
+  %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 %iv.next_unwrap, !node !285
+  %16 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8, !node !285
+  %17 = fadd fast double %16, %15, !node !285
+  store double %17, double* %"arrayidx2.i'ipg_unwrap", align 8
+  %18 = icmp eq i64 %"iv'ac.0", 0
+  %19 = fadd fast double %"mul.i'de.0", %25
+  %20 = select fast i1 %18, double %19, double %"mul.i'de.0"
+  br i1 %18, label %invertentry, label %incinvertfor.body.i
 
 incinvertfor.body.i:                              ; preds = %invertfor.body.i
-  %20 = add nsw i64 %"iv'ac.0", -1
+  %21 = add nsw i64 %"iv'ac.0", -1
+  %inc329 = add i32 %reverse_op.0, 12
+  %inc331 = add i32 %reverse_mem.0, 29
   br label %invertfor.body.i
 
-mergeinvertfor.body.i_square_sum.exit:            ; preds = %invertfor.cond1.preheader.i, %staging, %invertif.end
-  %"'de10.0" = phi double [ %phi.bo, %invertif.end ], [ 0.000000e+00, %staging ], [ 0.000000e+00, %invertfor.cond1.preheader.i ]
-  %"'de.0" = phi double [ %d0diffe48, %invertif.end ], [ 0.000000e+00, %staging ], [ 0.000000e+00, %invertfor.cond1.preheader.i ]
-  %21 = fcmp fast oeq double %add.i.lcssa, 0.000000e+00
-  %22 = call fast double @llvm.sqrt.f64(double %add.i.lcssa)
-  %23 = fdiv fast double %"'de10.0", %22
-  %24 = select fast i1 %21, double 0.000000e+00, double %23
+mergeinvertfor.body.i_square_sum.exit:            ; preds = %invertfor.cond1.preheader.lr.ph.i, %staging, %invertif.end
+  %"'de10.0" = phi double [ %phi.bo, %invertif.end ], [ 0.000000e+00, %staging ], [ 0.000000e+00, %invertfor.cond1.preheader.lr.ph.i ]
+  %"'de.0" = phi double [ %d0diffe48, %invertif.end ], [ 0.000000e+00, %staging ], [ 0.000000e+00, %invertfor.cond1.preheader.lr.ph.i ]
+  %reverse_mem.1 = phi i32 [ 227, %invertif.end ], [ %inc359, %invertfor.cond1.preheader.lr.ph.i ], [ 1, %staging ]
+  %reverse_op.1 = phi i32 [ 125, %invertif.end ], [ %inc361, %invertfor.cond1.preheader.lr.ph.i ], [ 0, %staging ]
+  %inc353 = add i32 %reverse_op.1, 4
+  %22 = fcmp fast oeq double %add.i.lcssa, 0.000000e+00
+  %23 = call fast double @llvm.sqrt.f64(double %add.i.lcssa)
+  %24 = fdiv fast double %"'de10.0", %23, !node !285
+  %25 = select fast i1 %22, double 0.000000e+00, double %24
+  %inc357 = add i32 %reverse_mem.1, 9
   br label %invertfor.body.i
 
-invertfor.cond1.preheader.i:                      ; preds = %invertfor.body3.i, %invertfor.inc12.i
-  %25 = icmp eq i64 %"iv1'ac.0", 0
-  br i1 %25, label %mergeinvertfor.body.i_square_sum.exit, label %invertfor.inc12.i
+invertfor.cond1.preheader.lr.ph.i:                ; preds = %invertfor.cond1.preheader.i
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.cond1.preheader.i ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.cond1.preheader.i ]
+  %inc361 = add i32 %reverse_op.3.lcssa, 1
+  %inc359 = add i32 %reverse_mem.3.lcssa, 1
+  br label %mergeinvertfor.body.i_square_sum.exit
 
-invertfor.body3.i:                                ; preds = %invertfor.body3.i, %mergeinvertfor.body3.i_for.inc12.i.loopexit
-  %"iv3'ac.0.in" = phi i64 [ %_unwrap19, %mergeinvertfor.body3.i_for.inc12.i.loopexit ], [ %"iv3'ac.0", %invertfor.body3.i ]
+invertfor.cond1.preheader.i:                      ; preds = %invertfor.inc12.i, %invertfor.body3.lr.ph.i
+  %reverse_mem.3 = phi i32 [ %inc391, %invertfor.body3.lr.ph.i ], [ %inc411, %invertfor.inc12.i ]
+  %reverse_op.3 = phi i32 [ %inc393.lcssa, %invertfor.body3.lr.ph.i ], [ %reverse_op.5, %invertfor.inc12.i ]
+  %26 = icmp eq i64 %"iv1'ac.0", 0
+  br i1 %26, label %invertfor.cond1.preheader.lr.ph.i, label %incinvertfor.cond1.preheader.i
+
+incinvertfor.cond1.preheader.i:                   ; preds = %invertfor.cond1.preheader.i
+  %inc365 = add i32 %reverse_op.3, 2
+  %inc367 = add i32 %reverse_mem.3, 3
+  br label %invertfor.inc12.i
+
+invertfor.body3.lr.ph.i:                          ; preds = %invertfor.body3.i
+  %reverse_mem.4.lcssa = phi i32 [ %reverse_mem.4, %invertfor.body3.i ]
+  %inc393.lcssa = phi i32 [ %inc393, %invertfor.body3.i ]
+  %inc391 = add i32 %reverse_mem.4.lcssa, 8
+  br label %invertfor.cond1.preheader.i
+
+invertfor.body3.i:                                ; preds = %mergeinvertfor.body3.i_for.inc12.i.loopexit, %incinvertfor.body3.i
+  %"iv3'ac.0.in" = phi i64 [ %_unwrap19, %mergeinvertfor.body3.i_for.inc12.i.loopexit ], [ %"iv3'ac.0", %incinvertfor.body3.i ]
+  %reverse_mem.4 = phi i32 [ %inc407, %mergeinvertfor.body3.i_for.inc12.i.loopexit ], [ %inc399, %incinvertfor.body3.i ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body3.i_for.inc12.i.loopexit ], [ %inc393, %incinvertfor.body3.i ]
   %"iv3'ac.0" = add nsw i64 %"iv3'ac.0.in", -1
-  %"data6.i'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2
-  %"'il_phi_unwrap" = load double*, double** %"data6.i'ipg_unwrap", align 8, !tbaa !137
+  %"data6.i'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2, !node !285
+  %"'il_phi_unwrap" = load double*, double** %"data6.i'ipg_unwrap", align 8, !tbaa !137, !node !285
   %cmp4.i_unwrap = icmp eq i64 %"iv1'ac.0.in", %"iv3'ac.0.in"
-  %_unwrap = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !420
-  %_unwrap11 = sext i32 %_unwrap to i64
-  %_unwrap12 = mul nsw i64 %"iv1'ac.0", %_unwrap11
+  %_unwrap = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !442, !node !285
+  %_unwrap11 = sext i32 %_unwrap to i64, !node !285
+  %_unwrap12 = mul nsw i64 %"iv1'ac.0", %_unwrap11, !node !285
   %.sink178_unwrap.v = select i1 %cmp4.i_unwrap, i64 %"iv1'ac.0", i64 %"iv3'ac.0"
   %.sink178_unwrap = add nsw i64 %.sink178_unwrap.v, %_unwrap12
-  %"arrayidx11.i'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi_unwrap", i64 %.sink178_unwrap
+  %"arrayidx11.i'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi_unwrap", i64 %.sink178_unwrap, !node !285
   store double 0.000000e+00, double* %"arrayidx11.i'ipg_unwrap", align 8
-  %26 = icmp eq i64 %"iv3'ac.0", 0
-  br i1 %26, label %invertfor.cond1.preheader.i, label %invertfor.body3.i
+  %27 = icmp eq i64 %"iv3'ac.0", 0
+  %inc393 = add i32 %reverse_op.4.in, 6
+  br i1 %27, label %invertfor.body3.lr.ph.i, label %incinvertfor.body3.i
 
-mergeinvertfor.body3.i_for.inc12.i.loopexit:      ; preds = %invertfor.inc12.i
-  %_unwrap19 = zext i32 %_unwrap22 to i64
+incinvertfor.body3.i:                             ; preds = %invertfor.body3.i
+  %inc399 = add i32 %reverse_mem.4, 10
   br label %invertfor.body3.i
 
-invertfor.inc12.i:                                ; preds = %invertfor.cond1.preheader.i, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit
-  %"iv1'ac.0.in" = phi i64 [ %_unwrap50, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit ], [ %"iv1'ac.0", %invertfor.cond1.preheader.i ]
+mergeinvertfor.body3.i_for.inc12.i.loopexit:      ; preds = %invertfor.inc12.i
+  %_unwrap19 = zext i32 %_unwrap22 to i64, !node !285
+  %inc407 = add i32 %reverse_mem.5, 5
+  br label %invertfor.body3.i
+
+invertfor.inc12.i:                                ; preds = %mergeinvertfor.cond1.preheader.i_cleanup.loopexit, %incinvertfor.cond1.preheader.i
+  %"iv1'ac.0.in" = phi i64 [ %_unwrap50, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit ], [ %"iv1'ac.0", %incinvertfor.cond1.preheader.i ]
+  %reverse_mem.5 = phi i32 [ 3, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit ], [ %inc367, %incinvertfor.cond1.preheader.i ]
+  %reverse_op.5 = phi i32 [ 1, %mergeinvertfor.cond1.preheader.i_cleanup.loopexit ], [ %inc365, %incinvertfor.cond1.preheader.i ]
   %"iv1'ac.0" = add nsw i64 %"iv1'ac.0.in", -1
-  %nrows.i_unwrap21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
-  %_unwrap22 = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !420
+  %nrows.i_unwrap21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0, !node !285
+  %inc411 = add i32 %reverse_mem.5, 2
+  %_unwrap22 = load i32, i32* %nrows.i_unwrap21, align 8, !tbaa !138, !invariant.group !442, !node !285
   %cmp230.i_unwrap = icmp sgt i32 %_unwrap22, 0
   br i1 %cmp230.i_unwrap, label %mergeinvertfor.body3.i_for.inc12.i.loopexit, label %invertfor.cond1.preheader.i
 
 invertif.end:                                     ; preds = %invertcleanup
-  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2
-  %"'il_phi5_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !tbaa !137
-  %nrows_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0
-  %_unwrap23 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !422
-  %mul28_unwrap = shl nsw i32 %_unwrap23, 1
-  %add95_unwrap = add nsw i32 %mul28_unwrap, 2
-  %idxprom96_unwrap = sext i32 %add95_unwrap to i64
-  %"arrayidx97'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom96_unwrap
-  %27 = load double, double* %"arrayidx97'ipg_unwrap", align 8
+  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"R'", i64 0, i32 2, !node !285
+  %"'il_phi5_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !tbaa !137, !node !285
+  %nrows_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 0, !node !285
+  %_unwrap23 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !444, !node !285
+  %mul28_unwrap = shl nsw i32 %_unwrap23, 1, !node !285
+  %add95_unwrap = add nsw i32 %mul28_unwrap, 2, !node !285
+  %idxprom96_unwrap = sext i32 %add95_unwrap to i64, !node !285
+  %"arrayidx97'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom96_unwrap, !node !285
+  %28 = load double, double* %"arrayidx97'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx97'ipg_unwrap", align 8
-  %28 = tail call fast double @llvm.cos.f64(double %2)
+  %29 = tail call fast double @llvm.cos.f64(double %2)
   %_unwrap57 = extractvalue { double, double*, double, double, double } %tapeArg, 4
   %div4_unwrap = fdiv fast double %_unwrap57, %2
   %mul87_unwrap = fmul fast double %div4_unwrap, %div4_unwrap
   %sub89_unwrap = fsub fast double 1.000000e+00, %mul87_unwrap
-  %m1diffe25 = fmul fast double %27, %sub89_unwrap
-  %29 = fmul fast double %27, %28
-  %30 = fsub fast double %27, %29
-  %m0diffediv4 = fmul fast double %30, %div4_unwrap
-  %31 = fadd fast double %m0diffediv4, %m0diffediv4
-  %add84_unwrap = add nsw i32 %_unwrap23, 2
-  %idxprom85_unwrap = sext i32 %add84_unwrap to i64
-  %"arrayidx86'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom85_unwrap
-  %32 = load double, double* %"arrayidx86'ipg_unwrap", align 8
+  %m1diffe25 = fmul fast double %28, %sub89_unwrap, !node !285
+  %30 = fmul fast double %28, %29
+  %31 = fsub fast double %28, %30
+  %m0diffediv4 = fmul fast double %31, %div4_unwrap, !node !285
+  %32 = fadd fast double %m0diffediv4, %m0diffediv4, !node !285
+  %add84_unwrap = add nsw i32 %_unwrap23, 2, !node !285
+  %idxprom85_unwrap = sext i32 %add84_unwrap to i64, !node !285
+  %"arrayidx86'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom85_unwrap, !node !285
+  %33 = load double, double* %"arrayidx86'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx86'ipg_unwrap", align 8
-  %"arrayidx75'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 2
-  %33 = load double, double* %"arrayidx75'ipg_unwrap", align 8
+  %"arrayidx75'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 2, !node !285
+  %34 = load double, double* %"arrayidx75'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx75'ipg_unwrap", align 8
-  %add62_unwrap = or i32 %mul28_unwrap, 1
-  %idxprom63_unwrap = sext i32 %add62_unwrap to i64
-  %"arrayidx64'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom63_unwrap
-  %34 = load double, double* %"arrayidx64'ipg_unwrap", align 8
+  %add62_unwrap = or i32 %mul28_unwrap, 1, !node !285
+  %idxprom63_unwrap = sext i32 %add62_unwrap to i64, !node !285
+  %"arrayidx64'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom63_unwrap, !node !285
+  %35 = load double, double* %"arrayidx64'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx64'ipg_unwrap", align 8
-  %35 = fadd fast double %32, %34
-  %36 = fsub fast double %32, %34
-  %37 = tail call fast double @llvm.sin.f64(double %2)
-  %m0diffediv = fmul fast double %36, %37
+  %36 = fadd fast double %33, %35, !node !285
+  %37 = fsub fast double %33, %35
+  %38 = tail call fast double @llvm.sin.f64(double %2)
+  %m0diffediv = fmul fast double %37, %38, !node !285
   %div_unwrap = fdiv fast double %1, %2
-  %m1diffe27 = fmul fast double %36, %div_unwrap
-  %m0diffemul54 = fmul fast double %35, %div4_unwrap
+  %m1diffe27 = fmul fast double %37, %div_unwrap, !node !285
+  %m0diffemul54 = fmul fast double %36, %div4_unwrap, !node !285
   %_unwrap56 = extractvalue { double, double*, double, double, double } %tapeArg, 3
   %div2_unwrap = fdiv fast double %_unwrap56, %2
-  %sub11_unwrap = fsub fast double 1.000000e+00, %28
+  %sub11_unwrap = fsub fast double 1.000000e+00, %29
   %mul54_unwrap = fmul fast double %div2_unwrap, %sub11_unwrap
-  %m1diffediv430 = fmul fast double %35, %mul54_unwrap
-  %38 = fadd fast double %31, %m1diffediv430
-  %m0diffediv2 = fmul fast double %m0diffemul54, %sub11_unwrap
-  %m1diffesub11 = fmul fast double %m0diffemul54, %div2_unwrap
-  %add51_unwrap = add nsw i32 %_unwrap23, 1
-  %idxprom52_unwrap = sext i32 %add51_unwrap to i64
-  %"arrayidx53'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom52_unwrap
-  %39 = load double, double* %"arrayidx53'ipg_unwrap", align 8
+  %m1diffediv430 = fmul fast double %36, %mul54_unwrap, !node !285
+  %39 = fadd fast double %32, %m1diffediv430, !node !285
+  %m0diffediv2 = fmul fast double %m0diffemul54, %sub11_unwrap, !node !285
+  %m1diffesub11 = fmul fast double %m0diffemul54, %div2_unwrap, !node !285
+  %add51_unwrap = add nsw i32 %_unwrap23, 1, !node !285
+  %idxprom52_unwrap = sext i32 %add51_unwrap to i64, !node !285
+  %"arrayidx53'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom52_unwrap, !node !285
+  %40 = load double, double* %"arrayidx53'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx53'ipg_unwrap", align 8
   %mul43_unwrap = fmul fast double %div2_unwrap, %div2_unwrap
   %sub45_unwrap = fsub fast double 1.000000e+00, %mul43_unwrap
-  %m1diffe31 = fmul fast double %39, %sub45_unwrap
-  %40 = fadd fast double %m1diffe25, %m1diffe31
-  %41 = fmul fast double %39, %28
-  %42 = fsub fast double %39, %41
-  %m0diffediv232 = fmul fast double %42, %div2_unwrap
-  %43 = fadd fast double %m0diffediv2, %m0diffediv232
-  %44 = fadd fast double %43, %m0diffediv232
-  %"arrayidx42'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 1
-  %45 = load double, double* %"arrayidx42'ipg_unwrap", align 8
+  %m1diffe31 = fmul fast double %40, %sub45_unwrap, !node !285
+  %41 = fadd fast double %m1diffe25, %m1diffe31, !node !285
+  %42 = fmul fast double %40, %29
+  %43 = fsub fast double %40, %42
+  %m0diffediv232 = fmul fast double %43, %div2_unwrap, !node !285
+  %44 = fadd fast double %m0diffediv2, %m0diffediv232, !node !285
+  %45 = fadd fast double %44, %m0diffediv232, !node !285
+  %"arrayidx42'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 1, !node !285
+  %46 = load double, double* %"arrayidx42'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx42'ipg_unwrap", align 8
-  %idxprom30_unwrap = sext i32 %mul28_unwrap to i64
-  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom30_unwrap
-  %46 = load double, double* %"arrayidx31'ipg_unwrap", align 8
+  %idxprom30_unwrap = sext i32 %mul28_unwrap to i64, !node !285
+  %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom30_unwrap, !node !285
+  %47 = load double, double* %"arrayidx31'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx31'ipg_unwrap", align 8
-  %47 = fadd fast double %33, %46
-  %48 = fsub fast double %46, %33
-  %m0diffediv233 = fmul fast double %48, %37
-  %m1diffe34 = fmul fast double %48, %div2_unwrap
-  %49 = fadd fast double %44, %m0diffediv233
-  %50 = fadd fast double %m1diffe27, %m1diffe34
-  %m0diffemul10 = fmul fast double %47, %div4_unwrap
+  %48 = fadd fast double %34, %47, !node !285
+  %49 = fsub fast double %47, %34
+  %m0diffediv233 = fmul fast double %49, %38, !node !285
+  %m1diffe34 = fmul fast double %49, %div2_unwrap, !node !285
+  %50 = fadd fast double %45, %m0diffediv233, !node !285
+  %51 = fadd fast double %m1diffe27, %m1diffe34, !node !285
+  %m0diffemul10 = fmul fast double %48, %div4_unwrap, !node !285
   %mul10_unwrap = fmul fast double %sub11_unwrap, %div_unwrap
-  %m1diffediv435 = fmul fast double %47, %mul10_unwrap
-  %51 = fadd fast double %38, %m1diffediv435
-  %idxprom19_unwrap = sext i32 %_unwrap23 to i64
-  %"arrayidx20'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom19_unwrap
-  %52 = load double, double* %"arrayidx20'ipg_unwrap", align 8
+  %m1diffediv435 = fmul fast double %48, %mul10_unwrap, !node !285
+  %52 = fadd fast double %39, %m1diffediv435, !node !285
+  %idxprom19_unwrap = sext i32 %_unwrap23 to i64, !node !285
+  %"arrayidx20'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %idxprom19_unwrap, !node !285
+  %53 = load double, double* %"arrayidx20'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx20'ipg_unwrap", align 8
-  %53 = fadd fast double %45, %52
-  %54 = fsub fast double %45, %52
-  %m0diffediv436 = fmul fast double %54, %37
-  %m1diffe37 = fmul fast double %54, %div4_unwrap
-  %55 = fadd fast double %51, %m0diffediv436
-  %56 = fadd fast double %50, %m1diffe37
-  %m0diffemul1038 = fmul fast double %53, %div2_unwrap
-  %m1diffediv239 = fmul fast double %53, %mul10_unwrap
-  %57 = fadd fast double %m0diffemul10, %m0diffemul1038
-  %58 = fadd fast double %49, %m1diffediv239
-  %m0diffesub11 = fmul fast double %57, %div_unwrap
-  %m1diffediv = fmul fast double %57, %sub11_unwrap
-  %59 = fadd fast double %m1diffesub11, %m0diffesub11
-  %60 = fadd fast double %m0diffediv, %m1diffediv
-  %61 = fsub fast double %40, %59
-  %62 = load double, double* %"'il_phi5_unwrap", align 8
+  %54 = fadd fast double %46, %53, !node !285
+  %55 = fsub fast double %46, %53
+  %m0diffediv436 = fmul fast double %55, %38, !node !285
+  %m1diffe37 = fmul fast double %55, %div4_unwrap, !node !285
+  %56 = fadd fast double %52, %m0diffediv436, !node !285
+  %57 = fadd fast double %51, %m1diffe37, !node !285
+  %m0diffemul1038 = fmul fast double %54, %div2_unwrap, !node !285
+  %m1diffediv239 = fmul fast double %54, %mul10_unwrap, !node !285
+  %58 = fadd fast double %m0diffemul10, %m0diffemul1038, !node !285
+  %59 = fadd fast double %50, %m1diffediv239, !node !285
+  %m0diffesub11 = fmul fast double %58, %div_unwrap, !node !285
+  %m1diffediv = fmul fast double %58, %sub11_unwrap, !node !285
+  %60 = fadd fast double %m1diffesub11, %m0diffesub11, !node !285
+  %61 = fadd fast double %m0diffediv, %m1diffediv, !node !285
+  %62 = fsub fast double %41, %60
+  %63 = load double, double* %"'il_phi5_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"'il_phi5_unwrap", align 8
   %mul_unwrap = fmul fast double %div_unwrap, %div_unwrap
   %sub_unwrap = fsub fast double 1.000000e+00, %mul_unwrap
-  %m1diffe42 = fmul fast double %62, %sub_unwrap
-  %63 = fadd fast double %61, %m1diffe42
-  %64 = fmul fast double %62, %28
-  %65 = fsub fast double %62, %64
-  %m0diffediv43 = fmul fast double %65, %div_unwrap
-  %66 = fadd fast double %60, %m0diffediv43
-  %67 = fadd fast double %66, %m0diffediv43
-  %68 = call fast double @llvm.sin.f64(double %2)
-  %69 = call fast double @llvm.cos.f64(double %2)
-  %70 = fmul fast double %56, %69
-  %71 = fmul fast double %68, %63
-  %d0diffe = fdiv fast double %55, %2
-  %72 = fmul fast double %div4_unwrap, %d0diffe
-  %73 = fadd fast double %71, %72
-  %"arrayidx3'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 2
-  %74 = load double, double* %"arrayidx3'ipg_unwrap", align 8
-  %75 = fadd fast double %74, %d0diffe
-  store double %75, double* %"arrayidx3'ipg_unwrap", align 8
-  %d0diffe46 = fdiv fast double %58, %2
-  %76 = fmul fast double %div2_unwrap, %d0diffe46
-  %77 = fadd fast double %73, %76
-  %"arrayidx1'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 1
-  %78 = load double, double* %"arrayidx1'ipg_unwrap", align 8
-  %79 = fadd fast double %78, %d0diffe46
-  store double %79, double* %"arrayidx1'ipg_unwrap", align 8
-  %d0diffe48 = fdiv fast double %67, %2
-  %80 = fmul fast double %div_unwrap, %d0diffe48
-  %81 = fadd fast double %77, %80
-  %82 = fsub fast double %70, %81
-  %phi.bo = fmul fast double %82, 5.000000e-01
+  %m1diffe42 = fmul fast double %63, %sub_unwrap, !node !285
+  %64 = fadd fast double %62, %m1diffe42, !node !285
+  %65 = fmul fast double %63, %29
+  %66 = fsub fast double %63, %65
+  %m0diffediv43 = fmul fast double %66, %div_unwrap, !node !285
+  %67 = fadd fast double %61, %m0diffediv43, !node !285
+  %68 = fadd fast double %67, %m0diffediv43, !node !285
+  %69 = call fast double @llvm.sin.f64(double %2)
+  %70 = call fast double @llvm.cos.f64(double %2)
+  %71 = fmul fast double %57, %70, !node !285
+  %72 = fmul fast double %69, %64
+  %d0diffe = fdiv fast double %56, %2, !node !285
+  %73 = fmul fast double %div4_unwrap, %d0diffe
+  %74 = fadd fast double %72, %73
+  %"arrayidx3'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 2, !node !285
+  %75 = load double, double* %"arrayidx3'ipg_unwrap", align 8, !node !285
+  %76 = fadd fast double %75, %d0diffe, !node !285
+  store double %76, double* %"arrayidx3'ipg_unwrap", align 8
+  %d0diffe46 = fdiv fast double %59, %2, !node !285
+  %77 = fmul fast double %div2_unwrap, %d0diffe46
+  %78 = fadd fast double %74, %77
+  %"arrayidx1'ipg_unwrap" = getelementptr inbounds double, double* %"angle_axis'", i64 1, !node !285
+  %79 = load double, double* %"arrayidx1'ipg_unwrap", align 8, !node !285
+  %80 = fadd fast double %79, %d0diffe46, !node !285
+  store double %80, double* %"arrayidx1'ipg_unwrap", align 8
+  %d0diffe48 = fdiv fast double %68, %2, !node !285
+  %81 = fmul fast double %div_unwrap, %d0diffe48
+  %82 = fadd fast double %78, %81
+  %83 = fsub fast double %71, %82
+  %phi.bo = fmul fast double %83, 5.000000e-01
   br label %mergeinvertfor.body.i_square_sum.exit
 
 mergeinvertfor.cond1.preheader.i_cleanup.loopexit: ; preds = %staging
-  %_unwrap50 = zext i32 %_unwrap53 to i64
+  %_unwrap50 = zext i32 %_unwrap53 to i64, !node !285
   br label %invertfor.inc12.i
 
-invertcleanup:                                    ; preds = %for.cond1.preheader.lr.ph.i, %if.then, %entry
-  %ncols.i_unwrap52 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1
-  %_unwrap53 = load i32, i32* %ncols.i_unwrap52, align 4, !tbaa !139, !invariant.group !419
+invertcleanup:                                    ; preds = %for.inc12.i, %if.then, %if.end
+  %forward_mem.4 = phi i32 [ %inc151, %if.then ], [ %inc189, %if.end ], [ %forward_mem.3, %for.inc12.i ]
+  %forward_op.4 = phi i32 [ %inc149.lcssa, %if.then ], [ %inc209, %if.end ], [ %forward_op.3, %for.inc12.i ]
+  %ncols.i_unwrap52 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %R, i64 0, i32 1, !node !285
+  %_unwrap53 = load i32, i32* %ncols.i_unwrap52, align 4, !tbaa !139, !invariant.group !441, !node !285
   br i1 %cmp, label %staging, label %invertif.end
 
 staging:                                          ; preds = %invertcleanup
@@ -18314,23 +20414,76 @@ entry:
   %3 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 7
   %4 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 8
   %5 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 9
-  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !273
-  %6 = load i32, i32* %nrows, align 8, !tbaa !138, !node !273
+  %nrows = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 0, !node !285
+  %6 = load i32, i32* %nrows, align 8, !tbaa !138, !node !285
   %7 = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 3
-  %mul3.i = mul nsw i32 %7, %6, !node !273
+  %mul3.i = mul nsw i32 %7, %6, !node !285
   %cmp.not.i = extractvalue { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg, 4
+  %cmp8.i = icmp sgt i32 %mul3.i, 0
+  %spec.select = select i1 %cmp8.i, i32 2, i32 1
+  %forward_op.0 = select i1 %cmp.not.i, i32 1, i32 %spec.select
   %cmp85 = icmp sgt i32 %6, 0
-  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertresize.exit
+  br i1 %cmp85, label %for.cond2.preheader.lr.ph, label %invertfor.end49
 
 for.cond2.preheader.lr.ph:                        ; preds = %entry
   %cmp483 = icmp sgt i32 %7, 0
-  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !273
-  %8 = zext i32 %6 to i64, !node !273
+  %ncols21 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %8 = zext i32 %6 to i64, !node !285
   %wide.trip.count96 = zext i32 %7 to i64
-  %wide.trip.count100_unwrap90 = zext i32 %6 to i64
-  br label %invertfor.inc47
+  %inc161 = or i32 %forward_op.0, 12
+  %inc165 = add nuw nsw i32 %inc161, 2
+  br label %for.cond2.preheader
+
+for.cond2.preheader:                              ; preds = %for.inc47, %for.cond2.preheader.lr.ph
+  %forward_mem.0 = phi i32 [ 16, %for.cond2.preheader.lr.ph ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.1 = phi i32 [ %inc165, %for.cond2.preheader.lr.ph ], [ %forward_op.5, %for.inc47 ]
+  %iv = phi i64 [ 0, %for.cond2.preheader.lr.ph ], [ %iv.next, %for.inc47 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc167 = add i32 %forward_op.1, 1
+  br i1 %cmp483, label %for.body5.lr.ph, label %for.inc47
+
+for.body5.lr.ph:                                  ; preds = %for.cond2.preheader
+  %inc181 = add i32 %forward_mem.0, 7
+  %9 = load i32, i32* %ncols21, align 4, !tbaa !139, !invariant.group !445, !node !285
+  %cmp2281 = icmp sgt i32 %9, 1
+  %wide.trip.count = zext i32 %9 to i64, !node !285
+  %inc183 = add i32 %forward_op.1, 2
+  br label %for.body5
+
+for.body5:                                        ; preds = %for.inc44, %for.body5.lr.ph
+  %forward_mem.1 = phi i32 [ %inc181, %for.body5.lr.ph ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.2 = phi i32 [ %inc183, %for.body5.lr.ph ], [ %forward_op.4, %for.inc44 ]
+  %iv4 = phi i64 [ 0, %for.body5.lr.ph ], [ %iv.next5, %for.inc44 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc213 = add i32 %forward_mem.1, 4
+  %inc223 = add i32 %forward_op.2, 16
+  br i1 %cmp2281, label %for.body23, label %for.inc44
+
+for.body23:                                       ; preds = %for.body5, %for.body23
+  %forward_mem.2 = phi i32 [ %inc275, %for.body23 ], [ %inc213, %for.body5 ]
+  %forward_op.3 = phi i32 [ %inc289, %for.body23 ], [ %inc223, %for.body5 ]
+  %iv6 = phi i64 [ %iv.next7, %for.body23 ], [ 0, %for.body5 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc275 = add i32 %forward_mem.2, 4
+  %indvars.iv.next = add nuw nsw i64 %iv6, 2
+  %inc289 = add i32 %forward_op.3, 29
+  %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc44, label %for.body23, !llvm.loop !185
+
+for.inc44:                                        ; preds = %for.body23, %for.body5
+  %forward_mem.3 = phi i32 [ %inc213, %for.body5 ], [ %inc275, %for.body23 ]
+  %forward_op.4 = phi i32 [ %inc223, %for.body5 ], [ %inc289, %for.body23 ]
+  %exitcond97.not = icmp eq i64 %iv.next5, %wide.trip.count96
+  br i1 %exitcond97.not, label %for.inc47, label %for.body5, !llvm.loop !186
+
+for.inc47:                                        ; preds = %for.inc44, %for.cond2.preheader
+  %forward_mem.4 = phi i32 [ %forward_mem.0, %for.cond2.preheader ], [ %forward_mem.3, %for.inc44 ]
+  %forward_op.5 = phi i32 [ %inc167, %for.cond2.preheader ], [ %forward_op.4, %for.inc44 ]
+  %exitcond101.not = icmp eq i64 %iv.next, %8
+  br i1 %exitcond101.not, label %invertfor.end49, label %for.cond2.preheader, !llvm.loop !187
 
 invertentry:                                      ; preds = %invertif.then9.i, %invertresize.exit
+  %10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.6, i32 %reverse_op.0, i32 %forward_mem.5, i32 %reverse_mem.0)
   ret void
 
 invertif.then9.i:                                 ; preds = %invertresize.exit
@@ -18340,647 +20493,209 @@ invertif.then9.i:                                 ; preds = %invertresize.exit
   tail call void @free(i8* %call.i_unwrap)
   br label %invertentry
 
-invertresize.exit:                                ; preds = %entry, %invertfor.cond2.preheader.lr.ph
+invertresize.exit:                                ; preds = %invertfor.end49, %invertfor.cond2.preheader.lr.ph
+  %reverse_mem.0 = phi i32 [ %inc351, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
+  %reverse_op.0 = phi i32 [ %inc355, %invertfor.cond2.preheader.lr.ph ], [ 0, %invertfor.end49 ]
   %cmp.not.i.not = xor i1 %cmp.not.i, true
   %cmp8.i_unwrap = icmp sgt i32 %mul3.i, 0
   %or.cond = and i1 %cmp.not.i.not, %cmp8.i_unwrap
   br i1 %or.cond, label %invertif.then9.i, label %invertentry
 
 invertfor.cond2.preheader.lr.ph:                  ; preds = %invertfor.cond2.preheader
-  %9 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %9)
-  %10 = bitcast double* %1 to i8*
-  tail call void @free(i8* nonnull %10)
-  %11 = bitcast i32* %2 to i8*
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.cond2.preheader ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.cond2.preheader ]
+  %inc355 = add i32 %reverse_op.1.lcssa, 1
+  %11 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %11)
-  %12 = bitcast double* %3 to i8*
+  %12 = bitcast double* %1 to i8*
   tail call void @free(i8* nonnull %12)
-  %13 = bitcast double* %4 to i8*
+  %13 = bitcast i32* %2 to i8*
   tail call void @free(i8* nonnull %13)
-  %14 = bitcast double* %5 to i8*
+  %14 = bitcast double* %3 to i8*
   tail call void @free(i8* nonnull %14)
+  %15 = bitcast double* %4 to i8*
+  tail call void @free(i8* nonnull %15)
+  %inc351 = add i32 %reverse_mem.1.lcssa, 30
+  %16 = bitcast double* %5 to i8*
+  tail call void @free(i8* nonnull %16)
   br label %invertresize.exit
 
-invertfor.cond2.preheader:                        ; preds = %invertfor.body5, %invertfor.inc47
-  %"add43'de.0" = phi double [ %"add43'de.4", %invertfor.inc47 ], [ %"add43'de.1", %invertfor.body5 ]
-  %15 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %15, label %invertfor.cond2.preheader.lr.ph, label %invertfor.inc47
+invertfor.cond2.preheader:                        ; preds = %invertfor.inc47, %invertfor.body5.lr.ph
+  %"add43'de.0" = phi double [ %"add43'de.1.lcssa", %invertfor.body5.lr.ph ], [ %"add43'de.4", %invertfor.inc47 ]
+  %reverse_mem.1 = phi i32 [ %inc495, %invertfor.body5.lr.ph ], [ %inc747, %invertfor.inc47 ]
+  %reverse_op.1 = phi i32 [ %inc497.lcssa, %invertfor.body5.lr.ph ], [ %reverse_op.5, %invertfor.inc47 ]
+  %17 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %17, label %invertfor.cond2.preheader.lr.ph, label %incinvertfor.cond2.preheader
 
-invertfor.body5:                                  ; preds = %invertfor.body23, %invertfor.inc44
-  %"add43'de.1" = phi double [ %"add43'de.3", %invertfor.inc44 ], [ %50, %invertfor.body23 ]
-  %"mul13'de.1" = phi double [ 0.000000e+00, %invertfor.inc44 ], [ %52, %invertfor.body23 ]
-  %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !423
-  %_unwrap16 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
-  %_unwrap17 = add nuw nsw i64 %_unwrap16, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap17
-  %16 = load double, double* %"arrayidx19'ipg_unwrap", align 8
+incinvertfor.cond2.preheader:                     ; preds = %invertfor.cond2.preheader
+  %inc359 = add i32 %reverse_op.1, 2
+  %inc361 = add i32 %reverse_mem.1, 3
+  br label %invertfor.inc47
+
+invertfor.body5.lr.ph:                            ; preds = %invertfor.body5
+  %"add43'de.1.lcssa" = phi double [ %"add43'de.1", %invertfor.body5 ]
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body5 ]
+  %inc497.lcssa = phi i32 [ %inc497, %invertfor.body5 ]
+  %inc495 = add i32 %reverse_mem.2.lcssa, 42
+  br label %invertfor.cond2.preheader
+
+invertfor.body5:                                  ; preds = %invertfor.inc44, %invertfor.body23.preheader
+  %"add43'de.1" = phi double [ %.lcssa753, %invertfor.body23.preheader ], [ %"add43'de.3", %invertfor.inc44 ]
+  %"mul13'de.1" = phi double [ %.lcssa, %invertfor.body23.preheader ], [ 0.000000e+00, %invertfor.inc44 ]
+  %reverse_mem.2 = phi i32 [ %inc717, %invertfor.body23.preheader ], [ %inc739, %invertfor.inc44 ]
+  %reverse_op.2 = phi i32 [ %inc715, %invertfor.body23.preheader ], [ %reverse_op.4, %invertfor.inc44 ]
+  %"data14'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap" = load double*, double** %"data14'ipg_unwrap", align 8, !invariant.group !446, !node !285
+  %_unwrap16 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90, !node !285
+  %_unwrap17 = add nuw nsw i64 %_unwrap16, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap17, !node !285
+  %18 = load double, double* %"arrayidx19'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap", align 8
-  %17 = fadd fast double %"mul13'de.1", %16
-  %18 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap88
-  %19 = add nuw nsw i64 %"iv4'ac.1", %18
-  %20 = getelementptr inbounds double, double* %3, i64 %19
-  %21 = load double, double* %20, align 8, !invariant.group !424
-  %m0diffe = fmul fast double %17, %21
-  %22 = getelementptr inbounds double, double* %4, i64 %19
-  %23 = load double, double* %22, align 8, !invariant.group !425
-  %m1diffe = fmul fast double %17, %23
-  %_unwrap29 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !426
-  %24 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0"
-  %25 = load i32, i32* %24, align 4, !invariant.group !427
-  %_unwrap35 = sext i32 %25 to i64
-  %_unwrap36 = mul nsw i64 %"iv4'ac.1", %_unwrap35
-  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap", i64 %_unwrap36
-  %26 = load double, double* %"arrayidx12'ipg_unwrap", align 8
-  %27 = fadd fast double %26, %m0diffe
-  store double %27, double* %"arrayidx12'ipg_unwrap", align 8
-  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !428
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0"
-  %28 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %29 = fadd fast double %28, %m1diffe
-  store double %29, double* %"arrayidx'ipg_unwrap", align 8
-  %30 = icmp eq i64 %"iv4'ac.1", 0
-  br i1 %30, label %invertfor.cond2.preheader, label %invertfor.inc44
+  %19 = fadd fast double %"mul13'de.1", %18, !node !285
+  %20 = mul nuw nsw i64 %"iv'ac.0", %wide.trip.count96_unwrap88, !node !285
+  %21 = add nuw nsw i64 %"iv4'ac.1", %20, !node !285
+  %22 = getelementptr inbounds double, double* %3, i64 %21, !node !285
+  %23 = load double, double* %22, align 8, !invariant.group !447, !node !285
+  %m0diffe = fmul fast double %19, %23, !node !285
+  %24 = getelementptr inbounds double, double* %4, i64 %21, !node !285
+  %25 = load double, double* %24, align 8, !invariant.group !448, !node !285
+  %m1diffe = fmul fast double %19, %25, !node !285
+  %_unwrap29 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0", !node !285
+  %"'il_phi2_unwrap" = load double*, double** %_unwrap29, align 8, !invariant.group !449, !node !285
+  %26 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0", !node !285
+  %27 = load i32, i32* %26, align 4, !invariant.group !450, !node !285
+  %_unwrap35 = sext i32 %27 to i64, !node !285
+  %_unwrap36 = mul nsw i64 %"iv4'ac.1", %_unwrap35, !node !285
+  %"arrayidx12'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap", i64 %_unwrap36, !node !285
+  %28 = load double, double* %"arrayidx12'ipg_unwrap", align 8, !node !285
+  %29 = fadd fast double %28, %m0diffe, !node !285
+  store double %29, double* %"arrayidx12'ipg_unwrap", align 8
+  %"data'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl14_unwrap" = load double*, double** %"data'ipg_unwrap", align 8, !invariant.group !451, !node !285
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap", i64 %"iv'ac.0", !node !285
+  %30 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !285
+  %31 = fadd fast double %30, %m1diffe, !node !285
+  store double %31, double* %"arrayidx'ipg_unwrap", align 8
+  %32 = icmp eq i64 %"iv4'ac.1", 0
+  %inc497 = add i32 %reverse_op.2, 26
+  br i1 %32, label %invertfor.body5.lr.ph, label %incinvertfor.body5
+
+incinvertfor.body5:                               ; preds = %invertfor.body5
+  %inc503 = add i32 %reverse_mem.2, 44
+  br label %invertfor.inc44
+
+invertfor.body23.preheader:                       ; preds = %invertfor.body23
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body23 ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.body23 ]
+  %.lcssa753 = phi double [ %52, %invertfor.body23 ]
+  %.lcssa = phi double [ %54, %invertfor.body23 ]
+  %inc715 = add i32 %reverse_op.3.lcssa, 45
+  %inc717 = add i32 %reverse_mem.3.lcssa, 62
+  br label %invertfor.body5
 
 invertfor.body23:                                 ; preds = %mergeinvertfor.body23_for.inc44.loopexit, %incinvertfor.body23
-  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %50, %incinvertfor.body23 ]
-  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %52, %incinvertfor.body23 ]
-  %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %53, %incinvertfor.body23 ]
-  %"data14'ipg_unwrap37" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2
-  %"'ipl_unwrap38" = load double*, double** %"data14'ipg_unwrap37", align 8, !invariant.group !423
-  %_unwrap40 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90
-  %_unwrap41 = add nuw nsw i64 %_unwrap40, %"iv'ac.0"
-  %"arrayidx19'ipg_unwrap42" = getelementptr inbounds double, double* %"'ipl_unwrap38", i64 %_unwrap41
-  %31 = load double, double* %"arrayidx19'ipg_unwrap42", align 8
+  %"add43'de.2" = phi double [ %"add43'de.3", %mergeinvertfor.body23_for.inc44.loopexit ], [ %52, %incinvertfor.body23 ]
+  %"mul13'de.2" = phi double [ 0.000000e+00, %mergeinvertfor.body23_for.inc44.loopexit ], [ %54, %incinvertfor.body23 ]
+  %"iv6'ac.2" = phi i64 [ %_unwrap85, %mergeinvertfor.body23_for.inc44.loopexit ], [ %55, %incinvertfor.body23 ]
+  %reverse_mem.3 = phi i32 [ %inc733, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc723, %incinvertfor.body23 ]
+  %reverse_op.3 = phi i32 [ %inc731, %mergeinvertfor.body23_for.inc44.loopexit ], [ %inc721, %incinvertfor.body23 ]
+  %"data14'ipg_unwrap37" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"out'", i64 0, i32 2, !node !285
+  %"'ipl_unwrap38" = load double*, double** %"data14'ipg_unwrap37", align 8, !invariant.group !446, !node !285
+  %_unwrap40 = mul nuw nsw i64 %"iv4'ac.1", %wide.trip.count100_unwrap90, !node !285
+  %_unwrap41 = add nuw nsw i64 %_unwrap40, %"iv'ac.0", !node !285
+  %"arrayidx19'ipg_unwrap42" = getelementptr inbounds double, double* %"'ipl_unwrap38", i64 %_unwrap41, !node !285
+  %33 = load double, double* %"arrayidx19'ipg_unwrap42", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx19'ipg_unwrap42", align 8
-  %32 = fadd fast double %"add43'de.2", %31
-  %_unwrap58 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139
-  %wide.trip.count_unwrap59 = zext i32 %_unwrap58 to i64
-  %33 = add nsw i64 %wide.trip.count_unwrap59, -1
-  %34 = mul nuw nsw i64 %33, %wide.trip.count96_unwrap88
-  %35 = mul nuw nsw i64 %"iv4'ac.1", %33
-  %36 = add nuw nsw i64 %"iv6'ac.2", %35
-  %37 = mul nuw nsw i64 %"iv'ac.0", %34
-  %38 = add nuw nsw i64 %36, %37
-  %39 = getelementptr inbounds double, double* %5, i64 %38
-  %40 = load double, double* %39, align 8, !invariant.group !429
-  %m0diffe61 = fmul fast double %32, %40
-  %41 = getelementptr inbounds double, double* %1, i64 %38
-  %42 = load double, double* %41, align 8, !invariant.group !430
-  %m1diffe67 = fmul fast double %32, %42
-  %_unwrap71 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0"
-  %"'il_phi2_unwrap72" = load double*, double** %_unwrap71, align 8, !invariant.group !426
-  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1
-  %43 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0"
-  %44 = load i32, i32* %43, align 4, !invariant.group !427
-  %_unwrap73 = sext i32 %44 to i64
-  %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73
-  %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap72", i64 %_unwrap75
-  %45 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %46 = fadd fast double %45, %m0diffe61
-  store double %46, double* %"arrayidx35'ipg_unwrap", align 8
-  %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2
-  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !428
-  %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90
-  %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0"
-  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79
-  %47 = load double, double* %"arrayidx29'ipg_unwrap", align 8
-  %48 = fadd fast double %47, %m1diffe67
-  store double %48, double* %"arrayidx29'ipg_unwrap", align 8
-  %49 = icmp eq i64 %"iv6'ac.2", 0
-  %50 = select fast i1 %49, double 0.000000e+00, double %32
-  %51 = fadd fast double %"mul13'de.2", %32
-  %52 = select fast i1 %49, double %51, double %"mul13'de.2"
-  br i1 %49, label %invertfor.body5, label %incinvertfor.body23
+  %34 = fadd fast double %"add43'de.2", %33, !node !285
+  %_unwrap58 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !node !285
+  %wide.trip.count_unwrap59 = zext i32 %_unwrap58 to i64, !node !285
+  %35 = add nsw i64 %wide.trip.count_unwrap59, -1, !node !285
+  %36 = mul nuw nsw i64 %35, %wide.trip.count96_unwrap88, !node !285
+  %37 = mul nuw nsw i64 %"iv4'ac.1", %35, !node !285
+  %38 = add nuw nsw i64 %"iv6'ac.2", %37, !node !285
+  %39 = mul nuw nsw i64 %"iv'ac.0", %36, !node !285
+  %40 = add nuw nsw i64 %38, %39, !node !285
+  %41 = getelementptr inbounds double, double* %5, i64 %40, !node !285
+  %42 = load double, double* %41, align 8, !invariant.group !452, !node !285
+  %m0diffe61 = fmul fast double %34, %42, !node !285
+  %43 = getelementptr inbounds double, double* %1, i64 %40, !node !285
+  %44 = load double, double* %43, align 8, !invariant.group !453, !node !285
+  %m1diffe67 = fmul fast double %34, %44, !node !285
+  %_unwrap71 = getelementptr inbounds double*, double** %0, i64 %"iv'ac.0", !node !285
+  %"'il_phi2_unwrap72" = load double*, double** %_unwrap71, align 8, !invariant.group !449, !node !285
+  %iv.next7_unwrap = add nuw nsw i64 %"iv6'ac.2", 1, !node !285
+  %45 = getelementptr inbounds i32, i32* %2, i64 %"iv'ac.0", !node !285
+  %46 = load i32, i32* %45, align 4, !invariant.group !450, !node !285
+  %_unwrap73 = sext i32 %46 to i64, !node !285
+  %_unwrap74 = mul nsw i64 %"iv4'ac.1", %_unwrap73, !node !285
+  %_unwrap75 = add nsw i64 %iv.next7_unwrap, %_unwrap74, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi2_unwrap72", i64 %_unwrap75, !node !285
+  %47 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %48 = fadd fast double %47, %m0diffe61, !node !285
+  store double %48, double* %"arrayidx35'ipg_unwrap", align 8
+  %"data'ipg_unwrap76" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"lhs'", i64 0, i32 2, !node !285
+  %"'ipl14_unwrap77" = load double*, double** %"data'ipg_unwrap76", align 8, !invariant.group !451, !node !285
+  %_unwrap78 = mul nuw nsw i64 %iv.next7_unwrap, %wide.trip.count100_unwrap90, !node !285
+  %_unwrap79 = add nuw nsw i64 %_unwrap78, %"iv'ac.0", !node !285
+  %"arrayidx29'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl14_unwrap77", i64 %_unwrap79, !node !285
+  %49 = load double, double* %"arrayidx29'ipg_unwrap", align 8, !node !285
+  %50 = fadd fast double %49, %m1diffe67, !node !285
+  store double %50, double* %"arrayidx29'ipg_unwrap", align 8
+  %51 = icmp eq i64 %"iv6'ac.2", 0
+  %52 = select fast i1 %51, double 0.000000e+00, double %34
+  %53 = fadd fast double %"mul13'de.2", %34, !node !285
+  %54 = select fast i1 %51, double %53, double %"mul13'de.2"
+  br i1 %51, label %invertfor.body23.preheader, label %incinvertfor.body23
 
 incinvertfor.body23:                              ; preds = %invertfor.body23
-  %53 = add nsw i64 %"iv6'ac.2", -1
+  %55 = add nsw i64 %"iv6'ac.2", -1, !node !285
+  %inc721 = add i32 %reverse_op.3, 46
+  %inc723 = add i32 %reverse_mem.3, 64
   br label %invertfor.body23
 
 mergeinvertfor.body23_for.inc44.loopexit:         ; preds = %invertfor.inc44
-  %wide.trip.count_unwrap84 = zext i32 %_unwrap87 to i64
-  %_unwrap85 = add nsw i64 %wide.trip.count_unwrap84, -2
+  %inc731 = add i32 %reverse_op.4.in, 2
+  %wide.trip.count_unwrap84 = zext i32 %_unwrap87 to i64, !node !285
+  %_unwrap85 = add nsw i64 %wide.trip.count_unwrap84, -2, !node !285
+  %inc733 = add i32 %reverse_mem.4, 7
   br label %invertfor.body23
 
-invertfor.inc44:                                  ; preds = %invertfor.body5, %invertfor.inc47.loopexit
-  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %invertfor.body5 ]
-  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %invertfor.body5 ]
+invertfor.inc44:                                  ; preds = %invertfor.inc47.loopexit, %incinvertfor.body5
+  %"add43'de.3" = phi double [ %"add43'de.4", %invertfor.inc47.loopexit ], [ %"add43'de.1", %incinvertfor.body5 ]
+  %"iv4'ac.1.in" = phi i64 [ %wide.trip.count96_unwrap88, %invertfor.inc47.loopexit ], [ %"iv4'ac.1", %incinvertfor.body5 ]
+  %reverse_mem.4 = phi i32 [ %inc745, %invertfor.inc47.loopexit ], [ %inc503, %incinvertfor.body5 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %invertfor.inc47.loopexit ], [ %inc497, %incinvertfor.body5 ]
+  %reverse_op.4 = add i32 %reverse_op.4.in, 1
   %"iv4'ac.1" = add nsw i64 %"iv4'ac.1.in", -1
-  %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1
-  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !431
+  %ncols21_unwrap86 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %lhs, i64 0, i32 1, !node !285
+  %inc739 = add i32 %reverse_mem.4, 3
+  %_unwrap87 = load i32, i32* %ncols21_unwrap86, align 4, !tbaa !139, !invariant.group !445, !node !285
   %cmp2281_unwrap = icmp sgt i32 %_unwrap87, 1
   br i1 %cmp2281_unwrap, label %mergeinvertfor.body23_for.inc44.loopexit, label %invertfor.body5
 
 invertfor.inc47.loopexit:                         ; preds = %invertfor.inc47
   %wide.trip.count96_unwrap88 = zext i32 %7 to i64
+  %inc745 = add i32 %reverse_mem.5, 3
   br label %invertfor.inc44
 
-invertfor.inc47:                                  ; preds = %invertfor.cond2.preheader, %for.cond2.preheader.lr.ph
-  %"add43'de.4" = phi double [ 0.000000e+00, %for.cond2.preheader.lr.ph ], [ %"add43'de.0", %invertfor.cond2.preheader ]
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap90, %for.cond2.preheader.lr.ph ], [ %"iv'ac.0", %invertfor.cond2.preheader ]
+invertfor.inc47:                                  ; preds = %invertfor.end49.loopexit, %incinvertfor.cond2.preheader
+  %"add43'de.4" = phi double [ 0.000000e+00, %invertfor.end49.loopexit ], [ %"add43'de.0", %incinvertfor.cond2.preheader ]
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count100_unwrap90, %invertfor.end49.loopexit ], [ %"iv'ac.0", %incinvertfor.cond2.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc361, %incinvertfor.cond2.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %invertfor.end49.loopexit ], [ %inc359, %incinvertfor.cond2.preheader ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+  %inc747 = add i32 %reverse_mem.5, 1
   %cmp483_unwrap = icmp sgt i32 %7, 0
   br i1 %cmp483_unwrap, label %invertfor.inc47.loopexit, label %invertfor.cond2.preheader
-}
 
-; Function Attrs: nounwind uwtable mustprogress
-define dso_local void @preprocess_to_pose_params(i32 %count, double* noalias nocapture readonly %theta, i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params) local_unnamed_addr #5 {
-entry:
-  %theta99 = bitcast double* %theta to i8*
-  %add = add nsw i32 %count, 3
-  %nrows1.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0
-  %0 = load i32, i32* %nrows1.i, align 8, !tbaa !138
-  %ncols2.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 1
-  %1 = load i32, i32* %ncols2.i, align 4, !tbaa !139
-  %mul.i = mul nsw i32 %1, %0
-  %mul3.i = mul i32 %add, 3
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.then.i
+invertfor.end49.loopexit:                         ; preds = %invertfor.end49
+  %wide.trip.count100_unwrap90 = zext i32 %6 to i64, !node !285
+  br label %invertfor.inc47
 
-if.then.i:                                        ; preds = %entry
-  %data.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %2 = load double*, double** %data.i, align 8, !tbaa !137
-  %cmp4.not.i = icmp eq double* %2, null
-  br i1 %cmp4.not.i, label %if.end.i, label %if.then5.i
-
-if.then5.i:                                       ; preds = %if.then.i
-  %3 = bitcast double* %2 to i8*
-  tail call void @free(i8* %3) #31
-  br label %if.end.i
-
-if.end.i:                                         ; preds = %if.then5.i, %if.then.i
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread87
-
-resize.exit.thread:                               ; preds = %if.end.i
-  %conv31.i = zext i32 %mul3.i to i64
-  %mul11.i = shl nuw nsw i64 %conv31.i, 3
-  %call.i = tail call noalias i8* @malloc(i64 %mul11.i) #31
-  %4 = bitcast double** %data.i to i8**
-  store i8* %call.i, i8** %4, align 8, !tbaa !137
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %5 = bitcast i8* %call.i to double*
-  br label %for.body.lr.ph.i
-
-resize.exit.thread87:                             ; preds = %if.end.i
-  store double* null, double** %data.i, align 8, !tbaa !137
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  br label %fill.exit
-
-resize.exit:                                      ; preds = %entry
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %data.i85.phi.trans.insert = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %.pre = load double*, double** %data.i85.phi.trans.insert, align 8, !tbaa !137
-  br i1 %cmp7.i, label %resize.exit.for.body.lr.ph.i_crit_edge, label %fill.exit
-
-resize.exit.for.body.lr.ph.i_crit_edge:           ; preds = %resize.exit
-  %.pre107 = zext i32 %mul3.i to i64
-  %.pre108 = shl nuw nsw i64 %.pre107, 3
-  br label %for.body.lr.ph.i
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit.for.body.lr.ph.i_crit_edge, %resize.exit.thread
-  %.pre-phi = phi i64 [ %.pre108, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %mul11.i, %resize.exit.thread ]
-  %6 = phi double* [ %.pre, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %5, %resize.exit.thread ]
-  %7 = bitcast double* %6 to i8*
-  call void @llvm.memset.p0i8.i64(i8* align 8 %7, i8 0, i64 %.pre-phi, i1 false)
-  br label %fill.exit
-
-fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread87
-  %8 = phi double* [ %6, %for.body.lr.ph.i ], [ null, %resize.exit.thread87 ], [ %.pre, %resize.exit ]
-  %9 = bitcast double* %8 to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %9, i8* nonnull align 8 dereferenceable(24) %theta99, i64 24, i1 false)
-  br label %for.body
-
-for.cond17.preheader:                             ; preds = %for.body
-  %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %10 = load double*, double** %data, align 8, !tbaa !137
-  br label %for.cond20.preheader
-
-for.body:                                         ; preds = %for.body, %fill.exit
-  %tiv1 = phi i64 [ %tiv.next2, %for.body ], [ 0, %fill.exit ]
-  %tiv.next2 = add nuw nsw i64 %tiv1, 1
-  %11 = add nuw nsw i64 %tiv1, 3
-  %arrayidx7 = getelementptr inbounds double, double* %8, i64 %11
-  store double 1.000000e+00, double* %arrayidx7, align 8, !tbaa !75
-  %arrayidx10 = getelementptr inbounds double, double* %theta, i64 %11
-  %12 = load double, double* %arrayidx10, align 8, !tbaa !75
-  %13 = add nuw nsw i64 %tiv1, 6
-  %arrayidx16 = getelementptr inbounds double, double* %8, i64 %13
-  store double %12, double* %arrayidx16, align 8, !tbaa !75
-  %exitcond105.not = icmp eq i64 %tiv.next2, 3
-  br i1 %exitcond105.not, label %for.cond17.preheader, label %for.body, !llvm.loop !201
-
-for.cond20.preheader:                             ; preds = %for.end45, %for.cond17.preheader
-  %tiv = phi i64 [ %tiv.next, %for.end45 ], [ 0, %for.cond17.preheader ]
-  %i_pose_params.093 = phi i32 [ %inc46, %for.end45 ], [ 5, %for.cond17.preheader ]
-  %i_theta.092 = phi i32 [ %i_theta.2.lcssa, %for.end45 ], [ 6, %for.cond17.preheader ]
-  %14 = trunc i64 %tiv to i32
-  %tiv.next = add nuw nsw i64 %tiv, 1
-  %15 = sext i32 %i_pose_params.093 to i64
-  %16 = add i32 %i_pose_params.093, 3
-  br label %for.body22
-
-for.body22:                                       ; preds = %if.end, %for.cond20.preheader
-  %indvars.iv = phi i64 [ %15, %for.cond20.preheader ], [ %indvars.iv.next, %if.end ]
-  %i.191 = phi i32 [ 2, %for.cond20.preheader ], [ %inc44, %if.end ]
-  %i_theta.189 = phi i32 [ %i_theta.092, %for.cond20.preheader ], [ %i_theta.2, %if.end ]
-  %idxprom23 = sext i32 %i_theta.189 to i64
-  %arrayidx24 = getelementptr inbounds double, double* %theta, i64 %idxprom23
-  %17 = load double, double* %arrayidx24, align 8, !tbaa !75
-  %18 = mul nsw i64 %indvars.iv, 3
-  %arrayidx30 = getelementptr inbounds double, double* %10, i64 %18
-  store double %17, double* %arrayidx30, align 8, !tbaa !75
-  %inc31 = add nsw i32 %i_theta.189, 1
-  %cmp32 = icmp eq i32 %i.191, 2
-  br i1 %cmp32, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body22
-  %idxprom33 = sext i32 %inc31 to i64
-  %arrayidx34 = getelementptr inbounds double, double* %theta, i64 %idxprom33
-  %19 = load double, double* %arrayidx34, align 8, !tbaa !75
-  %20 = add nsw i64 %18, 1
-  %arrayidx40 = getelementptr inbounds double, double* %10, i64 %20
-  store double %19, double* %arrayidx40, align 8, !tbaa !75
-  %inc41 = add nsw i32 %i_theta.189, 2
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body22
-  %i_theta.2 = phi i32 [ %inc41, %if.then ], [ %inc31, %for.body22 ]
-  %indvars.iv.next = add nsw i64 %indvars.iv, 1
-  %inc44 = add nuw nsw i32 %i.191, 1
-  %lftr.wideiv1 = trunc i64 %indvars.iv.next to i32
-  %exitcond = icmp eq i32 %16, %lftr.wideiv1
-  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !202
-
-for.end45:                                        ; preds = %if.end
-  %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
-  %indvars.iv.lcssa = phi i64 [ %indvars.iv, %if.end ]
-  %21 = trunc i64 %indvars.iv.lcssa to i32
-  %inc46 = add nsw i32 %21, 2
-  %exitcond98.not = icmp eq i32 %14, 4
-  br i1 %exitcond98.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !203
-
-for.end49:                                        ; preds = %for.end45
-  ret void
-}
-
-; Function Attrs: nounwind uwtable mustprogress
-define internal { i8*, i8*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params(i32 %count, double* noalias nocapture readonly %theta, double* nocapture %"theta'", i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params, %struct.Matrix* nocapture %"pose_params'") local_unnamed_addr #5 {
-entry:
-  %0 = alloca { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, align 8
-  %theta99 = bitcast double* %theta to i8*
-  %add = add nsw i32 %count, 3
-  %"nrows1.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 0
-  %nrows1.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0
-  %1 = load i32, i32* %nrows1.i, align 8, !tbaa !138
-  %"ncols2.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 1
-  %ncols2.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 1
-  %2 = load i32, i32* %ncols2.i, align 4, !tbaa !139
-  %mul.i = mul nsw i32 %2, %1
-  %3 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 3
-  store i32 %mul.i, i32* %3, align 8
-  %mul3.i = mul i32 %add, 3
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.then.i
-
-if.then.i:                                        ; preds = %entry
-  %"data.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %data.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %4 = load double*, double** %data.i, align 8, !tbaa !137
-  %cmp4.not.i = icmp eq double* %4, null
-  %5 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 4
-  store i1 %cmp4.not.i, i1* %5, align 4
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread87
-
-resize.exit.thread:                               ; preds = %if.then.i
-  %conv31.i = zext i32 %mul3.i to i64
-  %mul11.i = shl nuw nsw i64 %conv31.i, 3
-  %call.i = tail call noalias i8* @malloc(i64 %mul11.i) #31
-  %6 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 1
-  store i8* %call.i, i8** %6, align 8
-  %"call.i'mi" = tail call noalias nonnull i8* @malloc(i64 %mul11.i) #31
-  %7 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 0
-  store i8* %"call.i'mi", i8** %7, align 8
-  call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %"call.i'mi", i8 0, i64 %mul11.i, i1 false)
-  %"'ipc" = bitcast double** %"data.i'ipg" to i8**
-  %8 = bitcast double** %data.i to i8**
-  store i8* %"call.i'mi", i8** %"'ipc", align 8
-  store i8* %call.i, i8** %8, align 8, !tbaa !137
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %9 = bitcast i8* %call.i to double*
-  br label %for.body.lr.ph.i
-
-resize.exit.thread87:                             ; preds = %if.then.i
-  store double* null, double** %"data.i'ipg", align 8
-  store double* null, double** %data.i, align 8, !tbaa !137
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  br label %fill.exit
-
-resize.exit:                                      ; preds = %entry
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %"data.i85.phi.trans.insert'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %data.i85.phi.trans.insert = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %".pre'ipl" = load double*, double** %"data.i85.phi.trans.insert'ipg", align 8
-  %10 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 2
-  store double* %".pre'ipl", double** %10, align 8
-  %.pre = load double*, double** %data.i85.phi.trans.insert, align 8, !tbaa !137
-  %11 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 5
-  store double* %.pre, double** %11, align 8
-  br i1 %cmp7.i, label %resize.exit.for.body.lr.ph.i_crit_edge, label %fill.exit
-
-resize.exit.for.body.lr.ph.i_crit_edge:           ; preds = %resize.exit
-  %.pre107 = zext i32 %mul3.i to i64
-  %.pre108 = shl nuw nsw i64 %.pre107, 3
-  br label %for.body.lr.ph.i
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit.for.body.lr.ph.i_crit_edge, %resize.exit.thread
-  %.pre-phi = phi i64 [ %.pre108, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %mul11.i, %resize.exit.thread ]
-  %12 = phi double* [ %.pre, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %9, %resize.exit.thread ]
-  %13 = bitcast double* %12 to i8*
-  call void @llvm.memset.p0i8.i64(i8* align 8 %13, i8 0, i64 %.pre-phi, i1 false)
-  br label %fill.exit
-
-fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread87
-  %14 = phi double* [ %12, %for.body.lr.ph.i ], [ null, %resize.exit.thread87 ], [ %.pre, %resize.exit ]
-  %15 = bitcast double* %14 to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %15, i8* nonnull align 8 dereferenceable(24) %theta99, i64 24, i1 false)
-  br label %for.body
-
-for.cond17.preheader:                             ; preds = %for.body
-  %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %16 = load double*, double** %data, align 8, !tbaa !137
-  %malloccall = tail call noalias nonnull dereferenceable(20) dereferenceable_or_null(20) i8* @malloc(i64 20)
-  %i_pose_params.093_malloccache = bitcast i8* %malloccall to i32*
-  %17 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 6
-  %18 = bitcast i32** %17 to i8**
-  store i8* %malloccall, i8** %18, align 8
-  %malloccall8 = tail call noalias nonnull dereferenceable(60) dereferenceable_or_null(60) i8* @malloc(i64 60)
-  %i_theta.189_malloccache = bitcast i8* %malloccall8 to i32*
-  %19 = getelementptr inbounds { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 7
-  %20 = bitcast i32** %19 to i8**
-  store i8* %malloccall8, i8** %20, align 8
-  br label %for.cond20.preheader
-
-for.body:                                         ; preds = %for.body, %fill.exit
-  %iv = phi i64 [ %iv.next, %for.body ], [ 0, %fill.exit ]
-  %iv.next = add nuw nsw i64 %iv, 1
-  %21 = add nuw nsw i64 %iv, 3
-  %arrayidx7 = getelementptr inbounds double, double* %14, i64 %21
-  store double 1.000000e+00, double* %arrayidx7, align 8, !tbaa !75
-  %arrayidx10 = getelementptr inbounds double, double* %theta, i64 %21
-  %22 = load double, double* %arrayidx10, align 8, !tbaa !75
-  %23 = add nuw nsw i64 %iv, 6
-  %arrayidx16 = getelementptr inbounds double, double* %14, i64 %23
-  store double %22, double* %arrayidx16, align 8, !tbaa !75
-  %exitcond105.not = icmp eq i64 %iv.next, 3
-  br i1 %exitcond105.not, label %for.cond17.preheader, label %for.body, !llvm.loop !201
-
-for.cond20.preheader:                             ; preds = %for.end45, %for.cond17.preheader
-  %iv2 = phi i64 [ %iv.next3, %for.end45 ], [ 0, %for.cond17.preheader ]
-  %i_pose_params.093 = phi i32 [ %inc46, %for.end45 ], [ 5, %for.cond17.preheader ]
-  %i_theta.092 = phi i32 [ %i_theta.2.lcssa, %for.end45 ], [ 6, %for.cond17.preheader ]
-  %24 = getelementptr inbounds i32, i32* %i_pose_params.093_malloccache, i64 %iv2
-  store i32 %i_pose_params.093, i32* %24, align 4, !invariant.group !432
-  %iv.next3 = add nuw nsw i64 %iv2, 1
-  %25 = trunc i64 %iv2 to i32
-  %26 = sext i32 %i_pose_params.093 to i64
-  br label %for.body22
-
-for.body22:                                       ; preds = %if.end, %for.cond20.preheader
-  %iv4 = phi i64 [ %iv.next5, %if.end ], [ 0, %for.cond20.preheader ]
-  %i_theta.189 = phi i32 [ %i_theta.2, %if.end ], [ %i_theta.092, %for.cond20.preheader ]
-  %iv.next5 = add nuw nsw i64 %iv4, 1
-  %27 = trunc i64 %iv4 to i32
-  %28 = add i64 %iv4, %26
-  %idxprom23 = sext i32 %i_theta.189 to i64
-  %arrayidx24 = getelementptr inbounds double, double* %theta, i64 %idxprom23
-  %29 = load double, double* %arrayidx24, align 8, !tbaa !75
-  %30 = mul nsw i64 %28, 3
-  %arrayidx30 = getelementptr inbounds double, double* %16, i64 %30
-  store double %29, double* %arrayidx30, align 8, !tbaa !75
-  %31 = mul nuw nsw i64 %iv2, 3
-  %32 = add nuw nsw i64 %iv4, %31
-  %33 = getelementptr inbounds i32, i32* %i_theta.189_malloccache, i64 %32
-  store i32 %i_theta.189, i32* %33, align 4, !invariant.group !433
-  %inc31 = add nsw i32 %i_theta.189, 1
-  %cmp32 = icmp eq i32 %27, 0
-  br i1 %cmp32, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body22
-  %idxprom33 = sext i32 %inc31 to i64
-  %arrayidx34 = getelementptr inbounds double, double* %theta, i64 %idxprom33
-  %34 = load double, double* %arrayidx34, align 8, !tbaa !75
-  %35 = add nsw i64 %30, 1
-  %arrayidx40 = getelementptr inbounds double, double* %16, i64 %35
-  store double %34, double* %arrayidx40, align 8, !tbaa !75
-  %inc41 = add nsw i32 %i_theta.189, 2
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body22
-  %i_theta.2 = phi i32 [ %inc41, %if.then ], [ %inc31, %for.body22 ]
-  %36 = trunc i64 %28 to i32
-  %37 = add nsw i32 %i_pose_params.093, 2
-  %exitcond = icmp eq i32 %37, %36
-  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !202
-
-for.end45:                                        ; preds = %if.end
-  %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
-  %.lcssa = phi i64 [ %28, %if.end ]
-  %38 = trunc i64 %.lcssa to i32
-  %inc46 = add nsw i32 %38, 2
-  %exitcond98.not = icmp eq i32 %25, 4
-  br i1 %exitcond98.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !203
-
-for.end49:                                        ; preds = %for.end45
-  %39 = load { i8*, i8*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, i32, i1, double*, i32*, i32* }* %0, align 8
-  ret { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %39
-}
-
-; Function Attrs: nounwind uwtable mustprogress
-define internal void @diffeto_pose_params(i32 %count, double* noalias nocapture readonly %theta, double* nocapture %"theta'", i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params, %struct.Matrix* nocapture %"pose_params'", { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg) local_unnamed_addr #5 {
-entry:
-  %0 = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 6
-  %1 = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 7
-  %mul.i = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 3
-  %2 = mul i32 %count, 3
-  %mul3.i = add i32 %2, 9
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.end.i
-
-if.end.i:                                         ; preds = %entry
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %for.cond17.preheader
-
-resize.exit.thread:                               ; preds = %if.end.i
-  %"call.i'mi" = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 0
-  %"'ipc" = bitcast i8* %"call.i'mi" to double*
-  br label %for.body.lr.ph.i
-
-resize.exit:                                      ; preds = %entry
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %".pre'il_phi" = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 2
-  br i1 %cmp7.i, label %for.body.lr.ph.i, label %for.cond17.preheader
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit, %resize.exit.thread
-  %3 = phi double* [ %"'ipc", %resize.exit.thread ], [ %".pre'il_phi", %resize.exit ]
-  br label %for.cond17.preheader
-
-for.cond17.preheader:                             ; preds = %resize.exit, %for.body.lr.ph.i, %if.end.i
-  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 0, %resize.exit ], [ 2, %if.end.i ]
-  %4 = phi double* [ %3, %for.body.lr.ph.i ], [ %".pre'il_phi", %resize.exit ], [ null, %if.end.i ]
-  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2, !node !273
-  %"'ipl" = load double*, double** %"data'ipg", align 8, !node !273
-  br label %invertfor.end45
-
-invertentry:                                      ; preds = %invertfill.exit, %invertresize.exit.thread
-  ret void
-
-invertresize.exit.thread:                         ; preds = %invertfill.exit
-  %"call.i'mi_unwrap" = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 0
-  tail call void @free(i8* nonnull %"call.i'mi_unwrap")
-  %call.i_unwrap = extractvalue { i8*, i8*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 1
-  tail call void @free(i8* %call.i_unwrap)
-  br label %invertentry
-
-invertfill.exit:                                  ; preds = %invertfor.body
-  call void @__enzyme_memcpyadd_doubleda8sa8(double* %4, double* %"theta'", i64 3)
-  %cond = icmp eq i8 %_cache.0, 1
-  %cond.not = xor i1 %cond, true
-  %brmerge = or i1 %cond.not, %cmp.not.i
-  br i1 %brmerge, label %invertentry, label %invertresize.exit.thread
-
-invertfor.cond17.preheader:                       ; preds = %invertfor.cond20.preheader
-  %5 = bitcast i32* %0 to i8*
-  tail call void @free(i8* nonnull %5)
-  %6 = bitcast i32* %1 to i8*
-  tail call void @free(i8* nonnull %6)
-  br label %invertfor.body
-
-invertfor.body:                                   ; preds = %incinvertfor.body, %invertfor.cond17.preheader
-  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond17.preheader ], [ %11, %incinvertfor.body ]
-  %_unwrap = add nuw nsw i64 %"iv'ac.0", 6
-  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %4, i64 %_unwrap
-  %7 = load double, double* %"arrayidx16'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx16'ipg_unwrap", align 8
-  %_unwrap15 = add nuw nsw i64 %"iv'ac.0", 3
-  %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %_unwrap15
-  %8 = load double, double* %"arrayidx10'ipg_unwrap", align 8
-  %9 = fadd fast double %8, %7
-  store double %9, double* %"arrayidx10'ipg_unwrap", align 8
-  %"arrayidx7'ipg_unwrap" = getelementptr inbounds double, double* %4, i64 %_unwrap15
-  store double 0.000000e+00, double* %"arrayidx7'ipg_unwrap", align 8
-  %10 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %10, label %invertfill.exit, label %incinvertfor.body
-
-incinvertfor.body:                                ; preds = %invertfor.body
-  %11 = add nsw i64 %"iv'ac.0", -1
-  br label %invertfor.body
-
-invertfor.cond20.preheader:                       ; preds = %invertfor.body22
-  %12 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %12, label %invertfor.cond17.preheader, label %incinvertfor.cond20.preheader
-
-incinvertfor.cond20.preheader:                    ; preds = %invertfor.cond20.preheader
-  %13 = add nsw i64 %"iv2'ac.0", -1
-  br label %invertfor.end45
-
-invertfor.body22:                                 ; preds = %invertif.end, %invertif.then
-  %14 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %15 = load i32, i32* %14, align 4, !invariant.group !434
-  %_unwrap17 = sext i32 %15 to i64
-  %_unwrap18 = add i64 %"iv4'ac.0", %_unwrap17
-  %_unwrap19 = mul nsw i64 %_unwrap18, 3
-  %"arrayidx30'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl", i64 %_unwrap19
-  %16 = load double, double* %"arrayidx30'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx30'ipg_unwrap", align 8
-  %17 = mul nuw nsw i64 %"iv2'ac.0", 3
-  %18 = add nuw nsw i64 %"iv4'ac.0", %17
-  %19 = getelementptr inbounds i32, i32* %1, i64 %18
-  %20 = load i32, i32* %19, align 4, !invariant.group !435
-  %idxprom23_unwrap = sext i32 %20 to i64
-  %"arrayidx24'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23_unwrap
-  %21 = load double, double* %"arrayidx24'ipg_unwrap", align 8
-  %22 = fadd fast double %21, %16
-  store double %22, double* %"arrayidx24'ipg_unwrap", align 8
-  %23 = icmp eq i64 %"iv4'ac.0", 0
-  br i1 %23, label %invertfor.cond20.preheader, label %incinvertfor.body22
-
-incinvertfor.body22:                              ; preds = %invertfor.body22
-  %24 = add nsw i64 %"iv4'ac.0", -1
-  br label %invertif.end
-
-invertif.then:                                    ; preds = %invertif.end
-  %25 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %26 = load i32, i32* %25, align 4, !invariant.group !434
-  %_unwrap24 = sext i32 %26 to i64
-  %_unwrap25 = add i64 %"iv4'ac.0", %_unwrap24
-  %_unwrap26 = mul nsw i64 %_unwrap25, 3
-  %_unwrap27 = add nsw i64 %_unwrap26, 1
-  %"arrayidx40'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl", i64 %_unwrap27
-  %27 = load double, double* %"arrayidx40'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx40'ipg_unwrap", align 8
-  %28 = mul nuw nsw i64 %"iv2'ac.0", 3
-  %29 = add nuw nsw i64 %"iv4'ac.0", %28
-  %30 = getelementptr inbounds i32, i32* %1, i64 %29
-  %31 = load i32, i32* %30, align 4, !invariant.group !435
-  %inc31_unwrap = add nsw i32 %31, 1
-  %idxprom33_unwrap = sext i32 %inc31_unwrap to i64
-  %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33_unwrap
-  %32 = load double, double* %"arrayidx34'ipg_unwrap", align 8
-  %33 = fadd fast double %32, %27
-  store double %33, double* %"arrayidx34'ipg_unwrap", align 8
-  br label %invertfor.body22
-
-invertif.end:                                     ; preds = %invertfor.end45, %incinvertfor.body22
-  %"iv4'ac.0" = phi i64 [ 2, %invertfor.end45 ], [ %24, %incinvertfor.body22 ]
-  %34 = trunc i64 %"iv4'ac.0" to i32
-  %cmp32_unwrap = icmp eq i32 %34, 0
-  br i1 %cmp32_unwrap, label %invertif.then, label %invertfor.body22
-
-invertfor.end45:                                  ; preds = %for.cond17.preheader, %incinvertfor.cond20.preheader
-  %"iv2'ac.0" = phi i64 [ %13, %incinvertfor.cond20.preheader ], [ 4, %for.cond17.preheader ]
-  br label %invertif.end
-}
-
-; Function Attrs: argmemonly nounwind
-define internal void @__enzyme_memcpyadd_doubleda8sa8(double* nocapture %dst, double* nocapture %src, i64 %num) #30 {
-entry:
-  %0 = icmp eq i64 %num, 0
-  br i1 %0, label %for.end, label %for.body
-
-for.body:                                         ; preds = %entry, %for.body
-  %idx = phi i64 [ %idx.next, %for.body ], [ 0, %entry ]
-  %dst.i = getelementptr double, double* %dst, i64 %idx
-  %dst.i.l = load double, double* %dst.i, align 8
-  store double 0.000000e+00, double* %dst.i, align 8
-  %src.i = getelementptr double, double* %src, i64 %idx
-  %src.i.l = load double, double* %src.i, align 8
-  %1 = fadd fast double %src.i.l, %dst.i.l
-  store double %1, double* %src.i, align 8
-  %idx.next = add nuw i64 %idx, 1
-  %2 = icmp eq i64 %idx.next, %num
-  br i1 %2, label %for.end, label %for.body
-
-for.end:                                          ; preds = %for.body, %entry
-  ret void
+invertfor.end49:                                  ; preds = %for.inc47, %entry
+  %forward_mem.5 = phi i32 [ 15, %entry ], [ %forward_mem.4, %for.inc47 ]
+  %forward_op.6 = phi i32 [ %forward_op.0, %entry ], [ %forward_op.5, %for.inc47 ]
+  br i1 %cmp85, label %invertfor.end49.loopexit, label %invertresize.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -18989,25 +20704,135 @@ entry:
   %call.i = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  tail call void @to_pose_params(i32 %bone_count, double* %theta, i8** undef, %struct.Matrix* %0)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !217)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !220)
+  %theta99.i = bitcast double* %theta to i8*
+  %add.i = add nsw i32 %bone_count, 3
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %1 = bitcast i8* %ncols2.i.i to i32*
+  %mul3.i.i = mul i32 %add.i, 3
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
+
+if.end.i.i:                                       ; preds = %entry
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !222
+  %3 = bitcast i8* %data.i.i to i8**
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  %4 = bitcast i8* %call.i.i to double*
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !222
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ]
+  %6 = bitcast double* %5 to i8*
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %6, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !220
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %tiv3 = phi i64 [ %tiv.next4, %for.body.i ], [ 0, %fill.exit.i ]
+  %tiv.next4 = add nuw nsw i64 %tiv3, 1
+  %7 = add nuw nsw i64 %tiv3, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %5, i64 %7
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !222
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %7
+  %8 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %9 = add nuw nsw i64 %tiv3, 6
+  %arrayidx16.i = getelementptr inbounds double, double* %5, i64 %9
+  store double %8, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !222
+  %exitcond105.not.i = icmp eq i64 %tiv.next4, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i:                           ; preds = %for.body.i, %for.end45.i
+  %tiv1 = phi i64 [ %tiv.next2, %for.end45.i ], [ 0, %for.body.i ]
+  %i_pose_params.093.i = phi i32 [ %inc46.i, %for.end45.i ], [ 5, %for.body.i ]
+  %i_theta.092.i = phi i32 [ %i_theta.2.i.lcssa, %for.end45.i ], [ 6, %for.body.i ]
+  %10 = trunc i64 %tiv1 to i32
+  %tiv.next2 = add nuw nsw i64 %tiv1, 1
+  %11 = sext i32 %i_pose_params.093.i to i64
+  %12 = add i32 %i_pose_params.093.i, 3
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %indvars.iv.i = phi i64 [ %11, %for.cond20.preheader.i ], [ %indvars.iv.next.i, %if.end.i ]
+  %i.191.i = phi i32 [ 2, %for.cond20.preheader.i ], [ %inc44.i, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i
+  %13 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %14 = mul nsw i64 %indvars.iv.i, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %5, i64 %14
+  store double %13, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !222
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %cmp32.i = icmp eq i32 %i.191.i, 2
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i
+  %15 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220
+  %16 = add nsw i64 %14, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %5, i64 %16
+  store double %15, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !222
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %indvars.iv.next.i = add nsw i64 %indvars.iv.i, 1
+  %inc44.i = add nuw nsw i32 %i.191.i, 1
+  %lftr.wideiv1 = trunc i64 %indvars.iv.next.i to i32
+  %exitcond = icmp eq i32 %12, %lftr.wideiv1
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %indvars.iv.i.lcssa = phi i64 [ %indvars.iv.i, %if.end.i ]
+  %17 = trunc i64 %indvars.iv.i.lcssa to i32
+  %inc46.i = add nsw i32 %17, 2
+  %exitcond98.not.i = icmp eq i32 %10, 4
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
   %call.i84 = tail call noalias dereferenceable_or_null(16) i8* @malloc(i64 16) #31
-  %1 = bitcast i8* %call.i84 to %struct.Matrix*
+  %18 = bitcast i8* %call.i84 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i84, i8 0, i64 16, i1 false) #31
-  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %1)
+  tail call fastcc void @_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* %0, %struct.Matrix* %18)
   %cmp89 = icmp sgt i32 %corresp_count, 0
   br i1 %cmp89, label %for.body.lr.ph, label %for.end51
 
-for.body.lr.ph:                                   ; preds = %entry
+for.body.lr.ph:                                   ; preds = %to_pose_params.exit
   %data = getelementptr inbounds i8, i8* %call.i84, i64 8
-  %2 = bitcast i8* %data to double**
-  %3 = load double*, double** %2, align 8, !tbaa !137
+  %19 = bitcast i8* %data to double**
+  %20 = load double*, double** %19, align 8, !tbaa !137
   %nrows = bitcast i8* %call.i84 to i32*
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138
+  %21 = load i32, i32* %nrows, align 8, !tbaa !138
   %data38 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 2
-  %5 = load double*, double** %data38, align 8, !tbaa !137
+  %22 = load double*, double** %data38, align 8, !tbaa !137
   %nrows39 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %points, i64 0, i32 0
-  %6 = load i32, i32* %nrows39, align 8, !tbaa !138
-  %7 = sext i32 %6 to i64
+  %23 = load i32, i32* %nrows39, align 8, !tbaa !138
+  %24 = sext i32 %23 to i64
   %wide.trip.count = zext i32 %corresp_count to i64
   br label %for.body
 
@@ -19015,63 +20840,63 @@ for.body:                                         ; preds = %for.end, %for.body.
   %tiv = phi i64 [ %tiv.next, %for.end ], [ 0, %for.body.lr.ph ]
   %tiv.next = add nuw nsw i64 %tiv, 1
   %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %tiv
-  %8 = load i32, i32* %arrayidx, align 4, !tbaa !59
-  %idxprom2 = sext i32 %8 to i64
+  %25 = load i32, i32* %arrayidx, align 4, !tbaa !59
+  %idxprom2 = sext i32 %25 to i64
   %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0
-  %9 = shl nuw nsw i64 %tiv, 1
-  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %9
-  %10 = load i32, i32* %arraydecay, align 4, !tbaa !59
-  %mul12 = mul nsw i32 %4, %10
+  %26 = shl nuw nsw i64 %tiv, 1
+  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %26
+  %27 = load i32, i32* %arraydecay, align 4, !tbaa !59
+  %mul12 = mul nsw i32 %21, %27
   %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1
   %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1
-  %11 = load i32, i32* %arrayidx18, align 4, !tbaa !59
-  %mul20 = mul nsw i32 %11, %4
+  %28 = load i32, i32* %arrayidx18, align 4, !tbaa !59
+  %mul20 = mul nsw i32 %28, %21
   %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2
-  %12 = load i32, i32* %arrayidx30, align 4, !tbaa !59
-  %mul32 = mul nsw i32 %12, %4
-  %13 = mul nsw i64 %tiv, %7
-  %14 = mul nuw nsw i64 %tiv, 3
-  %15 = sext i32 %mul12 to i64
-  %16 = sext i32 %mul20 to i64
-  %17 = sext i32 %mul32 to i64
+  %29 = load i32, i32* %arrayidx30, align 4, !tbaa !59
+  %mul32 = mul nsw i32 %29, %21
+  %30 = mul nsw i64 %tiv, %24
+  %31 = mul nuw nsw i64 %tiv, 3
+  %32 = sext i32 %mul12 to i64
+  %33 = sext i32 %mul20 to i64
+  %34 = sext i32 %mul32 to i64
   br label %for.body9
 
 for.body9:                                        ; preds = %for.body9, %for.body
   %indvars.iv = phi i64 [ 0, %for.body ], [ %indvars.iv.next, %for.body9 ]
-  %18 = load double, double* %arrayidx6, align 8, !tbaa !75
-  %19 = add nsw i64 %indvars.iv, %15
-  %arrayidx14 = getelementptr inbounds double, double* %3, i64 %19
-  %20 = load double, double* %arrayidx14, align 8, !tbaa !75
-  %21 = load double, double* %arrayidx16, align 8, !tbaa !75
-  %22 = add nsw i64 %indvars.iv, %16
-  %arrayidx23 = getelementptr inbounds double, double* %3, i64 %22
-  %23 = load double, double* %arrayidx23, align 8, !tbaa !75
-  %24 = fadd fast double %18, %21
-  %sub28 = fsub fast double 1.000000e+00, %24
-  %25 = add nsw i64 %indvars.iv, %17
-  %arrayidx35 = getelementptr inbounds double, double* %3, i64 %25
-  %26 = load double, double* %arrayidx35, align 8, !tbaa !75
-  %27 = add nsw i64 %13, %indvars.iv
-  %arrayidx43 = getelementptr inbounds double, double* %5, i64 %27
-  %28 = load double, double* %arrayidx43, align 8, !tbaa !75
-  %mul15.neg = fmul fast double %20, %18
-  %mul24.neg = fmul fast double %23, %21
-  %mul36.neg = fmul fast double %26, %sub28
+  %35 = load double, double* %arrayidx6, align 8, !tbaa !75
+  %36 = add nsw i64 %indvars.iv, %32
+  %arrayidx14 = getelementptr inbounds double, double* %20, i64 %36
+  %37 = load double, double* %arrayidx14, align 8, !tbaa !75
+  %38 = load double, double* %arrayidx16, align 8, !tbaa !75
+  %39 = add nsw i64 %indvars.iv, %33
+  %arrayidx23 = getelementptr inbounds double, double* %20, i64 %39
+  %40 = load double, double* %arrayidx23, align 8, !tbaa !75
+  %41 = fadd fast double %35, %38
+  %sub28 = fsub fast double 1.000000e+00, %41
+  %42 = add nsw i64 %indvars.iv, %34
+  %arrayidx35 = getelementptr inbounds double, double* %20, i64 %42
+  %43 = load double, double* %arrayidx35, align 8, !tbaa !75
+  %44 = add nsw i64 %30, %indvars.iv
+  %arrayidx43 = getelementptr inbounds double, double* %22, i64 %44
+  %45 = load double, double* %arrayidx43, align 8, !tbaa !75
+  %mul15.neg = fmul fast double %37, %35
+  %mul24.neg = fmul fast double %40, %38
+  %mul36.neg = fmul fast double %43, %sub28
   %reass.add = fadd fast double %mul24.neg, %mul15.neg
   %reass.add87 = fadd fast double %reass.add, %mul36.neg
-  %sub44 = fsub fast double %28, %reass.add87
-  %29 = add nuw nsw i64 %indvars.iv, %14
-  %arrayidx48 = getelementptr inbounds double, double* %err, i64 %29
+  %sub44 = fsub fast double %45, %reass.add87
+  %46 = add nuw nsw i64 %indvars.iv, %31
+  %arrayidx48 = getelementptr inbounds double, double* %err, i64 %46
   store double %sub44, double* %arrayidx48, align 8, !tbaa !75
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
-  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !211
+  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !223
 
 for.end:                                          ; preds = %for.body9
   %exitcond101.not = icmp eq i64 %tiv.next, %wide.trip.count
-  br i1 %exitcond101.not, label %for.end51, label %for.body, !llvm.loop !212
+  br i1 %exitcond101.not, label %for.end51, label %for.body, !llvm.loop !224
 
-for.end51:                                        ; preds = %for.end, %entry
+for.end51:                                        ; preds = %for.end, %to_pose_params.exit
   ret void
 }
 
@@ -19081,216 +20906,554 @@ entry:
   %call.i = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i'mi", i8 0, i64 16, i1 false)
-  %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
+  %"'ipc28" = bitcast i8* %"call.i'mi" to %struct.Matrix*
   %0 = bitcast i8* %call.i to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i, i8 0, i64 16, i1 false) #31
-  %_augmented5 = call { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params.17(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc"), !node !273
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !217)
+  tail call void @llvm.experimental.noalias.scope.decl(metadata !220)
+  %theta99.i = bitcast double* %theta to i8*, !node !285
+  %add.i = add nsw i32 %bone_count, 3, !node !285
+  %"nrows1.i.i'ipc" = bitcast i8* %"call.i'mi" to i32*
+  %nrows1.i.i = bitcast i8* %call.i to i32*
+  %"ncols2.i.i'ipg" = getelementptr inbounds i8, i8* %"call.i'mi", i64 4
+  %ncols2.i.i = getelementptr inbounds i8, i8* %call.i, i64 4
+  %"'ipc" = bitcast i8* %"ncols2.i.i'ipg" to i32*, !node !285
+  %1 = bitcast i8* %ncols2.i.i to i32*, !node !285
+  %mul3.i.i = mul i32 %add.i, 3, !node !285
+  %cmp.not.i.i = icmp eq i32 %mul3.i.i, 0
+  br i1 %cmp.not.i.i, label %resize.exit.fill.exit_crit_edge.i, label %if.end.i.i
+
+if.end.i.i:                                       ; preds = %entry
+  %"data.i.i'ipg" = getelementptr inbounds i8, i8* %"call.i'mi", i64 8
+  %data.i.i = getelementptr inbounds i8, i8* %call.i, i64 8
+  %cmp8.i.i = icmp sgt i32 %mul3.i.i, 0
+  br i1 %cmp8.i.i, label %for.body.lr.ph.i.i, label %resize.exit.thread87.i
+
+resize.exit.thread87.i:                           ; preds = %if.end.i.i
+  %"'ipc10" = bitcast i8* %"data.i.i'ipg" to double**
+  %2 = bitcast i8* %data.i.i to double**
+  store double* null, double** %"'ipc10", align 8
+  store double* null, double** %2, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+resize.exit.fill.exit_crit_edge.i:                ; preds = %entry
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  br label %fill.exit.i
+
+for.body.lr.ph.i.i:                               ; preds = %if.end.i.i
+  %conv31.i.i = zext i32 %mul3.i.i to i64, !node !285
+  %mul11.i.i = shl nuw nsw i64 %conv31.i.i, 3, !node !285
+  %call.i.i = tail call noalias i8* @malloc(i64 %mul11.i.i) #31, !noalias !222, !node !285
+  %"call.i.i'mi" = tail call noalias nonnull i8* @malloc(i64 %mul11.i.i) #31, !node !285
+  call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %"call.i.i'mi", i8 0, i64 %mul11.i.i, i1 false), !node !285
+  %"'ipc11" = bitcast i8* %"data.i.i'ipg" to i8**, !node !285
+  %3 = bitcast i8* %data.i.i to i8**, !node !285
+  store i8* %"call.i.i'mi", i8** %"'ipc11", align 8
+  store i8* %call.i.i, i8** %3, align 8, !tbaa !137, !alias.scope !220, !noalias !217
+  store i32 %add.i, i32* %"'ipc", align 4
+  store i32 %add.i, i32* %1, align 4, !tbaa !139, !alias.scope !220, !noalias !217
+  store i32 3, i32* %"nrows1.i.i'ipc", align 8
+  store i32 3, i32* %nrows1.i.i, align 8, !tbaa !138, !alias.scope !220, !noalias !217
+  %"'ipc12" = bitcast i8* %"call.i.i'mi" to double*, !node !285
+  %4 = bitcast i8* %call.i.i to double*, !node !285
+  tail call void @llvm.memset.p0i8.i64(i8* align 8 %call.i.i, i8 0, i64 %mul11.i.i, i1 false) #31, !noalias !222, !node !285
+  br label %fill.exit.i
+
+fill.exit.i:                                      ; preds = %for.body.lr.ph.i.i, %resize.exit.fill.exit_crit_edge.i, %resize.exit.thread87.i
+  %call.i.i_cache.0 = phi i8* [ undef, %resize.exit.fill.exit_crit_edge.i ], [ %call.i.i, %for.body.lr.ph.i.i ], [ undef, %resize.exit.thread87.i ]
+  %"call.i.i'mi_cache.0" = phi i8* [ undef, %resize.exit.fill.exit_crit_edge.i ], [ %"call.i.i'mi", %for.body.lr.ph.i.i ], [ undef, %resize.exit.thread87.i ]
+  %forward_mem.0 = phi i32 [ 20, %resize.exit.fill.exit_crit_edge.i ], [ 24, %for.body.lr.ph.i.i ], [ 22, %resize.exit.thread87.i ]
+  %forward_op.0 = phi i32 [ 2, %resize.exit.fill.exit_crit_edge.i ], [ 3, %for.body.lr.ph.i.i ], [ 2, %resize.exit.thread87.i ]
+  %5 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %"'ipc12", %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ], !node !285
+  %6 = phi double* [ null, %resize.exit.fill.exit_crit_edge.i ], [ %4, %for.body.lr.ph.i.i ], [ null, %resize.exit.thread87.i ], !node !285
+  %7 = bitcast double* %6 to i8*, !node !285
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %7, i8* nonnull align 8 dereferenceable(24) %theta99.i, i64 24, i1 false) #31, !noalias !220, !node !285
+  br label %for.body.i
+
+for.body.i:                                       ; preds = %for.body.i, %fill.exit.i
+  %forward_mem.1 = phi i32 [ %forward_mem.0, %fill.exit.i ], [ %inc170, %for.body.i ]
+  %forward_op.1 = phi i32 [ %forward_op.0, %fill.exit.i ], [ %inc168, %for.body.i ]
+  %iv = phi i64 [ 0, %fill.exit.i ], [ %iv.next, %for.body.i ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %8 = add nuw nsw i64 %iv, 3
+  %arrayidx7.i = getelementptr inbounds double, double* %6, i64 %8, !node !285
+  store double 1.000000e+00, double* %arrayidx7.i, align 8, !tbaa !75, !noalias !222
+  %arrayidx10.i = getelementptr inbounds double, double* %theta, i64 %8, !node !285
+  %9 = load double, double* %arrayidx10.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220, !node !285
+  %10 = add nuw nsw i64 %iv, 6
+  %inc168 = add i32 %forward_op.1, 3
+  %arrayidx16.i = getelementptr inbounds double, double* %6, i64 %10, !node !285
+  %inc170 = add i32 %forward_mem.1, 3
+  store double %9, double* %arrayidx16.i, align 8, !tbaa !75, !noalias !222
+  %exitcond105.not.i = icmp eq i64 %iv.next, 3
+  br i1 %exitcond105.not.i, label %for.cond20.preheader.i.preheader, label %for.body.i, !llvm.loop !207
+
+for.cond20.preheader.i.preheader:                 ; preds = %for.body.i
+  %forward_mem.1.lcssa = phi i32 [ %forward_mem.1, %for.body.i ]
+  %inc168.lcssa = phi i32 [ %inc168, %for.body.i ]
+  %malloccall = tail call noalias nonnull dereferenceable(20) dereferenceable_or_null(20) i8* @malloc(i64 20)
+  %i_pose_params.093.i_malloccache = bitcast i8* %malloccall to i32*
+  %malloccall19 = tail call noalias nonnull dereferenceable(60) dereferenceable_or_null(60) i8* @malloc(i64 60)
+  %i_theta.189.i_malloccache = bitcast i8* %malloccall19 to i32*
+  %inc174 = add i32 %forward_mem.1.lcssa, 5
+  br label %for.cond20.preheader.i
+
+for.cond20.preheader.i:                           ; preds = %for.end45.i, %for.cond20.preheader.i.preheader
+  %forward_mem.2 = phi i32 [ %inc174, %for.cond20.preheader.i.preheader ], [ %forward_mem.4.lcssa, %for.end45.i ]
+  %forward_op.2 = phi i32 [ %inc168.lcssa, %for.cond20.preheader.i.preheader ], [ %inc220, %for.end45.i ]
+  %iv1 = phi i64 [ 0, %for.cond20.preheader.i.preheader ], [ %iv.next2, %for.end45.i ]
+  %i_pose_params.093.i = phi i32 [ 5, %for.cond20.preheader.i.preheader ], [ %inc46.i, %for.end45.i ]
+  %i_theta.092.i = phi i32 [ 6, %for.cond20.preheader.i.preheader ], [ %i_theta.2.i.lcssa, %for.end45.i ]
+  %11 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %iv1
+  %inc178 = add i32 %forward_mem.2, 2
+  store i32 %i_pose_params.093.i, i32* %11, align 4, !invariant.group !454
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %12 = trunc i64 %iv1 to i32
+  %13 = sext i32 %i_pose_params.093.i to i64
+  br label %for.body22.i
+
+for.body22.i:                                     ; preds = %if.end.i, %for.cond20.preheader.i
+  %forward_mem.3 = phi i32 [ %inc178, %for.cond20.preheader.i ], [ %forward_mem.4, %if.end.i ]
+  %forward_op.3.in = phi i32 [ %forward_op.2, %for.cond20.preheader.i ], [ %forward_op.4, %if.end.i ]
+  %iv3 = phi i64 [ 0, %for.cond20.preheader.i ], [ %iv.next4, %if.end.i ]
+  %i_theta.189.i = phi i32 [ %i_theta.092.i, %for.cond20.preheader.i ], [ %i_theta.2.i, %if.end.i ]
+  %iv.next4 = add nuw nsw i64 %iv3, 1
+  %14 = trunc i64 %iv3 to i32
+  %15 = add i64 %iv3, %13
+  %idxprom23.i = sext i32 %i_theta.189.i to i64
+  %arrayidx24.i = getelementptr inbounds double, double* %theta, i64 %idxprom23.i, !node !285
+  %16 = load double, double* %arrayidx24.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220, !node !285
+  %17 = mul nsw i64 %15, 3
+  %arrayidx30.i = getelementptr inbounds double, double* %6, i64 %17, !node !285
+  store double %16, double* %arrayidx30.i, align 8, !tbaa !75, !noalias !222
+  %18 = mul nuw nsw i64 %iv1, 3
+  %19 = add nuw nsw i64 %iv3, %18
+  %20 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %19
+  %inc202 = add i32 %forward_mem.3, 4
+  store i32 %i_theta.189.i, i32* %20, align 4, !invariant.group !455
+  %inc31.i = add nsw i32 %i_theta.189.i, 1
+  %inc204 = add i32 %forward_op.3.in, 9
+  %cmp32.i = icmp eq i32 %14, 0
+  br i1 %cmp32.i, label %if.then.i, label %if.end.i
+
+if.then.i:                                        ; preds = %for.body22.i
+  %idxprom33.i = sext i32 %inc31.i to i64
+  %arrayidx34.i = getelementptr inbounds double, double* %theta, i64 %idxprom33.i, !node !285
+  %21 = load double, double* %arrayidx34.i, align 8, !tbaa !75, !alias.scope !217, !noalias !220, !node !285
+  %22 = add nsw i64 %17, 1
+  %arrayidx40.i = getelementptr inbounds double, double* %6, i64 %22, !node !285
+  %inc210 = add i32 %forward_mem.3, 6
+  store double %21, double* %arrayidx40.i, align 8, !tbaa !75, !noalias !222
+  %inc41.i = add nsw i32 %i_theta.189.i, 2
+  %inc212 = add i32 %forward_op.3.in, 11
+  br label %if.end.i
+
+if.end.i:                                         ; preds = %if.then.i, %for.body22.i
+  %forward_mem.4 = phi i32 [ %inc210, %if.then.i ], [ %inc202, %for.body22.i ]
+  %forward_op.4 = phi i32 [ %inc212, %if.then.i ], [ %inc204, %for.body22.i ]
+  %i_theta.2.i = phi i32 [ %inc41.i, %if.then.i ], [ %inc31.i, %for.body22.i ]
+  %23 = trunc i64 %15 to i32
+  %24 = add nsw i32 %i_pose_params.093.i, 2
+  %exitcond = icmp eq i32 %24, %23
+  br i1 %exitcond, label %for.end45.i, label %for.body22.i, !llvm.loop !208
+
+for.end45.i:                                      ; preds = %if.end.i
+  %forward_mem.4.lcssa = phi i32 [ %forward_mem.4, %if.end.i ]
+  %forward_op.4.lcssa = phi i32 [ %forward_op.4, %if.end.i ]
+  %i_theta.2.i.lcssa = phi i32 [ %i_theta.2.i, %if.end.i ]
+  %.lcssa = phi i64 [ %15, %if.end.i ]
+  %25 = trunc i64 %.lcssa to i32
+  %inc46.i = add nsw i32 %25, 2
+  %inc220 = add i32 %forward_op.4.lcssa, 4
+  %exitcond98.not.i = icmp eq i32 %12, 4
+  br i1 %exitcond98.not.i, label %to_pose_params.exit, label %for.cond20.preheader.i, !llvm.loop !209
+
+to_pose_params.exit:                              ; preds = %for.end45.i
+  %inc220.lcssa = phi i32 [ %inc220, %for.end45.i ]
+  %forward_mem.4.lcssa.lcssa = phi i32 [ %forward_mem.4.lcssa, %for.end45.i ]
+  %forward_op.4.lcssa.lcssa = phi i32 [ %forward_op.4.lcssa, %for.end45.i ]
   %call.i84 = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   %"call.i84'mi" = tail call noalias nonnull dereferenceable(16) dereferenceable_or_null(16) i8* @malloc(i64 16) #31
   call void @llvm.memset.p0i8.i64(i8* nonnull align 1 dereferenceable(16) dereferenceable_or_null(16) %"call.i84'mi", i8 0, i64 16, i1 false)
-  %"'ipc4" = bitcast i8* %"call.i84'mi" to %struct.Matrix*
-  %1 = bitcast i8* %call.i84 to %struct.Matrix*
+  %"'ipc29" = bitcast i8* %"call.i84'mi" to %struct.Matrix*
+  %26 = bitcast i8* %call.i84 to %struct.Matrix*
   tail call void @llvm.memset.p0i8.i64(i8* nonnull align 8 dereferenceable(16) %call.i84, i8 0, i64 16, i1 false) #31
-  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.14(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc4"), !node !273
+  %_augmented = call fastcc { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } @augmented__ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.14(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc28", %struct.Matrix* nonnull %26, %struct.Matrix* nonnull %"'ipc29"), !node !285
   %cmp89 = icmp sgt i32 %corresp_count, 0
   br i1 %cmp89, label %for.body.lr.ph, label %invertfor.end51
 
-for.body.lr.ph:                                   ; preds = %entry
+for.body.lr.ph:                                   ; preds = %to_pose_params.exit
   %data = getelementptr inbounds i8, i8* %call.i84, i64 8
-  %2 = bitcast i8* %data to double**
-  %3 = load double*, double** %2, align 8, !tbaa !137
+  %27 = bitcast i8* %data to double**
+  %28 = load double*, double** %27, align 8, !tbaa !137
   %nrows = bitcast i8* %call.i84 to i32*
-  %4 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !436
-  %wide.trip.count = zext i32 %corresp_count to i64, !node !273
-  %mallocsize = mul nuw nsw i64 %wide.trip.count, 24, !node !273
-  %malloccall = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
-  %_malloccache = bitcast i8* %malloccall to double*, !node !273
-  %malloccall14 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
-  %_malloccache15 = bitcast i8* %malloccall14 to double*, !node !273
-  %malloccall20 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
-  %_malloccache21 = bitcast i8* %malloccall20 to double*, !node !273
-  %malloccall27 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
-  %_malloccache28 = bitcast i8* %malloccall27 to double*, !node !273
-  %malloccall36 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !273
-  %_malloccache37 = bitcast i8* %malloccall36 to double*, !node !273
+  %29 = load i32, i32* %nrows, align 8, !tbaa !138, !invariant.group !456
+  %wide.trip.count = zext i32 %corresp_count to i64, !node !285
+  %mallocsize = mul nuw nsw i64 %wide.trip.count, 24, !node !285
+  %malloccall36 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !285
+  %_malloccache = bitcast i8* %malloccall36 to double*, !node !285
+  %malloccall41 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !285
+  %_malloccache42 = bitcast i8* %malloccall41 to double*, !node !285
+  %malloccall47 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !285
+  %_malloccache48 = bitcast i8* %malloccall47 to double*, !node !285
+  %malloccall55 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !285
+  %_malloccache56 = bitcast i8* %malloccall55 to double*, !node !285
+  %inc250 = add i32 %forward_op.4.lcssa.lcssa, 12
+  %malloccall64 = tail call noalias nonnull i8* @malloc(i64 %mallocsize), !node !285
+  %_malloccache65 = bitcast i8* %malloccall64 to double*, !node !285
+  %inc252 = add i32 %forward_mem.4.lcssa.lcssa, 8
   br label %for.body
 
 for.body:                                         ; preds = %for.end, %for.body.lr.ph
-  %iv = phi i64 [ %iv.next, %for.end ], [ 0, %for.body.lr.ph ]
-  %iv.next = add nuw nsw i64 %iv, 1
-  %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %iv, !node !273
-  %5 = load i32, i32* %arrayidx, align 4, !tbaa !59, !invariant.group !437, !node !273
-  %idxprom2 = sext i32 %5 to i64, !node !273
-  %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0, !node !273
-  %6 = shl nuw nsw i64 %iv, 1
-  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %6, !node !273
-  %7 = load i32, i32* %arraydecay, align 4, !tbaa !59, !invariant.group !438, !node !273
-  %mul12 = mul nsw i32 %4, %7, !node !273
-  %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1, !node !273
-  %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1, !node !273
-  %8 = load i32, i32* %arrayidx18, align 4, !tbaa !59, !invariant.group !439, !node !273
-  %mul20 = mul nsw i32 %8, %4, !node !273
-  %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2, !node !273
-  %9 = load i32, i32* %arrayidx30, align 4, !tbaa !59, !invariant.group !440, !node !273
-  %mul32 = mul nsw i32 %9, %4, !node !273
-  %10 = mul nuw nsw i64 %iv, 3
-  %11 = sext i32 %mul12 to i64, !node !273
-  %12 = sext i32 %mul20 to i64, !node !273
-  %13 = sext i32 %mul32 to i64, !node !273
+  %forward_mem.5 = phi i32 [ %inc252, %for.body.lr.ph ], [ %inc344.lcssa, %for.end ]
+  %forward_op.5 = phi i32 [ %inc250, %for.body.lr.ph ], [ %inc346.lcssa, %for.end ]
+  %iv6 = phi i64 [ 0, %for.body.lr.ph ], [ %iv.next7, %for.end ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %arrayidx = getelementptr inbounds i32, i32* %correspondences, i64 %iv6, !node !285
+  %30 = load i32, i32* %arrayidx, align 4, !tbaa !59, !invariant.group !457, !node !285
+  %idxprom2 = sext i32 %30 to i64, !node !285
+  %arraydecay = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 0, !node !285
+  %31 = shl nuw nsw i64 %iv6, 1
+  %arrayidx6 = getelementptr inbounds double, double* %us, i64 %31, !node !285
+  %32 = load i32, i32* %arraydecay, align 4, !tbaa !59, !invariant.group !458, !node !285
+  %mul12 = mul nsw i32 %29, %32, !node !285
+  %arrayidx16 = getelementptr inbounds double, double* %arrayidx6, i64 1, !node !285
+  %arrayidx18 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 1, !node !285
+  %33 = load i32, i32* %arrayidx18, align 4, !tbaa !59, !invariant.group !459, !node !285
+  %mul20 = mul nsw i32 %33, %29, !node !285
+  %arrayidx30 = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2, i32 0, i64 2, !node !285
+  %inc268 = add i32 %forward_mem.5, 4
+  %34 = load i32, i32* %arrayidx30, align 4, !tbaa !59, !invariant.group !460, !node !285
+  %mul32 = mul nsw i32 %34, %29, !node !285
+  %35 = mul nuw nsw i64 %iv6, 3
+  %inc272 = add i32 %forward_op.5, 6
+  %36 = sext i32 %mul12 to i64, !node !285
+  %37 = sext i32 %mul20 to i64, !node !285
+  %38 = sext i32 %mul32 to i64, !node !285
   br label %for.body9
 
 for.body9:                                        ; preds = %for.body9, %for.body
-  %iv2 = phi i64 [ %iv.next3, %for.body9 ], [ 0, %for.body ]
-  %iv.next3 = add nuw nsw i64 %iv2, 1
-  %14 = load double, double* %arrayidx6, align 8, !tbaa !75, !node !273
-  %15 = add nuw nsw i64 %iv2, %10
-  %16 = getelementptr inbounds double, double* %_malloccache, i64 %15, !node !273
-  store double %14, double* %16, align 8, !invariant.group !441
-  %17 = add nsw i64 %iv2, %11, !node !273
-  %arrayidx14 = getelementptr inbounds double, double* %3, i64 %17, !node !273
-  %18 = load double, double* %arrayidx14, align 8, !tbaa !75, !node !273
-  %19 = load double, double* %arrayidx16, align 8, !tbaa !75, !node !273
-  %20 = getelementptr inbounds double, double* %_malloccache15, i64 %15, !node !273
-  store double %19, double* %20, align 8, !invariant.group !442
-  %21 = getelementptr inbounds double, double* %_malloccache37, i64 %15, !node !273
-  store double %18, double* %21, align 8, !invariant.group !443
-  %22 = add nsw i64 %iv2, %12, !node !273
-  %arrayidx23 = getelementptr inbounds double, double* %3, i64 %22, !node !273
-  %23 = load double, double* %arrayidx23, align 8, !tbaa !75, !node !273
-  %24 = add nsw i64 %iv2, %13, !node !273
-  %arrayidx35 = getelementptr inbounds double, double* %3, i64 %24, !node !273
-  %25 = load double, double* %arrayidx35, align 8, !tbaa !75, !node !273
-  %26 = getelementptr inbounds double, double* %_malloccache21, i64 %15, !node !273
-  store double %25, double* %26, align 8, !invariant.group !444
-  %27 = getelementptr inbounds double, double* %_malloccache28, i64 %15, !node !273
-  store double %23, double* %27, align 8, !invariant.group !445
-  %exitcond.not = icmp eq i64 %iv.next3, 3
-  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !211
+  %forward_mem.6 = phi i32 [ %inc268, %for.body ], [ %inc344, %for.body9 ]
+  %forward_op.6 = phi i32 [ %inc272, %for.body ], [ %inc346, %for.body9 ]
+  %iv8 = phi i64 [ 0, %for.body ], [ %iv.next9, %for.body9 ]
+  %iv.next9 = add nuw nsw i64 %iv8, 1
+  %39 = load double, double* %arrayidx6, align 8, !tbaa !75, !node !285
+  %40 = add nuw nsw i64 %iv8, %35
+  %41 = getelementptr inbounds double, double* %_malloccache, i64 %40, !node !285
+  store double %39, double* %41, align 8, !invariant.group !461
+  %42 = add nsw i64 %iv8, %36, !node !285
+  %arrayidx14 = getelementptr inbounds double, double* %28, i64 %42, !node !285
+  %43 = load double, double* %arrayidx14, align 8, !tbaa !75, !node !285
+  %44 = load double, double* %arrayidx16, align 8, !tbaa !75, !node !285
+  %45 = getelementptr inbounds double, double* %_malloccache42, i64 %40, !node !285
+  store double %44, double* %45, align 8, !invariant.group !462
+  %46 = getelementptr inbounds double, double* %_malloccache65, i64 %40, !node !285
+  store double %43, double* %46, align 8, !invariant.group !463
+  %47 = add nsw i64 %iv8, %37, !node !285
+  %arrayidx23 = getelementptr inbounds double, double* %28, i64 %47, !node !285
+  %48 = load double, double* %arrayidx23, align 8, !tbaa !75, !node !285
+  %49 = add nsw i64 %iv8, %38, !node !285
+  %arrayidx35 = getelementptr inbounds double, double* %28, i64 %49, !node !285
+  %50 = load double, double* %arrayidx35, align 8, !tbaa !75, !node !285
+  %51 = getelementptr inbounds double, double* %_malloccache48, i64 %40, !node !285
+  store double %50, double* %51, align 8, !invariant.group !464
+  %52 = getelementptr inbounds double, double* %_malloccache56, i64 %40, !node !285
+  %inc344 = add i32 %forward_mem.6, 15
+  store double %48, double* %52, align 8, !invariant.group !465
+  %inc346 = add i32 %forward_op.6, 22
+  %exitcond.not = icmp eq i64 %iv.next9, 3
+  br i1 %exitcond.not, label %for.end, label %for.body9, !llvm.loop !223
 
 for.end:                                          ; preds = %for.body9
-  %exitcond101.not = icmp eq i64 %iv.next, %wide.trip.count
-  br i1 %exitcond101.not, label %invertfor.end51, label %for.body, !llvm.loop !212
+  %inc344.lcssa = phi i32 [ %inc344, %for.body9 ]
+  %inc346.lcssa = phi i32 [ %inc346, %for.body9 ]
+  %exitcond101.not = icmp eq i64 %iv.next7, %wide.trip.count
+  br i1 %exitcond101.not, label %invertfor.end51, label %for.body, !llvm.loop !224
 
-invertentry:                                      ; preds = %invertfor.end51, %invertfor.body.lr.ph
-  call fastcc void @diffe_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.15(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", %struct.Matrix* nonnull %1, %struct.Matrix* nonnull %"'ipc4", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %_augmented)
-  tail call void @free(i8* nonnull %"call.i84'mi")
-  tail call void @free(i8* nonnull %call.i84)
-  call void @diffeto_pose_params.18(i32 %bone_count, double* %theta, double* %"theta'", i8** undef, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc", { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %_augmented5)
+invertentry:                                      ; preds = %invertfill.exit.i, %invertfor.body.lr.ph.i.i
+  %reverse_mem.0 = phi i32 [ %inc354, %invertfor.body.lr.ph.i.i ], [ %inc388.lcssa, %invertfill.exit.i ]
+  %inc390 = add i32 %reverse_op.0.lcssa, 5
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* nonnull %call.i)
+  %53 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.7, i32 %inc390, i32 %forward_mem.7, i32 %reverse_mem.0)
   ret void
 
-invertfor.body.lr.ph:                             ; preds = %invertfor.body
-  %28 = bitcast double* %_cache.0 to i8*
-  tail call void @free(i8* nonnull %28)
-  %29 = bitcast double* %_cache12.0 to i8*
-  tail call void @free(i8* nonnull %29)
-  %30 = bitcast double* %_cache18.0 to i8*
-  tail call void @free(i8* nonnull %30)
-  %31 = bitcast double* %_cache25.0 to i8*
-  tail call void @free(i8* nonnull %31)
-  %32 = bitcast double* %_cache34.0 to i8*
-  tail call void @free(i8* nonnull %32)
+invertfor.body.lr.ph.i.i:                         ; preds = %invertfill.exit.i
+  tail call void @free(i8* nonnull %"call.i.i'mi_cache.0"), !node !285
+  %inc354 = add i32 %reverse_mem.2.lcssa, 15
+  tail call void @free(i8* %call.i.i_cache.0), !node !285
   br label %invertentry
 
+invertfill.exit.i:                                ; preds = %invertfor.body.i
+  %reverse_mem.2.lcssa = phi i32 [ %reverse_mem.2, %invertfor.body.i ]
+  %reverse_op.0.lcssa = phi i32 [ %reverse_op.0, %invertfor.body.i ]
+  %inc388.lcssa = phi i32 [ %inc388, %invertfor.body.i ]
+  call void @__enzyme_memcpyadd_doubleda8sa8(double* %5, double* %"theta'", i64 3), !node !285
+  %cmp.not.i.i.not = xor i1 %cmp.not.i.i, true
+  %cmp8.i.i_unwrap = icmp sgt i32 %mul3.i.i, 0
+  %or.cond = and i1 %cmp.not.i.i.not, %cmp8.i.i_unwrap
+  br i1 %or.cond, label %invertfor.body.lr.ph.i.i, label %invertentry
+
+invertfor.body.i:                                 ; preds = %invertfor.cond20.preheader.i.preheader, %incinvertfor.body.i
+  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond20.preheader.i.preheader ], [ %58, %incinvertfor.body.i ]
+  %reverse_mem.2 = phi i32 [ %inc408, %invertfor.cond20.preheader.i.preheader ], [ %inc396, %incinvertfor.body.i ]
+  %reverse_op.0 = phi i32 [ %inc412.lcssa, %invertfor.cond20.preheader.i.preheader ], [ %inc394, %incinvertfor.body.i ]
+  %_unwrap = add nuw nsw i64 %"iv'ac.0", 6
+  %"arrayidx16.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap, !node !285
+  %54 = load double, double* %"arrayidx16.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx16.i'ipg_unwrap", align 8
+  %_unwrap14 = add nuw nsw i64 %"iv'ac.0", 3
+  %"arrayidx10.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %_unwrap14, !node !285
+  %55 = load double, double* %"arrayidx10.i'ipg_unwrap", align 8, !node !285
+  %56 = fadd fast double %55, %54, !node !285
+  store double %56, double* %"arrayidx10.i'ipg_unwrap", align 8
+  %"arrayidx7.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap14, !node !285
+  store double 0.000000e+00, double* %"arrayidx7.i'ipg_unwrap", align 8
+  %inc388 = add i32 %reverse_mem.2, 13
+  %57 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %57, label %invertfill.exit.i, label %incinvertfor.body.i
+
+incinvertfor.body.i:                              ; preds = %invertfor.body.i
+  %58 = add nsw i64 %"iv'ac.0", -1
+  %inc394 = add i32 %reverse_op.0, 6
+  %inc396 = add i32 %reverse_mem.2, 15
+  br label %invertfor.body.i
+
+invertfor.cond20.preheader.i.preheader:           ; preds = %invertfor.cond20.preheader.i
+  %inc412.lcssa = phi i32 [ %inc412, %invertfor.cond20.preheader.i ]
+  %reverse_mem.3.lcssa.lcssa = phi i32 [ %reverse_mem.3.lcssa, %invertfor.cond20.preheader.i ]
+  tail call void @free(i8* nonnull %malloccall)
+  tail call void @free(i8* nonnull %malloccall19)
+  %inc408 = add i32 %reverse_mem.3.lcssa.lcssa, 27
+  br label %invertfor.body.i
+
+invertfor.cond20.preheader.i:                     ; preds = %invertfor.body22.i
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body22.i ]
+  %reverse_op.1.lcssa = phi i32 [ %reverse_op.1, %invertfor.body22.i ]
+  %59 = icmp eq i64 %"iv1'ac.0", 0
+  %inc412 = add i32 %reverse_op.1.lcssa, 8
+  br i1 %59, label %invertfor.cond20.preheader.i.preheader, label %incinvertfor.cond20.preheader.i
+
+incinvertfor.cond20.preheader.i:                  ; preds = %invertfor.cond20.preheader.i
+  %60 = add nsw i64 %"iv1'ac.0", -1
+  %inc416 = add i32 %reverse_op.1.lcssa, 9
+  %inc418 = add i32 %reverse_mem.3.lcssa, 23
+  br label %invertfor.end45.i
+
+invertfor.body22.i:                               ; preds = %invertif.end.i, %invertif.then.i
+  %reverse_mem.3 = phi i32 [ %inc532, %invertif.then.i ], [ %inc536, %invertif.end.i ]
+  %reverse_op.1 = phi i32 [ %inc530, %invertif.then.i ], [ %inc538, %invertif.end.i ]
+  %61 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %"iv1'ac.0"
+  %62 = load i32, i32* %61, align 4, !invariant.group !454
+  %_unwrap15 = sext i32 %62 to i64
+  %_unwrap16 = add i64 %"iv3'ac.0", %_unwrap15
+  %_unwrap17 = mul nsw i64 %_unwrap16, 3
+  %"arrayidx30.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap17, !node !285
+  %63 = load double, double* %"arrayidx30.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx30.i'ipg_unwrap", align 8
+  %64 = mul nuw nsw i64 %"iv1'ac.0", 3
+  %65 = add nuw nsw i64 %"iv3'ac.0", %64
+  %66 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %65
+  %67 = load i32, i32* %66, align 4, !invariant.group !455
+  %idxprom23.i_unwrap = sext i32 %67 to i64
+  %"arrayidx24.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23.i_unwrap, !node !285
+  %68 = load double, double* %"arrayidx24.i'ipg_unwrap", align 8, !node !285
+  %69 = fadd fast double %68, %63, !node !285
+  store double %69, double* %"arrayidx24.i'ipg_unwrap", align 8
+  %70 = icmp eq i64 %"iv3'ac.0", 0
+  br i1 %70, label %invertfor.cond20.preheader.i, label %incinvertfor.body22.i
+
+incinvertfor.body22.i:                            ; preds = %invertfor.body22.i
+  %inc474 = add i32 %reverse_mem.3, 21
+  %71 = add nsw i64 %"iv3'ac.0", -1
+  %inc476 = add i32 %reverse_op.1, 8
+  br label %invertif.end.i
+
+invertif.then.i:                                  ; preds = %invertif.end.i
+  %72 = getelementptr inbounds i32, i32* %i_pose_params.093.i_malloccache, i64 %"iv1'ac.0"
+  %73 = load i32, i32* %72, align 4, !invariant.group !454
+  %_unwrap21 = sext i32 %73 to i64
+  %_unwrap22 = add i64 %"iv3'ac.0", %_unwrap21
+  %_unwrap23 = mul nsw i64 %_unwrap22, 3
+  %_unwrap24 = add nsw i64 %_unwrap23, 1
+  %"arrayidx40.i'ipg_unwrap" = getelementptr inbounds double, double* %5, i64 %_unwrap24, !node !285
+  %74 = load double, double* %"arrayidx40.i'ipg_unwrap", align 8, !node !285
+  store double 0.000000e+00, double* %"arrayidx40.i'ipg_unwrap", align 8
+  %75 = mul nuw nsw i64 %"iv1'ac.0", 3
+  %76 = add nuw nsw i64 %"iv3'ac.0", %75
+  %77 = getelementptr inbounds i32, i32* %i_theta.189.i_malloccache, i64 %76
+  %78 = load i32, i32* %77, align 4, !invariant.group !455
+  %inc31.i_unwrap = add nsw i32 %78, 1
+  %idxprom33.i_unwrap = sext i32 %inc31.i_unwrap to i64
+  %"arrayidx34.i'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33.i_unwrap, !node !285
+  %79 = load double, double* %"arrayidx34.i'ipg_unwrap", align 8, !node !285
+  %80 = fadd fast double %79, %74, !node !285
+  %inc530 = add i32 %reverse_op.2, 9
+  %inc532 = add i32 %reverse_mem.4.in, 22
+  store double %80, double* %"arrayidx34.i'ipg_unwrap", align 8
+  br label %invertfor.body22.i
+
+invertif.end.i:                                   ; preds = %invertfor.end45.i, %incinvertfor.body22.i
+  %"iv3'ac.0" = phi i64 [ 2, %invertfor.end45.i ], [ %71, %incinvertfor.body22.i ]
+  %reverse_mem.4.in = phi i32 [ %reverse_mem.5, %invertfor.end45.i ], [ %inc474, %incinvertfor.body22.i ]
+  %reverse_op.2 = phi i32 [ %reverse_op.3, %invertfor.end45.i ], [ %inc476, %incinvertfor.body22.i ]
+  %inc536 = add i32 %reverse_mem.4.in, 3
+  %inc538 = add i32 %reverse_op.2, 1
+  %81 = trunc i64 %"iv3'ac.0" to i32
+  %cmp32.i_unwrap = icmp eq i32 %81, 0
+  br i1 %cmp32.i_unwrap, label %invertif.then.i, label %invertfor.body22.i
+
+invertfor.end45.i:                                ; preds = %invertto_pose_params.exit, %incinvertfor.cond20.preheader.i
+  %"iv1'ac.0" = phi i64 [ 4, %invertto_pose_params.exit ], [ %60, %incinvertfor.cond20.preheader.i ]
+  %reverse_mem.5 = phi i32 [ %reverse_mem.6, %invertto_pose_params.exit ], [ %inc418, %incinvertfor.cond20.preheader.i ]
+  %reverse_op.3 = phi i32 [ %reverse_op.4, %invertto_pose_params.exit ], [ %inc416, %incinvertfor.cond20.preheader.i ]
+  br label %invertif.end.i
+
+invertto_pose_params.exit:                        ; preds = %invertfor.end51, %invertfor.body.lr.ph
+  %reverse_mem.6 = phi i32 [ %phi.bo, %invertfor.body.lr.ph ], [ 1, %invertfor.end51 ]
+  %reverse_op.4 = phi i32 [ %inc576, %invertfor.body.lr.ph ], [ 0, %invertfor.end51 ]
+  call fastcc void @diffe_ZL28get_skinned_vertex_positionsiPK6MatrixPKiS1_S1_S1_iS1_PS_i.15(i32 %bone_count, %struct.Matrix* %base_relatives, i32* %parents, %struct.Matrix* %inverse_base_absolutes, %struct.Matrix* %base_positions, %struct.Matrix* %weights, i32 %is_mirrored, %struct.Matrix* nonnull %0, %struct.Matrix* nonnull %"'ipc28", %struct.Matrix* nonnull %26, %struct.Matrix* nonnull %"'ipc29", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %_augmented), !node !285
+  tail call void @free(i8* nonnull %"call.i84'mi")
+  tail call void @free(i8* nonnull %call.i84)
+  br label %invertfor.end45.i
+
+invertfor.body.lr.ph:                             ; preds = %invertfor.body
+  %reverse_mem.7.in.lcssa.lcssa = phi i32 [ %reverse_mem.7.in.lcssa, %invertfor.body ]
+  %reverse_op.5.lcssa.lcssa = phi i32 [ %reverse_op.5.lcssa, %invertfor.body ]
+  %inc576 = add i32 %reverse_op.5.lcssa.lcssa, 65
+  %82 = bitcast double* %_cache.0 to i8*, !node !285
+  tail call void @free(i8* nonnull %82), !node !285
+  %83 = bitcast double* %_cache39.0 to i8*, !node !285
+  tail call void @free(i8* nonnull %83), !node !285
+  %84 = bitcast double* %_cache45.0 to i8*, !node !285
+  tail call void @free(i8* nonnull %84), !node !285
+  %85 = bitcast double* %_cache53.0 to i8*, !node !285
+  tail call void @free(i8* nonnull %85), !node !285
+  %86 = bitcast double* %_cache62.0 to i8*, !node !285
+  tail call void @free(i8* nonnull %86), !node !285
+  %phi.bo = add i32 %reverse_mem.7.in.lcssa.lcssa, 131
+  br label %invertto_pose_params.exit
+
 invertfor.body:                                   ; preds = %invertfor.body9
-  %33 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %33, label %invertfor.body.lr.ph, label %invertfor.end
+  %reverse_mem.7.in.lcssa = phi i32 [ %reverse_mem.7.in, %invertfor.body9 ]
+  %reverse_op.5.lcssa = phi i32 [ %reverse_op.5, %invertfor.body9 ]
+  %87 = icmp eq i64 %"iv6'ac.0", 0
+  br i1 %87, label %invertfor.body.lr.ph, label %incinvertfor.body
+
+incinvertfor.body:                                ; preds = %invertfor.body
+  %inc580 = add i32 %reverse_op.5.lcssa, 66
+  %inc582 = add i32 %reverse_mem.7.in.lcssa, 117
+  br label %invertfor.end
 
 invertfor.body9:                                  ; preds = %invertfor.end, %incinvertfor.body9
-  %"iv2'ac.0" = phi i64 [ 2, %invertfor.end ], [ %64, %incinvertfor.body9 ]
-  %_unwrap = mul nuw nsw i64 %"iv'ac.0", 3
-  %_unwrap10 = add nuw nsw i64 %"iv2'ac.0", %_unwrap
-  %"arrayidx48'ipg_unwrap" = getelementptr inbounds double, double* %"err'", i64 %_unwrap10
-  %34 = load double, double* %"arrayidx48'ipg_unwrap", align 8
+  %"iv8'ac.0" = phi i64 [ 2, %invertfor.end ], [ %118, %incinvertfor.body9 ]
+  %reverse_mem.7.in = phi i32 [ %reverse_mem.8, %invertfor.end ], [ %inc938, %incinvertfor.body9 ]
+  %reverse_op.5 = phi i32 [ %reverse_op.6, %invertfor.end ], [ %inc940, %incinvertfor.body9 ]
+  %_unwrap34 = mul nuw nsw i64 %"iv6'ac.0", 3, !node !285
+  %_unwrap35 = add nuw nsw i64 %"iv8'ac.0", %_unwrap34, !node !285
+  %"arrayidx48'ipg_unwrap" = getelementptr inbounds double, double* %"err'", i64 %_unwrap35, !node !285
+  %88 = load double, double* %"arrayidx48'ipg_unwrap", align 8, !node !285
   store double 0.000000e+00, double* %"arrayidx48'ipg_unwrap", align 8
-  %35 = getelementptr inbounds double, double* %_cache.0, i64 %_unwrap10
-  %36 = load double, double* %35, align 8, !invariant.group !441
-  %37 = getelementptr inbounds double, double* %_cache12.0, i64 %_unwrap10
-  %38 = load double, double* %37, align 8, !invariant.group !442
-  %_unwrap17 = fadd fast double %36, %38
-  %sub28_unwrap = fsub fast double 1.000000e+00, %_unwrap17
-  %39 = getelementptr inbounds double, double* %_cache18.0, i64 %_unwrap10
-  %40 = load double, double* %39, align 8, !invariant.group !444
-  %41 = getelementptr inbounds double, double* %_cache25.0, i64 %_unwrap10
-  %42 = load double, double* %41, align 8, !invariant.group !445
-  %43 = getelementptr inbounds double, double* %_cache34.0, i64 %_unwrap10
-  %44 = load double, double* %43, align 8, !invariant.group !443
+  %89 = getelementptr inbounds double, double* %_cache.0, i64 %_unwrap35, !node !285
+  %90 = load double, double* %89, align 8, !invariant.group !461, !node !285
+  %91 = getelementptr inbounds double, double* %_cache39.0, i64 %_unwrap35, !node !285
+  %92 = load double, double* %91, align 8, !invariant.group !462, !node !285
+  %_unwrap44 = fadd fast double %90, %92, !node !285
+  %sub28_unwrap = fsub fast double 1.000000e+00, %_unwrap44, !node !285
+  %93 = getelementptr inbounds double, double* %_cache45.0, i64 %_unwrap35, !node !285
+  %94 = load double, double* %93, align 8, !invariant.group !464, !node !285
+  %95 = getelementptr inbounds double, double* %_cache53.0, i64 %_unwrap35, !node !285
+  %96 = load double, double* %95, align 8, !invariant.group !465, !node !285
+  %97 = getelementptr inbounds double, double* %_cache62.0, i64 %_unwrap35, !node !285
+  %98 = load double, double* %97, align 8, !invariant.group !463, !node !285
   %"data'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i84'mi", i64 8
-  %"'ipc8_unwrap" = bitcast i8* %"data'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc8_unwrap", align 8, !invariant.group !446
-  %arrayidx_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv'ac.0"
-  %_unwrap44 = load i32, i32* %arrayidx_unwrap, align 4, !tbaa !59, !invariant.group !437
-  %idxprom2_unwrap = sext i32 %_unwrap44 to i64
-  %arrayidx30_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 2
-  %_unwrap45 = load i32, i32* %arrayidx30_unwrap, align 4, !tbaa !59, !invariant.group !440
+  %"'ipc32_unwrap" = bitcast i8* %"data'ipg_unwrap" to double**
+  %"'ipl_unwrap" = load double*, double** %"'ipc32_unwrap", align 8, !invariant.group !466
+  %arrayidx_unwrap = getelementptr inbounds i32, i32* %correspondences, i64 %"iv6'ac.0", !node !285
+  %_unwrap72 = load i32, i32* %arrayidx_unwrap, align 4, !tbaa !59, !invariant.group !457, !node !285
+  %idxprom2_unwrap = sext i32 %_unwrap72 to i64, !node !285
+  %arrayidx30_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 2, !node !285
+  %_unwrap73 = load i32, i32* %arrayidx30_unwrap, align 4, !tbaa !59, !invariant.group !460, !node !285
   %nrows_unwrap = bitcast i8* %call.i84 to i32*
-  %_unwrap46 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !436
-  %mul32_unwrap = mul nsw i32 %_unwrap45, %_unwrap46
-  %_unwrap47 = sext i32 %mul32_unwrap to i64
-  %_unwrap48 = add nsw i64 %"iv2'ac.0", %_unwrap47
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap48
-  %45 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %46 = fmul fast double %34, %sub28_unwrap
-  %47 = fsub fast double %45, %46
-  store double %47, double* %"arrayidx35'ipg_unwrap", align 8
-  %48 = fmul fast double %40, %34
-  %49 = fmul fast double %34, %44
-  %50 = fsub fast double %48, %49
-  %51 = fmul fast double %34, %42
-  %52 = fsub fast double %48, %51
-  %arrayidx18_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 1
-  %_unwrap50 = load i32, i32* %arrayidx18_unwrap, align 4, !tbaa !59, !invariant.group !439
-  %mul20_unwrap = mul nsw i32 %_unwrap50, %_unwrap46
-  %_unwrap51 = sext i32 %mul20_unwrap to i64
-  %_unwrap52 = add nsw i64 %"iv2'ac.0", %_unwrap51
-  %"arrayidx23'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap52
-  %53 = load double, double* %"arrayidx23'ipg_unwrap", align 8
-  %54 = fmul fast double %34, %38
-  %55 = fsub fast double %53, %54
-  store double %55, double* %"arrayidx23'ipg_unwrap", align 8
-  %_unwrap53 = shl nuw nsw i64 %"iv'ac.0", 1
-  %"arrayidx6'ipg_unwrap" = getelementptr inbounds double, double* %"us'", i64 %_unwrap53
-  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx6'ipg_unwrap", i64 1
-  %56 = load double, double* %"arrayidx16'ipg_unwrap", align 8
-  %57 = fadd fast double %56, %52
-  store double %57, double* %"arrayidx16'ipg_unwrap", align 8
-  %arraydecay_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 0
-  %_unwrap54 = load i32, i32* %arraydecay_unwrap, align 4, !tbaa !59, !invariant.group !438
-  %mul12_unwrap = mul nsw i32 %_unwrap46, %_unwrap54
-  %_unwrap55 = sext i32 %mul12_unwrap to i64
-  %_unwrap56 = add nsw i64 %"iv2'ac.0", %_unwrap55
-  %"arrayidx14'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap56
-  %58 = load double, double* %"arrayidx14'ipg_unwrap", align 8
-  %59 = fmul fast double %34, %36
-  %60 = fsub fast double %58, %59
-  store double %60, double* %"arrayidx14'ipg_unwrap", align 8
-  %61 = load double, double* %"arrayidx6'ipg_unwrap", align 8
-  %62 = fadd fast double %61, %50
-  store double %62, double* %"arrayidx6'ipg_unwrap", align 8
-  %63 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %63, label %invertfor.body, label %incinvertfor.body9
+  %_unwrap74 = load i32, i32* %nrows_unwrap, align 8, !tbaa !138, !invariant.group !456
+  %mul32_unwrap = mul nsw i32 %_unwrap73, %_unwrap74, !node !285
+  %_unwrap75 = sext i32 %mul32_unwrap to i64, !node !285
+  %_unwrap76 = add nsw i64 %"iv8'ac.0", %_unwrap75, !node !285
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap76, !node !285
+  %99 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %100 = fmul fast double %88, %sub28_unwrap
+  %101 = fsub fast double %99, %100
+  store double %101, double* %"arrayidx35'ipg_unwrap", align 8
+  %102 = fmul fast double %94, %88
+  %103 = fmul fast double %88, %98
+  %104 = fsub fast double %102, %103
+  %105 = fmul fast double %88, %96
+  %106 = fsub fast double %102, %105
+  %arrayidx18_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 1, !node !285
+  %_unwrap78 = load i32, i32* %arrayidx18_unwrap, align 4, !tbaa !59, !invariant.group !459, !node !285
+  %mul20_unwrap = mul nsw i32 %_unwrap78, %_unwrap74, !node !285
+  %_unwrap79 = sext i32 %mul20_unwrap to i64, !node !285
+  %_unwrap80 = add nsw i64 %"iv8'ac.0", %_unwrap79, !node !285
+  %"arrayidx23'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap80, !node !285
+  %107 = load double, double* %"arrayidx23'ipg_unwrap", align 8, !node !285
+  %108 = fmul fast double %88, %92
+  %109 = fsub fast double %107, %108
+  store double %109, double* %"arrayidx23'ipg_unwrap", align 8
+  %_unwrap81 = shl nuw nsw i64 %"iv6'ac.0", 1, !node !285
+  %"arrayidx6'ipg_unwrap" = getelementptr inbounds double, double* %"us'", i64 %_unwrap81, !node !285
+  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %"arrayidx6'ipg_unwrap", i64 1, !node !285
+  %110 = load double, double* %"arrayidx16'ipg_unwrap", align 8, !node !285
+  %111 = fadd fast double %110, %106, !node !285
+  store double %111, double* %"arrayidx16'ipg_unwrap", align 8
+  %arraydecay_unwrap = getelementptr inbounds %struct.Triangle, %struct.Triangle* %triangles, i64 %idxprom2_unwrap, i32 0, i64 0, !node !285
+  %_unwrap82 = load i32, i32* %arraydecay_unwrap, align 4, !tbaa !59, !invariant.group !458, !node !285
+  %mul12_unwrap = mul nsw i32 %_unwrap74, %_unwrap82, !node !285
+  %_unwrap83 = sext i32 %mul12_unwrap to i64, !node !285
+  %_unwrap84 = add nsw i64 %"iv8'ac.0", %_unwrap83, !node !285
+  %"arrayidx14'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap84, !node !285
+  %112 = load double, double* %"arrayidx14'ipg_unwrap", align 8, !node !285
+  %113 = fmul fast double %88, %90
+  %114 = fsub fast double %112, %113
+  store double %114, double* %"arrayidx14'ipg_unwrap", align 8
+  %115 = load double, double* %"arrayidx6'ipg_unwrap", align 8, !node !285
+  %116 = fadd fast double %115, %104, !node !285
+  store double %116, double* %"arrayidx6'ipg_unwrap", align 8
+  %117 = icmp eq i64 %"iv8'ac.0", 0
+  br i1 %117, label %invertfor.body, label %incinvertfor.body9
 
 incinvertfor.body9:                               ; preds = %invertfor.body9
-  %64 = add nsw i64 %"iv2'ac.0", -1
+  %inc938 = add i32 %reverse_mem.7.in, 115
+  %118 = add nsw i64 %"iv8'ac.0", -1
+  %inc940 = add i32 %reverse_op.5, 65
   br label %invertfor.body9
 
-invertfor.end:                                    ; preds = %invertfor.body, %mergeinvertfor.body_for.end51.loopexit
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count_unwrap57, %mergeinvertfor.body_for.end51.loopexit ], [ %"iv'ac.0", %invertfor.body ]
-  %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
+invertfor.end:                                    ; preds = %mergeinvertfor.body_for.end51.loopexit, %incinvertfor.body
+  %"iv6'ac.0.in" = phi i64 [ %wide.trip.count_unwrap85, %mergeinvertfor.body_for.end51.loopexit ], [ %"iv6'ac.0", %incinvertfor.body ]
+  %reverse_mem.8 = phi i32 [ 1, %mergeinvertfor.body_for.end51.loopexit ], [ %inc582, %incinvertfor.body ]
+  %reverse_op.6 = phi i32 [ 1, %mergeinvertfor.body_for.end51.loopexit ], [ %inc580, %incinvertfor.body ]
+  %"iv6'ac.0" = add nsw i64 %"iv6'ac.0.in", -1
   br label %invertfor.body9
 
 mergeinvertfor.body_for.end51.loopexit:           ; preds = %invertfor.end51
-  %wide.trip.count_unwrap57 = zext i32 %corresp_count to i64
+  %wide.trip.count_unwrap85 = zext i32 %corresp_count to i64, !node !285
   br label %invertfor.end
 
-invertfor.end51:                                  ; preds = %for.end, %entry
-  %_cache34.0 = phi double* [ undef, %entry ], [ %_malloccache37, %for.end ]
-  %_cache25.0 = phi double* [ undef, %entry ], [ %_malloccache28, %for.end ]
-  %_cache18.0 = phi double* [ undef, %entry ], [ %_malloccache21, %for.end ]
-  %_cache12.0 = phi double* [ undef, %entry ], [ %_malloccache15, %for.end ]
-  %_cache.0 = phi double* [ undef, %entry ], [ %_malloccache, %for.end ]
-  br i1 %cmp89, label %mergeinvertfor.body_for.end51.loopexit, label %invertentry
+invertfor.end51:                                  ; preds = %for.end, %to_pose_params.exit
+  %_cache62.0 = phi double* [ undef, %to_pose_params.exit ], [ %_malloccache65, %for.end ]
+  %_cache53.0 = phi double* [ undef, %to_pose_params.exit ], [ %_malloccache56, %for.end ]
+  %_cache45.0 = phi double* [ undef, %to_pose_params.exit ], [ %_malloccache48, %for.end ]
+  %_cache39.0 = phi double* [ undef, %to_pose_params.exit ], [ %_malloccache42, %for.end ]
+  %_cache.0 = phi double* [ undef, %to_pose_params.exit ], [ %_malloccache, %for.end ]
+  %forward_mem.7 = phi i32 [ %forward_mem.4.lcssa.lcssa, %to_pose_params.exit ], [ %inc344.lcssa, %for.end ]
+  %forward_op.7 = phi i32 [ %inc220.lcssa, %to_pose_params.exit ], [ %inc346.lcssa, %for.end ]
+  br i1 %cmp89, label %mergeinvertfor.body_for.end51.loopexit, label %invertto_pose_params.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -19391,9 +21554,9 @@ for.body3:                                        ; preds = %for.body3, %for.con
   %mul11 = fmul fast double %24, %22
   store double %mul11, double* %arrayidx10, align 8, !tbaa !75
   %25 = getelementptr inbounds double, double* %_malloccache26, i64 %23
-  store double %24, double* %25, align 8, !invariant.group !447
+  store double %24, double* %25, align 8, !invariant.group !467
   %26 = getelementptr inbounds double, double* %_malloccache, i64 %23
-  store double %22, double* %26, align 8, !invariant.group !448
+  store double %22, double* %26, align 8, !invariant.group !468
   %exitcond102.not = icmp eq i64 %iv.next3, 3
   br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
 
@@ -19471,11 +21634,11 @@ for.body22.lr.ph:                                 ; preds = %for.cond19.preheade
   %mul31 = shl nsw i32 %49, 1
   %"'ipl17" = load double*, double** %"data36'ipg", align 8
   %50 = getelementptr inbounds double*, double** %"'ipl17_malloccache", i64 %iv4
-  store double* %"'ipl17", double** %50, align 8, !invariant.group !449
+  store double* %"'ipl17", double** %50, align 8, !invariant.group !469
   %51 = getelementptr inbounds i32, i32* %mul31_malloccache, i64 %iv4
-  store i32 %mul31, i32* %51, align 4, !invariant.group !450
+  store i32 %mul31, i32* %51, align 4, !invariant.group !470
   %52 = getelementptr inbounds double*, double** %"'ipl18_malloccache", i64 %iv4
-  store double* %"'ipl18", double** %52, align 8, !invariant.group !451
+  store double* %"'ipl18", double** %52, align 8, !invariant.group !471
   %53 = load double*, double** %data36, align 8, !tbaa !137
   %54 = sext i32 %mul31 to i64
   %55 = mul nsw i64 %iv4, %36
@@ -19619,9 +21782,9 @@ for.body:                                         ; preds = %for.body, %for.body
   %arrayidx6 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv
   %_augmented26 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx, %struct.Matrix* nonnull %"arrayidx'ipg", %struct.Matrix* %arrayidx4, %struct.Matrix* %arrayidx6, %struct.Matrix* nonnull %"arrayidx6'ipg")
   %21 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented26_malloccache, i64 %iv
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !452
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented26, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %21, align 8, !invariant.group !472
   %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
-  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !206
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
 
 for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
   %ncols = getelementptr inbounds %struct.Matrix, %struct.Matrix* %base_positions, i64 0, i32 1
@@ -19790,7 +21953,7 @@ for.body11:                                       ; preds = %for.inc43, %for.bod
   %arrayidx13 = getelementptr inbounds %struct.Matrix, %struct.Matrix* %17, i64 %iv1
   %_augmented31 = call { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } @augmented_mat_mult.4(%struct.Matrix* %arrayidx13, %struct.Matrix* nonnull %"arrayidx13'ipg", %struct.Matrix* %base_positions, %struct.Matrix* nonnull %36, %struct.Matrix* nonnull %"'ipc30")
   %54 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_augmented31_malloccache, i64 %iv1
-  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %54, align 8, !invariant.group !453
+  store { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %_augmented31, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %54, align 8, !invariant.group !473
   br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
 
 for.cond18.preheader.lr.ph:                       ; preds = %for.body11
@@ -19801,11 +21964,11 @@ for.cond18.preheader.lr.ph:                       ; preds = %for.body11
   %58 = load i32, i32* %nrows24, align 8, !tbaa !138
   %"'ipl" = load double*, double** %"data30'ipg", align 8
   %59 = getelementptr inbounds double*, double** %"'ipl_malloccache", i64 %iv1
-  store double* %"'ipl", double** %59, align 8, !invariant.group !454
+  store double* %"'ipl", double** %59, align 8, !invariant.group !474
   %60 = getelementptr inbounds i32, i32* %_malloccache, i64 %iv1
-  store i32 %56, i32* %60, align 4, !invariant.group !455
+  store i32 %56, i32* %60, align 4, !invariant.group !475
   %61 = getelementptr inbounds double*, double** %"'ipl37_malloccache", i64 %iv1
-  store double* %"'ipl37", double** %61, align 8, !invariant.group !456
+  store double* %"'ipl37", double** %61, align 8, !invariant.group !476
   %62 = load double*, double** %data30, align 8, !tbaa !137
   %63 = sext i32 %56 to i64
   %64 = sext i32 %58 to i64
@@ -19837,17 +22000,17 @@ for.body20:                                       ; preds = %for.body20, %for.co
   %74 = mul nuw nsw i64 %iv1, %50
   %75 = add nuw nsw i64 %72, %74
   %76 = getelementptr inbounds double, double* %_malloccache51, i64 %75
-  store double %71, double* %76, align 8, !invariant.group !457
+  store double %71, double* %76, align 8, !invariant.group !477
   %exitcond86.not = icmp eq i64 %iv.next9, 3
-  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !207
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
 
 for.inc40:                                        ; preds = %for.body20
   %exitcond94.not = icmp eq i64 %iv.next7, %wide.trip.count93
-  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !208
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
 
 for.inc43:                                        ; preds = %for.inc40, %for.body11
   %exitcond98.not = icmp eq i64 %iv.next2, %wide.trip.count97
-  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !209
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
 
 for.end45:                                        ; preds = %for.inc43, %fill.exit
   %tobool.not = icmp ne i32 %is_mirrored, 0
@@ -19880,9 +22043,9 @@ for.body49:                                       ; preds = %for.body49, %for.bo
   %mul56 = fneg fast double %82
   store double %mul56, double* %arrayidx55, align 8, !tbaa !75
   %83 = getelementptr inbounds double, double* %_malloccache55, i64 %iv11
-  store double %82, double* %83, align 8, !invariant.group !458
+  store double %82, double* %83, align 8, !invariant.group !478
   %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
-  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !210
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
 
 if.then61:                                        ; preds = %for.body49, %for.end45
   %_augmented41 = call { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } @augmented_apply_global_transform.13(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'")
@@ -19906,7 +22069,7 @@ for.body.i31:                                     ; preds = %for.body.i31, %for.
   %cmp1.not.i = icmp eq double* %87, null
   %88 = getelementptr inbounds i8, i8* %malloccall56, i64 %iv14
   %89 = bitcast i8* %88 to i1*
-  store i1 %cmp1.not.i, i1* %89, align 1, !invariant.group !459
+  store i1 %cmp1.not.i, i1* %89, align 1, !invariant.group !479
   %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
   br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
 
@@ -19925,7 +22088,7 @@ for.body.i41:                                     ; preds = %for.body.i41, %for.
   %cmp1.not.i40 = icmp eq double* %92, null
   %93 = getelementptr inbounds i8, i8* %malloccall57, i64 %iv17
   %94 = bitcast i8* %93 to i1*
-  store i1 %cmp1.not.i40, i1* %94, align 1, !invariant.group !460
+  store i1 %cmp1.not.i40, i1* %94, align 1, !invariant.group !480
   %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
   br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
 
@@ -19944,7 +22107,7 @@ for.body.i53:                                     ; preds = %for.body.i53, %for.
   %cmp1.not.i52 = icmp eq double* %97, null
   %98 = getelementptr inbounds i8, i8* %malloccall58, i64 %iv20
   %99 = bitcast i8* %98 to i1*
-  store i1 %cmp1.not.i52, i1* %99, align 1, !invariant.group !461
+  store i1 %cmp1.not.i52, i1* %99, align 1, !invariant.group !481
   %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
   br i1 %exitcond.not.i56, label %delete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
@@ -19960,12 +22123,12 @@ entry:
   %1 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 19
   %2 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 20
   %3 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 21
-  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 27
-  %5 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 28
-  %6 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 29
-  %7 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 30
-  %8 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 31
-  %9 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 32
+  %4 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 28
+  %5 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 29
+  %6 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 30
+  %7 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 31
+  %8 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 32
+  %9 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 27
   %call.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 1
   %"call.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 0
   %cmp15.i = icmp sgt i32 %bone_count, 0
@@ -20001,80 +22164,200 @@ get_matrix_array.exit12:                          ; preds = %for.body.preheader.
   br i1 %cmp15.i, label %for.body.preheader, label %for.end
 
 for.body.preheader:                               ; preds = %get_matrix_array.exit12
-  %wide.trip.count101 = zext i32 %bone_count to i64, !node !273
-  br label %for.end
+  %wide.trip.count101 = zext i32 %bone_count to i64, !node !285
+  br label %for.body
 
-for.end:                                          ; preds = %for.body.preheader, %get_matrix_array.exit12
+for.body:                                         ; preds = %for.body, %for.body.preheader
+  %forward_mem.0 = phi i32 [ 16, %for.body.preheader ], [ %inc166, %for.body ]
+  %forward_op.0 = phi i32 [ 3, %for.body.preheader ], [ %inc162, %for.body ]
+  %iv = phi i64 [ 0, %for.body.preheader ], [ %iv.next, %for.body ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc162 = add i32 %forward_op.0, 1
+  %inc166 = add i32 %forward_mem.0, 2
+  %exitcond102.not = icmp eq i64 %iv.next, %wide.trip.count101
+  br i1 %exitcond102.not, label %for.end, label %for.body, !llvm.loop !212
+
+for.end:                                          ; preds = %for.body, %get_matrix_array.exit12
+  %forward_mem.1 = phi i32 [ 16, %get_matrix_array.exit12 ], [ %inc166, %for.body ]
+  %forward_op.1 = phi i32 [ 1, %get_matrix_array.exit12 ], [ %inc162, %for.body ]
   %15 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 24
   %mul.i13 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 25
   %mul3.i = mul i32 %15, 3
+  %inc168 = add i32 %forward_op.1, 1
   %cmp.not.i = icmp eq i32 %mul.i13, %mul3.i
   br i1 %cmp.not.i, label %resize.exit, label %if.end.i
 
 if.end.i:                                         ; preds = %for.end
   %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %for.body.lr.ph.i, label %fill.exit
+  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread69
+
+resize.exit.thread:                               ; preds = %if.end.i
+  %inc170 = add i32 %forward_op.1, 2
+  br label %for.body.lr.ph.i
+
+resize.exit.thread69:                             ; preds = %if.end.i
+  %inc172 = add i32 %forward_mem.1, 1
+  br label %fill.exit
 
 resize.exit:                                      ; preds = %for.end
   %cmp7.i = icmp sgt i32 %mul.i13, 0
+  %inc174 = add i32 %forward_mem.1, 1
   br i1 %cmp7.i, label %for.body.lr.ph.i, label %fill.exit
 
-for.body.lr.ph.i:                                 ; preds = %resize.exit, %if.end.i
+for.body.lr.ph.i:                                 ; preds = %resize.exit, %resize.exit.thread
+  %forward_mem.2 = phi i32 [ %forward_mem.1, %resize.exit.thread ], [ %inc174, %resize.exit ]
+  %forward_op.2 = phi i32 [ %inc170, %resize.exit.thread ], [ %inc168, %resize.exit ]
+  %inc176 = add i32 %forward_mem.2, 1
   br label %fill.exit
 
-fill.exit:                                        ; preds = %if.end.i, %for.body.lr.ph.i, %resize.exit
-  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 0, %if.end.i ]
+fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread69
+  %_cache.0 = phi i8 [ 0, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 1, %resize.exit.thread69 ]
+  %forward_mem.3 = phi i32 [ %inc176, %for.body.lr.ph.i ], [ %inc174, %resize.exit ], [ %inc172, %resize.exit.thread69 ]
+  %forward_op.3 = phi i32 [ %forward_op.2, %for.body.lr.ph.i ], [ %inc168, %resize.exit ], [ %inc168, %resize.exit.thread69 ]
   %call.i16 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 18
   %"call.i16'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 17
   %"'ipc41" = bitcast i8* %"call.i16'mi" to %struct.Matrix*
   %16 = bitcast i8* %call.i16 to %struct.Matrix*
+  %inc180 = add i32 %forward_op.3, 2
   %call4.i = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 16
   %"call4.i'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 15
   br i1 %cmp15.i, label %for.body11.lr.ph, label %for.end45
 
 for.body11.lr.ph:                                 ; preds = %fill.exit
   %cmp1674 = icmp sgt i32 %15, 0
-  %wide.trip.count97 = zext i32 %bone_count to i64, !node !273
+  %wide.trip.count97 = zext i32 %bone_count to i64, !node !285
   %wide.trip.count93 = zext i32 %15 to i64
-  br label %for.end45
+  %inc196 = add i32 %forward_op.3, 10
+  br label %for.body11
 
-for.end45:                                        ; preds = %for.body11.lr.ph, %fill.exit
+for.body11:                                       ; preds = %for.inc43, %for.body11.lr.ph
+  %forward_mem.4 = phi i32 [ %forward_mem.3, %for.body11.lr.ph ], [ %forward_mem.7, %for.inc43 ]
+  %forward_op.4 = phi i32 [ %inc196, %for.body11.lr.ph ], [ %forward_op.7, %for.inc43 ]
+  %iv1 = phi i64 [ 0, %for.body11.lr.ph ], [ %iv.next2, %for.inc43 ]
+  %iv.next2 = add nuw nsw i64 %iv1, 1
+  %inc198 = add i32 %forward_op.4, 1
+  %inc202 = add i32 %forward_mem.4, 2
+  br i1 %cmp1674, label %for.cond18.preheader.lr.ph, label %for.inc43
+
+for.cond18.preheader.lr.ph:                       ; preds = %for.body11
+  %inc214 = add i32 %forward_mem.4, 8
+  br label %for.cond18.preheader
+
+for.cond18.preheader:                             ; preds = %for.inc40, %for.cond18.preheader.lr.ph
+  %forward_mem.5 = phi i32 [ %inc214, %for.cond18.preheader.lr.ph ], [ %inc240.lcssa, %for.inc40 ]
+  %forward_op.5 = phi i32 [ %inc198, %for.cond18.preheader.lr.ph ], [ %inc254.lcssa, %for.inc40 ]
+  %iv6 = phi i64 [ 0, %for.cond18.preheader.lr.ph ], [ %iv.next7, %for.inc40 ]
+  %iv.next7 = add nuw nsw i64 %iv6, 1
+  %inc220 = add i32 %forward_op.5, 3
+  br label %for.body20
+
+for.body20:                                       ; preds = %for.body20, %for.cond18.preheader
+  %forward_mem.6 = phi i32 [ %forward_mem.5, %for.cond18.preheader ], [ %inc240, %for.body20 ]
+  %forward_op.6 = phi i32 [ %inc220, %for.cond18.preheader ], [ %inc254, %for.body20 ]
+  %iv8 = phi i64 [ 0, %for.cond18.preheader ], [ %iv.next9, %for.body20 ]
+  %iv.next9 = add nuw nsw i64 %iv8, 1
+  %inc240 = add i32 %forward_mem.6, 2
+  %inc254 = add i32 %forward_op.6, 15
+  %exitcond86.not = icmp eq i64 %iv.next9, 3
+  br i1 %exitcond86.not, label %for.inc40, label %for.body20, !llvm.loop !213
+
+for.inc40:                                        ; preds = %for.body20
+  %inc240.lcssa = phi i32 [ %inc240, %for.body20 ]
+  %inc254.lcssa = phi i32 [ %inc254, %for.body20 ]
+  %exitcond94.not = icmp eq i64 %iv.next7, %wide.trip.count93
+  br i1 %exitcond94.not, label %for.inc43, label %for.cond18.preheader, !llvm.loop !214
+
+for.inc43:                                        ; preds = %for.inc40, %for.body11
+  %forward_mem.7 = phi i32 [ %inc202, %for.body11 ], [ %inc240.lcssa, %for.inc40 ]
+  %forward_op.7 = phi i32 [ %inc198, %for.body11 ], [ %inc254.lcssa, %for.inc40 ]
+  %exitcond98.not = icmp eq i64 %iv.next2, %wide.trip.count97
+  br i1 %exitcond98.not, label %for.end45, label %for.body11, !llvm.loop !215
+
+for.end45:                                        ; preds = %for.inc43, %fill.exit
+  %forward_mem.8 = phi i32 [ %forward_mem.3, %fill.exit ], [ %forward_mem.7, %for.inc43 ]
+  %forward_op.8 = phi i32 [ %inc180, %fill.exit ], [ %forward_op.7, %for.inc43 ]
   %tobool.not = icmp ne i32 %is_mirrored, 0
   %cmp4871 = icmp sgt i32 %15, 0
   %or.cond = and i1 %tobool.not, %cmp4871
+  %inc256 = add i32 %forward_op.8, 1
   br i1 %or.cond, label %for.body49.lr.ph, label %if.then61
 
 for.body49.lr.ph:                                 ; preds = %for.end45
   %wide.trip.count = zext i32 %15 to i64
-  br label %if.then61
+  %inc260 = add i32 %forward_op.8, 3
+  br label %for.body49
 
-if.then61:                                        ; preds = %for.body49.lr.ph, %for.end45
+for.body49:                                       ; preds = %for.body49, %for.body49.lr.ph
+  %forward_mem.9 = phi i32 [ %forward_mem.8, %for.body49.lr.ph ], [ %inc268, %for.body49 ]
+  %forward_op.9 = phi i32 [ %inc260, %for.body49.lr.ph ], [ %inc264, %for.body49 ]
+  %iv11 = phi i64 [ 0, %for.body49.lr.ph ], [ %iv.next12, %for.body49 ]
+  %iv.next12 = add nuw nsw i64 %iv11, 1
+  %inc264 = add i32 %forward_op.9, 2
+  %inc268 = add i32 %forward_mem.9, 2
+  %exitcond.not = icmp eq i64 %iv.next12, %wide.trip.count
+  br i1 %exitcond.not, label %if.then61, label %for.body49, !llvm.loop !216
+
+if.then61:                                        ; preds = %for.body49, %for.end45
+  %forward_mem.10 = phi i32 [ %forward_mem.8, %for.end45 ], [ %inc268, %for.body49 ]
+  %forward_op.10 = phi i32 [ %inc256, %for.end45 ], [ %inc264, %for.body49 ]
   %tapeArg87 = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 23
-  br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_matrix.exit
+  %inc270 = add i32 %forward_mem.10, 1
+  br i1 %cmp15.i, label %for.body.preheader.i28, label %invertdelete_light_matrix_array.exit58
 
 for.body.preheader.i28:                           ; preds = %if.then61
-  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !273
-  %wide.trip.count.i27_unwrap110 = zext i32 %bone_count to i64
-  %_unwrap111 = add nsw i64 %wide.trip.count.i27_unwrap110, -1
-  %17 = bitcast i1* %9 to i8*
-  tail call void @free(i8* nonnull %17)
-  %18 = bitcast i1* %8 to i8*
-  tail call void @free(i8* nonnull %18)
-  %19 = bitcast i1* %7 to i8*
-  tail call void @free(i8* nonnull %19)
-  br label %invertdelete_matrix.exit
+  %wide.trip.count.i27 = zext i32 %bone_count to i64, !node !285
+  %inc274 = add i32 %forward_op.10, 2
+  br label %for.body.i31
+
+for.body.i31:                                     ; preds = %for.body.i31, %for.body.preheader.i28
+  %forward_mem.11 = phi i32 [ %inc270, %for.body.preheader.i28 ], [ %inc280, %for.body.i31 ]
+  %forward_op.11 = phi i32 [ %inc274, %for.body.preheader.i28 ], [ %inc276, %for.body.i31 ]
+  %iv14 = phi i64 [ 0, %for.body.preheader.i28 ], [ %iv.next15, %for.body.i31 ]
+  %iv.next15 = add nuw nsw i64 %iv14, 1
+  %inc276 = add i32 %forward_op.11, 1
+  %inc280 = add i32 %forward_mem.11, 2
+  %exitcond.not.i34 = icmp eq i64 %iv.next15, %wide.trip.count.i27
+  br i1 %exitcond.not.i34, label %for.body.preheader.i37, label %for.body.i31, !llvm.loop !184
+
+for.body.preheader.i37:                           ; preds = %for.body.i31
+  %forward_op.11.lcssa = phi i32 [ %forward_op.11, %for.body.i31 ]
+  %inc280.lcssa = phi i32 [ %inc280, %for.body.i31 ]
+  %inc284 = add i32 %forward_op.11.lcssa, 3
+  br label %for.body.i41
+
+for.body.i41:                                     ; preds = %for.body.i41, %for.body.preheader.i37
+  %forward_mem.12 = phi i32 [ %inc280.lcssa, %for.body.preheader.i37 ], [ %inc290, %for.body.i41 ]
+  %forward_op.12 = phi i32 [ %inc284, %for.body.preheader.i37 ], [ %inc286, %for.body.i41 ]
+  %iv17 = phi i64 [ 0, %for.body.preheader.i37 ], [ %iv.next18, %for.body.i41 ]
+  %iv.next18 = add nuw nsw i64 %iv17, 1
+  %inc286 = add i32 %forward_op.12, 1
+  %inc290 = add i32 %forward_mem.12, 2
+  %exitcond.not.i44 = icmp eq i64 %iv.next18, %wide.trip.count.i27
+  br i1 %exitcond.not.i44, label %for.body.preheader.i49, label %for.body.i41, !llvm.loop !184
+
+for.body.preheader.i49:                           ; preds = %for.body.i41
+  %forward_op.12.lcssa = phi i32 [ %forward_op.12, %for.body.i41 ]
+  %inc290.lcssa = phi i32 [ %inc290, %for.body.i41 ]
+  %inc294 = add i32 %forward_op.12.lcssa, 3
+  br label %for.body.i53
+
+for.body.i53:                                     ; preds = %for.body.i53, %for.body.preheader.i49
+  %forward_mem.13 = phi i32 [ %inc290.lcssa, %for.body.preheader.i49 ], [ %inc300, %for.body.i53 ]
+  %forward_op.13 = phi i32 [ %inc294, %for.body.preheader.i49 ], [ %inc296, %for.body.i53 ]
+  %iv20 = phi i64 [ 0, %for.body.preheader.i49 ], [ %iv.next21, %for.body.i53 ]
+  %iv.next21 = add nuw nsw i64 %iv20, 1
+  %inc296 = add i32 %forward_op.13, 1
+  %inc300 = add i32 %forward_mem.13, 2
+  %exitcond.not.i56 = icmp eq i64 %iv.next21, %wide.trip.count.i27
+  br i1 %exitcond.not.i56, label %invertdelete_light_matrix_array.exit58, label %for.body.i53, !llvm.loop !184
 
 invertentry:                                      ; preds = %invertfor.body.preheader.i11, %invertget_matrix_array.exit6
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
+  %17 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.14, i32 %reverse_op.0, i32 %forward_mem.14, i32 %reverse_mem.0)
   ret void
 
-invertget_matrix_array.exit6.critedge:            ; preds = %invertfor.end
-  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %12, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %13, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25)
-  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %12, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26)
-  br label %invertget_matrix_array.exit6
-
-invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_array.exit6.critedge, %invertfor.body.preheader
+invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_array.exit12
   %"call.i9'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 2
   tail call void @free(i8* nonnull %"call.i9'mi_unwrap")
   %call.i9_unwrap = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 3
@@ -20085,7 +22368,7 @@ invertget_matrix_array.exit6:                     ; preds = %invertget_matrix_ar
   tail call void @free(i8* %call.i3_unwrap)
   br label %invertentry
 
-invertfor.body.preheader.i11:                     ; preds = %invertfor.body.preheader
+invertfor.body.preheader.i11:                     ; preds = %invertget_matrix_array.exit12
   %"call.i963'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 6
   tail call void @free(i8* nonnull %"call.i963'mi_unwrap")
   %call.i963_unwrap = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 7
@@ -20096,33 +22379,49 @@ invertfor.body.preheader.i11:                     ; preds = %invertfor.body.preh
   tail call void @free(i8* %call.i359_unwrap)
   br label %invertentry
 
-invertfor.body.preheader:                         ; preds = %invertfor.body
-  %20 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0 to i8*
-  tail call void @free(i8* nonnull %20)
-  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %12, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %13, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25)
-  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %12, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26)
+invertget_matrix_array.exit12:                    ; preds = %invertfor.end, %invertfor.body.preheader
+  %reverse_mem.0 = phi i32 [ %inc308, %invertfor.body.preheader ], [ %inc340, %invertfor.end ]
+  %reverse_op.0 = phi i32 [ %inc328.lcssa, %invertfor.body.preheader ], [ %reverse_op.2, %invertfor.end ]
+  call void @differelatives_to_absolutes(i32 %bone_count, %struct.Matrix* %12, %struct.Matrix* %"'ipc", i32* %parents, %struct.Matrix* %13, %struct.Matrix* %"'ipc24", { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* } %tapeArg25), !node !285
+  call void @diffeget_posed_relatives(i32 %bone_count, %struct.Matrix* %base_relatives, %struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %12, %struct.Matrix* %"'ipc", { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* } %tapeArg26), !node !285
   br i1 %cmp15.i, label %invertfor.body.preheader.i11, label %invertget_matrix_array.exit6
 
-invertfor.body:                                   ; preds = %invertfor.body, %mergeinvertfor.body_for.end.loopexit
-  %"iv'ac.0.in" = phi i64 [ %wide.trip.count101_unwrap, %mergeinvertfor.body_for.end.loopexit ], [ %"iv'ac.0", %invertfor.body ]
+invertfor.body.preheader:                         ; preds = %invertfor.body
+  %reverse_mem.1.lcssa = phi i32 [ %reverse_mem.1, %invertfor.body ]
+  %inc328.lcssa = phi i32 [ %inc328, %invertfor.body ]
+  %inc308 = add i32 %reverse_mem.1.lcssa, 11
+  %18 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0 to i8*
+  tail call void @free(i8* nonnull %18)
+  br label %invertget_matrix_array.exit12
+
+invertfor.body:                                   ; preds = %mergeinvertfor.body_for.end.loopexit, %incinvertfor.body
+  %"iv'ac.0.in" = phi i64 [ %wide.trip.count101_unwrap, %mergeinvertfor.body_for.end.loopexit ], [ %"iv'ac.0", %incinvertfor.body ]
+  %reverse_mem.1 = phi i32 [ %inc338, %mergeinvertfor.body_for.end.loopexit ], [ %inc334, %incinvertfor.body ]
+  %reverse_op.1.in = phi i32 [ %reverse_op.2, %mergeinvertfor.body_for.end.loopexit ], [ %inc328, %incinvertfor.body ]
   %"iv'ac.0" = add nsw i64 %"iv'ac.0.in", -1
-  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv'ac.0"
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc24", i64 %"iv'ac.0"
-  %arrayidx4_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %inverse_base_absolutes, i64 %"iv'ac.0"
-  %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv'ac.0"
-  %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0"
-  %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0"
-  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !462
-  call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap)
-  %21 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %21, label %invertfor.body.preheader, label %invertfor.body
+  %arrayidx_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %13, i64 %"iv'ac.0", !node !285
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc24", i64 %"iv'ac.0", !node !285
+  %arrayidx4_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %inverse_base_absolutes, i64 %"iv'ac.0", !node !285
+  %arrayidx6_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv'ac.0", !node !285
+  %"arrayidx6'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv'ac.0", !node !285
+  %_unwrap29 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %0, i64 %"iv'ac.0", !node !285
+  %tapeArg28_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap29, align 8, !invariant.group !482, !node !285
+  call void @diffemat_mult.10(%struct.Matrix* %arrayidx_unwrap, %struct.Matrix* %"arrayidx'ipg_unwrap", %struct.Matrix* %arrayidx4_unwrap, %struct.Matrix* %arrayidx6_unwrap, %struct.Matrix* %"arrayidx6'ipg_unwrap", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg28_unwrap), !node !285
+  %19 = icmp eq i64 %"iv'ac.0", 0
+  %inc328 = add i32 %reverse_op.1.in, 2
+  br i1 %19, label %invertfor.body.preheader, label %incinvertfor.body
+
+incinvertfor.body:                                ; preds = %invertfor.body
+  %inc334 = add i32 %reverse_mem.1, 11
+  br label %invertfor.body
 
 mergeinvertfor.body_for.end.loopexit:             ; preds = %invertfor.end
-  %wide.trip.count101_unwrap = zext i32 %bone_count to i64
+  %wide.trip.count101_unwrap = zext i32 %bone_count to i64, !node !285
+  %inc338 = add i32 %reverse_mem.2, 2
   br label %invertfor.body
 
 invertfor.end:                                    ; preds = %invertfill.exit, %invertresize.exit.thread
-  br i1 %cmp15.i, label %mergeinvertfor.body_for.end.loopexit, label %invertget_matrix_array.exit6.critedge
+  br i1 %cmp15.i, label %mergeinvertfor.body_for.end.loopexit, label %invertget_matrix_array.exit12
 
 invertresize.exit.thread:                         ; preds = %invertfill.exit
   %"call.i14'mi_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 13
@@ -20132,118 +22431,246 @@ invertresize.exit.thread:                         ; preds = %invertfill.exit
   br label %invertfor.end
 
 invertfill.exit:                                  ; preds = %invertfor.end45, %invertfor.body11.lr.ph
+  %reverse_mem.2 = phi i32 [ %inc372, %invertfor.body11.lr.ph ], [ %reverse_mem.7, %invertfor.end45 ]
+  %reverse_op.2 = phi i32 [ %inc386.lcssa, %invertfor.body11.lr.ph ], [ %reverse_op.7, %invertfor.end45 ]
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* %call4.i)
   tail call void @free(i8* nonnull %"call.i16'mi")
   tail call void @free(i8* %call.i16)
-  %cond = icmp eq i8 %_cache.0, 1
+  %inc340 = add i32 %reverse_mem.2, 1
+  %cond = icmp eq i8 %_cache.0, 0
   %cond.not = xor i1 %cond, true
   %brmerge = or i1 %cond.not, %cmp.not.i
   br i1 %brmerge, label %invertfor.end, label %invertresize.exit.thread
 
 invertfor.body11.lr.ph:                           ; preds = %invertfor.body11
-  %22 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %1 to i8*
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.body11 ]
+  %inc386.lcssa = phi i32 [ %inc386, %invertfor.body11 ]
+  %20 = bitcast { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %1 to i8*
+  tail call void @free(i8* nonnull %20)
+  %21 = bitcast double** %2 to i8*
+  tail call void @free(i8* nonnull %21)
+  %22 = bitcast double** %3 to i8*
   tail call void @free(i8* nonnull %22)
-  %23 = bitcast double** %2 to i8*
+  %23 = bitcast double* %4 to i8*
   tail call void @free(i8* nonnull %23)
-  %24 = bitcast double** %3 to i8*
+  %inc372 = add i32 %reverse_mem.3.lcssa, 22
+  %24 = bitcast i32* %9 to i8*
   tail call void @free(i8* nonnull %24)
-  %25 = bitcast i32* %4 to i8*
-  tail call void @free(i8* nonnull %25)
-  %26 = bitcast double* %5 to i8*
-  tail call void @free(i8* nonnull %26)
   br label %invertfill.exit
 
-invertfor.body11:                                 ; preds = %invertfor.cond18.preheader, %invertfor.inc43
-  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv1'ac.0"
-  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0"
-  %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0"
-  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 8, !invariant.group !463
-  call void @diffemat_mult.10(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %16, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap)
-  %27 = icmp eq i64 %"iv1'ac.0", 0
-  br i1 %27, label %invertfor.body11.lr.ph, label %invertfor.inc43
+invertfor.body11:                                 ; preds = %invertfor.inc43, %invertfor.cond18.preheader.lr.ph
+  %reverse_mem.3 = phi i32 [ %inc394, %invertfor.cond18.preheader.lr.ph ], [ %inc552, %invertfor.inc43 ]
+  %reverse_op.3 = phi i32 [ %inc396, %invertfor.cond18.preheader.lr.ph ], [ %reverse_op.6, %invertfor.inc43 ]
+  %arrayidx13_unwrap = getelementptr inbounds %struct.Matrix, %struct.Matrix* %14, i64 %"iv1'ac.0", !node !285
+  %"arrayidx13'ipg_unwrap" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"'ipc27", i64 %"iv1'ac.0", !node !285
+  %_unwrap46 = getelementptr inbounds { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %1, i64 %"iv1'ac.0", !node !285
+  %tapeArg42_unwrap = load { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }* %_unwrap46, align 8, !invariant.group !483, !node !285
+  call void @diffemat_mult.10(%struct.Matrix* %arrayidx13_unwrap, %struct.Matrix* %"arrayidx13'ipg_unwrap", %struct.Matrix* %base_positions, %struct.Matrix* %16, %struct.Matrix* %"'ipc41", { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** } %tapeArg42_unwrap), !node !285
+  %25 = icmp eq i64 %"iv1'ac.0", 0
+  %inc386 = add i32 %reverse_op.3, 1
+  br i1 %25, label %invertfor.body11.lr.ph, label %incinvertfor.body11
+
+incinvertfor.body11:                              ; preds = %invertfor.body11
+  %inc388 = add i32 %reverse_mem.3, 7
+  br label %invertfor.inc43
+
+invertfor.cond18.preheader.lr.ph:                 ; preds = %invertfor.cond18.preheader
+  %reverse_mem.4.in.lcssa.lcssa = phi i32 [ %reverse_mem.4.in.lcssa, %invertfor.cond18.preheader ]
+  %reverse_op.4.lcssa.lcssa = phi i32 [ %reverse_op.4.lcssa, %invertfor.cond18.preheader ]
+  %inc396 = add i32 %reverse_op.4.lcssa.lcssa, 26
+  %inc394 = add i32 %reverse_mem.4.in.lcssa.lcssa, 44
+  br label %invertfor.body11
 
 invertfor.cond18.preheader:                       ; preds = %invertfor.body20
-  %28 = icmp eq i64 %"iv6'ac.1", 0
-  br i1 %28, label %invertfor.body11, label %invertfor.inc40
+  %reverse_mem.4.in.lcssa = phi i32 [ %reverse_mem.4.in, %invertfor.body20 ]
+  %reverse_op.4.lcssa = phi i32 [ %reverse_op.4, %invertfor.body20 ]
+  %26 = icmp eq i64 %"iv6'ac.1", 0
+  br i1 %26, label %invertfor.cond18.preheader.lr.ph, label %incinvertfor.cond18.preheader
+
+incinvertfor.cond18.preheader:                    ; preds = %invertfor.cond18.preheader
+  %inc400 = add i32 %reverse_op.4.lcssa, 27
+  %inc402 = add i32 %reverse_mem.4.in.lcssa, 46
+  br label %invertfor.inc40
 
 invertfor.body20:                                 ; preds = %invertfor.inc40, %incinvertfor.body20
-  %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %40, %incinvertfor.body20 ]
-  %_unwrap59 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0"
-  %"'il_phi5_unwrap" = load double*, double** %_unwrap59, align 8, !invariant.group !464
+  %"iv8'ac.1" = phi i64 [ 2, %invertfor.inc40 ], [ %38, %incinvertfor.body20 ]
+  %reverse_mem.4.in = phi i32 [ %reverse_mem.5, %invertfor.inc40 ], [ %inc538, %incinvertfor.body20 ]
+  %reverse_op.4 = phi i32 [ %reverse_op.5, %invertfor.inc40 ], [ %inc540, %incinvertfor.body20 ]
+  %_unwrap59 = getelementptr inbounds double*, double** %2, i64 %"iv1'ac.0", !node !285
+  %"'il_phi5_unwrap" = load double*, double** %_unwrap59, align 8, !invariant.group !484, !node !285
   %_unwrap60 = mul nuw nsw i64 %"iv6'ac.1", 3
   %_unwrap61 = add nuw nsw i64 %"iv8'ac.1", %_unwrap60
-  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %_unwrap61
-  %29 = load double, double* %"arrayidx35'ipg_unwrap", align 8
-  %30 = mul nuw nsw i64 %wide.trip.count93_unwrap79, 3
-  %31 = mul nuw nsw i64 %"iv1'ac.0", %30
-  %32 = add nuw nsw i64 %_unwrap61, %31
-  %33 = getelementptr inbounds double, double* %5, i64 %32
-  %34 = load double, double* %33, align 8, !invariant.group !465
-  %m1diffe = fmul fast double %29, %34
-  %_unwrap69 = getelementptr inbounds double*, double** %3, i64 %"iv1'ac.0"
-  %"'il_phi3_unwrap" = load double*, double** %_unwrap69, align 8, !invariant.group !466
-  %35 = getelementptr inbounds i32, i32* %4, i64 %"iv1'ac.0"
-  %36 = load i32, i32* %35, align 4, !invariant.group !467
-  %_unwrap75 = sext i32 %36 to i64
-  %_unwrap76 = mul nsw i64 %"iv6'ac.1", %_unwrap75
-  %_unwrap77 = add nsw i64 %_unwrap76, %"iv8'ac.1"
-  %"arrayidx22'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap77
-  %37 = load double, double* %"arrayidx22'ipg_unwrap", align 8
-  %38 = fadd fast double %37, %m1diffe
-  store double %38, double* %"arrayidx22'ipg_unwrap", align 8
-  %39 = icmp eq i64 %"iv8'ac.1", 0
-  br i1 %39, label %invertfor.cond18.preheader, label %incinvertfor.body20
+  %"arrayidx35'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi5_unwrap", i64 %_unwrap61, !node !285
+  %27 = load double, double* %"arrayidx35'ipg_unwrap", align 8, !node !285
+  %28 = mul nuw nsw i64 %wide.trip.count93_unwrap79, 3
+  %29 = mul nuw nsw i64 %"iv1'ac.0", %28, !node !285
+  %30 = add nuw nsw i64 %_unwrap61, %29, !node !285
+  %31 = getelementptr inbounds double, double* %4, i64 %30, !node !285
+  %32 = load double, double* %31, align 8, !invariant.group !485, !node !285
+  %m1diffe = fmul fast double %27, %32, !node !285
+  %_unwrap69 = getelementptr inbounds double*, double** %3, i64 %"iv1'ac.0", !node !285
+  %"'il_phi3_unwrap" = load double*, double** %_unwrap69, align 8, !invariant.group !486, !node !285
+  %33 = getelementptr inbounds i32, i32* %9, i64 %"iv1'ac.0", !node !285
+  %34 = load i32, i32* %33, align 4, !invariant.group !487, !node !285
+  %_unwrap75 = sext i32 %34 to i64, !node !285
+  %_unwrap76 = mul nsw i64 %"iv6'ac.1", %_unwrap75, !node !285
+  %_unwrap77 = add nsw i64 %_unwrap76, %"iv8'ac.1", !node !285
+  %"arrayidx22'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi3_unwrap", i64 %_unwrap77, !node !285
+  %35 = load double, double* %"arrayidx22'ipg_unwrap", align 8, !node !285
+  %36 = fadd fast double %35, %m1diffe, !node !285
+  store double %36, double* %"arrayidx22'ipg_unwrap", align 8
+  %37 = icmp eq i64 %"iv8'ac.1", 0
+  br i1 %37, label %invertfor.cond18.preheader, label %incinvertfor.body20
 
 incinvertfor.body20:                              ; preds = %invertfor.body20
-  %40 = add nsw i64 %"iv8'ac.1", -1
+  %inc538 = add i32 %reverse_mem.4.in, 44
+  %38 = add nsw i64 %"iv8'ac.1", -1
+  %inc540 = add i32 %reverse_op.4, 26
   br label %invertfor.body20
 
-invertfor.inc40:                                  ; preds = %invertfor.cond18.preheader, %invertfor.inc43.loopexit
-  %"iv6'ac.1.in" = phi i64 [ %wide.trip.count93_unwrap79, %invertfor.inc43.loopexit ], [ %"iv6'ac.1", %invertfor.cond18.preheader ]
+invertfor.inc40:                                  ; preds = %invertfor.inc43.loopexit, %incinvertfor.cond18.preheader
+  %"iv6'ac.1.in" = phi i64 [ %wide.trip.count93_unwrap79, %invertfor.inc43.loopexit ], [ %"iv6'ac.1", %incinvertfor.cond18.preheader ]
+  %reverse_mem.5 = phi i32 [ %inc550, %invertfor.inc43.loopexit ], [ %inc402, %incinvertfor.cond18.preheader ]
+  %reverse_op.5 = phi i32 [ %inc548, %invertfor.inc43.loopexit ], [ %inc400, %incinvertfor.cond18.preheader ]
   %"iv6'ac.1" = add nsw i64 %"iv6'ac.1.in", -1
   br label %invertfor.body20
 
 invertfor.inc43.loopexit:                         ; preds = %invertfor.inc43
   %wide.trip.count93_unwrap79 = zext i32 %15 to i64
+  %inc548 = add i32 %reverse_op.6.in, 2
+  %inc550 = add i32 %reverse_mem.6.in, 4
   br label %invertfor.inc40
 
-invertfor.inc43:                                  ; preds = %invertfor.body11, %mergeinvertfor.body11_for.end45.loopexit
-  %"iv1'ac.0.in" = phi i64 [ %wide.trip.count97_unwrap81, %mergeinvertfor.body11_for.end45.loopexit ], [ %"iv1'ac.0", %invertfor.body11 ]
+invertfor.inc43:                                  ; preds = %mergeinvertfor.body11_for.end45.loopexit, %incinvertfor.body11
+  %"iv1'ac.0.in" = phi i64 [ %wide.trip.count97_unwrap81, %mergeinvertfor.body11_for.end45.loopexit ], [ %"iv1'ac.0", %incinvertfor.body11 ]
+  %reverse_mem.6.in = phi i32 [ %reverse_mem.7, %mergeinvertfor.body11_for.end45.loopexit ], [ %inc388, %incinvertfor.body11 ]
+  %reverse_op.6.in = phi i32 [ %reverse_op.7, %mergeinvertfor.body11_for.end45.loopexit ], [ %inc386, %incinvertfor.body11 ]
+  %reverse_op.6 = add i32 %reverse_op.6.in, 1
   %"iv1'ac.0" = add nsw i64 %"iv1'ac.0.in", -1
+  %inc552 = add i32 %reverse_mem.6.in, 2
   br i1 %cmp4871, label %invertfor.inc43.loopexit, label %invertfor.body11
 
 mergeinvertfor.body11_for.end45.loopexit:         ; preds = %invertfor.end45
-  %wide.trip.count97_unwrap81 = zext i32 %bone_count to i64
+  %wide.trip.count97_unwrap81 = zext i32 %bone_count to i64, !node !285
   br label %invertfor.inc43
 
 invertfor.end45:                                  ; preds = %invertdelete_matrix.exit, %invertfor.body49.lr.ph
+  %reverse_mem.7 = phi i32 [ %inc560, %invertfor.body49.lr.ph ], [ %reverse_mem.9, %invertdelete_matrix.exit ]
+  %reverse_op.7 = phi i32 [ %inc598.lcssa, %invertfor.body49.lr.ph ], [ %reverse_op.9, %invertdelete_matrix.exit ]
   br i1 %cmp15.i, label %mergeinvertfor.body11_for.end45.loopexit, label %invertfill.exit
 
 invertfor.body49.lr.ph:                           ; preds = %invertfor.body49
-  %41 = bitcast double* %6 to i8*
-  tail call void @free(i8* nonnull %41)
+  %reverse_mem.8.in.lcssa = phi i32 [ %reverse_mem.8.in, %invertfor.body49 ]
+  %inc598.lcssa = phi i32 [ %inc598, %invertfor.body49 ]
+  %inc560 = add i32 %reverse_mem.8.in.lcssa, 17
+  %39 = bitcast double* %5 to i8*
+  tail call void @free(i8* nonnull %39)
   br label %invertfor.end45
 
-invertfor.body49:                                 ; preds = %invertfor.body49, %mergeinvertfor.body49_if.then61.loopexit
-  %"iv11'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body49_if.then61.loopexit ], [ %"iv11'ac.0", %invertfor.body49 ]
+invertfor.body49:                                 ; preds = %mergeinvertfor.body49_if.then61.loopexit, %incinvertfor.body49
+  %"iv11'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body49_if.then61.loopexit ], [ %"iv11'ac.0", %incinvertfor.body49 ]
+  %reverse_mem.8.in = phi i32 [ %reverse_mem.9, %mergeinvertfor.body49_if.then61.loopexit ], [ %inc600, %incinvertfor.body49 ]
+  %reverse_op.8.in = phi i32 [ %reverse_op.9, %mergeinvertfor.body49_if.then61.loopexit ], [ %inc598, %incinvertfor.body49 ]
   %"iv11'ac.0" = add nsw i64 %"iv11'ac.0.in", -1
   %"'il_phi10_unwrap" = extractvalue { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8**, i8**, double**, { i8*, i8*, double**, double**, double**, i32, i32, i1, i1, i32*, i32*, double*, double*, double**, double** }*, i32*, i1*, i32* }, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, double*, { i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, i1, i1, double*, double*, double*, double* }, { i8*, i8*, i1, i1, double*, double*, double*, double* }, i8*, i8*, double, double, double }*, double***, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double** }*, double*, i32, i32*, i32* }, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, i8*, i8*, i8*, i8*, i8*, i8*, { i8*, i8*, double**, double**, i32, i32, i1, i1, i32*, double*, double** }*, double**, double**, double*, { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* }, i32, i32, i1, i32*, double*, double*, i1*, i1*, i1* } %tapeArg, 22
   %_unwrap84 = mul nuw nsw i64 %"iv11'ac.0", 3
   %"arrayidx55'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi10_unwrap", i64 %_unwrap84
-  %42 = load double, double* %"arrayidx55'ipg_unwrap", align 8
-  %43 = fneg fast double %42
-  store double %43, double* %"arrayidx55'ipg_unwrap", align 8
-  %44 = icmp eq i64 %"iv11'ac.0", 0
-  br i1 %44, label %invertfor.body49.lr.ph, label %invertfor.body49
+  %40 = load double, double* %"arrayidx55'ipg_unwrap", align 8
+  %41 = fneg fast double %40
+  store double %41, double* %"arrayidx55'ipg_unwrap", align 8
+  %42 = icmp eq i64 %"iv11'ac.0", 0
+  %inc598 = add i32 %reverse_op.8.in, 6
+  br i1 %42, label %invertfor.body49.lr.ph, label %incinvertfor.body49
+
+incinvertfor.body49:                              ; preds = %invertfor.body49
+  %inc600 = add i32 %reverse_mem.8.in, 16
+  br label %invertfor.body49
 
 mergeinvertfor.body49_if.then61.loopexit:         ; preds = %invertdelete_matrix.exit
   %wide.trip.count_unwrap = zext i32 %15 to i64
   br label %invertfor.body49
 
-invertdelete_matrix.exit:                         ; preds = %if.then61, %for.body.preheader.i28
-  call void @diffeapply_global_transform.16(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'", { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg87)
+invertdelete_matrix.exit:                         ; preds = %invertdelete_light_matrix_array.exit58, %invertfor.body.preheader.i28
+  %reverse_mem.9 = phi i32 [ %inc614, %invertfor.body.preheader.i28 ], [ 0, %invertdelete_light_matrix_array.exit58 ]
+  %reverse_op.9 = phi i32 [ %inc618, %invertfor.body.preheader.i28 ], [ 0, %invertdelete_light_matrix_array.exit58 ]
+  call void @diffeapply_global_transform.16(%struct.Matrix* %pose_params, %struct.Matrix* %"pose_params'", %struct.Matrix* %positions, %struct.Matrix* %"positions'", { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg87), !node !285
   br i1 %or.cond, label %mergeinvertfor.body49_if.then61.loopexit, label %invertfor.end45
+
+invertfor.body.preheader.i28:                     ; preds = %invertfor.inc.i
+  %reverse_mem.10.lcssa = phi i32 [ %reverse_mem.10, %invertfor.inc.i ]
+  %reverse_op.10.lcssa = phi i32 [ %reverse_op.10, %invertfor.inc.i ]
+  %inc618 = add i32 %reverse_op.10.lcssa, 3
+  %inc614 = add i32 %reverse_mem.10.lcssa, 7
+  %43 = bitcast i1* %6 to i8*
+  tail call void @free(i8* nonnull %43)
+  br label %invertdelete_matrix.exit
+
+incinvertfor.body.i31:                            ; preds = %invertfor.inc.i
+  %44 = add nsw i64 %"iv14'ac.0", -1, !node !285
+  %inc622 = add i32 %reverse_op.10, 4
+  %inc624 = add i32 %reverse_mem.10, 6
+  br label %invertfor.inc.i
+
+invertfor.inc.i:                                  ; preds = %invertfor.body.preheader.i37, %incinvertfor.body.i31
+  %"iv14'ac.0" = phi i64 [ %_unwrap111, %invertfor.body.preheader.i37 ], [ %44, %incinvertfor.body.i31 ]
+  %reverse_mem.10 = phi i32 [ %inc644, %invertfor.body.preheader.i37 ], [ %inc624, %incinvertfor.body.i31 ]
+  %reverse_op.10 = phi i32 [ %inc636, %invertfor.body.preheader.i37 ], [ %inc622, %incinvertfor.body.i31 ]
+  %45 = icmp eq i64 %"iv14'ac.0", 0
+  br i1 %45, label %invertfor.body.preheader.i28, label %incinvertfor.body.i31
+
+invertfor.body.preheader.i37:                     ; preds = %invertfor.inc.i45
+  %reverse_mem.11.lcssa = phi i32 [ %reverse_mem.11, %invertfor.inc.i45 ]
+  %reverse_op.11.in.lcssa = phi i32 [ %reverse_op.11.in, %invertfor.inc.i45 ]
+  %46 = bitcast i1* %7 to i8*
+  tail call void @free(i8* nonnull %46)
+  %inc636 = add i32 %reverse_op.11.in.lcssa, 8
+  %inc644 = add i32 %reverse_mem.11.lcssa, 8
+  br label %invertfor.inc.i
+
+incinvertfor.body.i41:                            ; preds = %invertfor.inc.i45
+  %47 = add nsw i64 %"iv17'ac.0", -1, !node !285
+  %inc654 = add i32 %reverse_mem.11, 6
+  br label %invertfor.inc.i45
+
+invertfor.inc.i45:                                ; preds = %invertfor.body.preheader.i49, %incinvertfor.body.i41
+  %"iv17'ac.0" = phi i64 [ %_unwrap111, %invertfor.body.preheader.i49 ], [ %47, %incinvertfor.body.i41 ]
+  %reverse_mem.11 = phi i32 [ %inc674, %invertfor.body.preheader.i49 ], [ %inc654, %incinvertfor.body.i41 ]
+  %reverse_op.11.in = phi i32 [ %reverse_op.12.lcssa, %invertfor.body.preheader.i49 ], [ %reverse_op.11, %incinvertfor.body.i41 ]
+  %reverse_op.11 = add i32 %reverse_op.11.in, 4
+  %48 = icmp eq i64 %"iv17'ac.0", 0
+  br i1 %48, label %invertfor.body.preheader.i37, label %incinvertfor.body.i41
+
+invertfor.body.preheader.i49:                     ; preds = %invertfor.inc.i57
+  %reverse_mem.12.lcssa = phi i32 [ %reverse_mem.12, %invertfor.inc.i57 ]
+  %reverse_op.12.lcssa = phi i32 [ %reverse_op.12, %invertfor.inc.i57 ]
+  %49 = bitcast i1* %8 to i8*
+  tail call void @free(i8* nonnull %49)
+  %inc674 = add i32 %reverse_mem.12.lcssa, 8
+  br label %invertfor.inc.i45
+
+incinvertfor.body.i53:                            ; preds = %invertfor.inc.i57
+  %50 = add nsw i64 %"iv20'ac.0", -1, !node !285
+  %inc682 = add i32 %reverse_op.12, 4
+  %inc684 = add i32 %reverse_mem.12, 6
+  br label %invertfor.inc.i57
+
+invertfor.inc.i57:                                ; preds = %invertdelete_light_matrix_array.exit58.loopexit, %incinvertfor.body.i53
+  %"iv20'ac.0" = phi i64 [ %_unwrap111, %invertdelete_light_matrix_array.exit58.loopexit ], [ %50, %incinvertfor.body.i53 ]
+  %reverse_mem.12 = phi i32 [ 1, %invertdelete_light_matrix_array.exit58.loopexit ], [ %inc684, %incinvertfor.body.i53 ]
+  %reverse_op.12 = phi i32 [ 1, %invertdelete_light_matrix_array.exit58.loopexit ], [ %inc682, %incinvertfor.body.i53 ]
+  %51 = icmp eq i64 %"iv20'ac.0", 0
+  br i1 %51, label %invertfor.body.preheader.i49, label %incinvertfor.body.i53
+
+invertdelete_light_matrix_array.exit58.loopexit:  ; preds = %invertdelete_light_matrix_array.exit58
+  %wide.trip.count.i27_unwrap110 = zext i32 %bone_count to i64, !node !285
+  %_unwrap111 = add nsw i64 %wide.trip.count.i27_unwrap110, -1, !node !285
+  br label %invertfor.inc.i57
+
+invertdelete_light_matrix_array.exit58:           ; preds = %for.body.i53, %if.then61
+  %forward_mem.14 = phi i32 [ %inc270, %if.then61 ], [ %inc300, %for.body.i53 ]
+  %forward_op.14 = phi i32 [ %forward_op.10, %if.then61 ], [ %inc296, %for.body.i53 ]
+  br i1 %cmp15.i, label %invertdelete_light_matrix_array.exit58.loopexit, label %invertdelete_matrix.exit
 }
 
 ; Function Attrs: nounwind uwtable mustprogress
@@ -20251,9 +22678,9 @@ define internal void @diffeapply_global_transform.16(%struct.Matrix* nocapture r
 entry:
   %0 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 9
   %1 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 10
-  %2 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 14
-  %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 17
-  %4 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 13
+  %2 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 17
+  %3 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 13
+  %4 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 14
   %call.i = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 5
   %"call.i'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 4
   %"'ipc" = bitcast i8* %"call.i'mi" to %struct.Matrix*
@@ -20263,6 +22690,37 @@ entry:
   %6 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 12
   %"'ipc16" = bitcast i8* %"call4.i'mi" to double*
   %7 = sext i32 %6 to i64
+  br label %for.cond1.preheader
+
+for.cond1.preheader:                              ; preds = %for.inc12, %entry
+  %forward_mem.0 = phi i32 [ 11, %entry ], [ %inc121.lcssa, %for.inc12 ]
+  %forward_op.0 = phi i32 [ 0, %entry ], [ %inc125.lcssa, %for.inc12 ]
+  %iv = phi i64 [ 0, %entry ], [ %iv.next, %for.inc12 ]
+  %iv.next = add nuw nsw i64 %iv, 1
+  %inc97 = add i32 %forward_op.0, 3
+  br label %for.body3
+
+for.body3:                                        ; preds = %for.body3, %for.cond1.preheader
+  %forward_mem.1 = phi i32 [ %forward_mem.0, %for.cond1.preheader ], [ %inc121, %for.body3 ]
+  %forward_op.1 = phi i32 [ %inc97, %for.cond1.preheader ], [ %inc125, %for.body3 ]
+  %iv2 = phi i64 [ 0, %for.cond1.preheader ], [ %iv.next3, %for.body3 ]
+  %iv.next3 = add nuw nsw i64 %iv2, 1
+  %inc121 = add i32 %forward_mem.1, 4
+  %inc125 = add i32 %forward_op.1, 10
+  %exitcond102.not = icmp eq i64 %iv.next3, 3
+  br i1 %exitcond102.not, label %for.inc12, label %for.body3, !llvm.loop !195
+
+for.inc12:                                        ; preds = %for.body3
+  %forward_op.1.lcssa = phi i32 [ %forward_op.1, %for.body3 ]
+  %inc121.lcssa = phi i32 [ %inc121, %for.body3 ]
+  %inc125.lcssa = phi i32 [ %inc125, %for.body3 ]
+  %exitcond107.not = icmp eq i64 %iv.next, 3
+  br i1 %exitcond107.not, label %for.end14, label %for.cond1.preheader, !llvm.loop !196
+
+for.end14:                                        ; preds = %for.inc12
+  %forward_op.1.lcssa.lcssa = phi i32 [ %forward_op.1.lcssa, %for.inc12 ]
+  %inc121.lcssa.lcssa = phi i32 [ %inc121.lcssa, %for.inc12 ]
+  %inc125.lcssa.lcssa = phi i32 [ %inc125.lcssa, %for.inc12 ]
   %call.i81 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 8
   %"call.i81'mi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 7
   %"'ipc24" = bitcast i8* %"call.i81'mi" to %struct.Matrix*
@@ -20270,17 +22728,48 @@ entry:
   %tapeArg25 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 6
   %9 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 15
   %cmp1789 = icmp sgt i32 %9, 0
-  br i1 %cmp1789, label %for.cond19.preheader.lr.ph, label %invertfor.end14
+  br i1 %cmp1789, label %for.cond19.preheader.lr.ph, label %invertdelete_matrix.exit86
 
-for.cond19.preheader.lr.ph:                       ; preds = %entry
+for.cond19.preheader.lr.ph:                       ; preds = %for.end14
   %10 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 16
   %cmp2187 = icmp sgt i32 %10, 0
   %wide.trip.count = zext i32 %10 to i64
   %11 = zext i32 %9 to i64
-  %_unwrap58 = zext i32 %9 to i64
-  br label %invertfor.inc45
+  %inc133 = add i32 %forward_op.1.lcssa.lcssa, 14
+  br label %for.cond19.preheader
+
+for.cond19.preheader:                             ; preds = %for.inc45, %for.cond19.preheader.lr.ph
+  %forward_mem.2 = phi i32 [ %inc121.lcssa.lcssa, %for.cond19.preheader.lr.ph ], [ %forward_mem.3, %for.inc45 ]
+  %forward_op.2 = phi i32 [ %inc133, %for.cond19.preheader.lr.ph ], [ %forward_op.4, %for.inc45 ]
+  %iv4 = phi i64 [ 0, %for.cond19.preheader.lr.ph ], [ %iv.next5, %for.inc45 ]
+  %iv.next5 = add nuw nsw i64 %iv4, 1
+  %inc135 = add i32 %forward_op.2, 1
+  br i1 %cmp2187, label %for.body22.lr.ph, label %for.inc45
+
+for.body22.lr.ph:                                 ; preds = %for.cond19.preheader
+  %inc153 = add i32 %forward_mem.2, 8
+  %inc155 = add i32 %forward_op.2, 3
+  br label %for.body22
+
+for.body22:                                       ; preds = %for.body22, %for.body22.lr.ph
+  %forward_op.3 = phi i32 [ %inc155, %for.body22.lr.ph ], [ %inc163, %for.body22 ]
+  %iv9 = phi i64 [ 0, %for.body22.lr.ph ], [ %iv.next10, %for.body22 ]
+  %iv.next10 = add nuw nsw i64 %iv9, 1
+  %inc163 = add i32 %forward_op.3, 4
+  %exitcond.not = icmp eq i64 %iv.next10, %wide.trip.count
+  br i1 %exitcond.not, label %for.inc45, label %for.body22, !llvm.loop !197
+
+for.inc45:                                        ; preds = %for.body22, %for.cond19.preheader
+  %forward_mem.3 = phi i32 [ %forward_mem.2, %for.cond19.preheader ], [ %inc153, %for.body22 ]
+  %forward_op.4 = phi i32 [ %inc135, %for.cond19.preheader ], [ %inc163, %for.body22 ]
+  %exitcond98.not = icmp eq i64 %iv.next5, %11
+  br i1 %exitcond98.not, label %invertdelete_matrix.exit86, label %for.cond19.preheader, !llvm.loop !198
 
 invertentry:                                      ; preds = %invertfor.cond1.preheader
+  %reverse_mem.0.in.lcssa.lcssa = phi i32 [ %reverse_mem.0.in.lcssa, %invertfor.cond1.preheader ]
+  %reverse_op.0.lcssa.lcssa = phi i32 [ %reverse_op.0.lcssa, %invertfor.cond1.preheader ]
+  %inc193 = add i32 %reverse_op.0.lcssa.lcssa, 16
+  %inc165 = add i32 %forward_mem.4, 1
   %tapeArg13 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 1
   %12 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 11
   %"'il_phi" = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 2
@@ -20288,447 +22777,166 @@ invertentry:                                      ; preds = %invertfor.cond1.pre
   tail call void @free(i8* nonnull %"call4.i'mi")
   tail call void @free(i8* nonnull %"call.i'mi")
   tail call void @free(i8* %call.i)
-  %13 = bitcast double* %2 to i8*
+  %13 = bitcast double* %3 to i8*
   tail call void @free(i8* nonnull %13)
+  %inc185 = add i32 %reverse_mem.0.in.lcssa.lcssa, 45
   %14 = bitcast double* %4 to i8*
   tail call void @free(i8* nonnull %14)
+  %15 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([80 x i8], [80 x i8]* @ResultFormatStrIR, i64 0, i64 0), i32 %forward_op.5, i32 %inc193, i32 %inc165, i32 %inc185)
   ret void
 
 invertfor.cond1.preheader:                        ; preds = %invertfor.body3
-  %15 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %15, label %invertentry, label %incinvertfor.cond1.preheader
+  %reverse_mem.0.in.lcssa = phi i32 [ %reverse_mem.0.in, %invertfor.body3 ]
+  %reverse_op.0.lcssa = phi i32 [ %reverse_op.0, %invertfor.body3 ]
+  %16 = icmp eq i64 %"iv'ac.0", 0
+  br i1 %16, label %invertentry, label %incinvertfor.cond1.preheader
 
 incinvertfor.cond1.preheader:                     ; preds = %invertfor.cond1.preheader
-  %16 = add nsw i64 %"iv'ac.0", -1
+  %17 = add nsw i64 %"iv'ac.0", -1
+  %inc197 = add i32 %reverse_op.0.lcssa, 17
+  %inc199 = add i32 %reverse_mem.0.in.lcssa, 37
   br label %invertfor.inc12
 
 invertfor.body3:                                  ; preds = %invertfor.inc12, %incinvertfor.body3
-  %"iv2'ac.0" = phi i64 [ 2, %invertfor.inc12 ], [ %25, %incinvertfor.body3 ]
+  %"iv2'ac.0" = phi i64 [ 2, %invertfor.inc12 ], [ %26, %incinvertfor.body3 ]
+  %reverse_mem.0.in = phi i32 [ %reverse_mem.1, %invertfor.inc12 ], [ %inc297, %incinvertfor.body3 ]
+  %reverse_op.0 = phi i32 [ %reverse_op.1, %invertfor.inc12 ], [ %inc299, %incinvertfor.body3 ]
   %_unwrap = mul nuw nsw i64 %"iv'ac.0", 3
   %_unwrap17 = add nuw nsw i64 %_unwrap, %"iv2'ac.0"
   %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"'ipc16", i64 %_unwrap17
-  %17 = load double, double* %"arrayidx10'ipg_unwrap", align 8
+  %18 = load double, double* %"arrayidx10'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx10'ipg_unwrap", align 8
-  %18 = getelementptr inbounds double, double* %4, i64 %_unwrap17
-  %19 = load double, double* %18, align 8, !invariant.group !468
-  %m0diffe = fmul fast double %17, %19
-  %20 = getelementptr inbounds double, double* %2, i64 %_unwrap17
-  %21 = load double, double* %20, align 8, !invariant.group !469
-  %m1diffe = fmul fast double %17, %21
+  %19 = getelementptr inbounds double, double* %3, i64 %_unwrap17
+  %20 = load double, double* %19, align 8, !invariant.group !488
+  %m0diffe = fmul fast double %18, %20
+  %21 = getelementptr inbounds double, double* %4, i64 %_unwrap17
+  %22 = load double, double* %21, align 8, !invariant.group !489
+  %m1diffe = fmul fast double %18, %22
   store double %m0diffe, double* %"arrayidx10'ipg_unwrap", align 8
   %_unwrap23 = add nsw i64 %"iv'ac.0", %7
   %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1", i64 %_unwrap23
-  %22 = load double, double* %"arrayidx'ipg_unwrap", align 8
-  %23 = fadd fast double %22, %m1diffe
-  store double %23, double* %"arrayidx'ipg_unwrap", align 8
-  %24 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %24, label %invertfor.cond1.preheader, label %incinvertfor.body3
+  %23 = load double, double* %"arrayidx'ipg_unwrap", align 8
+  %24 = fadd fast double %23, %m1diffe
+  store double %24, double* %"arrayidx'ipg_unwrap", align 8
+  %25 = icmp eq i64 %"iv2'ac.0", 0
+  br i1 %25, label %invertfor.cond1.preheader, label %incinvertfor.body3
 
 incinvertfor.body3:                               ; preds = %invertfor.body3
-  %25 = add nsw i64 %"iv2'ac.0", -1
+  %inc297 = add i32 %reverse_mem.0.in, 35
+  %26 = add nsw i64 %"iv2'ac.0", -1
+  %inc299 = add i32 %reverse_op.0, 16
   br label %invertfor.body3
 
 invertfor.inc12:                                  ; preds = %invertfor.end14, %incinvertfor.cond1.preheader
-  %"iv'ac.0" = phi i64 [ 2, %invertfor.end14 ], [ %16, %incinvertfor.cond1.preheader ]
+  %"iv'ac.0" = phi i64 [ 2, %invertfor.end14 ], [ %17, %incinvertfor.cond1.preheader ]
+  %reverse_mem.1 = phi i32 [ %reverse_mem.2, %invertfor.end14 ], [ %inc199, %incinvertfor.cond1.preheader ]
+  %reverse_op.1 = phi i32 [ %reverse_op.2, %invertfor.end14 ], [ %inc197, %incinvertfor.cond1.preheader ]
   br label %invertfor.body3
 
-invertfor.end14:                                  ; preds = %entry, %invertfor.cond19.preheader.lr.ph
-  call void @diffemat_mult.12(%struct.Matrix* %5, %struct.Matrix* %"'ipc", %struct.Matrix* %positions, %struct.Matrix* %"positions'", %struct.Matrix* %8, %struct.Matrix* %"'ipc24", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg25)
+invertfor.end14:                                  ; preds = %invertdelete_matrix.exit86, %invertfor.cond19.preheader.lr.ph
+  %reverse_mem.2 = phi i32 [ %phi.bo, %invertfor.cond19.preheader.lr.ph ], [ 1, %invertdelete_matrix.exit86 ]
+  %reverse_op.2 = phi i32 [ %inc323, %invertfor.cond19.preheader.lr.ph ], [ 0, %invertdelete_matrix.exit86 ]
+  call void @diffemat_mult.12(%struct.Matrix* %5, %struct.Matrix* %"'ipc", %struct.Matrix* %positions, %struct.Matrix* %"positions'", %struct.Matrix* %8, %struct.Matrix* %"'ipc24", { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* } %tapeArg25), !node !285
   tail call void @free(i8* nonnull %"call.i81'mi")
   tail call void @free(i8* %call.i81)
   br label %invertfor.inc12
 
 invertfor.cond19.preheader.lr.ph:                 ; preds = %invertfor.cond19.preheader
-  %26 = bitcast double** %0 to i8*
-  tail call void @free(i8* nonnull %26)
-  %27 = bitcast double** %1 to i8*
+  %reverse_mem.3.lcssa = phi i32 [ %reverse_mem.3, %invertfor.cond19.preheader ]
+  %reverse_op.3.lcssa = phi i32 [ %reverse_op.3, %invertfor.cond19.preheader ]
+  %inc323 = add i32 %reverse_op.3.lcssa, 1
+  %27 = bitcast double** %0 to i8*
   tail call void @free(i8* nonnull %27)
-  %28 = bitcast i32* %3 to i8*
+  %28 = bitcast double** %1 to i8*
   tail call void @free(i8* nonnull %28)
+  %29 = bitcast i32* %2 to i8*
+  tail call void @free(i8* nonnull %29)
+  %phi.bo = add i32 %reverse_mem.3.lcssa, 9
   br label %invertfor.end14
 
-invertfor.cond19.preheader:                       ; preds = %invertfor.body22, %invertfor.inc45
-  %29 = icmp eq i64 %"iv4'ac.0", 0
-  br i1 %29, label %invertfor.cond19.preheader.lr.ph, label %invertfor.inc45
+invertfor.cond19.preheader:                       ; preds = %invertfor.inc45, %invertfor.body22.lr.ph
+  %reverse_mem.3 = phi i32 [ %inc419, %invertfor.body22.lr.ph ], [ %inc435, %invertfor.inc45 ]
+  %reverse_op.3 = phi i32 [ %inc421.lcssa, %invertfor.body22.lr.ph ], [ %reverse_op.5, %invertfor.inc45 ]
+  %30 = icmp eq i64 %"iv4'ac.0", 0
+  br i1 %30, label %invertfor.cond19.preheader.lr.ph, label %incinvertfor.cond19.preheader
 
-invertfor.body22:                                 ; preds = %invertfor.body22, %mergeinvertfor.body22_for.inc45.loopexit
-  %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %invertfor.body22 ]
+incinvertfor.cond19.preheader:                    ; preds = %invertfor.cond19.preheader
+  %inc327 = add i32 %reverse_op.3, 2
+  %inc329 = add i32 %reverse_mem.3, 3
+  br label %invertfor.inc45
+
+invertfor.body22.lr.ph:                           ; preds = %invertfor.body22
+  %reverse_mem.4.lcssa = phi i32 [ %reverse_mem.4, %invertfor.body22 ]
+  %inc421.lcssa = phi i32 [ %inc421, %invertfor.body22 ]
+  %inc419 = add i32 %reverse_mem.4.lcssa, 33
+  br label %invertfor.cond19.preheader
+
+invertfor.body22:                                 ; preds = %mergeinvertfor.body22_for.inc45.loopexit, %incinvertfor.body22
+  %"iv9'ac.0.in" = phi i64 [ %wide.trip.count_unwrap, %mergeinvertfor.body22_for.inc45.loopexit ], [ %"iv9'ac.0", %incinvertfor.body22 ]
+  %reverse_mem.4 = phi i32 [ %inc433, %mergeinvertfor.body22_for.inc45.loopexit ], [ %inc427, %incinvertfor.body22 ]
+  %reverse_op.4.in = phi i32 [ %reverse_op.5, %mergeinvertfor.body22_for.inc45.loopexit ], [ %inc421, %incinvertfor.body22 ]
   %"iv9'ac.0" = add nsw i64 %"iv9'ac.0.in", -1
   %_unwrap36 = getelementptr inbounds double*, double** %0, i64 %"iv4'ac.0"
-  %"'il_phi8_unwrap" = load double*, double** %_unwrap36, align 8, !invariant.group !470
-  %_unwrap38 = sext i32 %_unwrap71 to i64
+  %"'il_phi8_unwrap" = load double*, double** %_unwrap36, align 8, !invariant.group !490
+  %_unwrap38 = sext i32 %_unwrap69 to i64
   %_unwrap39 = mul nsw i64 %"iv4'ac.0", %_unwrap38
   %_unwrap40 = add nsw i64 %"iv9'ac.0", %_unwrap39
   %"arrayidx41'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi8_unwrap", i64 %_unwrap40
-  %30 = load double, double* %"arrayidx41'ipg_unwrap", align 8
+  %31 = load double, double* %"arrayidx41'ipg_unwrap", align 8
   store double 0.000000e+00, double* %"arrayidx41'ipg_unwrap", align 8
   %_unwrap44 = getelementptr inbounds double*, double** %1, i64 %"iv4'ac.0"
-  %"'il_phi7_unwrap" = load double*, double** %_unwrap44, align 8, !invariant.group !471
-  %31 = getelementptr inbounds i32, i32* %3, i64 %"iv4'ac.0"
-  %32 = load i32, i32* %31, align 4, !invariant.group !472
-  %_unwrap49 = sext i32 %32 to i64
+  %"'il_phi7_unwrap" = load double*, double** %_unwrap44, align 8, !invariant.group !491
+  %32 = getelementptr inbounds i32, i32* %2, i64 %"iv4'ac.0"
+  %33 = load i32, i32* %32, align 4, !invariant.group !492
+  %_unwrap49 = sext i32 %33 to i64
   %_unwrap50 = add nsw i64 %"iv9'ac.0", %_unwrap49
   %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi7_unwrap", i64 %_unwrap50
-  %33 = load double, double* %"arrayidx34'ipg_unwrap", align 8
-  %34 = fadd fast double %33, %30
-  store double %34, double* %"arrayidx34'ipg_unwrap", align 8
+  %34 = load double, double* %"arrayidx34'ipg_unwrap", align 8
+  %35 = fadd fast double %34, %31
+  store double %35, double* %"arrayidx34'ipg_unwrap", align 8
   %"data23'ipg_unwrap" = getelementptr inbounds i8, i8* %"call.i81'mi", i64 8
   %"'ipc33_unwrap" = bitcast i8* %"data23'ipg_unwrap" to double**
-  %"'ipl_unwrap" = load double*, double** %"'ipc33_unwrap", align 8, !invariant.group !473
+  %"'ipl_unwrap" = load double*, double** %"'ipc33_unwrap", align 8, !invariant.group !493
   %nrows24_unwrap = bitcast i8* %call.i81 to i32*
-  %_unwrap52 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !474
+  %_unwrap52 = load i32, i32* %nrows24_unwrap, align 8, !tbaa !138, !invariant.group !494
   %_unwrap53 = sext i32 %_unwrap52 to i64
   %_unwrap54 = mul nsw i64 %"iv4'ac.0", %_unwrap53
   %_unwrap55 = add nsw i64 %"iv9'ac.0", %_unwrap54
   %"arrayidx28'ipg_unwrap" = getelementptr inbounds double, double* %"'ipl_unwrap", i64 %_unwrap55
-  %35 = load double, double* %"arrayidx28'ipg_unwrap", align 8
-  %36 = fadd fast double %35, %30
-  store double %36, double* %"arrayidx28'ipg_unwrap", align 8
-  %37 = icmp eq i64 %"iv9'ac.0", 0
-  br i1 %37, label %invertfor.cond19.preheader, label %invertfor.body22
-
-mergeinvertfor.body22_for.inc45.loopexit:         ; preds = %invertfor.inc45
-  %wide.trip.count_unwrap = zext i32 %_unwrap71 to i64
-  br label %invertfor.body22
-
-invertfor.inc45:                                  ; preds = %invertfor.cond19.preheader, %for.cond19.preheader.lr.ph
-  %"iv4'ac.0.in" = phi i64 [ %_unwrap58, %for.cond19.preheader.lr.ph ], [ %"iv4'ac.0", %invertfor.cond19.preheader ]
-  %"iv4'ac.0" = add nsw i64 %"iv4'ac.0.in", -1
-  %_unwrap71 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 16
-  %cmp2187_unwrap = icmp sgt i32 %_unwrap71, 0
-  br i1 %cmp2187_unwrap, label %mergeinvertfor.body22_for.inc45.loopexit, label %invertfor.cond19.preheader
-}
-
-; Function Attrs: nounwind uwtable mustprogress
-define internal { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } @augmented_to_pose_params.17(i32 %count, double* noalias nocapture readonly %theta, double* nocapture %"theta'", i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params, %struct.Matrix* nocapture %"pose_params'") local_unnamed_addr #5 {
-entry:
-  %0 = alloca { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, align 8
-  %theta99 = bitcast double* %theta to i8*
-  %add = add nsw i32 %count, 3
-  %"nrows1.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 0
-  %nrows1.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 0
-  %1 = load i32, i32* %nrows1.i, align 8, !tbaa !138
-  %"ncols2.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 1
-  %ncols2.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 1
-  %2 = load i32, i32* %ncols2.i, align 4, !tbaa !139
-  %mul.i = mul nsw i32 %2, %1
-  %3 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 4
-  store i32 %mul.i, i32* %3, align 8
-  %mul3.i = mul i32 %add, 3
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.then.i
-
-if.then.i:                                        ; preds = %entry
-  %"data.i'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %data.i = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %4 = load double*, double** %data.i, align 8, !tbaa !137
-  %cmp4.not.i = icmp eq double* %4, null
-  %5 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 5
-  store i1 %cmp4.not.i, i1* %5, align 4
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %resize.exit.thread87
-
-resize.exit.thread:                               ; preds = %if.then.i
-  %conv31.i = zext i32 %mul3.i to i64
-  %mul11.i = shl nuw nsw i64 %conv31.i, 3
-  %call.i = tail call noalias i8* @malloc(i64 %mul11.i) #31
-  %6 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 1
-  store i8* %call.i, i8** %6, align 8
-  %"call.i'mi" = tail call noalias nonnull i8* @malloc(i64 %mul11.i) #31
-  %7 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 0
-  store i8* %"call.i'mi", i8** %7, align 8
-  call void @llvm.memset.p0i8.i64(i8* nonnull align 1 %"call.i'mi", i8 0, i64 %mul11.i, i1 false)
-  %"'ipc" = bitcast double** %"data.i'ipg" to i8**
-  %8 = bitcast double** %data.i to i8**
-  store i8* %"call.i'mi", i8** %"'ipc", align 8
-  store i8* %call.i, i8** %8, align 8, !tbaa !137
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %9 = bitcast i8* %call.i to double*
-  br label %for.body.lr.ph.i
-
-resize.exit.thread87:                             ; preds = %if.then.i
-  store double* null, double** %"data.i'ipg", align 8
-  store double* null, double** %data.i, align 8, !tbaa !137
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  br label %fill.exit
-
-resize.exit:                                      ; preds = %entry
-  store i32 %add, i32* %"ncols2.i'ipg", align 4
-  store i32 %add, i32* %ncols2.i, align 4, !tbaa !139
-  store i32 3, i32* %"nrows1.i'ipg", align 8
-  store i32 3, i32* %nrows1.i, align 8, !tbaa !138
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %"data.i85.phi.trans.insert'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %data.i85.phi.trans.insert = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %".pre'ipl" = load double*, double** %"data.i85.phi.trans.insert'ipg", align 8
-  %10 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 2
-  store double* %".pre'ipl", double** %10, align 8
-  %.pre = load double*, double** %data.i85.phi.trans.insert, align 8, !tbaa !137
-  %11 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 6
-  store double* %.pre, double** %11, align 8
-  br i1 %cmp7.i, label %resize.exit.for.body.lr.ph.i_crit_edge, label %fill.exit
-
-resize.exit.for.body.lr.ph.i_crit_edge:           ; preds = %resize.exit
-  %.pre107 = zext i32 %mul3.i to i64
-  %.pre108 = shl nuw nsw i64 %.pre107, 3
-  br label %for.body.lr.ph.i
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit.for.body.lr.ph.i_crit_edge, %resize.exit.thread
-  %.pre-phi = phi i64 [ %.pre108, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %mul11.i, %resize.exit.thread ]
-  %12 = phi double* [ %.pre, %resize.exit.for.body.lr.ph.i_crit_edge ], [ %9, %resize.exit.thread ]
-  %13 = bitcast double* %12 to i8*
-  call void @llvm.memset.p0i8.i64(i8* align 8 %13, i8 0, i64 %.pre-phi, i1 false)
-  br label %fill.exit
-
-fill.exit:                                        ; preds = %for.body.lr.ph.i, %resize.exit, %resize.exit.thread87
-  %14 = phi double* [ %12, %for.body.lr.ph.i ], [ null, %resize.exit.thread87 ], [ %.pre, %resize.exit ]
-  %15 = bitcast double* %14 to i8*
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(24) %15, i8* nonnull align 8 dereferenceable(24) %theta99, i64 24, i1 false)
-  br label %for.body
-
-for.cond17.preheader:                             ; preds = %for.body
-  %"data'ipg" = getelementptr inbounds %struct.Matrix, %struct.Matrix* %"pose_params'", i64 0, i32 2
-  %data = getelementptr inbounds %struct.Matrix, %struct.Matrix* %pose_params, i64 0, i32 2
-  %"'ipl" = load double*, double** %"data'ipg", align 8
-  %16 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 3
-  store double* %"'ipl", double** %16, align 8
-  %17 = load double*, double** %data, align 8, !tbaa !137
-  %malloccall = tail call noalias nonnull dereferenceable(20) dereferenceable_or_null(20) i8* @malloc(i64 20)
-  %i_pose_params.093_malloccache = bitcast i8* %malloccall to i32*
-  %18 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 7
-  %19 = bitcast i32** %18 to i8**
-  store i8* %malloccall, i8** %19, align 8
-  %malloccall8 = tail call noalias nonnull dereferenceable(60) dereferenceable_or_null(60) i8* @malloc(i64 60)
-  %i_theta.189_malloccache = bitcast i8* %malloccall8 to i32*
-  %20 = getelementptr inbounds { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, i64 0, i32 8
-  %21 = bitcast i32** %20 to i8**
-  store i8* %malloccall8, i8** %21, align 8
-  br label %for.cond20.preheader
-
-for.body:                                         ; preds = %for.body, %fill.exit
-  %iv = phi i64 [ %iv.next, %for.body ], [ 0, %fill.exit ]
-  %iv.next = add nuw nsw i64 %iv, 1
-  %22 = add nuw nsw i64 %iv, 3
-  %arrayidx7 = getelementptr inbounds double, double* %14, i64 %22
-  store double 1.000000e+00, double* %arrayidx7, align 8, !tbaa !75
-  %arrayidx10 = getelementptr inbounds double, double* %theta, i64 %22
-  %23 = load double, double* %arrayidx10, align 8, !tbaa !75
-  %24 = add nuw nsw i64 %iv, 6
-  %arrayidx16 = getelementptr inbounds double, double* %14, i64 %24
-  store double %23, double* %arrayidx16, align 8, !tbaa !75
-  %exitcond105.not = icmp eq i64 %iv.next, 3
-  br i1 %exitcond105.not, label %for.cond17.preheader, label %for.body, !llvm.loop !201
-
-for.cond20.preheader:                             ; preds = %for.end45, %for.cond17.preheader
-  %iv2 = phi i64 [ %iv.next3, %for.end45 ], [ 0, %for.cond17.preheader ]
-  %i_pose_params.093 = phi i32 [ %inc46, %for.end45 ], [ 5, %for.cond17.preheader ]
-  %i_theta.092 = phi i32 [ %i_theta.2.lcssa, %for.end45 ], [ 6, %for.cond17.preheader ]
-  %25 = getelementptr inbounds i32, i32* %i_pose_params.093_malloccache, i64 %iv2
-  store i32 %i_pose_params.093, i32* %25, align 4, !invariant.group !475
-  %iv.next3 = add nuw nsw i64 %iv2, 1
-  %26 = trunc i64 %iv2 to i32
-  %27 = sext i32 %i_pose_params.093 to i64
-  br label %for.body22
-
-for.body22:                                       ; preds = %if.end, %for.cond20.preheader
-  %iv4 = phi i64 [ %iv.next5, %if.end ], [ 0, %for.cond20.preheader ]
-  %i_theta.189 = phi i32 [ %i_theta.2, %if.end ], [ %i_theta.092, %for.cond20.preheader ]
-  %iv.next5 = add nuw nsw i64 %iv4, 1
-  %28 = trunc i64 %iv4 to i32
-  %29 = add i64 %iv4, %27
-  %idxprom23 = sext i32 %i_theta.189 to i64
-  %arrayidx24 = getelementptr inbounds double, double* %theta, i64 %idxprom23
-  %30 = load double, double* %arrayidx24, align 8, !tbaa !75
-  %31 = mul nsw i64 %29, 3
-  %arrayidx30 = getelementptr inbounds double, double* %17, i64 %31
-  store double %30, double* %arrayidx30, align 8, !tbaa !75
-  %32 = mul nuw nsw i64 %iv2, 3
-  %33 = add nuw nsw i64 %iv4, %32
-  %34 = getelementptr inbounds i32, i32* %i_theta.189_malloccache, i64 %33
-  store i32 %i_theta.189, i32* %34, align 4, !invariant.group !476
-  %inc31 = add nsw i32 %i_theta.189, 1
-  %cmp32 = icmp eq i32 %28, 0
-  br i1 %cmp32, label %if.then, label %if.end
-
-if.then:                                          ; preds = %for.body22
-  %idxprom33 = sext i32 %inc31 to i64
-  %arrayidx34 = getelementptr inbounds double, double* %theta, i64 %idxprom33
-  %35 = load double, double* %arrayidx34, align 8, !tbaa !75
-  %36 = add nsw i64 %31, 1
-  %arrayidx40 = getelementptr inbounds double, double* %17, i64 %36
-  store double %35, double* %arrayidx40, align 8, !tbaa !75
-  %inc41 = add nsw i32 %i_theta.189, 2
-  br label %if.end
-
-if.end:                                           ; preds = %if.then, %for.body22
-  %i_theta.2 = phi i32 [ %inc41, %if.then ], [ %inc31, %for.body22 ]
-  %37 = trunc i64 %29 to i32
-  %38 = add nsw i32 %i_pose_params.093, 2
-  %exitcond = icmp eq i32 %38, %37
-  br i1 %exitcond, label %for.end45, label %for.body22, !llvm.loop !202
-
-for.end45:                                        ; preds = %if.end
-  %i_theta.2.lcssa = phi i32 [ %i_theta.2, %if.end ]
-  %.lcssa = phi i64 [ %29, %if.end ]
-  %39 = trunc i64 %.lcssa to i32
-  %inc46 = add nsw i32 %39, 2
-  %exitcond98.not = icmp eq i32 %26, 4
-  br i1 %exitcond98.not, label %for.end49, label %for.cond20.preheader, !llvm.loop !203
-
-for.end49:                                        ; preds = %for.end45
-  %40 = load { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }, { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* }* %0, align 8
-  ret { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %40
-}
-
-; Function Attrs: nounwind uwtable mustprogress
-define internal void @diffeto_pose_params.18(i32 %count, double* noalias nocapture readonly %theta, double* nocapture %"theta'", i8** noalias nocapture readnone %bone_names, %struct.Matrix* noalias nocapture %pose_params, %struct.Matrix* nocapture %"pose_params'", { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg) local_unnamed_addr #5 {
-entry:
-  %0 = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 7
-  %1 = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 8
-  %mul.i = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 4
-  %2 = mul i32 %count, 3
-  %mul3.i = add i32 %2, 9
-  %cmp.not.i = icmp eq i32 %mul.i, %mul3.i
-  br i1 %cmp.not.i, label %resize.exit, label %if.end.i
-
-if.end.i:                                         ; preds = %entry
-  %cmp8.i = icmp sgt i32 %mul3.i, 0
-  br i1 %cmp8.i, label %resize.exit.thread, label %for.cond17.preheader
-
-resize.exit.thread:                               ; preds = %if.end.i
-  %"call.i'mi" = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 0
-  %"'ipc" = bitcast i8* %"call.i'mi" to double*
-  br label %for.body.lr.ph.i
-
-resize.exit:                                      ; preds = %entry
-  %cmp7.i = icmp sgt i32 %mul.i, 0
-  %".pre'il_phi" = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 2
-  br i1 %cmp7.i, label %for.body.lr.ph.i, label %for.cond17.preheader
-
-for.body.lr.ph.i:                                 ; preds = %resize.exit, %resize.exit.thread
-  %3 = phi double* [ %"'ipc", %resize.exit.thread ], [ %".pre'il_phi", %resize.exit ]
-  br label %for.cond17.preheader
-
-for.cond17.preheader:                             ; preds = %resize.exit, %for.body.lr.ph.i, %if.end.i
-  %_cache.0 = phi i8 [ 1, %for.body.lr.ph.i ], [ 2, %resize.exit ], [ 0, %if.end.i ]
-  %4 = phi double* [ %3, %for.body.lr.ph.i ], [ %".pre'il_phi", %resize.exit ], [ null, %if.end.i ]
-  %"'il_phi1" = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 3
-  br label %invertfor.end45
-
-invertentry:                                      ; preds = %invertfill.exit, %invertresize.exit.thread
-  ret void
-
-invertresize.exit.thread:                         ; preds = %invertfill.exit
-  %"call.i'mi_unwrap" = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 0
-  tail call void @free(i8* nonnull %"call.i'mi_unwrap")
-  %call.i_unwrap = extractvalue { i8*, i8*, double*, double*, i32, i1, double*, i32*, i32* } %tapeArg, 1
-  tail call void @free(i8* %call.i_unwrap)
-  br label %invertentry
-
-invertfill.exit:                                  ; preds = %invertfor.body
-  call void @__enzyme_memcpyadd_doubleda8sa8(double* %4, double* %"theta'", i64 3)
-  %cond = icmp eq i8 %_cache.0, 1
-  %cond.not = xor i1 %cond, true
-  %brmerge = or i1 %cond.not, %cmp.not.i
-  br i1 %brmerge, label %invertentry, label %invertresize.exit.thread
-
-invertfor.cond17.preheader:                       ; preds = %invertfor.cond20.preheader
-  %5 = bitcast i32* %0 to i8*
-  tail call void @free(i8* nonnull %5)
-  %6 = bitcast i32* %1 to i8*
-  tail call void @free(i8* nonnull %6)
-  br label %invertfor.body
-
-invertfor.body:                                   ; preds = %incinvertfor.body, %invertfor.cond17.preheader
-  %"iv'ac.0" = phi i64 [ 2, %invertfor.cond17.preheader ], [ %11, %incinvertfor.body ]
-  %_unwrap = add nuw nsw i64 %"iv'ac.0", 6
-  %"arrayidx16'ipg_unwrap" = getelementptr inbounds double, double* %4, i64 %_unwrap
-  %7 = load double, double* %"arrayidx16'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx16'ipg_unwrap", align 8
-  %_unwrap15 = add nuw nsw i64 %"iv'ac.0", 3
-  %"arrayidx10'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %_unwrap15
-  %8 = load double, double* %"arrayidx10'ipg_unwrap", align 8
-  %9 = fadd fast double %8, %7
-  store double %9, double* %"arrayidx10'ipg_unwrap", align 8
-  %"arrayidx7'ipg_unwrap" = getelementptr inbounds double, double* %4, i64 %_unwrap15
-  store double 0.000000e+00, double* %"arrayidx7'ipg_unwrap", align 8
-  %10 = icmp eq i64 %"iv'ac.0", 0
-  br i1 %10, label %invertfill.exit, label %incinvertfor.body
-
-incinvertfor.body:                                ; preds = %invertfor.body
-  %11 = add nsw i64 %"iv'ac.0", -1
-  br label %invertfor.body
-
-invertfor.cond20.preheader:                       ; preds = %invertfor.body22
-  %12 = icmp eq i64 %"iv2'ac.0", 0
-  br i1 %12, label %invertfor.cond17.preheader, label %incinvertfor.cond20.preheader
-
-incinvertfor.cond20.preheader:                    ; preds = %invertfor.cond20.preheader
-  %13 = add nsw i64 %"iv2'ac.0", -1
-  br label %invertfor.end45
-
-invertfor.body22:                                 ; preds = %invertif.end, %invertif.then
-  %14 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %15 = load i32, i32* %14, align 4, !invariant.group !477
-  %_unwrap17 = sext i32 %15 to i64
-  %_unwrap18 = add i64 %"iv4'ac.0", %_unwrap17
-  %_unwrap19 = mul nsw i64 %_unwrap18, 3
-  %"arrayidx30'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1", i64 %_unwrap19
-  %16 = load double, double* %"arrayidx30'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx30'ipg_unwrap", align 8
-  %17 = mul nuw nsw i64 %"iv2'ac.0", 3
-  %18 = add nuw nsw i64 %"iv4'ac.0", %17
-  %19 = getelementptr inbounds i32, i32* %1, i64 %18
-  %20 = load i32, i32* %19, align 4, !invariant.group !478
-  %idxprom23_unwrap = sext i32 %20 to i64
-  %"arrayidx24'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom23_unwrap
-  %21 = load double, double* %"arrayidx24'ipg_unwrap", align 8
-  %22 = fadd fast double %21, %16
-  store double %22, double* %"arrayidx24'ipg_unwrap", align 8
-  %23 = icmp eq i64 %"iv4'ac.0", 0
-  br i1 %23, label %invertfor.cond20.preheader, label %incinvertfor.body22
+  %36 = load double, double* %"arrayidx28'ipg_unwrap", align 8
+  %37 = fadd fast double %36, %31
+  store double %37, double* %"arrayidx28'ipg_unwrap", align 8
+  %38 = icmp eq i64 %"iv9'ac.0", 0
+  %inc421 = add i32 %reverse_op.4.in, 14
+  br i1 %38, label %invertfor.body22.lr.ph, label %incinvertfor.body22
 
 incinvertfor.body22:                              ; preds = %invertfor.body22
-  %24 = add nsw i64 %"iv4'ac.0", -1
-  br label %invertif.end
-
-invertif.then:                                    ; preds = %invertif.end
-  %25 = getelementptr inbounds i32, i32* %0, i64 %"iv2'ac.0"
-  %26 = load i32, i32* %25, align 4, !invariant.group !477
-  %_unwrap24 = sext i32 %26 to i64
-  %_unwrap25 = add i64 %"iv4'ac.0", %_unwrap24
-  %_unwrap26 = mul nsw i64 %_unwrap25, 3
-  %_unwrap27 = add nsw i64 %_unwrap26, 1
-  %"arrayidx40'ipg_unwrap" = getelementptr inbounds double, double* %"'il_phi1", i64 %_unwrap27
-  %27 = load double, double* %"arrayidx40'ipg_unwrap", align 8
-  store double 0.000000e+00, double* %"arrayidx40'ipg_unwrap", align 8
-  %28 = mul nuw nsw i64 %"iv2'ac.0", 3
-  %29 = add nuw nsw i64 %"iv4'ac.0", %28
-  %30 = getelementptr inbounds i32, i32* %1, i64 %29
-  %31 = load i32, i32* %30, align 4, !invariant.group !478
-  %inc31_unwrap = add nsw i32 %31, 1
-  %idxprom33_unwrap = sext i32 %inc31_unwrap to i64
-  %"arrayidx34'ipg_unwrap" = getelementptr inbounds double, double* %"theta'", i64 %idxprom33_unwrap
-  %32 = load double, double* %"arrayidx34'ipg_unwrap", align 8
-  %33 = fadd fast double %32, %27
-  store double %33, double* %"arrayidx34'ipg_unwrap", align 8
+  %inc427 = add i32 %reverse_mem.4, 35
   br label %invertfor.body22
 
-invertif.end:                                     ; preds = %invertfor.end45, %incinvertfor.body22
-  %"iv4'ac.0" = phi i64 [ 2, %invertfor.end45 ], [ %24, %incinvertfor.body22 ]
-  %34 = trunc i64 %"iv4'ac.0" to i32
-  %cmp32_unwrap = icmp eq i32 %34, 0
-  br i1 %cmp32_unwrap, label %invertif.then, label %invertfor.body22
+mergeinvertfor.body22_for.inc45.loopexit:         ; preds = %invertfor.inc45
+  %wide.trip.count_unwrap = zext i32 %_unwrap69 to i64
+  %inc433 = add i32 %reverse_mem.5, 3
+  br label %invertfor.body22
 
-invertfor.end45:                                  ; preds = %for.cond17.preheader, %incinvertfor.cond20.preheader
-  %"iv2'ac.0" = phi i64 [ %13, %incinvertfor.cond20.preheader ], [ 4, %for.cond17.preheader ]
-  br label %invertif.end
+invertfor.inc45:                                  ; preds = %mergeinvertfor.cond19.preheader_for.end47, %incinvertfor.cond19.preheader
+  %"iv4'ac.0.in" = phi i64 [ %_unwrap58, %mergeinvertfor.cond19.preheader_for.end47 ], [ %"iv4'ac.0", %incinvertfor.cond19.preheader ]
+  %reverse_mem.5 = phi i32 [ 1, %mergeinvertfor.cond19.preheader_for.end47 ], [ %inc329, %incinvertfor.cond19.preheader ]
+  %reverse_op.5 = phi i32 [ 1, %mergeinvertfor.cond19.preheader_for.end47 ], [ %inc327, %incinvertfor.cond19.preheader ]
+  %"iv4'ac.0" = add nsw i64 %"iv4'ac.0.in", -1
+  %inc435 = add i32 %reverse_mem.5, 1
+  %_unwrap69 = extractvalue { double*, { double, double*, double, double, double }, double*, i8*, i8*, i8*, { i8*, i8*, double**, i32, i1, i1, i32*, double*, double*, double*, double* }, i8*, i8*, double**, double**, double*, i32, double*, double*, i32, i32, i32* } %tapeArg, 16
+  %cmp2187_unwrap = icmp sgt i32 %_unwrap69, 0
+  br i1 %cmp2187_unwrap, label %mergeinvertfor.body22_for.inc45.loopexit, label %invertfor.cond19.preheader
+
+mergeinvertfor.cond19.preheader_for.end47:        ; preds = %invertdelete_matrix.exit86
+  %_unwrap58 = zext i32 %9 to i64
+  br label %invertfor.inc45
+
+invertdelete_matrix.exit86:                       ; preds = %for.inc45, %for.end14
+  %forward_mem.4 = phi i32 [ %inc121.lcssa.lcssa, %for.end14 ], [ %forward_mem.3, %for.inc45 ]
+  %forward_op.5 = phi i32 [ %inc125.lcssa.lcssa, %for.end14 ], [ %forward_op.4, %for.inc45 ]
+  br i1 %cmp1789, label %mergeinvertfor.cond19.preheader_for.end47, label %invertfor.end14
 }
 
 attributes #0 = { nounwind uwtable "denormal-fp-math"="preserve-sign,preserve-sign" "denormal-fp-math-f32"="ieee,ieee" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="true" "no-jump-tables"="false" "no-nans-fp-math"="true" "no-signed-zeros-fp-math"="true" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" "unsafe-fp-math"="true" "use-soft-float"="false" }
@@ -20974,32 +23182,32 @@ attributes #37 = { builtin nounwind }
 !198 = distinct !{!198, !9, !10}
 !199 = distinct !{!199, !9, !10}
 !200 = distinct !{!200, !9, !10}
-!201 = distinct !{!201, !9, !10}
-!202 = distinct !{!202, !9, !10}
-!203 = distinct !{!203, !9, !10}
-!204 = distinct !{!204, !9, !10}
-!205 = distinct !{!205, !9, !10}
-!206 = distinct !{!206, !9, !10}
+!201 = !{!202}
+!202 = distinct !{!202, !203, !"to_pose_params: %theta"}
+!203 = distinct !{!203, !"to_pose_params"}
+!204 = !{!205}
+!205 = distinct !{!205, !203, !"to_pose_params: %pose_params"}
+!206 = !{!202, !205}
 !207 = distinct !{!207, !9, !10}
 !208 = distinct !{!208, !9, !10}
 !209 = distinct !{!209, !9, !10}
 !210 = distinct !{!210, !9, !10}
 !211 = distinct !{!211, !9, !10}
 !212 = distinct !{!212, !9, !10}
-!213 = !{!214, !16, i64 0}
-!214 = !{!"_ZTS11Matrix_diff", !16, i64 0}
+!213 = distinct !{!213, !9, !10}
+!214 = distinct !{!214, !9, !10}
 !215 = distinct !{!215, !9, !10}
 !216 = distinct !{!216, !9, !10}
-!217 = distinct !{!217, !9, !10}
-!218 = distinct !{!218, !9, !10}
-!219 = distinct !{!219, !9, !10}
-!220 = distinct !{!220, !9, !10}
-!221 = distinct !{!221, !9, !10}
-!222 = distinct !{!222, !9, !10}
+!217 = !{!218}
+!218 = distinct !{!218, !219, !"to_pose_params: %theta"}
+!219 = distinct !{!219, !"to_pose_params"}
+!220 = !{!221}
+!221 = distinct !{!221, !219, !"to_pose_params: %pose_params"}
+!222 = !{!218, !221}
 !223 = distinct !{!223, !9, !10}
 !224 = distinct !{!224, !9, !10}
-!225 = distinct !{!225, !9, !10}
-!226 = distinct !{!226, !9, !10}
+!225 = !{!226, !16, i64 0}
+!226 = !{!"_ZTS11Matrix_diff", !16, i64 0}
 !227 = distinct !{!227, !9, !10}
 !228 = distinct !{!228, !9, !10}
 !229 = distinct !{!229, !9, !10}
@@ -21046,19 +23254,19 @@ attributes #37 = { builtin nounwind }
 !270 = distinct !{!270, !9, !10}
 !271 = distinct !{!271, !9, !10}
 !272 = distinct !{!272, !9, !10}
-!273 = !{!"true"}
-!274 = distinct !{}
-!275 = distinct !{}
-!276 = distinct !{}
-!277 = distinct !{}
-!278 = distinct !{}
-!279 = distinct !{}
-!280 = distinct !{}
-!281 = distinct !{}
-!282 = distinct !{}
-!283 = distinct !{}
-!284 = !{i64 8}
-!285 = distinct !{}
+!273 = distinct !{!273, !9, !10}
+!274 = distinct !{!274, !9, !10}
+!275 = distinct !{!275, !9, !10}
+!276 = distinct !{!276, !9, !10}
+!277 = distinct !{!277, !9, !10}
+!278 = distinct !{!278, !9, !10}
+!279 = distinct !{!279, !9, !10}
+!280 = distinct !{!280, !9, !10}
+!281 = distinct !{!281, !9, !10}
+!282 = distinct !{!282, !9, !10}
+!283 = distinct !{!283, !9, !10}
+!284 = distinct !{!284, !9, !10}
+!285 = !{!"true"}
 !286 = distinct !{}
 !287 = distinct !{}
 !288 = distinct !{}
@@ -21071,7 +23279,7 @@ attributes #37 = { builtin nounwind }
 !295 = distinct !{}
 !296 = distinct !{}
 !297 = distinct !{}
-!298 = distinct !{}
+!298 = !{i64 8}
 !299 = distinct !{}
 !300 = distinct !{}
 !301 = distinct !{}
@@ -21252,3 +23460,19 @@ attributes #37 = { builtin nounwind }
 !476 = distinct !{}
 !477 = distinct !{}
 !478 = distinct !{}
+!479 = distinct !{}
+!480 = distinct !{}
+!481 = distinct !{}
+!482 = distinct !{}
+!483 = distinct !{}
+!484 = distinct !{}
+!485 = distinct !{}
+!486 = distinct !{}
+!487 = distinct !{}
+!488 = distinct !{}
+!489 = distinct !{}
+!490 = distinct !{}
+!491 = distinct !{}
+!492 = distinct !{}
+!493 = distinct !{}
+!494 = distinct !{}

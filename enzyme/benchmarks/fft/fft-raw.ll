@@ -1,4 +1,4 @@
-; ModuleID = 'fft-raw.ll'
+; ModuleID = 'fft-unopt.ll'
 source_filename = "fft.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-unknown-linux-gnu"
@@ -9767,7 +9767,7 @@ if.end.i.i:                                       ; preds = %if.then.i.i, %for.b
 while.body.i.i.preheader:                         ; preds = %if.end.i.i
   br label %while.body.i.i
 
-while.body.i.i:                                   ; preds = %while.body.i.i, %while.body.i.i.preheader
+while.body.i.i:                                   ; preds = %while.body.i.i.preheader, %while.body.i.i
   %m.037.i.i = phi i32 [ %shr33.i.i, %while.body.i.i ], [ %len, %while.body.i.i.preheader ]
   %j.136.i.i = phi i32 [ %sub11.i.i, %while.body.i.i ], [ %j.040.i.i, %while.body.i.i.preheader ]
   %sub11.i.i = sub nsw i32 %j.136.i.i, %m.037.i.i
@@ -9833,7 +9833,7 @@ if.end.i.i19:                                     ; preds = %if.then.i.i17, %for
 while.body.i.i26.preheader:                       ; preds = %if.end.i.i19
   br label %while.body.i.i26
 
-while.body.i.i26:                                 ; preds = %while.body.i.i26, %while.body.i.i26.preheader
+while.body.i.i26:                                 ; preds = %while.body.i.i26.preheader, %while.body.i.i26
   %m.037.i.i20 = phi i32 [ %shr33.i.i23, %while.body.i.i26 ], [ %len, %while.body.i.i26.preheader ]
   %j.136.i.i21 = phi i32 [ %sub11.i.i22, %while.body.i.i26 ], [ %j.040.i.i8, %while.body.i.i26.preheader ]
   %sub11.i.i22 = sub nsw i32 %j.136.i.i21, %m.037.i.i20
@@ -10085,7 +10085,7 @@ _ZL8scramblePdj.exit.thread.i:                    ; preds = %entry
   %augmented_load152 = load i32, i32* %forward_mem, align 4
   %inc153 = add i32 %augmented_load152, 1
   store i32 %inc153, i32* %forward_mem, align 4
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %13, align 8, !node !179, !enzyme_mustcache !183
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %13, align 8, !enzyme_mustcache !183, !node !179
   %augmented_load154 = load i32, i32* %forward_mem, align 4
   %inc155 = add i32 %augmented_load154, 1
   store i32 %inc155, i32* %forward_mem, align 4
@@ -10099,7 +10099,7 @@ for.body.lr.ph.i.i6:                              ; preds = %while.end.i.i
   %augmented_load156 = load i32, i32* %forward_mem, align 4
   %inc157 = add i32 %augmented_load156, 1
   store i32 %inc157, i32* %forward_mem, align 4
-  %tapeld40 = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %14, align 8, !node !179, !enzyme_mustcache !183
+  %tapeld40 = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %14, align 8, !enzyme_mustcache !183, !node !179
   %augmented_load158 = load i32, i32* %forward_mem, align 4
   %inc159 = add i32 %augmented_load158, 1
   store i32 %inc159, i32* %forward_mem, align 4
@@ -11280,7 +11280,7 @@ if.end:                                           ; preds = %entry
 for.body.preheader:                               ; preds = %if.end
   br label %for.body
 
-for.body:                                         ; preds = %for.body, %for.body.preheader
+for.body:                                         ; preds = %for.body.preheader, %for.body
   %tiv = phi i64 [ 0, %for.body.preheader ], [ %tiv.next, %for.body ]
   %wr.0111 = phi double [ %add47, %for.body ], [ 1.000000e+00, %for.body.preheader ]
   %wi.0110 = phi double [ %add51, %for.body ], [ 0.000000e+00, %for.body.preheader ]
@@ -11445,7 +11445,7 @@ if.end:                                           ; preds = %entry
   %augmented_load56 = load i32, i32* %forward_mem, align 4
   %inc57 = add i32 %augmented_load56, 1
   store i32 %inc57, i32* %forward_mem, align 4
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !node !179, !enzyme_mustcache !183
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183, !node !179
   %augmented_load58 = load i32, i32* %forward_mem, align 4
   %inc59 = add i32 %augmented_load58, 1
   store i32 %inc59, i32* %forward_mem, align 4
@@ -12415,7 +12415,7 @@ if.end:                                           ; preds = %entry
   %augmented_load56 = load i32, i32* %forward_mem, align 4
   %inc57 = add i32 %augmented_load56, 1
   store i32 %inc57, i32* %forward_mem, align 4
-  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !node !179, !enzyme_mustcache !183
+  %tapeld = load { i8*, i8*, double*, double* }, { i8*, i8*, double*, double* }* %0, align 8, !enzyme_mustcache !183, !node !179
   %augmented_load58 = load i32, i32* %forward_mem, align 4
   %inc59 = add i32 %augmented_load58, 1
   store i32 %inc59, i32* %forward_mem, align 4
@@ -13307,7 +13307,7 @@ if.end:                                           ; preds = %entry
 for.body.preheader:                               ; preds = %if.end
   br label %for.body
 
-for.body:                                         ; preds = %for.body, %for.body.preheader
+for.body:                                         ; preds = %for.body.preheader, %for.body
   %tiv = phi i64 [ 0, %for.body.preheader ], [ %tiv.next, %for.body ]
   %wr.0111 = phi double [ %add47, %for.body ], [ 1.000000e+00, %for.body.preheader ]
   %wi.0110 = phi double [ %add51, %for.body ], [ 0.000000e+00, %for.body.preheader ]

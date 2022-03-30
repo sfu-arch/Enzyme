@@ -16,10 +16,10 @@ Return __enzyme_autodiff(T...);
 inline double matvec_real(double* mat, double* vec) {
   double *out = (double*)malloc(sizeof(double)*N);
   //double *out = new double[N];
-#pragma clang loop unroll(full)
+// #pragma clang loop unroll(full)
   for(int i=0; i<N; i++) {
     out[i] = 0;
-#pragma clang loop unroll(full)
+// #pragma clang loop unroll(full)
     for(int j=0; j<M; j++) {
         out[i] += mat[i*M+j] * vec[j];
     }

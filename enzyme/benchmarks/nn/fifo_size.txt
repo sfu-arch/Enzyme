@@ -1,2 +1,0 @@
-reg_count, fifo_size
-24, 124

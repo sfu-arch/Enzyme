@@ -492,6 +492,7 @@ $_ZTVN5adept21gradient_out_of_rangeE = comdat any
 @_ZTIN5adept21gradient_out_of_rangeE = linkonce_odr dso_local constant { i8*, i8*, i8* } { i8* bitcast (i8** getelementptr inbounds (i8*, i8** @_ZTVN10__cxxabiv120__si_class_type_infoE, i64 2) to i8*), i8* getelementptr inbounds ([32 x i8], [32 x i8]* @_ZTSN5adept21gradient_out_of_rangeE, i32 0, i32 0), i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept18autodiff_exceptionE to i8*) }, comdat, align 8
 @_ZTVN5adept21gradient_out_of_rangeE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept21gradient_out_of_rangeE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::gradient_out_of_range"*)* @_ZN5adept21gradient_out_of_rangeD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_ba.cpp, i8* null }]
+@ResultFormatStrIR = global [80 x i8] c"forward ops = %d, reverse ops = %d, forward mem ops = %d, reverse mem ops = %d\0A\00"
 
 @_ZN11BASparseMatC1Ev = dso_local unnamed_addr alias void (%class.BASparseMat*), void (%class.BASparseMat*)* @_ZN11BASparseMatC2Ev
 @_ZN11BASparseMatC1Eiii = dso_local unnamed_addr alias void (%class.BASparseMat*, i32, i32, i32), void (%class.BASparseMat*, i32, i32, i32)* @_ZN11BASparseMatC2Eiii
@@ -23077,42 +23078,143 @@ entry:
 ; Function Attrs: nofree norecurse nounwind uwtable willreturn mustprogress
 define internal void @diffecompute_zach_weight_error(double* nocapture readonly %w, double* nocapture %"w'", double* nocapture %err, double* nocapture %"err'") #14 {
 entry:
+  %forward_op = alloca i32, align 4
+  store i32 0, i32* %forward_op, align 4
+  %reverse_op = alloca i32, align 4
+  store i32 0, i32* %reverse_op, align 4
+  %forward_mem = alloca i32, align 4
+  store i32 0, i32* %forward_mem, align 4
+  %reverse_mem = alloca i32, align 4
+  store i32 0, i32* %reverse_mem, align 4
   %"sub'de" = alloca double, align 8, !node !362
+  %augmented_load = load i32, i32* %forward_mem, align 4
+  %inc = add i32 %augmented_load, 1
+  store i32 %inc, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
   %"mul'de" = alloca double, align 8, !node !362
+  %augmented_load1 = load i32, i32* %forward_mem, align 4
+  %inc2 = add i32 %augmented_load1, 1
+  store i32 %inc2, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul'de", align 8
   %"'de" = alloca double, align 8, !node !362
+  %augmented_load3 = load i32, i32* %forward_mem, align 4
+  %inc4 = add i32 %augmented_load3, 1
+  store i32 %inc4, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
+  %augmented_load5 = load i32, i32* %forward_mem, align 4
+  %inc6 = add i32 %augmented_load5, 1
+  store i32 %inc6, i32* %forward_mem, align 4
   %0 = load double, double* %w, align 8, !tbaa !68, !node !362
   br label %invertentry
 
 invertentry:                                      ; preds = %entry
+  %augmented_load7 = load i32, i32* %reverse_mem, align 4
+  %inc8 = add i32 %augmented_load7, 1
+  store i32 %inc8, i32* %reverse_mem, align 4
   %1 = load double, double* %"err'", align 8, !node !362
+  %augmented_load9 = load i32, i32* %reverse_mem, align 4
+  %inc10 = add i32 %augmented_load9, 1
+  store i32 %inc10, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"err'", align 8
+  %augmented_load11 = load i32, i32* %reverse_mem, align 4
+  %inc12 = add i32 %augmented_load11, 1
+  store i32 %inc12, i32* %reverse_mem, align 4
   %2 = load double, double* %"sub'de", align 8, !node !362
   %3 = fadd fast double %2, %1, !node !362
+  %augmented_load13 = load i32, i32* %reverse_op, align 4
+  %inc14 = add i32 %augmented_load13, 1
+  store i32 %inc14, i32* %reverse_op, align 4
+  %augmented_load15 = load i32, i32* %reverse_mem, align 4
+  %inc16 = add i32 %augmented_load15, 1
+  store i32 %inc16, i32* %reverse_mem, align 4
   store double %3, double* %"sub'de", align 8
+  %augmented_load17 = load i32, i32* %reverse_mem, align 4
+  %inc18 = add i32 %augmented_load17, 1
+  store i32 %inc18, i32* %reverse_mem, align 4
   %4 = load double, double* %"sub'de", align 8, !node !362
   %5 = fneg fast double %4, !node !362
+  %augmented_load19 = load i32, i32* %reverse_mem, align 4
+  %inc20 = add i32 %augmented_load19, 1
+  store i32 %inc20, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
+  %augmented_load21 = load i32, i32* %reverse_mem, align 4
+  %inc22 = add i32 %augmented_load21, 1
+  store i32 %inc22, i32* %reverse_mem, align 4
   %6 = load double, double* %"mul'de", align 8, !node !362
   %7 = fadd fast double %6, %5, !node !362
+  %augmented_load23 = load i32, i32* %reverse_op, align 4
+  %inc24 = add i32 %augmented_load23, 1
+  store i32 %inc24, i32* %reverse_op, align 4
+  %augmented_load25 = load i32, i32* %reverse_mem, align 4
+  %inc26 = add i32 %augmented_load25, 1
+  store i32 %inc26, i32* %reverse_mem, align 4
   store double %7, double* %"mul'de", align 8
+  %augmented_load27 = load i32, i32* %reverse_mem, align 4
+  %inc28 = add i32 %augmented_load27, 1
+  store i32 %inc28, i32* %reverse_mem, align 4
   %8 = load double, double* %"mul'de", align 8, !node !362
   %m0diffe = fmul fast double %8, %0, !node !362
+  %augmented_load29 = load i32, i32* %reverse_op, align 4
+  %inc30 = add i32 %augmented_load29, 1
+  store i32 %inc30, i32* %reverse_op, align 4
   %m1diffe = fmul fast double %8, %0, !node !362
+  %augmented_load31 = load i32, i32* %reverse_op, align 4
+  %inc32 = add i32 %augmented_load31, 1
+  store i32 %inc32, i32* %reverse_op, align 4
+  %augmented_load33 = load i32, i32* %reverse_mem, align 4
+  %inc34 = add i32 %augmented_load33, 1
+  store i32 %inc34, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul'de", align 8
+  %augmented_load35 = load i32, i32* %reverse_mem, align 4
+  %inc36 = add i32 %augmented_load35, 1
+  store i32 %inc36, i32* %reverse_mem, align 4
   %9 = load double, double* %"'de", align 8, !node !362
   %10 = fadd fast double %9, %m0diffe, !node !362
+  %augmented_load37 = load i32, i32* %reverse_op, align 4
+  %inc38 = add i32 %augmented_load37, 1
+  store i32 %inc38, i32* %reverse_op, align 4
+  %augmented_load39 = load i32, i32* %reverse_mem, align 4
+  %inc40 = add i32 %augmented_load39, 1
+  store i32 %inc40, i32* %reverse_mem, align 4
   store double %10, double* %"'de", align 8
+  %augmented_load41 = load i32, i32* %reverse_mem, align 4
+  %inc42 = add i32 %augmented_load41, 1
+  store i32 %inc42, i32* %reverse_mem, align 4
   %11 = load double, double* %"'de", align 8, !node !362
   %12 = fadd fast double %11, %m1diffe, !node !362
+  %augmented_load43 = load i32, i32* %reverse_op, align 4
+  %inc44 = add i32 %augmented_load43, 1
+  store i32 %inc44, i32* %reverse_op, align 4
+  %augmented_load45 = load i32, i32* %reverse_mem, align 4
+  %inc46 = add i32 %augmented_load45, 1
+  store i32 %inc46, i32* %reverse_mem, align 4
   store double %12, double* %"'de", align 8
+  %augmented_load47 = load i32, i32* %reverse_mem, align 4
+  %inc48 = add i32 %augmented_load47, 1
+  store i32 %inc48, i32* %reverse_mem, align 4
   %13 = load double, double* %"'de", align 8, !node !362
+  %augmented_load49 = load i32, i32* %reverse_mem, align 4
+  %inc50 = add i32 %augmented_load49, 1
+  store i32 %inc50, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
+  %augmented_load51 = load i32, i32* %reverse_mem, align 4
+  %inc52 = add i32 %augmented_load51, 1
+  store i32 %inc52, i32* %reverse_mem, align 4
   %14 = load double, double* %"w'", align 8, !node !362
   %15 = fadd fast double %14, %13, !node !362
+  %augmented_load53 = load i32, i32* %reverse_op, align 4
+  %inc54 = add i32 %augmented_load53, 1
+  store i32 %inc54, i32* %reverse_op, align 4
+  %augmented_load55 = load i32, i32* %reverse_mem, align 4
+  %inc56 = add i32 %augmented_load55, 1
+  store i32 %inc56, i32* %reverse_mem, align 4
   store double %15, double* %"w'", align 8
+  %augmented_load57 = load i32, i32* %forward_op, align 4
+  %augmented_load58 = load i32, i32* %reverse_op, align 4
+  %augmented_load59 = load i32, i32* %reverse_mem, align 4
+  %augmented_load60 = load i32, i32* %forward_mem, align 4
+  %16 = bitcast [80 x i8]* @ResultFormatStrIR to i8*
+  %17 = call i32 (i8*, ...) @printf(i8* %16, i32 %augmented_load57, i32 %augmented_load58, i32 %augmented_load60, i32 %augmented_load59)
   ret void
 }
 
@@ -23197,452 +23299,1546 @@ project.exit:
 ; Function Attrs: nofree nounwind uwtable mustprogress
 define internal void @diffecompute_reproj_error(double* noalias nocapture readonly %cam, double* nocapture %"cam'", double* noalias nocapture readonly %X, double* nocapture %"X'", double* noalias nocapture readonly %w, double* nocapture %"w'", double* noalias nocapture readonly %feat, double* noalias nocapture %err, double* nocapture %"err'") #15 {
 project.exit:
+  %forward_op = alloca i32, align 4
+  store i32 0, i32* %forward_op, align 4
+  %reverse_op = alloca i32, align 4
+  store i32 0, i32* %reverse_op, align 4
+  %forward_mem = alloca i32, align 4
+  store i32 0, i32* %forward_mem, align 4
+  %reverse_mem = alloca i32, align 4
+  store i32 0, i32* %reverse_mem, align 4
   %"mul6'de" = alloca double, align 8, !node !362
+  %augmented_load = load i32, i32* %forward_mem, align 4
+  %inc = add i32 %augmented_load, 1
+  store i32 %inc, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul6'de", align 8
   %"sub5'de" = alloca double, align 8, !node !362
+  %augmented_load23 = load i32, i32* %forward_mem, align 4
+  %inc24 = add i32 %augmented_load23, 1
+  store i32 %inc24, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub5'de", align 8
   %"'de" = alloca double, align 8, !node !362
+  %augmented_load25 = load i32, i32* %forward_mem, align 4
+  %inc26 = add i32 %augmented_load25, 1
+  store i32 %inc26, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
   %"add30.i'de" = alloca double, align 8, !node !362
+  %augmented_load27 = load i32, i32* %forward_mem, align 4
+  %inc28 = add i32 %augmented_load27, 1
+  store i32 %inc28, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add30.i'de", align 8
   %"mul'de" = alloca double, align 8, !node !362
+  %augmented_load29 = load i32, i32* %forward_mem, align 4
+  %inc30 = add i32 %augmented_load29, 1
+  store i32 %inc30, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul'de", align 8
   %"sub'de" = alloca double, align 8, !node !362
+  %augmented_load31 = load i32, i32* %forward_mem, align 4
+  %inc32 = add i32 %augmented_load31, 1
+  store i32 %inc32, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
   %"add.i'de" = alloca double, align 8, !node !362
+  %augmented_load33 = load i32, i32* %forward_mem, align 4
+  %inc34 = add i32 %augmented_load33, 1
+  store i32 %inc34, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add.i'de", align 8
   %"mul28.i'de" = alloca double, align 8, !node !362
+  %augmented_load35 = load i32, i32* %forward_mem, align 4
+  %inc36 = add i32 %augmented_load35, 1
+  store i32 %inc36, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul28.i'de", align 8
   %"'de2" = alloca double, align 8, !node !362
+  %augmented_load37 = load i32, i32* %forward_mem, align 4
+  %inc38 = add i32 %augmented_load37, 1
+  store i32 %inc38, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de2", align 8
   %"mul6.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load39 = load i32, i32* %forward_mem, align 4
+  %inc40 = add i32 %augmented_load39, 1
+  store i32 %inc40, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul6.i.i'de", align 8
   %"div19.i'de" = alloca double, align 8, !node !362
+  %augmented_load41 = load i32, i32* %forward_mem, align 4
+  %inc42 = add i32 %augmented_load41, 1
+  store i32 %inc42, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"div19.i'de", align 8
   %"mul.i'de" = alloca double, align 8, !node !362
+  %augmented_load43 = load i32, i32* %forward_mem, align 4
+  %inc44 = add i32 %augmented_load43, 1
+  store i32 %inc44, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i'de", align 8
   %"'de3" = alloca double, align 8, !node !362
+  %augmented_load45 = load i32, i32* %forward_mem, align 4
+  %inc46 = add i32 %augmented_load45, 1
+  store i32 %inc46, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de3", align 8
   %"div.i'de" = alloca double, align 8, !node !362
+  %augmented_load47 = load i32, i32* %forward_mem, align 4
+  %inc48 = add i32 %augmented_load47, 1
+  store i32 %inc48, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"div.i'de", align 8
   %"add4.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load49 = load i32, i32* %forward_mem, align 4
+  %inc50 = add i32 %augmented_load49, 1
+  store i32 %inc50, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add4.i.i'de", align 8
   %"'de6" = alloca double, align 8, !node !362
+  %augmented_load51 = load i32, i32* %forward_mem, align 4
+  %inc52 = add i32 %augmented_load51, 1
+  store i32 %inc52, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de6", align 8
   %"reass.mul.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load53 = load i32, i32* %forward_mem, align 4
+  %inc54 = add i32 %augmented_load53, 1
+  store i32 %inc54, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"reass.mul.i.i'de", align 8
   %"reass.add.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load55 = load i32, i32* %forward_mem, align 4
+  %inc56 = add i32 %augmented_load55, 1
+  store i32 %inc56, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"reass.add.i.i'de", align 8
   %"add.i.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load57 = load i32, i32* %forward_mem, align 4
+  %inc58 = add i32 %augmented_load57, 1
+  store i32 %inc58, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add.i.i.i'de", align 8
   %"mul3.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load59 = load i32, i32* %forward_mem, align 4
+  %inc60 = add i32 %augmented_load59, 1
+  store i32 %inc60, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul3.i.i'de", align 8
   %"'de7" = alloca double, align 8, !node !362
+  %augmented_load61 = load i32, i32* %forward_mem, align 4
+  %inc62 = add i32 %augmented_load61, 1
+  store i32 %inc62, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de7", align 8
   %"'de9" = alloca double, align 8, !node !362
+  %augmented_load63 = load i32, i32* %forward_mem, align 4
+  %inc64 = add i32 %augmented_load63, 1
+  store i32 %inc64, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de9", align 8
   %"mul.i.i.i11'de" = alloca double, align 8, !node !362
+  %augmented_load65 = load i32, i32* %forward_mem, align 4
+  %inc66 = add i32 %augmented_load65, 1
+  store i32 %inc66, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i.i.i11'de", align 8
   %"mul.i.i.i'de" = alloca double, align 8, !node !362
+  %augmented_load67 = load i32, i32* %forward_mem, align 4
+  %inc68 = add i32 %augmented_load67, 1
+  store i32 %inc68, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i.i.i'de", align 8
   %"'de12" = alloca double, align 8, !node !362
+  %augmented_load69 = load i32, i32* %forward_mem, align 4
+  %inc70 = add i32 %augmented_load69, 1
+  store i32 %inc70, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de12", align 8
   %"'de13" = alloca double, align 8, !node !362
+  %augmented_load71 = load i32, i32* %forward_mem, align 4
+  %inc72 = add i32 %augmented_load71, 1
+  store i32 %inc72, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de13", align 8
   %"'de15" = alloca double, align 8, !node !362
+  %augmented_load73 = load i32, i32* %forward_mem, align 4
+  %inc74 = add i32 %augmented_load73, 1
+  store i32 %inc74, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de15", align 8
   %"sub10.i'de" = alloca double, align 8
+  %augmented_load75 = load i32, i32* %forward_mem, align 4
+  %inc76 = add i32 %augmented_load75, 1
+  store i32 %inc76, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub10.i'de", align 8
   %"'de16" = alloca double, align 8
+  %augmented_load77 = load i32, i32* %forward_mem, align 4
+  %inc78 = add i32 %augmented_load77, 1
+  store i32 %inc78, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de16", align 8
   %"'de17" = alloca double, align 8
+  %augmented_load79 = load i32, i32* %forward_mem, align 4
+  %inc80 = add i32 %augmented_load79, 1
+  store i32 %inc80, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de17", align 8
   %"sub6.i'de" = alloca double, align 8
+  %augmented_load81 = load i32, i32* %forward_mem, align 4
+  %inc82 = add i32 %augmented_load81, 1
+  store i32 %inc82, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub6.i'de", align 8
   %"'de18" = alloca double, align 8
+  %augmented_load83 = load i32, i32* %forward_mem, align 4
+  %inc84 = add i32 %augmented_load83, 1
+  store i32 %inc84, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de18", align 8
   %"'de19" = alloca double, align 8
+  %augmented_load85 = load i32, i32* %forward_mem, align 4
+  %inc86 = add i32 %augmented_load85, 1
+  store i32 %inc86, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de19", align 8
   %"sub.i'de" = alloca double, align 8
+  %augmented_load87 = load i32, i32* %forward_mem, align 4
+  %inc88 = add i32 %augmented_load87, 1
+  store i32 %inc88, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub.i'de", align 8
   %"'de20" = alloca double, align 8
+  %augmented_load89 = load i32, i32* %forward_mem, align 4
+  %inc90 = add i32 %augmented_load89, 1
+  store i32 %inc90, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de20", align 8
   %"'de21" = alloca double, align 8
+  %augmented_load91 = load i32, i32* %forward_mem, align 4
+  %inc92 = add i32 %augmented_load91, 1
+  store i32 %inc92, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de21", align 8
   %"Xo.i'ipa" = alloca [3 x double], align 16
+  %augmented_load93 = load i32, i32* %forward_mem, align 4
+  %inc94 = add i32 %augmented_load93, 1
+  store i32 %inc94, i32* %forward_mem, align 4
   store [3 x double] zeroinitializer, [3 x double]* %"Xo.i'ipa", align 16
   %Xo.i = alloca [3 x double], align 16
   %"Xcam.i'ipa" = alloca [3 x double], align 16
+  %augmented_load95 = load i32, i32* %forward_mem, align 4
+  %inc96 = add i32 %augmented_load95, 1
+  store i32 %inc96, i32* %forward_mem, align 4
   store [3 x double] zeroinitializer, [3 x double]* %"Xcam.i'ipa", align 16
   %Xcam.i = alloca [3 x double], align 16
   tail call void @llvm.experimental.noalias.scope.decl(metadata !103)
   tail call void @llvm.experimental.noalias.scope.decl(metadata !106)
   %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 3, !node !362
   %arrayidx.i = getelementptr inbounds double, double* %cam, i64 3, !node !362
+  %augmented_load97 = load i32, i32* %forward_mem, align 4
+  %inc98 = add i32 %augmented_load97, 1
+  store i32 %inc98, i32* %forward_mem, align 4
   %0 = load double, double* %X, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
+  %augmented_load99 = load i32, i32* %forward_mem, align 4
+  %inc100 = add i32 %augmented_load99, 1
+  store i32 %inc100, i32* %forward_mem, align 4
   %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub.i = fsub fast double %0, %1, !node !362
+  %augmented_load101 = load i32, i32* %forward_op, align 4
+  %inc102 = add i32 %augmented_load101, 1
+  store i32 %inc102, i32* %forward_op, align 4
   %"arrayidx3.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 0
   %arrayidx3.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 0, !node !362
+  %augmented_load103 = load i32, i32* %forward_mem, align 4
+  %inc104 = add i32 %augmented_load103, 1
+  store i32 %inc104, i32* %forward_mem, align 4
   store double %sub.i, double* %arrayidx3.i, align 16, !tbaa !68, !noalias !108
   %"arrayidx4.i'ipg" = getelementptr inbounds double, double* %"X'", i64 1, !node !362
   %arrayidx4.i = getelementptr inbounds double, double* %X, i64 1, !node !362
+  %augmented_load105 = load i32, i32* %forward_mem, align 4
+  %inc106 = add i32 %augmented_load105, 1
+  store i32 %inc106, i32* %forward_mem, align 4
   %2 = load double, double* %arrayidx4.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
   %"arrayidx5.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 4, !node !362
   %arrayidx5.i = getelementptr inbounds double, double* %cam, i64 4, !node !362
+  %augmented_load107 = load i32, i32* %forward_mem, align 4
+  %inc108 = add i32 %augmented_load107, 1
+  store i32 %inc108, i32* %forward_mem, align 4
   %3 = load double, double* %arrayidx5.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub6.i = fsub fast double %2, %3, !node !362
+  %augmented_load109 = load i32, i32* %forward_op, align 4
+  %inc110 = add i32 %augmented_load109, 1
+  store i32 %inc110, i32* %forward_op, align 4
   %"arrayidx7.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 1
   %arrayidx7.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 1, !node !362
+  %augmented_load111 = load i32, i32* %forward_mem, align 4
+  %inc112 = add i32 %augmented_load111, 1
+  store i32 %inc112, i32* %forward_mem, align 4
   store double %sub6.i, double* %arrayidx7.i, align 8, !tbaa !68, !noalias !108
   %"arrayidx8.i'ipg" = getelementptr inbounds double, double* %"X'", i64 2, !node !362
   %arrayidx8.i = getelementptr inbounds double, double* %X, i64 2, !node !362
+  %augmented_load113 = load i32, i32* %forward_mem, align 4
+  %inc114 = add i32 %augmented_load113, 1
+  store i32 %inc114, i32* %forward_mem, align 4
   %4 = load double, double* %arrayidx8.i, align 8, !tbaa !68, !alias.scope !106, !noalias !110, !node !362
   %"arrayidx9.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 5, !node !362
   %arrayidx9.i = getelementptr inbounds double, double* %cam, i64 5, !node !362
+  %augmented_load115 = load i32, i32* %forward_mem, align 4
+  %inc116 = add i32 %augmented_load115, 1
+  store i32 %inc116, i32* %forward_mem, align 4
   %5 = load double, double* %arrayidx9.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %sub10.i = fsub fast double %4, %5, !node !362
+  %augmented_load117 = load i32, i32* %forward_op, align 4
+  %inc118 = add i32 %augmented_load117, 1
+  store i32 %inc118, i32* %forward_op, align 4
   %"arrayidx11.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xo.i'ipa", i64 0, i64 2
   %arrayidx11.i = getelementptr inbounds [3 x double], [3 x double]* %Xo.i, i64 0, i64 2, !node !362
+  %augmented_load119 = load i32, i32* %forward_mem, align 4
+  %inc120 = add i32 %augmented_load119, 1
+  store i32 %inc120, i32* %forward_mem, align 4
   store double %sub10.i, double* %arrayidx11.i, align 16, !tbaa !68, !noalias !108
   %"arraydecay13.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 0, !node !362
   %arraydecay13.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 0
   %_augmented = call { i8*, i8*, i8*, i8*, i8*, double* } @augmented_rodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg"), !node !362
+  %augmented_load121 = load i32, i32* %forward_mem, align 4
+  %inc122 = add i32 %augmented_load121, 1
+  store i32 %inc122, i32* %forward_mem, align 4
   %6 = load double, double* %arraydecay13.i, align 16, !tbaa !68, !noalias !108
   %"arrayidx15.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 2, !node !362
   %arrayidx15.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 2
+  %augmented_load123 = load i32, i32* %forward_mem, align 4
+  %inc124 = add i32 %augmented_load123, 1
+  store i32 %inc124, i32* %forward_mem, align 4
   %7 = load double, double* %arrayidx15.i, align 16, !tbaa !68, !noalias !108
   %div.i = fdiv fast double %6, %7
+  %augmented_load125 = load i32, i32* %forward_op, align 4
+  %inc126 = add i32 %augmented_load125, 1
+  store i32 %inc126, i32* %forward_op, align 4
   %"arrayidx17.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"Xcam.i'ipa", i64 0, i64 1, !node !362
   %arrayidx17.i = getelementptr inbounds [3 x double], [3 x double]* %Xcam.i, i64 0, i64 1
+  %augmented_load127 = load i32, i32* %forward_mem, align 4
+  %inc128 = add i32 %augmented_load127, 1
+  store i32 %inc128, i32* %forward_mem, align 4
   %8 = load double, double* %arrayidx17.i, align 8, !tbaa !68, !noalias !108
   %div19.i = fdiv fast double %8, %7
+  %augmented_load129 = load i32, i32* %forward_op, align 4
+  %inc130 = add i32 %augmented_load129, 1
+  store i32 %inc130, i32* %forward_op, align 4
   %mul.i.i.i11 = fmul fast double %div.i, %div.i
+  %augmented_load131 = load i32, i32* %forward_op, align 4
+  %inc132 = add i32 %augmented_load131, 1
+  store i32 %inc132, i32* %forward_op, align 4
   %mul.i.i.i = fmul fast double %div19.i, %div19.i
+  %augmented_load133 = load i32, i32* %forward_op, align 4
+  %inc134 = add i32 %augmented_load133, 1
+  store i32 %inc134, i32* %forward_op, align 4
   %add.i.i.i = fadd fast double %mul.i.i.i11, %mul.i.i.i
+  %augmented_load135 = load i32, i32* %forward_op, align 4
+  %inc136 = add i32 %augmented_load135, 1
+  store i32 %inc136, i32* %forward_op, align 4
   %"arrayidx21.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 9, !node !362
   %arrayidx21.i = getelementptr inbounds double, double* %cam, i64 9, !node !362
+  %augmented_load137 = load i32, i32* %forward_mem, align 4
+  %inc138 = add i32 %augmented_load137, 1
+  store i32 %inc138, i32* %forward_mem, align 4
   %9 = load double, double* %arrayidx21.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %"arrayidx1.i.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 10, !node !362
   %arrayidx1.i.i = getelementptr inbounds double, double* %cam, i64 10, !node !362
+  %augmented_load139 = load i32, i32* %forward_mem, align 4
+  %inc140 = add i32 %augmented_load139, 1
+  store i32 %inc140, i32* %forward_mem, align 4
   %10 = load double, double* %arrayidx1.i.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %mul3.i.i = fmul fast double %10, %add.i.i.i, !node !362
+  %augmented_load141 = load i32, i32* %forward_op, align 4
+  %inc142 = add i32 %augmented_load141, 1
+  store i32 %inc142, i32* %forward_op, align 4
   %reass.add.i.i = fadd fast double %mul3.i.i, %9, !node !362
+  %augmented_load143 = load i32, i32* %forward_op, align 4
+  %inc144 = add i32 %augmented_load143, 1
+  store i32 %inc144, i32* %forward_op, align 4
   %reass.mul.i.i = fmul fast double %reass.add.i.i, %add.i.i.i, !node !362
+  %augmented_load145 = load i32, i32* %forward_op, align 4
+  %inc146 = add i32 %augmented_load145, 1
+  store i32 %inc146, i32* %forward_op, align 4
   %add4.i.i = fadd fast double %reass.mul.i.i, 1.000000e+00, !node !362
+  %augmented_load147 = load i32, i32* %forward_op, align 4
+  %inc148 = add i32 %augmented_load147, 1
+  store i32 %inc148, i32* %forward_op, align 4
   %"arrayidx23.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 6, !node !362
   %arrayidx23.i = getelementptr inbounds double, double* %cam, i64 6, !node !362
+  %augmented_load149 = load i32, i32* %forward_mem, align 4
+  %inc150 = add i32 %augmented_load149, 1
+  store i32 %inc150, i32* %forward_mem, align 4
   %11 = load double, double* %arrayidx23.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %mul6.i.i = fmul fast double %add4.i.i, %11, !node !362
+  %augmented_load151 = load i32, i32* %forward_op, align 4
+  %inc152 = add i32 %augmented_load151, 1
+  store i32 %inc152, i32* %forward_op, align 4
   %mul.i = fmul fast double %mul6.i.i, %div.i, !node !362
+  %augmented_load153 = load i32, i32* %forward_op, align 4
+  %inc154 = add i32 %augmented_load153, 1
+  store i32 %inc154, i32* %forward_op, align 4
   %"arrayidx24.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 7, !node !362
   %arrayidx24.i = getelementptr inbounds double, double* %cam, i64 7, !node !362
+  %augmented_load155 = load i32, i32* %forward_mem, align 4
+  %inc156 = add i32 %augmented_load155, 1
+  store i32 %inc156, i32* %forward_mem, align 4
   %12 = load double, double* %arrayidx24.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %add.i = fadd fast double %mul.i, %12, !node !362
+  %augmented_load157 = load i32, i32* %forward_op, align 4
+  %inc158 = add i32 %augmented_load157, 1
+  store i32 %inc158, i32* %forward_op, align 4
   %mul28.i = fmul fast double %mul6.i.i, %div19.i, !node !362
+  %augmented_load159 = load i32, i32* %forward_op, align 4
+  %inc160 = add i32 %augmented_load159, 1
+  store i32 %inc160, i32* %forward_op, align 4
   %"arrayidx29.i'ipg" = getelementptr inbounds double, double* %"cam'", i64 8, !node !362
   %arrayidx29.i = getelementptr inbounds double, double* %cam, i64 8, !node !362
+  %augmented_load161 = load i32, i32* %forward_mem, align 4
+  %inc162 = add i32 %augmented_load161, 1
+  store i32 %inc162, i32* %forward_mem, align 4
   %13 = load double, double* %arrayidx29.i, align 8, !tbaa !68, !alias.scope !103, !noalias !111, !node !362
   %add30.i = fadd fast double %mul28.i, %13, !node !362
+  %augmented_load163 = load i32, i32* %forward_op, align 4
+  %inc164 = add i32 %augmented_load163, 1
+  store i32 %inc164, i32* %forward_op, align 4
+  %augmented_load165 = load i32, i32* %forward_mem, align 4
+  %inc166 = add i32 %augmented_load165, 1
+  store i32 %inc166, i32* %forward_mem, align 4
   %14 = load double, double* %w, align 8, !tbaa !68, !node !362
+  %augmented_load167 = load i32, i32* %forward_mem, align 4
+  %inc168 = add i32 %augmented_load167, 1
+  store i32 %inc168, i32* %forward_mem, align 4
   %15 = load double, double* %feat, align 8, !tbaa !68, !node !362
   %sub = fsub fast double %add.i, %15, !node !362
+  %augmented_load169 = load i32, i32* %forward_op, align 4
+  %inc170 = add i32 %augmented_load169, 1
+  store i32 %inc170, i32* %forward_op, align 4
   %arrayidx4 = getelementptr inbounds double, double* %feat, i64 1, !node !362
+  %augmented_load171 = load i32, i32* %forward_mem, align 4
+  %inc172 = add i32 %augmented_load171, 1
+  store i32 %inc172, i32* %forward_mem, align 4
   %16 = load double, double* %arrayidx4, align 8, !tbaa !68, !node !362
   %sub5 = fsub fast double %add30.i, %16, !node !362
+  %augmented_load173 = load i32, i32* %forward_op, align 4
+  %inc174 = add i32 %augmented_load173, 1
+  store i32 %inc174, i32* %forward_op, align 4
   %"arrayidx7'ipg" = getelementptr inbounds double, double* %"err'", i64 1, !node !362
   br label %invertproject.exit
 
 invertproject.exit:                               ; preds = %project.exit
+  %augmented_load175 = load i32, i32* %reverse_mem, align 4
+  %inc176 = add i32 %augmented_load175, 1
+  store i32 %inc176, i32* %reverse_mem, align 4
   %17 = load double, double* %"arrayidx7'ipg", align 8, !node !362
+  %augmented_load177 = load i32, i32* %reverse_mem, align 4
+  %inc178 = add i32 %augmented_load177, 1
+  store i32 %inc178, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx7'ipg", align 8
+  %augmented_load179 = load i32, i32* %reverse_mem, align 4
+  %inc180 = add i32 %augmented_load179, 1
+  store i32 %inc180, i32* %reverse_mem, align 4
   %18 = load double, double* %"mul6'de", align 8, !node !362
   %19 = fadd fast double %18, %17, !node !362
+  %augmented_load181 = load i32, i32* %reverse_op, align 4
+  %inc182 = add i32 %augmented_load181, 1
+  store i32 %inc182, i32* %reverse_op, align 4
+  %augmented_load183 = load i32, i32* %reverse_mem, align 4
+  %inc184 = add i32 %augmented_load183, 1
+  store i32 %inc184, i32* %reverse_mem, align 4
   store double %19, double* %"mul6'de", align 8
+  %augmented_load185 = load i32, i32* %reverse_mem, align 4
+  %inc186 = add i32 %augmented_load185, 1
+  store i32 %inc186, i32* %reverse_mem, align 4
   %20 = load double, double* %"mul6'de", align 8, !node !362
   %m0diffesub5 = fmul fast double %20, %14, !node !362
+  %augmented_load187 = load i32, i32* %reverse_op, align 4
+  %inc188 = add i32 %augmented_load187, 1
+  store i32 %inc188, i32* %reverse_op, align 4
   %m1diffe = fmul fast double %20, %sub5, !node !362
+  %augmented_load189 = load i32, i32* %reverse_op, align 4
+  %inc190 = add i32 %augmented_load189, 1
+  store i32 %inc190, i32* %reverse_op, align 4
+  %augmented_load191 = load i32, i32* %reverse_mem, align 4
+  %inc192 = add i32 %augmented_load191, 1
+  store i32 %inc192, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul6'de", align 8
+  %augmented_load193 = load i32, i32* %reverse_mem, align 4
+  %inc194 = add i32 %augmented_load193, 1
+  store i32 %inc194, i32* %reverse_mem, align 4
   %21 = load double, double* %"sub5'de", align 8, !node !362
   %22 = fadd fast double %21, %m0diffesub5, !node !362
+  %augmented_load195 = load i32, i32* %reverse_op, align 4
+  %inc196 = add i32 %augmented_load195, 1
+  store i32 %inc196, i32* %reverse_op, align 4
+  %augmented_load197 = load i32, i32* %reverse_mem, align 4
+  %inc198 = add i32 %augmented_load197, 1
+  store i32 %inc198, i32* %reverse_mem, align 4
   store double %22, double* %"sub5'de", align 8
+  %augmented_load199 = load i32, i32* %reverse_mem, align 4
+  %inc200 = add i32 %augmented_load199, 1
+  store i32 %inc200, i32* %reverse_mem, align 4
   %23 = load double, double* %"'de", align 8, !node !362
   %24 = fadd fast double %23, %m1diffe, !node !362
+  %augmented_load201 = load i32, i32* %reverse_op, align 4
+  %inc202 = add i32 %augmented_load201, 1
+  store i32 %inc202, i32* %reverse_op, align 4
+  %augmented_load203 = load i32, i32* %reverse_mem, align 4
+  %inc204 = add i32 %augmented_load203, 1
+  store i32 %inc204, i32* %reverse_mem, align 4
   store double %24, double* %"'de", align 8
+  %augmented_load205 = load i32, i32* %reverse_mem, align 4
+  %inc206 = add i32 %augmented_load205, 1
+  store i32 %inc206, i32* %reverse_mem, align 4
   %25 = load double, double* %"sub5'de", align 8, !node !362
+  %augmented_load207 = load i32, i32* %reverse_mem, align 4
+  %inc208 = add i32 %augmented_load207, 1
+  store i32 %inc208, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub5'de", align 8
+  %augmented_load209 = load i32, i32* %reverse_mem, align 4
+  %inc210 = add i32 %augmented_load209, 1
+  store i32 %inc210, i32* %reverse_mem, align 4
   %26 = load double, double* %"add30.i'de", align 8, !node !362
   %27 = fadd fast double %26, %25, !node !362
+  %augmented_load211 = load i32, i32* %reverse_op, align 4
+  %inc212 = add i32 %augmented_load211, 1
+  store i32 %inc212, i32* %reverse_op, align 4
+  %augmented_load213 = load i32, i32* %reverse_mem, align 4
+  %inc214 = add i32 %augmented_load213, 1
+  store i32 %inc214, i32* %reverse_mem, align 4
   store double %27, double* %"add30.i'de", align 8
+  %augmented_load215 = load i32, i32* %reverse_mem, align 4
+  %inc216 = add i32 %augmented_load215, 1
+  store i32 %inc216, i32* %reverse_mem, align 4
   %28 = load double, double* %"err'", align 8, !node !362
+  %augmented_load217 = load i32, i32* %reverse_mem, align 4
+  %inc218 = add i32 %augmented_load217, 1
+  store i32 %inc218, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"err'", align 8
+  %augmented_load219 = load i32, i32* %reverse_mem, align 4
+  %inc220 = add i32 %augmented_load219, 1
+  store i32 %inc220, i32* %reverse_mem, align 4
   %29 = load double, double* %"mul'de", align 8, !node !362
   %30 = fadd fast double %29, %28, !node !362
+  %augmented_load221 = load i32, i32* %reverse_op, align 4
+  %inc222 = add i32 %augmented_load221, 1
+  store i32 %inc222, i32* %reverse_op, align 4
+  %augmented_load223 = load i32, i32* %reverse_mem, align 4
+  %inc224 = add i32 %augmented_load223, 1
+  store i32 %inc224, i32* %reverse_mem, align 4
   store double %30, double* %"mul'de", align 8
+  %augmented_load225 = load i32, i32* %reverse_mem, align 4
+  %inc226 = add i32 %augmented_load225, 1
+  store i32 %inc226, i32* %reverse_mem, align 4
   %31 = load double, double* %"mul'de", align 8, !node !362
   %m0diffesub = fmul fast double %31, %14, !node !362
+  %augmented_load227 = load i32, i32* %reverse_op, align 4
+  %inc228 = add i32 %augmented_load227, 1
+  store i32 %inc228, i32* %reverse_op, align 4
   %m1diffe1 = fmul fast double %31, %sub, !node !362
+  %augmented_load229 = load i32, i32* %reverse_op, align 4
+  %inc230 = add i32 %augmented_load229, 1
+  store i32 %inc230, i32* %reverse_op, align 4
+  %augmented_load231 = load i32, i32* %reverse_mem, align 4
+  %inc232 = add i32 %augmented_load231, 1
+  store i32 %inc232, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul'de", align 8
+  %augmented_load233 = load i32, i32* %reverse_mem, align 4
+  %inc234 = add i32 %augmented_load233, 1
+  store i32 %inc234, i32* %reverse_mem, align 4
   %32 = load double, double* %"sub'de", align 8, !node !362
   %33 = fadd fast double %32, %m0diffesub, !node !362
+  %augmented_load235 = load i32, i32* %reverse_op, align 4
+  %inc236 = add i32 %augmented_load235, 1
+  store i32 %inc236, i32* %reverse_op, align 4
+  %augmented_load237 = load i32, i32* %reverse_mem, align 4
+  %inc238 = add i32 %augmented_load237, 1
+  store i32 %inc238, i32* %reverse_mem, align 4
   store double %33, double* %"sub'de", align 8
+  %augmented_load239 = load i32, i32* %reverse_mem, align 4
+  %inc240 = add i32 %augmented_load239, 1
+  store i32 %inc240, i32* %reverse_mem, align 4
   %34 = load double, double* %"'de", align 8, !node !362
   %35 = fadd fast double %34, %m1diffe1, !node !362
+  %augmented_load241 = load i32, i32* %reverse_op, align 4
+  %inc242 = add i32 %augmented_load241, 1
+  store i32 %inc242, i32* %reverse_op, align 4
+  %augmented_load243 = load i32, i32* %reverse_mem, align 4
+  %inc244 = add i32 %augmented_load243, 1
+  store i32 %inc244, i32* %reverse_mem, align 4
   store double %35, double* %"'de", align 8
+  %augmented_load245 = load i32, i32* %reverse_mem, align 4
+  %inc246 = add i32 %augmented_load245, 1
+  store i32 %inc246, i32* %reverse_mem, align 4
   %36 = load double, double* %"sub'de", align 8, !node !362
+  %augmented_load247 = load i32, i32* %reverse_mem, align 4
+  %inc248 = add i32 %augmented_load247, 1
+  store i32 %inc248, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
+  %augmented_load249 = load i32, i32* %reverse_mem, align 4
+  %inc250 = add i32 %augmented_load249, 1
+  store i32 %inc250, i32* %reverse_mem, align 4
   %37 = load double, double* %"add.i'de", align 8, !node !362
   %38 = fadd fast double %37, %36, !node !362
+  %augmented_load251 = load i32, i32* %reverse_op, align 4
+  %inc252 = add i32 %augmented_load251, 1
+  store i32 %inc252, i32* %reverse_op, align 4
+  %augmented_load253 = load i32, i32* %reverse_mem, align 4
+  %inc254 = add i32 %augmented_load253, 1
+  store i32 %inc254, i32* %reverse_mem, align 4
   store double %38, double* %"add.i'de", align 8
+  %augmented_load255 = load i32, i32* %reverse_mem, align 4
+  %inc256 = add i32 %augmented_load255, 1
+  store i32 %inc256, i32* %reverse_mem, align 4
   %39 = load double, double* %"'de", align 8, !node !362
+  %augmented_load257 = load i32, i32* %reverse_mem, align 4
+  %inc258 = add i32 %augmented_load257, 1
+  store i32 %inc258, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
+  %augmented_load259 = load i32, i32* %reverse_mem, align 4
+  %inc260 = add i32 %augmented_load259, 1
+  store i32 %inc260, i32* %reverse_mem, align 4
   %40 = load double, double* %"w'", align 8, !node !362
   %41 = fadd fast double %40, %39, !node !362
+  %augmented_load261 = load i32, i32* %reverse_op, align 4
+  %inc262 = add i32 %augmented_load261, 1
+  store i32 %inc262, i32* %reverse_op, align 4
+  %augmented_load263 = load i32, i32* %reverse_mem, align 4
+  %inc264 = add i32 %augmented_load263, 1
+  store i32 %inc264, i32* %reverse_mem, align 4
   store double %41, double* %"w'", align 8
+  %augmented_load265 = load i32, i32* %reverse_mem, align 4
+  %inc266 = add i32 %augmented_load265, 1
+  store i32 %inc266, i32* %reverse_mem, align 4
   %42 = load double, double* %"add30.i'de", align 8, !node !362
+  %augmented_load267 = load i32, i32* %reverse_mem, align 4
+  %inc268 = add i32 %augmented_load267, 1
+  store i32 %inc268, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add30.i'de", align 8
+  %augmented_load269 = load i32, i32* %reverse_mem, align 4
+  %inc270 = add i32 %augmented_load269, 1
+  store i32 %inc270, i32* %reverse_mem, align 4
   %43 = load double, double* %"mul28.i'de", align 8, !node !362
   %44 = fadd fast double %43, %42, !node !362
+  %augmented_load271 = load i32, i32* %reverse_op, align 4
+  %inc272 = add i32 %augmented_load271, 1
+  store i32 %inc272, i32* %reverse_op, align 4
+  %augmented_load273 = load i32, i32* %reverse_mem, align 4
+  %inc274 = add i32 %augmented_load273, 1
+  store i32 %inc274, i32* %reverse_mem, align 4
   store double %44, double* %"mul28.i'de", align 8
+  %augmented_load275 = load i32, i32* %reverse_mem, align 4
+  %inc276 = add i32 %augmented_load275, 1
+  store i32 %inc276, i32* %reverse_mem, align 4
   %45 = load double, double* %"'de2", align 8, !node !362
   %46 = fadd fast double %45, %42, !node !362
+  %augmented_load277 = load i32, i32* %reverse_op, align 4
+  %inc278 = add i32 %augmented_load277, 1
+  store i32 %inc278, i32* %reverse_op, align 4
+  %augmented_load279 = load i32, i32* %reverse_mem, align 4
+  %inc280 = add i32 %augmented_load279, 1
+  store i32 %inc280, i32* %reverse_mem, align 4
   store double %46, double* %"'de2", align 8
+  %augmented_load281 = load i32, i32* %reverse_mem, align 4
+  %inc282 = add i32 %augmented_load281, 1
+  store i32 %inc282, i32* %reverse_mem, align 4
   %47 = load double, double* %"'de2", align 8, !node !362
+  %augmented_load283 = load i32, i32* %reverse_mem, align 4
+  %inc284 = add i32 %augmented_load283, 1
+  store i32 %inc284, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de2", align 8
+  %augmented_load285 = load i32, i32* %reverse_mem, align 4
+  %inc286 = add i32 %augmented_load285, 1
+  store i32 %inc286, i32* %reverse_mem, align 4
   %48 = load double, double* %"arrayidx29.i'ipg", align 8, !node !362
   %49 = fadd fast double %48, %47, !node !362
+  %augmented_load287 = load i32, i32* %reverse_op, align 4
+  %inc288 = add i32 %augmented_load287, 1
+  store i32 %inc288, i32* %reverse_op, align 4
+  %augmented_load289 = load i32, i32* %reverse_mem, align 4
+  %inc290 = add i32 %augmented_load289, 1
+  store i32 %inc290, i32* %reverse_mem, align 4
   store double %49, double* %"arrayidx29.i'ipg", align 8
+  %augmented_load291 = load i32, i32* %reverse_mem, align 4
+  %inc292 = add i32 %augmented_load291, 1
+  store i32 %inc292, i32* %reverse_mem, align 4
   %50 = load double, double* %"mul28.i'de", align 8, !node !362
   %m0diffemul6.i.i = fmul fast double %50, %div19.i, !node !362
+  %augmented_load293 = load i32, i32* %reverse_op, align 4
+  %inc294 = add i32 %augmented_load293, 1
+  store i32 %inc294, i32* %reverse_op, align 4
   %m1diffediv19.i = fmul fast double %50, %mul6.i.i, !node !362
+  %augmented_load295 = load i32, i32* %reverse_op, align 4
+  %inc296 = add i32 %augmented_load295, 1
+  store i32 %inc296, i32* %reverse_op, align 4
+  %augmented_load297 = load i32, i32* %reverse_mem, align 4
+  %inc298 = add i32 %augmented_load297, 1
+  store i32 %inc298, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul28.i'de", align 8
+  %augmented_load299 = load i32, i32* %reverse_mem, align 4
+  %inc300 = add i32 %augmented_load299, 1
+  store i32 %inc300, i32* %reverse_mem, align 4
   %51 = load double, double* %"mul6.i.i'de", align 8, !node !362
   %52 = fadd fast double %51, %m0diffemul6.i.i, !node !362
+  %augmented_load301 = load i32, i32* %reverse_op, align 4
+  %inc302 = add i32 %augmented_load301, 1
+  store i32 %inc302, i32* %reverse_op, align 4
+  %augmented_load303 = load i32, i32* %reverse_mem, align 4
+  %inc304 = add i32 %augmented_load303, 1
+  store i32 %inc304, i32* %reverse_mem, align 4
   store double %52, double* %"mul6.i.i'de", align 8
+  %augmented_load305 = load i32, i32* %reverse_mem, align 4
+  %inc306 = add i32 %augmented_load305, 1
+  store i32 %inc306, i32* %reverse_mem, align 4
   %53 = load double, double* %"div19.i'de", align 8, !node !362
   %54 = fadd fast double %53, %m1diffediv19.i, !node !362
+  %augmented_load307 = load i32, i32* %reverse_op, align 4
+  %inc308 = add i32 %augmented_load307, 1
+  store i32 %inc308, i32* %reverse_op, align 4
+  %augmented_load309 = load i32, i32* %reverse_mem, align 4
+  %inc310 = add i32 %augmented_load309, 1
+  store i32 %inc310, i32* %reverse_mem, align 4
   store double %54, double* %"div19.i'de", align 8
+  %augmented_load311 = load i32, i32* %reverse_mem, align 4
+  %inc312 = add i32 %augmented_load311, 1
+  store i32 %inc312, i32* %reverse_mem, align 4
   %55 = load double, double* %"add.i'de", align 8, !node !362
+  %augmented_load313 = load i32, i32* %reverse_mem, align 4
+  %inc314 = add i32 %augmented_load313, 1
+  store i32 %inc314, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add.i'de", align 8
+  %augmented_load315 = load i32, i32* %reverse_mem, align 4
+  %inc316 = add i32 %augmented_load315, 1
+  store i32 %inc316, i32* %reverse_mem, align 4
   %56 = load double, double* %"mul.i'de", align 8, !node !362
   %57 = fadd fast double %56, %55, !node !362
+  %augmented_load317 = load i32, i32* %reverse_op, align 4
+  %inc318 = add i32 %augmented_load317, 1
+  store i32 %inc318, i32* %reverse_op, align 4
+  %augmented_load319 = load i32, i32* %reverse_mem, align 4
+  %inc320 = add i32 %augmented_load319, 1
+  store i32 %inc320, i32* %reverse_mem, align 4
   store double %57, double* %"mul.i'de", align 8
+  %augmented_load321 = load i32, i32* %reverse_mem, align 4
+  %inc322 = add i32 %augmented_load321, 1
+  store i32 %inc322, i32* %reverse_mem, align 4
   %58 = load double, double* %"'de3", align 8, !node !362
   %59 = fadd fast double %58, %55, !node !362
+  %augmented_load323 = load i32, i32* %reverse_op, align 4
+  %inc324 = add i32 %augmented_load323, 1
+  store i32 %inc324, i32* %reverse_op, align 4
+  %augmented_load325 = load i32, i32* %reverse_mem, align 4
+  %inc326 = add i32 %augmented_load325, 1
+  store i32 %inc326, i32* %reverse_mem, align 4
   store double %59, double* %"'de3", align 8
+  %augmented_load327 = load i32, i32* %reverse_mem, align 4
+  %inc328 = add i32 %augmented_load327, 1
+  store i32 %inc328, i32* %reverse_mem, align 4
   %60 = load double, double* %"'de3", align 8, !node !362
+  %augmented_load329 = load i32, i32* %reverse_mem, align 4
+  %inc330 = add i32 %augmented_load329, 1
+  store i32 %inc330, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de3", align 8
+  %augmented_load331 = load i32, i32* %reverse_mem, align 4
+  %inc332 = add i32 %augmented_load331, 1
+  store i32 %inc332, i32* %reverse_mem, align 4
   %61 = load double, double* %"arrayidx24.i'ipg", align 8, !node !362
   %62 = fadd fast double %61, %60, !node !362
+  %augmented_load333 = load i32, i32* %reverse_op, align 4
+  %inc334 = add i32 %augmented_load333, 1
+  store i32 %inc334, i32* %reverse_op, align 4
+  %augmented_load335 = load i32, i32* %reverse_mem, align 4
+  %inc336 = add i32 %augmented_load335, 1
+  store i32 %inc336, i32* %reverse_mem, align 4
   store double %62, double* %"arrayidx24.i'ipg", align 8
+  %augmented_load337 = load i32, i32* %reverse_mem, align 4
+  %inc338 = add i32 %augmented_load337, 1
+  store i32 %inc338, i32* %reverse_mem, align 4
   %63 = load double, double* %"mul.i'de", align 8, !node !362
   %m0diffemul6.i.i4 = fmul fast double %63, %div.i, !node !362
+  %augmented_load339 = load i32, i32* %reverse_op, align 4
+  %inc340 = add i32 %augmented_load339, 1
+  store i32 %inc340, i32* %reverse_op, align 4
   %m1diffediv.i = fmul fast double %63, %mul6.i.i, !node !362
+  %augmented_load341 = load i32, i32* %reverse_op, align 4
+  %inc342 = add i32 %augmented_load341, 1
+  store i32 %inc342, i32* %reverse_op, align 4
+  %augmented_load343 = load i32, i32* %reverse_mem, align 4
+  %inc344 = add i32 %augmented_load343, 1
+  store i32 %inc344, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i'de", align 8
+  %augmented_load345 = load i32, i32* %reverse_mem, align 4
+  %inc346 = add i32 %augmented_load345, 1
+  store i32 %inc346, i32* %reverse_mem, align 4
   %64 = load double, double* %"mul6.i.i'de", align 8, !node !362
   %65 = fadd fast double %64, %m0diffemul6.i.i4, !node !362
+  %augmented_load347 = load i32, i32* %reverse_op, align 4
+  %inc348 = add i32 %augmented_load347, 1
+  store i32 %inc348, i32* %reverse_op, align 4
+  %augmented_load349 = load i32, i32* %reverse_mem, align 4
+  %inc350 = add i32 %augmented_load349, 1
+  store i32 %inc350, i32* %reverse_mem, align 4
   store double %65, double* %"mul6.i.i'de", align 8
+  %augmented_load351 = load i32, i32* %reverse_mem, align 4
+  %inc352 = add i32 %augmented_load351, 1
+  store i32 %inc352, i32* %reverse_mem, align 4
   %66 = load double, double* %"div.i'de", align 8, !node !362
   %67 = fadd fast double %66, %m1diffediv.i, !node !362
+  %augmented_load353 = load i32, i32* %reverse_op, align 4
+  %inc354 = add i32 %augmented_load353, 1
+  store i32 %inc354, i32* %reverse_op, align 4
+  %augmented_load355 = load i32, i32* %reverse_mem, align 4
+  %inc356 = add i32 %augmented_load355, 1
+  store i32 %inc356, i32* %reverse_mem, align 4
   store double %67, double* %"div.i'de", align 8
+  %augmented_load357 = load i32, i32* %reverse_mem, align 4
+  %inc358 = add i32 %augmented_load357, 1
+  store i32 %inc358, i32* %reverse_mem, align 4
   %68 = load double, double* %"mul6.i.i'de", align 8, !node !362
   %m0diffeadd4.i.i = fmul fast double %68, %11, !node !362
+  %augmented_load359 = load i32, i32* %reverse_op, align 4
+  %inc360 = add i32 %augmented_load359, 1
+  store i32 %inc360, i32* %reverse_op, align 4
   %m1diffe5 = fmul fast double %68, %add4.i.i, !node !362
+  %augmented_load361 = load i32, i32* %reverse_op, align 4
+  %inc362 = add i32 %augmented_load361, 1
+  store i32 %inc362, i32* %reverse_op, align 4
+  %augmented_load363 = load i32, i32* %reverse_mem, align 4
+  %inc364 = add i32 %augmented_load363, 1
+  store i32 %inc364, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul6.i.i'de", align 8
+  %augmented_load365 = load i32, i32* %reverse_mem, align 4
+  %inc366 = add i32 %augmented_load365, 1
+  store i32 %inc366, i32* %reverse_mem, align 4
   %69 = load double, double* %"add4.i.i'de", align 8, !node !362
   %70 = fadd fast double %69, %m0diffeadd4.i.i, !node !362
+  %augmented_load367 = load i32, i32* %reverse_op, align 4
+  %inc368 = add i32 %augmented_load367, 1
+  store i32 %inc368, i32* %reverse_op, align 4
+  %augmented_load369 = load i32, i32* %reverse_mem, align 4
+  %inc370 = add i32 %augmented_load369, 1
+  store i32 %inc370, i32* %reverse_mem, align 4
   store double %70, double* %"add4.i.i'de", align 8
+  %augmented_load371 = load i32, i32* %reverse_mem, align 4
+  %inc372 = add i32 %augmented_load371, 1
+  store i32 %inc372, i32* %reverse_mem, align 4
   %71 = load double, double* %"'de6", align 8, !node !362
   %72 = fadd fast double %71, %m1diffe5, !node !362
+  %augmented_load373 = load i32, i32* %reverse_op, align 4
+  %inc374 = add i32 %augmented_load373, 1
+  store i32 %inc374, i32* %reverse_op, align 4
+  %augmented_load375 = load i32, i32* %reverse_mem, align 4
+  %inc376 = add i32 %augmented_load375, 1
+  store i32 %inc376, i32* %reverse_mem, align 4
   store double %72, double* %"'de6", align 8
+  %augmented_load377 = load i32, i32* %reverse_mem, align 4
+  %inc378 = add i32 %augmented_load377, 1
+  store i32 %inc378, i32* %reverse_mem, align 4
   %73 = load double, double* %"'de6", align 8, !node !362
+  %augmented_load379 = load i32, i32* %reverse_mem, align 4
+  %inc380 = add i32 %augmented_load379, 1
+  store i32 %inc380, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de6", align 8
+  %augmented_load381 = load i32, i32* %reverse_mem, align 4
+  %inc382 = add i32 %augmented_load381, 1
+  store i32 %inc382, i32* %reverse_mem, align 4
   %74 = load double, double* %"arrayidx23.i'ipg", align 8, !node !362
   %75 = fadd fast double %74, %73, !node !362
+  %augmented_load383 = load i32, i32* %reverse_op, align 4
+  %inc384 = add i32 %augmented_load383, 1
+  store i32 %inc384, i32* %reverse_op, align 4
+  %augmented_load385 = load i32, i32* %reverse_mem, align 4
+  %inc386 = add i32 %augmented_load385, 1
+  store i32 %inc386, i32* %reverse_mem, align 4
   store double %75, double* %"arrayidx23.i'ipg", align 8
+  %augmented_load387 = load i32, i32* %reverse_mem, align 4
+  %inc388 = add i32 %augmented_load387, 1
+  store i32 %inc388, i32* %reverse_mem, align 4
   %76 = load double, double* %"add4.i.i'de", align 8, !node !362
+  %augmented_load389 = load i32, i32* %reverse_mem, align 4
+  %inc390 = add i32 %augmented_load389, 1
+  store i32 %inc390, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add4.i.i'de", align 8
+  %augmented_load391 = load i32, i32* %reverse_mem, align 4
+  %inc392 = add i32 %augmented_load391, 1
+  store i32 %inc392, i32* %reverse_mem, align 4
   %77 = load double, double* %"reass.mul.i.i'de", align 8, !node !362
   %78 = fadd fast double %77, %76, !node !362
+  %augmented_load393 = load i32, i32* %reverse_op, align 4
+  %inc394 = add i32 %augmented_load393, 1
+  store i32 %inc394, i32* %reverse_op, align 4
+  %augmented_load395 = load i32, i32* %reverse_mem, align 4
+  %inc396 = add i32 %augmented_load395, 1
+  store i32 %inc396, i32* %reverse_mem, align 4
   store double %78, double* %"reass.mul.i.i'de", align 8
+  %augmented_load397 = load i32, i32* %reverse_mem, align 4
+  %inc398 = add i32 %augmented_load397, 1
+  store i32 %inc398, i32* %reverse_mem, align 4
   %79 = load double, double* %"reass.mul.i.i'de", align 8, !node !362
   %m0differeass.add.i.i = fmul fast double %79, %add.i.i.i, !node !362
+  %augmented_load399 = load i32, i32* %reverse_op, align 4
+  %inc400 = add i32 %augmented_load399, 1
+  store i32 %inc400, i32* %reverse_op, align 4
   %m1diffeadd.i.i.i = fmul fast double %79, %reass.add.i.i, !node !362
+  %augmented_load401 = load i32, i32* %reverse_op, align 4
+  %inc402 = add i32 %augmented_load401, 1
+  store i32 %inc402, i32* %reverse_op, align 4
+  %augmented_load403 = load i32, i32* %reverse_mem, align 4
+  %inc404 = add i32 %augmented_load403, 1
+  store i32 %inc404, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"reass.mul.i.i'de", align 8
+  %augmented_load405 = load i32, i32* %reverse_mem, align 4
+  %inc406 = add i32 %augmented_load405, 1
+  store i32 %inc406, i32* %reverse_mem, align 4
   %80 = load double, double* %"reass.add.i.i'de", align 8, !node !362
   %81 = fadd fast double %80, %m0differeass.add.i.i, !node !362
+  %augmented_load407 = load i32, i32* %reverse_op, align 4
+  %inc408 = add i32 %augmented_load407, 1
+  store i32 %inc408, i32* %reverse_op, align 4
+  %augmented_load409 = load i32, i32* %reverse_mem, align 4
+  %inc410 = add i32 %augmented_load409, 1
+  store i32 %inc410, i32* %reverse_mem, align 4
   store double %81, double* %"reass.add.i.i'de", align 8
+  %augmented_load411 = load i32, i32* %reverse_mem, align 4
+  %inc412 = add i32 %augmented_load411, 1
+  store i32 %inc412, i32* %reverse_mem, align 4
   %82 = load double, double* %"add.i.i.i'de", align 8, !node !362
   %83 = fadd fast double %82, %m1diffeadd.i.i.i, !node !362
+  %augmented_load413 = load i32, i32* %reverse_op, align 4
+  %inc414 = add i32 %augmented_load413, 1
+  store i32 %inc414, i32* %reverse_op, align 4
+  %augmented_load415 = load i32, i32* %reverse_mem, align 4
+  %inc416 = add i32 %augmented_load415, 1
+  store i32 %inc416, i32* %reverse_mem, align 4
   store double %83, double* %"add.i.i.i'de", align 8
+  %augmented_load417 = load i32, i32* %reverse_mem, align 4
+  %inc418 = add i32 %augmented_load417, 1
+  store i32 %inc418, i32* %reverse_mem, align 4
   %84 = load double, double* %"reass.add.i.i'de", align 8, !node !362
+  %augmented_load419 = load i32, i32* %reverse_mem, align 4
+  %inc420 = add i32 %augmented_load419, 1
+  store i32 %inc420, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"reass.add.i.i'de", align 8
+  %augmented_load421 = load i32, i32* %reverse_mem, align 4
+  %inc422 = add i32 %augmented_load421, 1
+  store i32 %inc422, i32* %reverse_mem, align 4
   %85 = load double, double* %"mul3.i.i'de", align 8, !node !362
   %86 = fadd fast double %85, %84, !node !362
+  %augmented_load423 = load i32, i32* %reverse_op, align 4
+  %inc424 = add i32 %augmented_load423, 1
+  store i32 %inc424, i32* %reverse_op, align 4
+  %augmented_load425 = load i32, i32* %reverse_mem, align 4
+  %inc426 = add i32 %augmented_load425, 1
+  store i32 %inc426, i32* %reverse_mem, align 4
   store double %86, double* %"mul3.i.i'de", align 8
+  %augmented_load427 = load i32, i32* %reverse_mem, align 4
+  %inc428 = add i32 %augmented_load427, 1
+  store i32 %inc428, i32* %reverse_mem, align 4
   %87 = load double, double* %"'de7", align 8, !node !362
   %88 = fadd fast double %87, %84, !node !362
+  %augmented_load429 = load i32, i32* %reverse_op, align 4
+  %inc430 = add i32 %augmented_load429, 1
+  store i32 %inc430, i32* %reverse_op, align 4
+  %augmented_load431 = load i32, i32* %reverse_mem, align 4
+  %inc432 = add i32 %augmented_load431, 1
+  store i32 %inc432, i32* %reverse_mem, align 4
   store double %88, double* %"'de7", align 8
+  %augmented_load433 = load i32, i32* %reverse_mem, align 4
+  %inc434 = add i32 %augmented_load433, 1
+  store i32 %inc434, i32* %reverse_mem, align 4
   %89 = load double, double* %"mul3.i.i'de", align 8, !node !362
   %m0diffe = fmul fast double %89, %add.i.i.i, !node !362
+  %augmented_load435 = load i32, i32* %reverse_op, align 4
+  %inc436 = add i32 %augmented_load435, 1
+  store i32 %inc436, i32* %reverse_op, align 4
   %m1diffeadd.i.i.i8 = fmul fast double %89, %10, !node !362
+  %augmented_load437 = load i32, i32* %reverse_op, align 4
+  %inc438 = add i32 %augmented_load437, 1
+  store i32 %inc438, i32* %reverse_op, align 4
+  %augmented_load439 = load i32, i32* %reverse_mem, align 4
+  %inc440 = add i32 %augmented_load439, 1
+  store i32 %inc440, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul3.i.i'de", align 8
+  %augmented_load441 = load i32, i32* %reverse_mem, align 4
+  %inc442 = add i32 %augmented_load441, 1
+  store i32 %inc442, i32* %reverse_mem, align 4
   %90 = load double, double* %"'de9", align 8, !node !362
   %91 = fadd fast double %90, %m0diffe, !node !362
+  %augmented_load443 = load i32, i32* %reverse_op, align 4
+  %inc444 = add i32 %augmented_load443, 1
+  store i32 %inc444, i32* %reverse_op, align 4
+  %augmented_load445 = load i32, i32* %reverse_mem, align 4
+  %inc446 = add i32 %augmented_load445, 1
+  store i32 %inc446, i32* %reverse_mem, align 4
   store double %91, double* %"'de9", align 8
+  %augmented_load447 = load i32, i32* %reverse_mem, align 4
+  %inc448 = add i32 %augmented_load447, 1
+  store i32 %inc448, i32* %reverse_mem, align 4
   %92 = load double, double* %"add.i.i.i'de", align 8, !node !362
   %93 = fadd fast double %92, %m1diffeadd.i.i.i8, !node !362
+  %augmented_load449 = load i32, i32* %reverse_op, align 4
+  %inc450 = add i32 %augmented_load449, 1
+  store i32 %inc450, i32* %reverse_op, align 4
+  %augmented_load451 = load i32, i32* %reverse_mem, align 4
+  %inc452 = add i32 %augmented_load451, 1
+  store i32 %inc452, i32* %reverse_mem, align 4
   store double %93, double* %"add.i.i.i'de", align 8
+  %augmented_load453 = load i32, i32* %reverse_mem, align 4
+  %inc454 = add i32 %augmented_load453, 1
+  store i32 %inc454, i32* %reverse_mem, align 4
   %94 = load double, double* %"'de9", align 8, !node !362
+  %augmented_load455 = load i32, i32* %reverse_mem, align 4
+  %inc456 = add i32 %augmented_load455, 1
+  store i32 %inc456, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de9", align 8
+  %augmented_load457 = load i32, i32* %reverse_mem, align 4
+  %inc458 = add i32 %augmented_load457, 1
+  store i32 %inc458, i32* %reverse_mem, align 4
   %95 = load double, double* %"arrayidx1.i.i'ipg", align 8, !node !362
   %96 = fadd fast double %95, %94, !node !362
+  %augmented_load459 = load i32, i32* %reverse_op, align 4
+  %inc460 = add i32 %augmented_load459, 1
+  store i32 %inc460, i32* %reverse_op, align 4
+  %augmented_load461 = load i32, i32* %reverse_mem, align 4
+  %inc462 = add i32 %augmented_load461, 1
+  store i32 %inc462, i32* %reverse_mem, align 4
   store double %96, double* %"arrayidx1.i.i'ipg", align 8
+  %augmented_load463 = load i32, i32* %reverse_mem, align 4
+  %inc464 = add i32 %augmented_load463, 1
+  store i32 %inc464, i32* %reverse_mem, align 4
   %97 = load double, double* %"'de7", align 8, !node !362
+  %augmented_load465 = load i32, i32* %reverse_mem, align 4
+  %inc466 = add i32 %augmented_load465, 1
+  store i32 %inc466, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de7", align 8
+  %augmented_load467 = load i32, i32* %reverse_mem, align 4
+  %inc468 = add i32 %augmented_load467, 1
+  store i32 %inc468, i32* %reverse_mem, align 4
   %98 = load double, double* %"arrayidx21.i'ipg", align 8, !node !362
   %99 = fadd fast double %98, %97, !node !362
+  %augmented_load469 = load i32, i32* %reverse_op, align 4
+  %inc470 = add i32 %augmented_load469, 1
+  store i32 %inc470, i32* %reverse_op, align 4
+  %augmented_load471 = load i32, i32* %reverse_mem, align 4
+  %inc472 = add i32 %augmented_load471, 1
+  store i32 %inc472, i32* %reverse_mem, align 4
   store double %99, double* %"arrayidx21.i'ipg", align 8
+  %augmented_load473 = load i32, i32* %reverse_mem, align 4
+  %inc474 = add i32 %augmented_load473, 1
+  store i32 %inc474, i32* %reverse_mem, align 4
   %100 = load double, double* %"add.i.i.i'de", align 8, !node !362
+  %augmented_load475 = load i32, i32* %reverse_mem, align 4
+  %inc476 = add i32 %augmented_load475, 1
+  store i32 %inc476, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add.i.i.i'de", align 8
+  %augmented_load477 = load i32, i32* %reverse_mem, align 4
+  %inc478 = add i32 %augmented_load477, 1
+  store i32 %inc478, i32* %reverse_mem, align 4
   %101 = load double, double* %"mul.i.i.i11'de", align 8, !node !362
   %102 = fadd fast double %101, %100, !node !362
+  %augmented_load479 = load i32, i32* %reverse_op, align 4
+  %inc480 = add i32 %augmented_load479, 1
+  store i32 %inc480, i32* %reverse_op, align 4
+  %augmented_load481 = load i32, i32* %reverse_mem, align 4
+  %inc482 = add i32 %augmented_load481, 1
+  store i32 %inc482, i32* %reverse_mem, align 4
   store double %102, double* %"mul.i.i.i11'de", align 8
+  %augmented_load483 = load i32, i32* %reverse_mem, align 4
+  %inc484 = add i32 %augmented_load483, 1
+  store i32 %inc484, i32* %reverse_mem, align 4
   %103 = load double, double* %"mul.i.i.i'de", align 8, !node !362
   %104 = fadd fast double %103, %100, !node !362
+  %augmented_load485 = load i32, i32* %reverse_op, align 4
+  %inc486 = add i32 %augmented_load485, 1
+  store i32 %inc486, i32* %reverse_op, align 4
+  %augmented_load487 = load i32, i32* %reverse_mem, align 4
+  %inc488 = add i32 %augmented_load487, 1
+  store i32 %inc488, i32* %reverse_mem, align 4
   store double %104, double* %"mul.i.i.i'de", align 8
+  %augmented_load489 = load i32, i32* %reverse_mem, align 4
+  %inc490 = add i32 %augmented_load489, 1
+  store i32 %inc490, i32* %reverse_mem, align 4
   %105 = load double, double* %"mul.i.i.i'de", align 8, !node !362
   %m0diffediv19.i = fmul fast double %105, %div19.i, !node !362
+  %augmented_load491 = load i32, i32* %reverse_op, align 4
+  %inc492 = add i32 %augmented_load491, 1
+  store i32 %inc492, i32* %reverse_op, align 4
   %m1diffediv19.i10 = fmul fast double %105, %div19.i, !node !362
+  %augmented_load493 = load i32, i32* %reverse_op, align 4
+  %inc494 = add i32 %augmented_load493, 1
+  store i32 %inc494, i32* %reverse_op, align 4
+  %augmented_load495 = load i32, i32* %reverse_mem, align 4
+  %inc496 = add i32 %augmented_load495, 1
+  store i32 %inc496, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i.i.i'de", align 8
+  %augmented_load497 = load i32, i32* %reverse_mem, align 4
+  %inc498 = add i32 %augmented_load497, 1
+  store i32 %inc498, i32* %reverse_mem, align 4
   %106 = load double, double* %"div19.i'de", align 8, !node !362
   %107 = fadd fast double %106, %m0diffediv19.i, !node !362
+  %augmented_load499 = load i32, i32* %reverse_op, align 4
+  %inc500 = add i32 %augmented_load499, 1
+  store i32 %inc500, i32* %reverse_op, align 4
+  %augmented_load501 = load i32, i32* %reverse_mem, align 4
+  %inc502 = add i32 %augmented_load501, 1
+  store i32 %inc502, i32* %reverse_mem, align 4
   store double %107, double* %"div19.i'de", align 8
+  %augmented_load503 = load i32, i32* %reverse_mem, align 4
+  %inc504 = add i32 %augmented_load503, 1
+  store i32 %inc504, i32* %reverse_mem, align 4
   %108 = load double, double* %"div19.i'de", align 8, !node !362
   %109 = fadd fast double %108, %m1diffediv19.i10, !node !362
+  %augmented_load505 = load i32, i32* %reverse_op, align 4
+  %inc506 = add i32 %augmented_load505, 1
+  store i32 %inc506, i32* %reverse_op, align 4
+  %augmented_load507 = load i32, i32* %reverse_mem, align 4
+  %inc508 = add i32 %augmented_load507, 1
+  store i32 %inc508, i32* %reverse_mem, align 4
   store double %109, double* %"div19.i'de", align 8
+  %augmented_load509 = load i32, i32* %reverse_mem, align 4
+  %inc510 = add i32 %augmented_load509, 1
+  store i32 %inc510, i32* %reverse_mem, align 4
   %110 = load double, double* %"mul.i.i.i11'de", align 8, !node !362
   %m0diffediv.i = fmul fast double %110, %div.i, !node !362
+  %augmented_load511 = load i32, i32* %reverse_op, align 4
+  %inc512 = add i32 %augmented_load511, 1
+  store i32 %inc512, i32* %reverse_op, align 4
   %m1diffediv.i11 = fmul fast double %110, %div.i, !node !362
+  %augmented_load513 = load i32, i32* %reverse_op, align 4
+  %inc514 = add i32 %augmented_load513, 1
+  store i32 %inc514, i32* %reverse_op, align 4
+  %augmented_load515 = load i32, i32* %reverse_mem, align 4
+  %inc516 = add i32 %augmented_load515, 1
+  store i32 %inc516, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i.i.i11'de", align 8
+  %augmented_load517 = load i32, i32* %reverse_mem, align 4
+  %inc518 = add i32 %augmented_load517, 1
+  store i32 %inc518, i32* %reverse_mem, align 4
   %111 = load double, double* %"div.i'de", align 8, !node !362
   %112 = fadd fast double %111, %m0diffediv.i, !node !362
+  %augmented_load519 = load i32, i32* %reverse_op, align 4
+  %inc520 = add i32 %augmented_load519, 1
+  store i32 %inc520, i32* %reverse_op, align 4
+  %augmented_load521 = load i32, i32* %reverse_mem, align 4
+  %inc522 = add i32 %augmented_load521, 1
+  store i32 %inc522, i32* %reverse_mem, align 4
   store double %112, double* %"div.i'de", align 8
+  %augmented_load523 = load i32, i32* %reverse_mem, align 4
+  %inc524 = add i32 %augmented_load523, 1
+  store i32 %inc524, i32* %reverse_mem, align 4
   %113 = load double, double* %"div.i'de", align 8, !node !362
   %114 = fadd fast double %113, %m1diffediv.i11, !node !362
+  %augmented_load525 = load i32, i32* %reverse_op, align 4
+  %inc526 = add i32 %augmented_load525, 1
+  store i32 %inc526, i32* %reverse_op, align 4
+  %augmented_load527 = load i32, i32* %reverse_mem, align 4
+  %inc528 = add i32 %augmented_load527, 1
+  store i32 %inc528, i32* %reverse_mem, align 4
   store double %114, double* %"div.i'de", align 8
+  %augmented_load529 = load i32, i32* %reverse_mem, align 4
+  %inc530 = add i32 %augmented_load529, 1
+  store i32 %inc530, i32* %reverse_mem, align 4
   %115 = load double, double* %"div19.i'de", align 8, !node !362
   %d0diffe = fdiv fast double %115, %7, !node !362
+  %augmented_load531 = load i32, i32* %reverse_op, align 4
+  %inc532 = add i32 %augmented_load531, 1
+  store i32 %inc532, i32* %reverse_op, align 4
   %116 = fdiv fast double %115, %7, !node !362
+  %augmented_load533 = load i32, i32* %reverse_op, align 4
+  %inc534 = add i32 %augmented_load533, 1
+  store i32 %inc534, i32* %reverse_op, align 4
   %117 = fmul fast double %div19.i, %116, !node !362
+  %augmented_load535 = load i32, i32* %reverse_op, align 4
+  %inc536 = add i32 %augmented_load535, 1
+  store i32 %inc536, i32* %reverse_op, align 4
   %118 = fneg fast double %117, !node !362
+  %augmented_load537 = load i32, i32* %reverse_mem, align 4
+  %inc538 = add i32 %augmented_load537, 1
+  store i32 %inc538, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"div19.i'de", align 8
+  %augmented_load539 = load i32, i32* %reverse_mem, align 4
+  %inc540 = add i32 %augmented_load539, 1
+  store i32 %inc540, i32* %reverse_mem, align 4
   %119 = load double, double* %"'de12", align 8, !node !362
   %120 = fadd fast double %119, %d0diffe, !node !362
+  %augmented_load541 = load i32, i32* %reverse_op, align 4
+  %inc542 = add i32 %augmented_load541, 1
+  store i32 %inc542, i32* %reverse_op, align 4
+  %augmented_load543 = load i32, i32* %reverse_mem, align 4
+  %inc544 = add i32 %augmented_load543, 1
+  store i32 %inc544, i32* %reverse_mem, align 4
   store double %120, double* %"'de12", align 8
+  %augmented_load545 = load i32, i32* %reverse_mem, align 4
+  %inc546 = add i32 %augmented_load545, 1
+  store i32 %inc546, i32* %reverse_mem, align 4
   %121 = load double, double* %"'de13", align 8, !node !362
   %122 = fadd fast double %121, %118, !node !362
+  %augmented_load547 = load i32, i32* %reverse_op, align 4
+  %inc548 = add i32 %augmented_load547, 1
+  store i32 %inc548, i32* %reverse_op, align 4
+  %augmented_load549 = load i32, i32* %reverse_mem, align 4
+  %inc550 = add i32 %augmented_load549, 1
+  store i32 %inc550, i32* %reverse_mem, align 4
   store double %122, double* %"'de13", align 8
+  %augmented_load551 = load i32, i32* %reverse_mem, align 4
+  %inc552 = add i32 %augmented_load551, 1
+  store i32 %inc552, i32* %reverse_mem, align 4
   %123 = load double, double* %"'de12", align 8, !node !362
+  %augmented_load553 = load i32, i32* %reverse_mem, align 4
+  %inc554 = add i32 %augmented_load553, 1
+  store i32 %inc554, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de12", align 8
+  %augmented_load555 = load i32, i32* %reverse_mem, align 4
+  %inc556 = add i32 %augmented_load555, 1
+  store i32 %inc556, i32* %reverse_mem, align 4
   %124 = load double, double* %"arrayidx17.i'ipg", align 8, !node !362
   %125 = fadd fast double %124, %123, !node !362
+  %augmented_load557 = load i32, i32* %reverse_op, align 4
+  %inc558 = add i32 %augmented_load557, 1
+  store i32 %inc558, i32* %reverse_op, align 4
+  %augmented_load559 = load i32, i32* %reverse_mem, align 4
+  %inc560 = add i32 %augmented_load559, 1
+  store i32 %inc560, i32* %reverse_mem, align 4
   store double %125, double* %"arrayidx17.i'ipg", align 8
+  %augmented_load561 = load i32, i32* %reverse_mem, align 4
+  %inc562 = add i32 %augmented_load561, 1
+  store i32 %inc562, i32* %reverse_mem, align 4
   %126 = load double, double* %"div.i'de", align 8, !node !362
   %d0diffe14 = fdiv fast double %126, %7, !node !362
+  %augmented_load563 = load i32, i32* %reverse_op, align 4
+  %inc564 = add i32 %augmented_load563, 1
+  store i32 %inc564, i32* %reverse_op, align 4
   %127 = fdiv fast double %126, %7, !node !362
+  %augmented_load565 = load i32, i32* %reverse_op, align 4
+  %inc566 = add i32 %augmented_load565, 1
+  store i32 %inc566, i32* %reverse_op, align 4
   %128 = fmul fast double %div.i, %127, !node !362
+  %augmented_load567 = load i32, i32* %reverse_op, align 4
+  %inc568 = add i32 %augmented_load567, 1
+  store i32 %inc568, i32* %reverse_op, align 4
   %129 = fneg fast double %128, !node !362
+  %augmented_load569 = load i32, i32* %reverse_mem, align 4
+  %inc570 = add i32 %augmented_load569, 1
+  store i32 %inc570, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"div.i'de", align 8
+  %augmented_load571 = load i32, i32* %reverse_mem, align 4
+  %inc572 = add i32 %augmented_load571, 1
+  store i32 %inc572, i32* %reverse_mem, align 4
   %130 = load double, double* %"'de15", align 8, !node !362
   %131 = fadd fast double %130, %d0diffe14, !node !362
+  %augmented_load573 = load i32, i32* %reverse_op, align 4
+  %inc574 = add i32 %augmented_load573, 1
+  store i32 %inc574, i32* %reverse_op, align 4
+  %augmented_load575 = load i32, i32* %reverse_mem, align 4
+  %inc576 = add i32 %augmented_load575, 1
+  store i32 %inc576, i32* %reverse_mem, align 4
   store double %131, double* %"'de15", align 8
+  %augmented_load577 = load i32, i32* %reverse_mem, align 4
+  %inc578 = add i32 %augmented_load577, 1
+  store i32 %inc578, i32* %reverse_mem, align 4
   %132 = load double, double* %"'de13", align 8, !node !362
   %133 = fadd fast double %132, %129, !node !362
+  %augmented_load579 = load i32, i32* %reverse_op, align 4
+  %inc580 = add i32 %augmented_load579, 1
+  store i32 %inc580, i32* %reverse_op, align 4
+  %augmented_load581 = load i32, i32* %reverse_mem, align 4
+  %inc582 = add i32 %augmented_load581, 1
+  store i32 %inc582, i32* %reverse_mem, align 4
   store double %133, double* %"'de13", align 8
+  %augmented_load583 = load i32, i32* %reverse_mem, align 4
+  %inc584 = add i32 %augmented_load583, 1
+  store i32 %inc584, i32* %reverse_mem, align 4
   %134 = load double, double* %"'de13", align 8, !node !362
+  %augmented_load585 = load i32, i32* %reverse_mem, align 4
+  %inc586 = add i32 %augmented_load585, 1
+  store i32 %inc586, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de13", align 8
+  %augmented_load587 = load i32, i32* %reverse_mem, align 4
+  %inc588 = add i32 %augmented_load587, 1
+  store i32 %inc588, i32* %reverse_mem, align 4
   %135 = load double, double* %"arrayidx15.i'ipg", align 16, !node !362
   %136 = fadd fast double %135, %134, !node !362
+  %augmented_load589 = load i32, i32* %reverse_op, align 4
+  %inc590 = add i32 %augmented_load589, 1
+  store i32 %inc590, i32* %reverse_op, align 4
+  %augmented_load591 = load i32, i32* %reverse_mem, align 4
+  %inc592 = add i32 %augmented_load591, 1
+  store i32 %inc592, i32* %reverse_mem, align 4
   store double %136, double* %"arrayidx15.i'ipg", align 16
+  %augmented_load593 = load i32, i32* %reverse_mem, align 4
+  %inc594 = add i32 %augmented_load593, 1
+  store i32 %inc594, i32* %reverse_mem, align 4
   %137 = load double, double* %"'de15", align 8, !node !362
+  %augmented_load595 = load i32, i32* %reverse_mem, align 4
+  %inc596 = add i32 %augmented_load595, 1
+  store i32 %inc596, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de15", align 8
+  %augmented_load597 = load i32, i32* %reverse_mem, align 4
+  %inc598 = add i32 %augmented_load597, 1
+  store i32 %inc598, i32* %reverse_mem, align 4
   %138 = load double, double* %"arraydecay13.i'ipg", align 16, !node !362
   %139 = fadd fast double %138, %137, !node !362
+  %augmented_load599 = load i32, i32* %reverse_op, align 4
+  %inc600 = add i32 %augmented_load599, 1
+  store i32 %inc600, i32* %reverse_op, align 4
+  %augmented_load601 = load i32, i32* %reverse_mem, align 4
+  %inc602 = add i32 %augmented_load601, 1
+  store i32 %inc602, i32* %reverse_mem, align 4
   store double %139, double* %"arraydecay13.i'ipg", align 16
   call void @differodrigues_rotate_point(double* %cam, double* %"cam'", double* %arrayidx3.i, double* %"arrayidx3.i'ipg", double* %arraydecay13.i, double* %"arraydecay13.i'ipg", { i8*, i8*, i8*, i8*, i8*, double* } %_augmented), !node !362
+  %augmented_load603 = load i32, i32* %reverse_mem, align 4
+  %inc604 = add i32 %augmented_load603, 1
+  store i32 %inc604, i32* %reverse_mem, align 4
   %140 = load double, double* %"arrayidx11.i'ipg", align 16
+  %augmented_load605 = load i32, i32* %reverse_mem, align 4
+  %inc606 = add i32 %augmented_load605, 1
+  store i32 %inc606, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx11.i'ipg", align 16
+  %augmented_load607 = load i32, i32* %reverse_mem, align 4
+  %inc608 = add i32 %augmented_load607, 1
+  store i32 %inc608, i32* %reverse_mem, align 4
   %141 = load double, double* %"sub10.i'de", align 8
   %142 = fadd fast double %141, %140
+  %augmented_load609 = load i32, i32* %reverse_op, align 4
+  %inc610 = add i32 %augmented_load609, 1
+  store i32 %inc610, i32* %reverse_op, align 4
+  %augmented_load611 = load i32, i32* %reverse_mem, align 4
+  %inc612 = add i32 %augmented_load611, 1
+  store i32 %inc612, i32* %reverse_mem, align 4
   store double %142, double* %"sub10.i'de", align 8
+  %augmented_load613 = load i32, i32* %reverse_mem, align 4
+  %inc614 = add i32 %augmented_load613, 1
+  store i32 %inc614, i32* %reverse_mem, align 4
   %143 = load double, double* %"sub10.i'de", align 8
   %144 = fneg fast double %143
+  %augmented_load615 = load i32, i32* %reverse_mem, align 4
+  %inc616 = add i32 %augmented_load615, 1
+  store i32 %inc616, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub10.i'de", align 8
+  %augmented_load617 = load i32, i32* %reverse_mem, align 4
+  %inc618 = add i32 %augmented_load617, 1
+  store i32 %inc618, i32* %reverse_mem, align 4
   %145 = load double, double* %"'de16", align 8
   %146 = fadd fast double %145, %143
+  %augmented_load619 = load i32, i32* %reverse_op, align 4
+  %inc620 = add i32 %augmented_load619, 1
+  store i32 %inc620, i32* %reverse_op, align 4
+  %augmented_load621 = load i32, i32* %reverse_mem, align 4
+  %inc622 = add i32 %augmented_load621, 1
+  store i32 %inc622, i32* %reverse_mem, align 4
   store double %146, double* %"'de16", align 8
+  %augmented_load623 = load i32, i32* %reverse_mem, align 4
+  %inc624 = add i32 %augmented_load623, 1
+  store i32 %inc624, i32* %reverse_mem, align 4
   %147 = load double, double* %"'de17", align 8
   %148 = fadd fast double %147, %144
+  %augmented_load625 = load i32, i32* %reverse_op, align 4
+  %inc626 = add i32 %augmented_load625, 1
+  store i32 %inc626, i32* %reverse_op, align 4
+  %augmented_load627 = load i32, i32* %reverse_mem, align 4
+  %inc628 = add i32 %augmented_load627, 1
+  store i32 %inc628, i32* %reverse_mem, align 4
   store double %148, double* %"'de17", align 8
+  %augmented_load629 = load i32, i32* %reverse_mem, align 4
+  %inc630 = add i32 %augmented_load629, 1
+  store i32 %inc630, i32* %reverse_mem, align 4
   %149 = load double, double* %"'de17", align 8
+  %augmented_load631 = load i32, i32* %reverse_mem, align 4
+  %inc632 = add i32 %augmented_load631, 1
+  store i32 %inc632, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de17", align 8
+  %augmented_load633 = load i32, i32* %reverse_mem, align 4
+  %inc634 = add i32 %augmented_load633, 1
+  store i32 %inc634, i32* %reverse_mem, align 4
   %150 = load double, double* %"arrayidx9.i'ipg", align 8, !node !362
   %151 = fadd fast double %150, %149, !node !362
+  %augmented_load635 = load i32, i32* %reverse_op, align 4
+  %inc636 = add i32 %augmented_load635, 1
+  store i32 %inc636, i32* %reverse_op, align 4
+  %augmented_load637 = load i32, i32* %reverse_mem, align 4
+  %inc638 = add i32 %augmented_load637, 1
+  store i32 %inc638, i32* %reverse_mem, align 4
   store double %151, double* %"arrayidx9.i'ipg", align 8
+  %augmented_load639 = load i32, i32* %reverse_mem, align 4
+  %inc640 = add i32 %augmented_load639, 1
+  store i32 %inc640, i32* %reverse_mem, align 4
   %152 = load double, double* %"'de16", align 8
+  %augmented_load641 = load i32, i32* %reverse_mem, align 4
+  %inc642 = add i32 %augmented_load641, 1
+  store i32 %inc642, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de16", align 8
+  %augmented_load643 = load i32, i32* %reverse_mem, align 4
+  %inc644 = add i32 %augmented_load643, 1
+  store i32 %inc644, i32* %reverse_mem, align 4
   %153 = load double, double* %"arrayidx8.i'ipg", align 8, !node !362
   %154 = fadd fast double %153, %152, !node !362
+  %augmented_load645 = load i32, i32* %reverse_op, align 4
+  %inc646 = add i32 %augmented_load645, 1
+  store i32 %inc646, i32* %reverse_op, align 4
+  %augmented_load647 = load i32, i32* %reverse_mem, align 4
+  %inc648 = add i32 %augmented_load647, 1
+  store i32 %inc648, i32* %reverse_mem, align 4
   store double %154, double* %"arrayidx8.i'ipg", align 8
+  %augmented_load649 = load i32, i32* %reverse_mem, align 4
+  %inc650 = add i32 %augmented_load649, 1
+  store i32 %inc650, i32* %reverse_mem, align 4
   %155 = load double, double* %"arrayidx7.i'ipg", align 8
+  %augmented_load651 = load i32, i32* %reverse_mem, align 4
+  %inc652 = add i32 %augmented_load651, 1
+  store i32 %inc652, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx7.i'ipg", align 8
+  %augmented_load653 = load i32, i32* %reverse_mem, align 4
+  %inc654 = add i32 %augmented_load653, 1
+  store i32 %inc654, i32* %reverse_mem, align 4
   %156 = load double, double* %"sub6.i'de", align 8
   %157 = fadd fast double %156, %155
+  %augmented_load655 = load i32, i32* %reverse_op, align 4
+  %inc656 = add i32 %augmented_load655, 1
+  store i32 %inc656, i32* %reverse_op, align 4
+  %augmented_load657 = load i32, i32* %reverse_mem, align 4
+  %inc658 = add i32 %augmented_load657, 1
+  store i32 %inc658, i32* %reverse_mem, align 4
   store double %157, double* %"sub6.i'de", align 8
+  %augmented_load659 = load i32, i32* %reverse_mem, align 4
+  %inc660 = add i32 %augmented_load659, 1
+  store i32 %inc660, i32* %reverse_mem, align 4
   %158 = load double, double* %"sub6.i'de", align 8
   %159 = fneg fast double %158
+  %augmented_load661 = load i32, i32* %reverse_mem, align 4
+  %inc662 = add i32 %augmented_load661, 1
+  store i32 %inc662, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub6.i'de", align 8
+  %augmented_load663 = load i32, i32* %reverse_mem, align 4
+  %inc664 = add i32 %augmented_load663, 1
+  store i32 %inc664, i32* %reverse_mem, align 4
   %160 = load double, double* %"'de18", align 8
   %161 = fadd fast double %160, %158
+  %augmented_load665 = load i32, i32* %reverse_op, align 4
+  %inc666 = add i32 %augmented_load665, 1
+  store i32 %inc666, i32* %reverse_op, align 4
+  %augmented_load667 = load i32, i32* %reverse_mem, align 4
+  %inc668 = add i32 %augmented_load667, 1
+  store i32 %inc668, i32* %reverse_mem, align 4
   store double %161, double* %"'de18", align 8
+  %augmented_load669 = load i32, i32* %reverse_mem, align 4
+  %inc670 = add i32 %augmented_load669, 1
+  store i32 %inc670, i32* %reverse_mem, align 4
   %162 = load double, double* %"'de19", align 8
   %163 = fadd fast double %162, %159
+  %augmented_load671 = load i32, i32* %reverse_op, align 4
+  %inc672 = add i32 %augmented_load671, 1
+  store i32 %inc672, i32* %reverse_op, align 4
+  %augmented_load673 = load i32, i32* %reverse_mem, align 4
+  %inc674 = add i32 %augmented_load673, 1
+  store i32 %inc674, i32* %reverse_mem, align 4
   store double %163, double* %"'de19", align 8
+  %augmented_load675 = load i32, i32* %reverse_mem, align 4
+  %inc676 = add i32 %augmented_load675, 1
+  store i32 %inc676, i32* %reverse_mem, align 4
   %164 = load double, double* %"'de19", align 8
+  %augmented_load677 = load i32, i32* %reverse_mem, align 4
+  %inc678 = add i32 %augmented_load677, 1
+  store i32 %inc678, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de19", align 8
+  %augmented_load679 = load i32, i32* %reverse_mem, align 4
+  %inc680 = add i32 %augmented_load679, 1
+  store i32 %inc680, i32* %reverse_mem, align 4
   %165 = load double, double* %"arrayidx5.i'ipg", align 8, !node !362
   %166 = fadd fast double %165, %164, !node !362
+  %augmented_load681 = load i32, i32* %reverse_op, align 4
+  %inc682 = add i32 %augmented_load681, 1
+  store i32 %inc682, i32* %reverse_op, align 4
+  %augmented_load683 = load i32, i32* %reverse_mem, align 4
+  %inc684 = add i32 %augmented_load683, 1
+  store i32 %inc684, i32* %reverse_mem, align 4
   store double %166, double* %"arrayidx5.i'ipg", align 8
+  %augmented_load685 = load i32, i32* %reverse_mem, align 4
+  %inc686 = add i32 %augmented_load685, 1
+  store i32 %inc686, i32* %reverse_mem, align 4
   %167 = load double, double* %"'de18", align 8
+  %augmented_load687 = load i32, i32* %reverse_mem, align 4
+  %inc688 = add i32 %augmented_load687, 1
+  store i32 %inc688, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de18", align 8
+  %augmented_load689 = load i32, i32* %reverse_mem, align 4
+  %inc690 = add i32 %augmented_load689, 1
+  store i32 %inc690, i32* %reverse_mem, align 4
   %168 = load double, double* %"arrayidx4.i'ipg", align 8, !node !362
   %169 = fadd fast double %168, %167, !node !362
+  %augmented_load691 = load i32, i32* %reverse_op, align 4
+  %inc692 = add i32 %augmented_load691, 1
+  store i32 %inc692, i32* %reverse_op, align 4
+  %augmented_load693 = load i32, i32* %reverse_mem, align 4
+  %inc694 = add i32 %augmented_load693, 1
+  store i32 %inc694, i32* %reverse_mem, align 4
   store double %169, double* %"arrayidx4.i'ipg", align 8
+  %augmented_load695 = load i32, i32* %reverse_mem, align 4
+  %inc696 = add i32 %augmented_load695, 1
+  store i32 %inc696, i32* %reverse_mem, align 4
   %170 = load double, double* %"arrayidx3.i'ipg", align 16
+  %augmented_load697 = load i32, i32* %reverse_mem, align 4
+  %inc698 = add i32 %augmented_load697, 1
+  store i32 %inc698, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx3.i'ipg", align 16
+  %augmented_load699 = load i32, i32* %reverse_mem, align 4
+  %inc700 = add i32 %augmented_load699, 1
+  store i32 %inc700, i32* %reverse_mem, align 4
   %171 = load double, double* %"sub.i'de", align 8
   %172 = fadd fast double %171, %170
+  %augmented_load701 = load i32, i32* %reverse_op, align 4
+  %inc702 = add i32 %augmented_load701, 1
+  store i32 %inc702, i32* %reverse_op, align 4
+  %augmented_load703 = load i32, i32* %reverse_mem, align 4
+  %inc704 = add i32 %augmented_load703, 1
+  store i32 %inc704, i32* %reverse_mem, align 4
   store double %172, double* %"sub.i'de", align 8
+  %augmented_load705 = load i32, i32* %reverse_mem, align 4
+  %inc706 = add i32 %augmented_load705, 1
+  store i32 %inc706, i32* %reverse_mem, align 4
   %173 = load double, double* %"sub.i'de", align 8
   %174 = fneg fast double %173
+  %augmented_load707 = load i32, i32* %reverse_mem, align 4
+  %inc708 = add i32 %augmented_load707, 1
+  store i32 %inc708, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub.i'de", align 8
+  %augmented_load709 = load i32, i32* %reverse_mem, align 4
+  %inc710 = add i32 %augmented_load709, 1
+  store i32 %inc710, i32* %reverse_mem, align 4
   %175 = load double, double* %"'de20", align 8
   %176 = fadd fast double %175, %173
+  %augmented_load711 = load i32, i32* %reverse_op, align 4
+  %inc712 = add i32 %augmented_load711, 1
+  store i32 %inc712, i32* %reverse_op, align 4
+  %augmented_load713 = load i32, i32* %reverse_mem, align 4
+  %inc714 = add i32 %augmented_load713, 1
+  store i32 %inc714, i32* %reverse_mem, align 4
   store double %176, double* %"'de20", align 8
+  %augmented_load715 = load i32, i32* %reverse_mem, align 4
+  %inc716 = add i32 %augmented_load715, 1
+  store i32 %inc716, i32* %reverse_mem, align 4
   %177 = load double, double* %"'de21", align 8
   %178 = fadd fast double %177, %174
+  %augmented_load717 = load i32, i32* %reverse_op, align 4
+  %inc718 = add i32 %augmented_load717, 1
+  store i32 %inc718, i32* %reverse_op, align 4
+  %augmented_load719 = load i32, i32* %reverse_mem, align 4
+  %inc720 = add i32 %augmented_load719, 1
+  store i32 %inc720, i32* %reverse_mem, align 4
   store double %178, double* %"'de21", align 8
+  %augmented_load721 = load i32, i32* %reverse_mem, align 4
+  %inc722 = add i32 %augmented_load721, 1
+  store i32 %inc722, i32* %reverse_mem, align 4
   %179 = load double, double* %"'de21", align 8
+  %augmented_load723 = load i32, i32* %reverse_mem, align 4
+  %inc724 = add i32 %augmented_load723, 1
+  store i32 %inc724, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de21", align 8
+  %augmented_load725 = load i32, i32* %reverse_mem, align 4
+  %inc726 = add i32 %augmented_load725, 1
+  store i32 %inc726, i32* %reverse_mem, align 4
   %180 = load double, double* %"arrayidx.i'ipg", align 8, !node !362
   %181 = fadd fast double %180, %179, !node !362
+  %augmented_load727 = load i32, i32* %reverse_op, align 4
+  %inc728 = add i32 %augmented_load727, 1
+  store i32 %inc728, i32* %reverse_op, align 4
+  %augmented_load729 = load i32, i32* %reverse_mem, align 4
+  %inc730 = add i32 %augmented_load729, 1
+  store i32 %inc730, i32* %reverse_mem, align 4
   store double %181, double* %"arrayidx.i'ipg", align 8
+  %augmented_load731 = load i32, i32* %reverse_mem, align 4
+  %inc732 = add i32 %augmented_load731, 1
+  store i32 %inc732, i32* %reverse_mem, align 4
   %182 = load double, double* %"'de20", align 8
+  %augmented_load733 = load i32, i32* %reverse_mem, align 4
+  %inc734 = add i32 %augmented_load733, 1
+  store i32 %inc734, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de20", align 8
+  %augmented_load735 = load i32, i32* %reverse_mem, align 4
+  %inc736 = add i32 %augmented_load735, 1
+  store i32 %inc736, i32* %reverse_mem, align 4
   %183 = load double, double* %"X'", align 8, !node !362
   %184 = fadd fast double %183, %182, !node !362
+  %augmented_load737 = load i32, i32* %reverse_op, align 4
+  %inc738 = add i32 %augmented_load737, 1
+  store i32 %inc738, i32* %reverse_op, align 4
+  %augmented_load739 = load i32, i32* %reverse_mem, align 4
+  %inc740 = add i32 %augmented_load739, 1
+  store i32 %inc740, i32* %reverse_mem, align 4
   store double %184, double* %"X'", align 8
+  %augmented_load741 = load i32, i32* %forward_op, align 4
+  %augmented_load742 = load i32, i32* %reverse_op, align 4
+  %augmented_load743 = load i32, i32* %reverse_mem, align 4
+  %augmented_load744 = load i32, i32* %forward_mem, align 4
+  %185 = bitcast [80 x i8]* @ResultFormatStrIR to i8*
+  %186 = call i32 (i8*, ...) @printf(i8* %185, i32 %augmented_load741, i32 %augmented_load742, i32 %augmented_load744, i32 %augmented_load743)
   ret void
 }
 
@@ -24013,139 +25209,339 @@ if.end:                                           ; preds = %for.end48, %for.end
 ; Function Attrs: nofree nounwind uwtable mustprogress
 define internal void @differodrigues_rotate_point(double* noalias nocapture readonly %rot, double* nocapture %"rot'", double* noalias nocapture readonly %pt, double* nocapture %"pt'", double* noalias nocapture %rotatedPt, double* nocapture %"rotatedPt'", { i8*, i8*, i8*, i8*, i8*, double* } %tapeArg) local_unnamed_addr #15 {
 entry:
+  %forward_op = alloca i32, align 4
+  store i32 0, i32* %forward_op, align 4
+  %reverse_op = alloca i32, align 4
+  store i32 0, i32* %reverse_op, align 4
+  %forward_mem = alloca i32, align 4
+  store i32 0, i32* %forward_mem, align 4
+  %reverse_mem = alloca i32, align 4
+  store i32 0, i32* %reverse_mem, align 4
   %"iv'ac" = alloca i64, align 8
   %"iv1'ac" = alloca i64, align 8
   %"iv3'ac" = alloca i64, align 8
   %"iv5'ac" = alloca i64, align 8
   %"add.i'de" = alloca double, align 8
+  %augmented_load = load i32, i32* %forward_mem, align 4
+  %inc = add i32 %augmented_load, 1
+  store i32 %inc, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add.i'de", align 8
   %"mul.i'de" = alloca double, align 8
+  %augmented_load95 = load i32, i32* %forward_mem, align 4
+  %inc96 = add i32 %augmented_load95, 1
+  store i32 %inc96, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i'de", align 8
   %"res.012.i'de" = alloca double, align 8
+  %augmented_load97 = load i32, i32* %forward_mem, align 4
+  %inc98 = add i32 %augmented_load97, 1
+  store i32 %inc98, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"res.012.i'de", align 8
   %"'de" = alloca double, align 8, !node !362
+  %augmented_load99 = load i32, i32* %forward_mem, align 4
+  %inc100 = add i32 %augmented_load99, 1
+  store i32 %inc100, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
   %"'de7" = alloca double, align 8, !node !362
+  %augmented_load101 = load i32, i32* %forward_mem, align 4
+  %inc102 = add i32 %augmented_load101, 1
+  store i32 %inc102, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de7", align 8
   %"add.i!manual_lcssa_cache" = alloca double, align 8
   %"'de8" = alloca double, align 8, !node !362
+  %augmented_load103 = load i32, i32* %forward_mem, align 4
+  %inc104 = add i32 %augmented_load103, 1
+  store i32 %inc104, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de8", align 8
   %"'de10" = alloca double, align 8
+  %augmented_load105 = load i32, i32* %forward_mem, align 4
+  %inc106 = add i32 %augmented_load105, 1
+  store i32 %inc106, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de10", align 8
   %"'de13" = alloca double, align 8
+  %augmented_load107 = load i32, i32* %forward_mem, align 4
+  %inc108 = add i32 %augmented_load107, 1
+  store i32 %inc108, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de13", align 8
   %"add29117'de" = alloca double, align 8, !node !362
+  %augmented_load109 = load i32, i32* %forward_mem, align 4
+  %inc110 = add i32 %augmented_load109, 1
+  store i32 %inc110, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add29117'de", align 8
   %"add25115'de" = alloca double, align 8, !node !362
+  %augmented_load111 = load i32, i32* %forward_mem, align 4
+  %inc112 = add i32 %augmented_load111, 1
+  store i32 %inc112, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add25115'de", align 8
   %"mul28116'de" = alloca double, align 8, !node !362
+  %augmented_load113 = load i32, i32* %forward_mem, align 4
+  %inc114 = add i32 %augmented_load113, 1
+  store i32 %inc114, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul28116'de", align 8
   %"mul15'de" = alloca double, align 8, !node !362
+  %augmented_load115 = load i32, i32* %forward_mem, align 4
+  %inc116 = add i32 %augmented_load115, 1
+  store i32 %inc116, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul15'de", align 8
   %"'de21" = alloca double, align 8, !node !362
+  %augmented_load117 = load i32, i32* %forward_mem, align 4
+  %inc118 = add i32 %augmented_load117, 1
+  store i32 %inc118, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de21", align 8
   %"mul24114'de" = alloca double, align 8, !node !362
+  %augmented_load119 = load i32, i32* %forward_mem, align 4
+  %inc120 = add i32 %augmented_load119, 1
+  store i32 %inc120, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul24114'de", align 8
   %"mul21113'de" = alloca double, align 8, !node !362
+  %augmented_load121 = load i32, i32* %forward_mem, align 4
+  %inc122 = add i32 %augmented_load121, 1
+  store i32 %inc122, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul21113'de", align 8
   %"sub.i91'de" = alloca double, align 8, !node !362
+  %augmented_load123 = load i32, i32* %forward_mem, align 4
+  %inc124 = add i32 %augmented_load123, 1
+  store i32 %inc124, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub.i91'de", align 8
   %"'de23" = alloca double, align 8, !node !362
+  %augmented_load125 = load i32, i32* %forward_mem, align 4
+  %inc126 = add i32 %augmented_load125, 1
+  store i32 %inc126, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de23", align 8
   %"'de26" = alloca double, align 8, !node !362
+  %augmented_load127 = load i32, i32* %forward_mem, align 4
+  %inc128 = add i32 %augmented_load127, 1
+  store i32 %inc128, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de26", align 8
   %"add14'de" = alloca double, align 8, !node !362
+  %augmented_load129 = load i32, i32* %forward_mem, align 4
+  %inc130 = add i32 %augmented_load129, 1
+  store i32 %inc130, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add14'de", align 8
   %"sub'de" = alloca double, align 8, !node !362
+  %augmented_load131 = load i32, i32* %forward_mem, align 4
+  %inc132 = add i32 %augmented_load131, 1
+  store i32 %inc132, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
   %"add'de" = alloca double, align 8, !node !362
+  %augmented_load133 = load i32, i32* %forward_mem, align 4
+  %inc134 = add i32 %augmented_load133, 1
+  store i32 %inc134, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add'de", align 8
   %"mul13'de" = alloca double, align 8, !node !362
+  %augmented_load135 = load i32, i32* %forward_mem, align 4
+  %inc136 = add i32 %augmented_load135, 1
+  store i32 %inc136, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul13'de", align 8
   %"'de29" = alloca double, align 8, !node !362
+  %augmented_load137 = load i32, i32* %forward_mem, align 4
+  %inc138 = add i32 %augmented_load137, 1
+  store i32 %inc138, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de29", align 8
   %"'de30" = alloca double, align 8, !node !362
+  %augmented_load139 = load i32, i32* %forward_mem, align 4
+  %inc140 = add i32 %augmented_load139, 1
+  store i32 %inc140, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de30", align 8
   %"mul10'de" = alloca double, align 8, !node !362
+  %augmented_load141 = load i32, i32* %forward_mem, align 4
+  %inc142 = add i32 %augmented_load141, 1
+  store i32 %inc142, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul10'de", align 8
   %"mul7'de" = alloca double, align 8, !node !362
+  %augmented_load143 = load i32, i32* %forward_mem, align 4
+  %inc144 = add i32 %augmented_load143, 1
+  store i32 %inc144, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul7'de", align 8
   %"'de33" = alloca double, align 8, !node !362
+  %augmented_load145 = load i32, i32* %forward_mem, align 4
+  %inc146 = add i32 %augmented_load145, 1
+  store i32 %inc146, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de33", align 8
   %"'de34" = alloca double, align 8, !node !362
+  %augmented_load147 = load i32, i32* %forward_mem, align 4
+  %inc148 = add i32 %augmented_load147, 1
+  store i32 %inc148, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de34", align 8
   %"sub20.i98'de" = alloca double, align 8
+  %augmented_load149 = load i32, i32* %forward_mem, align 4
+  %inc150 = add i32 %augmented_load149, 1
+  store i32 %inc150, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub20.i98'de", align 8
   %"mul16.i96'de" = alloca double, align 8
+  %augmented_load151 = load i32, i32* %forward_mem, align 4
+  %inc152 = add i32 %augmented_load151, 1
+  store i32 %inc152, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul16.i96'de", align 8
   %"mul19.i97'de" = alloca double, align 8
+  %augmented_load153 = load i32, i32* %forward_mem, align 4
+  %inc154 = add i32 %augmented_load153, 1
+  store i32 %inc154, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul19.i97'de", align 8
   %"sub12.i94'de" = alloca double, align 8
+  %augmented_load155 = load i32, i32* %forward_mem, align 4
+  %inc156 = add i32 %augmented_load155, 1
+  store i32 %inc156, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub12.i94'de", align 8
   %"mul8.i92'de" = alloca double, align 8
+  %augmented_load157 = load i32, i32* %forward_mem, align 4
+  %inc158 = add i32 %augmented_load157, 1
+  store i32 %inc158, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul8.i92'de", align 8
   %"mul11.i93'de" = alloca double, align 8
+  %augmented_load159 = load i32, i32* %forward_mem, align 4
+  %inc160 = add i32 %augmented_load159, 1
+  store i32 %inc160, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul11.i93'de", align 8
   %"mul.i87'de" = alloca double, align 8, !node !362
+  %augmented_load161 = load i32, i32* %forward_mem, align 4
+  %inc162 = add i32 %augmented_load161, 1
+  store i32 %inc162, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i87'de", align 8
   %"mul4.i90'de" = alloca double, align 8, !node !362
+  %augmented_load163 = load i32, i32* %forward_mem, align 4
+  %inc164 = add i32 %augmented_load163, 1
+  store i32 %inc164, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul4.i90'de", align 8
   %"add29'de" = alloca double, align 8, !node !362
+  %augmented_load165 = load i32, i32* %forward_mem, align 4
+  %inc166 = add i32 %augmented_load165, 1
+  store i32 %inc166, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add29'de", align 8
   %"add25'de" = alloca double, align 8, !node !362
+  %augmented_load167 = load i32, i32* %forward_mem, align 4
+  %inc168 = add i32 %augmented_load167, 1
+  store i32 %inc168, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add25'de", align 8
   %"mul28'de" = alloca double, align 8, !node !362
+  %augmented_load169 = load i32, i32* %forward_mem, align 4
+  %inc170 = add i32 %augmented_load169, 1
+  store i32 %inc170, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul28'de", align 8
   %".pre112'de" = alloca double, align 8, !node !362
+  %augmented_load171 = load i32, i32* %forward_mem, align 4
+  %inc172 = add i32 %augmented_load171, 1
+  store i32 %inc172, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %".pre112'de", align 8
   %"mul24'de" = alloca double, align 8, !node !362
+  %augmented_load173 = load i32, i32* %forward_mem, align 4
+  %inc174 = add i32 %augmented_load173, 1
+  store i32 %inc174, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul24'de", align 8
   %"mul21'de" = alloca double, align 8, !node !362
+  %augmented_load175 = load i32, i32* %forward_mem, align 4
+  %inc176 = add i32 %augmented_load175, 1
+  store i32 %inc176, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul21'de", align 8
   %".pre111'de" = alloca double, align 8, !node !362
+  %augmented_load177 = load i32, i32* %forward_mem, align 4
+  %inc178 = add i32 %augmented_load177, 1
+  store i32 %inc178, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %".pre111'de", align 8
   %".pre110'de" = alloca double, align 8, !node !362
+  %augmented_load179 = load i32, i32* %forward_mem, align 4
+  %inc180 = add i32 %augmented_load179, 1
+  store i32 %inc180, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %".pre110'de", align 8
   %"add43119'de" = alloca double, align 8, !node !362
+  %augmented_load181 = load i32, i32* %forward_mem, align 4
+  %inc182 = add i32 %augmented_load181, 1
+  store i32 %inc182, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add43119'de", align 8
   %"sub.i'de" = alloca double, align 8, !node !362
+  %augmented_load183 = load i32, i32* %forward_mem, align 4
+  %inc184 = add i32 %augmented_load183, 1
+  store i32 %inc184, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub.i'de", align 8
   %"'de70" = alloca double, align 8, !node !362
+  %augmented_load185 = load i32, i32* %forward_mem, align 4
+  %inc186 = add i32 %augmented_load185, 1
+  store i32 %inc186, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de70", align 8
   %"sub20.i'de" = alloca double, align 8
+  %augmented_load187 = load i32, i32* %forward_mem, align 4
+  %inc188 = add i32 %augmented_load187, 1
+  store i32 %inc188, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub20.i'de", align 8
   %"mul16.i'de" = alloca double, align 8
+  %augmented_load189 = load i32, i32* %forward_mem, align 4
+  %inc190 = add i32 %augmented_load189, 1
+  store i32 %inc190, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul16.i'de", align 8
   %"mul19.i'de" = alloca double, align 8
+  %augmented_load191 = load i32, i32* %forward_mem, align 4
+  %inc192 = add i32 %augmented_load191, 1
+  store i32 %inc192, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul19.i'de", align 8
   %"'de75" = alloca double, align 8, !node !362
+  %augmented_load193 = load i32, i32* %forward_mem, align 4
+  %inc194 = add i32 %augmented_load193, 1
+  store i32 %inc194, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de75", align 8
   %"'de80" = alloca double, align 8, !node !362
+  %augmented_load195 = load i32, i32* %forward_mem, align 4
+  %inc196 = add i32 %augmented_load195, 1
+  store i32 %inc196, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de80", align 8
   %"'de81" = alloca double, align 8, !node !362
+  %augmented_load197 = load i32, i32* %forward_mem, align 4
+  %inc198 = add i32 %augmented_load197, 1
+  store i32 %inc198, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de81", align 8
   %"sub12.i'de" = alloca double, align 8
+  %augmented_load199 = load i32, i32* %forward_mem, align 4
+  %inc200 = add i32 %augmented_load199, 1
+  store i32 %inc200, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"sub12.i'de", align 8
   %"mul8.i'de" = alloca double, align 8
+  %augmented_load201 = load i32, i32* %forward_mem, align 4
+  %inc202 = add i32 %augmented_load201, 1
+  store i32 %inc202, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul8.i'de", align 8
   %"mul11.i'de" = alloca double, align 8
+  %augmented_load203 = load i32, i32* %forward_mem, align 4
+  %inc204 = add i32 %augmented_load203, 1
+  store i32 %inc204, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul11.i'de", align 8
   %"'de85" = alloca double, align 8, !node !362
+  %augmented_load205 = load i32, i32* %forward_mem, align 4
+  %inc206 = add i32 %augmented_load205, 1
+  store i32 %inc206, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de85", align 8
   %"'de89" = alloca double, align 8, !node !362
+  %augmented_load207 = load i32, i32* %forward_mem, align 4
+  %inc208 = add i32 %augmented_load207, 1
+  store i32 %inc208, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"'de89", align 8
   %"mul.i84'de" = alloca double, align 8, !node !362
+  %augmented_load209 = load i32, i32* %forward_mem, align 4
+  %inc210 = add i32 %augmented_load209, 1
+  store i32 %inc210, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul.i84'de", align 8
   %"mul4.i'de" = alloca double, align 8, !node !362
+  %augmented_load211 = load i32, i32* %forward_mem, align 4
+  %inc212 = add i32 %augmented_load211, 1
+  store i32 %inc212, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"mul4.i'de", align 8
   %"add43'de" = alloca double, align 8, !node !362
+  %augmented_load213 = load i32, i32* %forward_mem, align 4
+  %inc214 = add i32 %augmented_load213, 1
+  store i32 %inc214, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %"add43'de", align 8
   %".pre109'de" = alloca double, align 8, !node !362
+  %augmented_load215 = load i32, i32* %forward_mem, align 4
+  %inc216 = add i32 %augmented_load215, 1
+  store i32 %inc216, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %".pre109'de", align 8
   %".pre'de" = alloca double, align 8, !node !362
+  %augmented_load217 = load i32, i32* %forward_mem, align 4
+  %inc218 = add i32 %augmented_load217, 1
+  store i32 %inc218, i32* %forward_mem, align 4
   store double 0.000000e+00, double* %".pre'de", align 8
   %0 = extractvalue { i8*, i8*, i8*, i8*, i8*, double* } %tapeArg, 5
   %mdyncache_fromtape_cache = alloca double*, align 8
+  %augmented_load219 = load i32, i32* %forward_mem, align 4
+  %inc220 = add i32 %augmented_load219, 1
+  store i32 %inc220, i32* %forward_mem, align 4
   store double* %0, double** %mdyncache_fromtape_cache, align 8
   %malloccall1 = extractvalue { i8*, i8*, i8*, i8*, i8*, double* } %tapeArg, 4
   %"malloccall1'mi" = extractvalue { i8*, i8*, i8*, i8*, i8*, double* } %tapeArg, 3
@@ -24162,11 +25558,23 @@ entry:
 for.body.i:                                       ; preds = %for.body.i, %entry
   %iv = phi i64 [ %iv.next, %for.body.i ], [ 0, %entry ]
   %iv.next = add nuw nsw i64 %iv, 1
+  %augmented_load221 = load i32, i32* %forward_op, align 4
+  %inc222 = add i32 %augmented_load221, 1
+  store i32 %inc222, i32* %forward_op, align 4
   %"arrayidx.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv, !node !362
   %arrayidx.i = getelementptr inbounds double, double* %rot, i64 %iv, !node !362
+  %augmented_load223 = load i32, i32* %forward_mem, align 4
+  %inc224 = add i32 %augmented_load223, 1
+  store i32 %inc224, i32* %forward_mem, align 4
   %1 = load double, double* %arrayidx.i, align 8, !tbaa !68, !invariant.group !367, !node !362
+  %augmented_load225 = load i32, i32* %forward_mem, align 4
+  %inc226 = add i32 %augmented_load225, 1
+  store i32 %inc226, i32* %forward_mem, align 4
   %2 = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !365, !invariant.group !368
   %3 = getelementptr inbounds double, double* %2, i64 %iv
+  %augmented_load227 = load i32, i32* %forward_mem, align 4
+  %inc228 = add i32 %augmented_load227, 1
+  store i32 %inc228, i32* %forward_mem, align 4
   %add.i = load double, double* %3, align 8, !invariant.group !369
   %exitcond.not.i = icmp eq i64 %iv.next, 3
   br i1 %exitcond.not.i, label %sqsum.exit, label %for.body.i, !llvm.loop !99
@@ -24177,6 +25585,9 @@ sqsum.exit:                                       ; preds = %for.body.i
 
 if.then:                                          ; preds = %sqsum.exit
   %"add.i!manual_lcssa" = phi double [ %add.i, %sqsum.exit ]
+  %augmented_load229 = load i32, i32* %forward_mem, align 4
+  %inc230 = add i32 %augmented_load229, 1
+  store i32 %inc230, i32* %forward_mem, align 4
   store double %"add.i!manual_lcssa", double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
   %4 = tail call fast double @llvm.sqrt.f64(double %add.i)
   %5 = tail call fast double @llvm.cos.f64(double %4)
@@ -24185,10 +25596,19 @@ if.then:                                          ; preds = %sqsum.exit
 for.body:                                         ; preds = %for.body, %if.then
   %iv1 = phi i64 [ %iv.next2, %for.body ], [ 0, %if.then ]
   %iv.next2 = add nuw nsw i64 %iv1, 1
+  %augmented_load231 = load i32, i32* %forward_op, align 4
+  %inc232 = add i32 %augmented_load231, 1
+  store i32 %inc232, i32* %forward_op, align 4
   %"arrayidx'ipg" = getelementptr inbounds double, double* %"rot'", i64 %iv1, !node !362
   %arrayidx = getelementptr inbounds double, double* %rot, i64 %iv1, !node !362
+  %augmented_load233 = load i32, i32* %forward_mem, align 4
+  %inc234 = add i32 %augmented_load233, 1
+  store i32 %inc234, i32* %forward_mem, align 4
   %6 = load double, double* %arrayidx, align 8, !tbaa !68, !invariant.group !371, !node !362
   %7 = fdiv fast double %6, %4, !node !362
+  %augmented_load235 = load i32, i32* %forward_op, align 4
+  %inc236 = add i32 %augmented_load235, 1
+  store i32 %inc236, i32* %forward_op, align 4
   %"arrayidx3'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv1
   %exitcond105.not = icmp eq i64 %iv.next2, 3
   br i1 %exitcond105.not, label %for.end, label %for.body, !llvm.loop !100
@@ -24200,46 +25620,109 @@ for.end:                                          ; preds = %for.body
   %"arraydecay4'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 0
   %"arrayidx.i85'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 1
   %arrayidx.i85 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
+  %augmented_load237 = load i32, i32* %forward_mem, align 4
+  %inc238 = add i32 %augmented_load237, 1
+  store i32 %inc238, i32* %forward_mem, align 4
   %9 = load double, double* %arrayidx.i85, align 8, !tbaa !68, !invariant.group !372
   %"arrayidx1.i86'ipg" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
   %arrayidx1.i86 = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %augmented_load239 = load i32, i32* %forward_mem, align 4
+  %inc240 = add i32 %augmented_load239, 1
+  store i32 %inc240, i32* %forward_mem, align 4
   %10 = load double, double* %arrayidx1.i86, align 8, !tbaa !68, !invariant.group !373, !node !362
   %mul.i87 = fmul fast double %10, %9, !node !362
+  %augmented_load241 = load i32, i32* %forward_op, align 4
+  %inc242 = add i32 %augmented_load241, 1
+  store i32 %inc242, i32* %forward_op, align 4
   %"arrayidx2.i88'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 2
   %arrayidx2.i88 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
+  %augmented_load243 = load i32, i32* %forward_mem, align 4
+  %inc244 = add i32 %augmented_load243, 1
+  store i32 %inc244, i32* %forward_mem, align 4
   %11 = load double, double* %arrayidx2.i88, align 16, !tbaa !68, !invariant.group !374
   %"arrayidx3.i89'ipg" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
   %arrayidx3.i89 = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %augmented_load245 = load i32, i32* %forward_mem, align 4
+  %inc246 = add i32 %augmented_load245, 1
+  store i32 %inc246, i32* %forward_mem, align 4
   %12 = load double, double* %arrayidx3.i89, align 8, !tbaa !68, !invariant.group !375, !node !362
   %mul4.i90 = fmul fast double %12, %11, !node !362
+  %augmented_load247 = load i32, i32* %forward_op, align 4
+  %inc248 = add i32 %augmented_load247, 1
+  store i32 %inc248, i32* %forward_op, align 4
   %sub.i91 = fsub fast double %mul.i87, %mul4.i90, !node !362
+  %augmented_load249 = load i32, i32* %forward_op, align 4
+  %inc250 = add i32 %augmented_load249, 1
+  store i32 %inc250, i32* %forward_op, align 4
+  %augmented_load251 = load i32, i32* %forward_mem, align 4
+  %inc252 = add i32 %augmented_load251, 1
+  store i32 %inc252, i32* %forward_mem, align 4
   %13 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
+  %augmented_load253 = load i32, i32* %forward_mem, align 4
+  %inc254 = add i32 %augmented_load253, 1
+  store i32 %inc254, i32* %forward_mem, align 4
   %14 = load double, double* %arraydecay, align 16, !tbaa !68, !invariant.group !377
   %"arrayidx13.i95'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 1
   %"arrayidx21.i99'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 2
   %mul7 = fmul fast double %14, %13, !node !362
+  %augmented_load255 = load i32, i32* %forward_op, align 4
+  %inc256 = add i32 %augmented_load255, 1
+  store i32 %inc256, i32* %forward_op, align 4
   %mul10 = fmul fast double %9, %12, !node !362
+  %augmented_load257 = load i32, i32* %forward_op, align 4
+  %inc258 = add i32 %augmented_load257, 1
+  store i32 %inc258, i32* %forward_op, align 4
   %add = fadd fast double %mul10, %mul7, !node !362
+  %augmented_load259 = load i32, i32* %forward_op, align 4
+  %inc260 = add i32 %augmented_load259, 1
+  store i32 %inc260, i32* %forward_op, align 4
   %mul13 = fmul fast double %11, %10, !node !362
+  %augmented_load261 = load i32, i32* %forward_op, align 4
+  %inc262 = add i32 %augmented_load261, 1
+  store i32 %inc262, i32* %forward_op, align 4
   %add14 = fadd fast double %add, %mul13, !node !362
+  %augmented_load263 = load i32, i32* %forward_op, align 4
+  %inc264 = add i32 %augmented_load263, 1
+  store i32 %inc264, i32* %forward_op, align 4
   %sub = fsub fast double 1.000000e+00, %5
+  %augmented_load265 = load i32, i32* %forward_op, align 4
+  %inc266 = add i32 %augmented_load265, 1
+  store i32 %inc266, i32* %forward_op, align 4
   %mul15 = fmul fast double %add14, %sub, !node !362
+  %augmented_load267 = load i32, i32* %forward_op, align 4
+  %inc268 = add i32 %augmented_load267, 1
+  store i32 %inc268, i32* %forward_op, align 4
   br label %for.body18.for.body18_crit_edge
 
 for.body18.for.body18_crit_edge:                  ; preds = %for.body18.for.body18_crit_edge, %for.end
   %iv3 = phi i64 [ %iv.next4, %for.body18.for.body18_crit_edge ], [ 0, %for.end ]
   %iv.next4 = add nuw nsw i64 %iv3, 1
+  %augmented_load269 = load i32, i32* %forward_op, align 4
+  %inc270 = add i32 %augmented_load269, 1
+  store i32 %inc270, i32* %forward_op, align 4
   %"arrayidx20.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4, !node !362
   %arrayidx20.phi.trans.insert = getelementptr inbounds double, double* %pt, i64 %iv.next4, !node !362
+  %augmented_load271 = load i32, i32* %forward_mem, align 4
+  %inc272 = add i32 %augmented_load271, 1
+  store i32 %inc272, i32* %forward_mem, align 4
   %.pre110 = load double, double* %arrayidx20.phi.trans.insert, align 8, !tbaa !68, !invariant.group !378, !node !362
   %"arrayidx23.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 %iv.next4
   %arrayidx23.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %w_cross_pt, i64 0, i64 %iv.next4
+  %augmented_load273 = load i32, i32* %forward_mem, align 4
+  %inc274 = add i32 %augmented_load273, 1
+  store i32 %inc274, i32* %forward_mem, align 4
   %.pre111 = load double, double* %arrayidx23.phi.trans.insert, align 8, !tbaa !68, !invariant.group !379
   %"arrayidx27.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv.next4
   %arrayidx27.phi.trans.insert = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 %iv.next4
+  %augmented_load275 = load i32, i32* %forward_mem, align 4
+  %inc276 = add i32 %augmented_load275, 1
+  store i32 %inc276, i32* %forward_mem, align 4
   %.pre112 = load double, double* %arrayidx27.phi.trans.insert, align 8, !tbaa !68, !invariant.group !380
   %"arrayidx31'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4, !node !362
   %indvars.iv.next = add nuw nsw i64 %iv.next4, 1
+  %augmented_load277 = load i32, i32* %forward_op, align 4
+  %inc278 = add i32 %augmented_load277, 1
+  store i32 %inc278, i32* %forward_op, align 4
   %exitcond.not = icmp eq i64 %indvars.iv.next, 3
   br i1 %exitcond.not, label %for.end34, label %for.body18.for.body18_crit_edge, !llvm.loop !101
 
@@ -24250,17 +25733,35 @@ if.else:                                          ; preds = %sqsum.exit
   %"arraydecay35'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 0
   %"arrayidx.i83'ipg" = getelementptr inbounds double, double* %"rot'", i64 1, !node !362
   %arrayidx.i83 = getelementptr inbounds double, double* %rot, i64 1, !node !362
+  %augmented_load279 = load i32, i32* %forward_mem, align 4
+  %inc280 = add i32 %augmented_load279, 1
+  store i32 %inc280, i32* %forward_mem, align 4
   %15 = load double, double* %arrayidx.i83, align 8, !tbaa !68, !invariant.group !381, !node !362
   %"arrayidx1.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
   %arrayidx1.i = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %augmented_load281 = load i32, i32* %forward_mem, align 4
+  %inc282 = add i32 %augmented_load281, 1
+  store i32 %inc282, i32* %forward_mem, align 4
   %16 = load double, double* %arrayidx1.i, align 8, !tbaa !68, !invariant.group !382, !node !362
   %"arrayidx2.i'ipg" = getelementptr inbounds double, double* %"rot'", i64 2, !node !362
   %arrayidx2.i = getelementptr inbounds double, double* %rot, i64 2, !node !362
+  %augmented_load283 = load i32, i32* %forward_mem, align 4
+  %inc284 = add i32 %augmented_load283, 1
+  store i32 %inc284, i32* %forward_mem, align 4
   %17 = load double, double* %arrayidx2.i, align 8, !tbaa !68, !invariant.group !383, !node !362
   %"arrayidx3.i'ipg" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
   %arrayidx3.i = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %augmented_load285 = load i32, i32* %forward_mem, align 4
+  %inc286 = add i32 %augmented_load285, 1
+  store i32 %inc286, i32* %forward_mem, align 4
   %18 = load double, double* %arrayidx3.i, align 8, !tbaa !68, !invariant.group !384, !node !362
+  %augmented_load287 = load i32, i32* %forward_mem, align 4
+  %inc288 = add i32 %augmented_load287, 1
+  store i32 %inc288, i32* %forward_mem, align 4
   %19 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385, !node !362
+  %augmented_load289 = load i32, i32* %forward_mem, align 4
+  %inc290 = add i32 %augmented_load289, 1
+  store i32 %inc290, i32* %forward_mem, align 4
   %20 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386, !node !362
   %"arrayidx13.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 1
   %"arrayidx21.i'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 2
@@ -24269,10 +25770,16 @@ if.else:                                          ; preds = %sqsum.exit
 for.body38.for.body38_crit_edge:                  ; preds = %for.body38.for.body38_crit_edge, %if.else
   %iv5 = phi i64 [ %iv.next6, %for.body38.for.body38_crit_edge ], [ 0, %if.else ]
   %iv.next6 = add nuw nsw i64 %iv5, 1
+  %augmented_load291 = load i32, i32* %forward_op, align 4
+  %inc292 = add i32 %augmented_load291, 1
+  store i32 %inc292, i32* %forward_op, align 4
   %"arrayidx40.phi.trans.insert'ipg" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6, !node !362
   %"arrayidx42.phi.trans.insert'ipg" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 %iv.next6
   %"arrayidx45'ipg" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6, !node !362
   %indvars.iv.next107 = add nuw nsw i64 %iv.next6, 1
+  %augmented_load293 = load i32, i32* %forward_op, align 4
+  %inc294 = add i32 %augmented_load293, 1
+  store i32 %inc294, i32* %forward_op, align 4
   %exitcond108.not = icmp eq i64 %indvars.iv.next107, 3
   br i1 %exitcond108.not, label %for.end48, label %for.body38.for.body38_crit_edge, !llvm.loop !102
 
@@ -24288,765 +25795,2664 @@ invertentry:                                      ; preds = %invertfor.body.i
   tail call void @free(i8* %malloccall)
   tail call void @free(i8* nonnull %"malloccall1'mi")
   tail call void @free(i8* %malloccall1)
+  %augmented_load295 = load i32, i32* %reverse_mem, align 4
+  %inc296 = add i32 %augmented_load295, 1
+  store i32 %inc296, i32* %reverse_mem, align 4
   %21 = load i64, i64* %"iv'ac", align 8
+  %augmented_load297 = load i32, i32* %reverse_mem, align 4
+  %inc298 = add i32 %augmented_load297, 1
+  store i32 %inc298, i32* %reverse_mem, align 4
   %forfree = load double*, double** %mdyncache_fromtape_cache, align 8, !dereferenceable !365, !invariant.group !368
   %22 = bitcast double* %forfree to i8*
   tail call void @free(i8* nonnull %22)
+  %augmented_load299 = load i32, i32* %forward_op, align 4
+  %augmented_load300 = load i32, i32* %reverse_op, align 4
+  %augmented_load301 = load i32, i32* %reverse_mem, align 4
+  %augmented_load302 = load i32, i32* %forward_mem, align 4
+  %23 = bitcast [80 x i8]* @ResultFormatStrIR to i8*
+  %24 = call i32 (i8*, ...) @printf(i8* %23, i32 %augmented_load299, i32 %augmented_load300, i32 %augmented_load302, i32 %augmented_load301)
   ret void
 
 invertfor.body.i:                                 ; preds = %mergeinvertfor.body.i_sqsum.exit, %incinvertfor.body.i
-  %23 = load double, double* %"add.i'de", align 8
+  %augmented_load303 = load i32, i32* %reverse_mem, align 4
+  %inc304 = add i32 %augmented_load303, 1
+  store i32 %inc304, i32* %reverse_mem, align 4
+  %25 = load double, double* %"add.i'de", align 8
+  %augmented_load305 = load i32, i32* %reverse_mem, align 4
+  %inc306 = add i32 %augmented_load305, 1
+  store i32 %inc306, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add.i'de", align 8
-  %24 = load double, double* %"mul.i'de", align 8
-  %25 = fadd fast double %24, %23
-  store double %25, double* %"mul.i'de", align 8
-  %26 = load double, double* %"res.012.i'de", align 8
-  %27 = fadd fast double %26, %23
-  store double %27, double* %"res.012.i'de", align 8
-  %28 = load double, double* %"mul.i'de", align 8
-  %29 = load i64, i64* %"iv'ac", align 8
-  %arrayidx.i_unwrap = getelementptr inbounds double, double* %rot, i64 %29, !node !362
+  %augmented_load307 = load i32, i32* %reverse_mem, align 4
+  %inc308 = add i32 %augmented_load307, 1
+  store i32 %inc308, i32* %reverse_mem, align 4
+  %26 = load double, double* %"mul.i'de", align 8
+  %27 = fadd fast double %26, %25
+  %augmented_load309 = load i32, i32* %reverse_op, align 4
+  %inc310 = add i32 %augmented_load309, 1
+  store i32 %inc310, i32* %reverse_op, align 4
+  %augmented_load311 = load i32, i32* %reverse_mem, align 4
+  %inc312 = add i32 %augmented_load311, 1
+  store i32 %inc312, i32* %reverse_mem, align 4
+  store double %27, double* %"mul.i'de", align 8
+  %augmented_load313 = load i32, i32* %reverse_mem, align 4
+  %inc314 = add i32 %augmented_load313, 1
+  store i32 %inc314, i32* %reverse_mem, align 4
+  %28 = load double, double* %"res.012.i'de", align 8
+  %29 = fadd fast double %28, %25
+  %augmented_load315 = load i32, i32* %reverse_op, align 4
+  %inc316 = add i32 %augmented_load315, 1
+  store i32 %inc316, i32* %reverse_op, align 4
+  %augmented_load317 = load i32, i32* %reverse_mem, align 4
+  %inc318 = add i32 %augmented_load317, 1
+  store i32 %inc318, i32* %reverse_mem, align 4
+  store double %29, double* %"res.012.i'de", align 8
+  %augmented_load319 = load i32, i32* %reverse_mem, align 4
+  %inc320 = add i32 %augmented_load319, 1
+  store i32 %inc320, i32* %reverse_mem, align 4
+  %30 = load double, double* %"mul.i'de", align 8
+  %augmented_load321 = load i32, i32* %reverse_mem, align 4
+  %inc322 = add i32 %augmented_load321, 1
+  store i32 %inc322, i32* %reverse_mem, align 4
+  %31 = load i64, i64* %"iv'ac", align 8
+  %arrayidx.i_unwrap = getelementptr inbounds double, double* %rot, i64 %31, !node !362
+  %augmented_load323 = load i32, i32* %reverse_mem, align 4
+  %inc324 = add i32 %augmented_load323, 1
+  store i32 %inc324, i32* %reverse_mem, align 4
   %_unwrap = load double, double* %arrayidx.i_unwrap, align 8, !tbaa !68, !invariant.group !367, !node !362
-  %m0diffe = fmul fast double %28, %_unwrap, !node !362
-  %m1diffe = fmul fast double %28, %_unwrap, !node !362
+  %m0diffe = fmul fast double %30, %_unwrap, !node !362
+  %augmented_load325 = load i32, i32* %reverse_op, align 4
+  %inc326 = add i32 %augmented_load325, 1
+  store i32 %inc326, i32* %reverse_op, align 4
+  %m1diffe = fmul fast double %30, %_unwrap, !node !362
+  %augmented_load327 = load i32, i32* %reverse_op, align 4
+  %inc328 = add i32 %augmented_load327, 1
+  store i32 %inc328, i32* %reverse_op, align 4
+  %augmented_load329 = load i32, i32* %reverse_mem, align 4
+  %inc330 = add i32 %augmented_load329, 1
+  store i32 %inc330, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i'de", align 8
-  %30 = load double, double* %"'de", align 8, !node !362
-  %31 = fadd fast double %30, %m0diffe, !node !362
-  store double %31, double* %"'de", align 8
+  %augmented_load331 = load i32, i32* %reverse_mem, align 4
+  %inc332 = add i32 %augmented_load331, 1
+  store i32 %inc332, i32* %reverse_mem, align 4
   %32 = load double, double* %"'de", align 8, !node !362
-  %33 = fadd fast double %32, %m1diffe, !node !362
+  %33 = fadd fast double %32, %m0diffe, !node !362
+  %augmented_load333 = load i32, i32* %reverse_op, align 4
+  %inc334 = add i32 %augmented_load333, 1
+  store i32 %inc334, i32* %reverse_op, align 4
+  %augmented_load335 = load i32, i32* %reverse_mem, align 4
+  %inc336 = add i32 %augmented_load335, 1
+  store i32 %inc336, i32* %reverse_mem, align 4
   store double %33, double* %"'de", align 8
+  %augmented_load337 = load i32, i32* %reverse_mem, align 4
+  %inc338 = add i32 %augmented_load337, 1
+  store i32 %inc338, i32* %reverse_mem, align 4
   %34 = load double, double* %"'de", align 8, !node !362
+  %35 = fadd fast double %34, %m1diffe, !node !362
+  %augmented_load339 = load i32, i32* %reverse_op, align 4
+  %inc340 = add i32 %augmented_load339, 1
+  store i32 %inc340, i32* %reverse_op, align 4
+  %augmented_load341 = load i32, i32* %reverse_mem, align 4
+  %inc342 = add i32 %augmented_load341, 1
+  store i32 %inc342, i32* %reverse_mem, align 4
+  store double %35, double* %"'de", align 8
+  %augmented_load343 = load i32, i32* %reverse_mem, align 4
+  %inc344 = add i32 %augmented_load343, 1
+  store i32 %inc344, i32* %reverse_mem, align 4
+  %36 = load double, double* %"'de", align 8, !node !362
+  %augmented_load345 = load i32, i32* %reverse_mem, align 4
+  %inc346 = add i32 %augmented_load345, 1
+  store i32 %inc346, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de", align 8
-  %35 = load i64, i64* %"iv'ac", align 8
-  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %35, !node !362
-  %36 = load double, double* %"arrayidx.i'ipg_unwrap", align 8, !node !362
-  %37 = fadd fast double %36, %34, !node !362
-  store double %37, double* %"arrayidx.i'ipg_unwrap", align 8
-  %38 = load double, double* %"res.012.i'de", align 8
+  %augmented_load347 = load i32, i32* %reverse_mem, align 4
+  %inc348 = add i32 %augmented_load347, 1
+  store i32 %inc348, i32* %reverse_mem, align 4
+  %37 = load i64, i64* %"iv'ac", align 8
+  %"arrayidx.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %37, !node !362
+  %augmented_load349 = load i32, i32* %reverse_mem, align 4
+  %inc350 = add i32 %augmented_load349, 1
+  store i32 %inc350, i32* %reverse_mem, align 4
+  %38 = load double, double* %"arrayidx.i'ipg_unwrap", align 8, !node !362
+  %39 = fadd fast double %38, %36, !node !362
+  %augmented_load351 = load i32, i32* %reverse_op, align 4
+  %inc352 = add i32 %augmented_load351, 1
+  store i32 %inc352, i32* %reverse_op, align 4
+  %augmented_load353 = load i32, i32* %reverse_mem, align 4
+  %inc354 = add i32 %augmented_load353, 1
+  store i32 %inc354, i32* %reverse_mem, align 4
+  store double %39, double* %"arrayidx.i'ipg_unwrap", align 8
+  %augmented_load355 = load i32, i32* %reverse_mem, align 4
+  %inc356 = add i32 %augmented_load355, 1
+  store i32 %inc356, i32* %reverse_mem, align 4
+  %40 = load double, double* %"res.012.i'de", align 8
+  %augmented_load357 = load i32, i32* %reverse_mem, align 4
+  %inc358 = add i32 %augmented_load357, 1
+  store i32 %inc358, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"res.012.i'de", align 8
-  %39 = load i64, i64* %"iv'ac", align 8
-  %40 = icmp eq i64 %39, 0
-  %41 = xor i1 %40, true
-  %42 = select fast i1 %41, double %38, double 0.000000e+00
-  %43 = load double, double* %"add.i'de", align 8
-  %44 = fadd fast double %43, %38
-  %45 = select fast i1 %40, double %43, double %44
-  store double %45, double* %"add.i'de", align 8
-  br i1 %40, label %invertentry, label %incinvertfor.body.i
+  %augmented_load359 = load i32, i32* %reverse_mem, align 4
+  %inc360 = add i32 %augmented_load359, 1
+  store i32 %inc360, i32* %reverse_mem, align 4
+  %41 = load i64, i64* %"iv'ac", align 8
+  %42 = icmp eq i64 %41, 0
+  %43 = xor i1 %42, true
+  %augmented_load361 = load i32, i32* %reverse_op, align 4
+  %inc362 = add i32 %augmented_load361, 1
+  store i32 %inc362, i32* %reverse_op, align 4
+  %44 = select fast i1 %43, double %40, double 0.000000e+00
+  %augmented_load363 = load i32, i32* %reverse_mem, align 4
+  %inc364 = add i32 %augmented_load363, 1
+  store i32 %inc364, i32* %reverse_mem, align 4
+  %45 = load double, double* %"add.i'de", align 8
+  %46 = fadd fast double %45, %40
+  %augmented_load365 = load i32, i32* %reverse_op, align 4
+  %inc366 = add i32 %augmented_load365, 1
+  store i32 %inc366, i32* %reverse_op, align 4
+  %47 = select fast i1 %42, double %45, double %46
+  %augmented_load367 = load i32, i32* %reverse_mem, align 4
+  %inc368 = add i32 %augmented_load367, 1
+  store i32 %inc368, i32* %reverse_mem, align 4
+  store double %47, double* %"add.i'de", align 8
+  br i1 %42, label %invertentry, label %incinvertfor.body.i
 
 incinvertfor.body.i:                              ; preds = %invertfor.body.i
-  %46 = load i64, i64* %"iv'ac", align 8
-  %47 = add nsw i64 %46, -1
-  store i64 %47, i64* %"iv'ac", align 8
+  %augmented_load369 = load i32, i32* %reverse_mem, align 4
+  %inc370 = add i32 %augmented_load369, 1
+  store i32 %inc370, i32* %reverse_mem, align 4
+  %48 = load i64, i64* %"iv'ac", align 8
+  %49 = add nsw i64 %48, -1
+  %augmented_load371 = load i32, i32* %reverse_op, align 4
+  %inc372 = add i32 %augmented_load371, 1
+  store i32 %inc372, i32* %reverse_op, align 4
+  %augmented_load373 = load i32, i32* %reverse_mem, align 4
+  %inc374 = add i32 %augmented_load373, 1
+  store i32 %inc374, i32* %reverse_mem, align 4
+  store i64 %49, i64* %"iv'ac", align 8
   br label %invertfor.body.i
 
 invertsqsum.exit:                                 ; preds = %invertif.else, %invertif.then
   br label %mergeinvertfor.body.i_sqsum.exit
 
 mergeinvertfor.body.i_sqsum.exit:                 ; preds = %invertsqsum.exit
+  %augmented_load375 = load i32, i32* %reverse_mem, align 4
+  %inc376 = add i32 %augmented_load375, 1
+  store i32 %inc376, i32* %reverse_mem, align 4
   store i64 2, i64* %"iv'ac", align 8
   br label %invertfor.body.i
 
 invertif.then:                                    ; preds = %invertfor.body
-  %48 = load double, double* %"'de7", align 8, !node !362
+  %augmented_load377 = load i32, i32* %reverse_mem, align 4
+  %inc378 = add i32 %augmented_load377, 1
+  store i32 %inc378, i32* %reverse_mem, align 4
+  %50 = load double, double* %"'de7", align 8, !node !362
+  %augmented_load379 = load i32, i32* %reverse_mem, align 4
+  %inc380 = add i32 %augmented_load379, 1
+  store i32 %inc380, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de7", align 8
-  %49 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
-  %50 = tail call fast double @llvm.sqrt.f64(double %49)
-  %51 = call fast double @llvm.sin.f64(double %50)
-  %52 = fneg fast double %51
-  %53 = fmul fast double %48, %52, !node !362
-  %54 = load double, double* %"'de8", align 8, !node !362
-  %55 = fadd fast double %54, %53, !node !362
-  store double %55, double* %"'de8", align 8
+  %augmented_load381 = load i32, i32* %reverse_mem, align 4
+  %inc382 = add i32 %augmented_load381, 1
+  store i32 %inc382, i32* %reverse_mem, align 4
+  %51 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
+  %52 = tail call fast double @llvm.sqrt.f64(double %51)
+  %53 = call fast double @llvm.sin.f64(double %52)
+  %54 = fneg fast double %53
+  %55 = fmul fast double %50, %54, !node !362
+  %augmented_load383 = load i32, i32* %reverse_op, align 4
+  %inc384 = add i32 %augmented_load383, 1
+  store i32 %inc384, i32* %reverse_op, align 4
+  %augmented_load385 = load i32, i32* %reverse_mem, align 4
+  %inc386 = add i32 %augmented_load385, 1
+  store i32 %inc386, i32* %reverse_mem, align 4
   %56 = load double, double* %"'de8", align 8, !node !362
+  %57 = fadd fast double %56, %55, !node !362
+  %augmented_load387 = load i32, i32* %reverse_op, align 4
+  %inc388 = add i32 %augmented_load387, 1
+  store i32 %inc388, i32* %reverse_op, align 4
+  %augmented_load389 = load i32, i32* %reverse_mem, align 4
+  %inc390 = add i32 %augmented_load389, 1
+  store i32 %inc390, i32* %reverse_mem, align 4
+  store double %57, double* %"'de8", align 8
+  %augmented_load391 = load i32, i32* %reverse_mem, align 4
+  %inc392 = add i32 %augmented_load391, 1
+  store i32 %inc392, i32* %reverse_mem, align 4
+  %58 = load double, double* %"'de8", align 8, !node !362
+  %augmented_load393 = load i32, i32* %reverse_mem, align 4
+  %inc394 = add i32 %augmented_load393, 1
+  store i32 %inc394, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de8", align 8
-  %57 = call fast double @llvm.sqrt.f64(double %add.i)
-  %58 = fmul fast double 5.000000e-01, %56, !node !362
-  %59 = fdiv fast double %58, %57, !node !362
-  %60 = fcmp fast oeq double %add.i, 0.000000e+00
-  %61 = select fast i1 %60, double 0.000000e+00, double %59
-  %62 = load double, double* %"add.i'de", align 8
-  %63 = fadd fast double %62, %59, !node !362
-  %64 = select fast i1 %60, double %62, double %63
-  store double %64, double* %"add.i'de", align 8
+  %59 = call fast double @llvm.sqrt.f64(double %add.i)
+  %60 = fmul fast double 5.000000e-01, %58, !node !362
+  %augmented_load395 = load i32, i32* %reverse_op, align 4
+  %inc396 = add i32 %augmented_load395, 1
+  store i32 %inc396, i32* %reverse_op, align 4
+  %61 = fdiv fast double %60, %59, !node !362
+  %augmented_load397 = load i32, i32* %reverse_op, align 4
+  %inc398 = add i32 %augmented_load397, 1
+  store i32 %inc398, i32* %reverse_op, align 4
+  %62 = fcmp fast oeq double %add.i, 0.000000e+00
+  %63 = select fast i1 %62, double 0.000000e+00, double %61
+  %augmented_load399 = load i32, i32* %reverse_mem, align 4
+  %inc400 = add i32 %augmented_load399, 1
+  store i32 %inc400, i32* %reverse_mem, align 4
+  %64 = load double, double* %"add.i'de", align 8
+  %65 = fadd fast double %64, %61, !node !362
+  %augmented_load401 = load i32, i32* %reverse_op, align 4
+  %inc402 = add i32 %augmented_load401, 1
+  store i32 %inc402, i32* %reverse_op, align 4
+  %66 = select fast i1 %62, double %64, double %65
+  %augmented_load403 = load i32, i32* %reverse_mem, align 4
+  %inc404 = add i32 %augmented_load403, 1
+  store i32 %inc404, i32* %reverse_mem, align 4
+  store double %66, double* %"add.i'de", align 8
   br label %invertsqsum.exit
 
 invertfor.body:                                   ; preds = %mergeinvertfor.body_for.end, %incinvertfor.body
-  %65 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx3'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %65
-  %66 = load double, double* %"arrayidx3'ipg_unwrap", align 8
+  %augmented_load405 = load i32, i32* %reverse_mem, align 4
+  %inc406 = add i32 %augmented_load405, 1
+  store i32 %inc406, i32* %reverse_mem, align 4
+  %67 = load i64, i64* %"iv1'ac", align 8
+  %"arrayidx3'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %67
+  %augmented_load407 = load i32, i32* %reverse_mem, align 4
+  %inc408 = add i32 %augmented_load407, 1
+  store i32 %inc408, i32* %reverse_mem, align 4
+  %68 = load double, double* %"arrayidx3'ipg_unwrap", align 8
+  %augmented_load409 = load i32, i32* %reverse_mem, align 4
+  %inc410 = add i32 %augmented_load409, 1
+  store i32 %inc410, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx3'ipg_unwrap", align 8
-  %67 = load double, double* %"'de10", align 8
-  %68 = fadd fast double %67, %66
-  store double %68, double* %"'de10", align 8
+  %augmented_load411 = load i32, i32* %reverse_mem, align 4
+  %inc412 = add i32 %augmented_load411, 1
+  store i32 %inc412, i32* %reverse_mem, align 4
   %69 = load double, double* %"'de10", align 8
-  %70 = load i64, i64* %"iv1'ac", align 8
-  %71 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
-  %72 = tail call fast double @llvm.sqrt.f64(double %71)
-  %d0diffe = fdiv fast double %69, %72
-  %73 = load i64, i64* %"iv1'ac", align 8
-  %arrayidx_unwrap = getelementptr inbounds double, double* %rot, i64 %73, !node !362
+  %70 = fadd fast double %69, %68
+  %augmented_load413 = load i32, i32* %reverse_op, align 4
+  %inc414 = add i32 %augmented_load413, 1
+  store i32 %inc414, i32* %reverse_op, align 4
+  %augmented_load415 = load i32, i32* %reverse_mem, align 4
+  %inc416 = add i32 %augmented_load415, 1
+  store i32 %inc416, i32* %reverse_mem, align 4
+  store double %70, double* %"'de10", align 8
+  %augmented_load417 = load i32, i32* %reverse_mem, align 4
+  %inc418 = add i32 %augmented_load417, 1
+  store i32 %inc418, i32* %reverse_mem, align 4
+  %71 = load double, double* %"'de10", align 8
+  %augmented_load419 = load i32, i32* %reverse_mem, align 4
+  %inc420 = add i32 %augmented_load419, 1
+  store i32 %inc420, i32* %reverse_mem, align 4
+  %72 = load i64, i64* %"iv1'ac", align 8
+  %augmented_load421 = load i32, i32* %reverse_mem, align 4
+  %inc422 = add i32 %augmented_load421, 1
+  store i32 %inc422, i32* %reverse_mem, align 4
+  %73 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
+  %74 = tail call fast double @llvm.sqrt.f64(double %73)
+  %d0diffe = fdiv fast double %71, %74
+  %augmented_load423 = load i32, i32* %reverse_op, align 4
+  %inc424 = add i32 %augmented_load423, 1
+  store i32 %inc424, i32* %reverse_op, align 4
+  %augmented_load425 = load i32, i32* %reverse_mem, align 4
+  %inc426 = add i32 %augmented_load425, 1
+  store i32 %inc426, i32* %reverse_mem, align 4
+  %75 = load i64, i64* %"iv1'ac", align 8
+  %arrayidx_unwrap = getelementptr inbounds double, double* %rot, i64 %75, !node !362
+  %augmented_load427 = load i32, i32* %reverse_mem, align 4
+  %inc428 = add i32 %augmented_load427, 1
+  store i32 %inc428, i32* %reverse_mem, align 4
   %_unwrap11 = load double, double* %arrayidx_unwrap, align 8, !tbaa !68, !invariant.group !371, !node !362
-  %_unwrap12 = fdiv fast double %_unwrap11, %72, !node !362
-  %74 = fdiv fast double %69, %72
-  %75 = fmul fast double %_unwrap12, %74, !node !362
-  %76 = fneg fast double %75, !node !362
+  %_unwrap12 = fdiv fast double %_unwrap11, %74, !node !362
+  %augmented_load429 = load i32, i32* %reverse_op, align 4
+  %inc430 = add i32 %augmented_load429, 1
+  store i32 %inc430, i32* %reverse_op, align 4
+  %76 = fdiv fast double %71, %74
+  %augmented_load431 = load i32, i32* %reverse_op, align 4
+  %inc432 = add i32 %augmented_load431, 1
+  store i32 %inc432, i32* %reverse_op, align 4
+  %77 = fmul fast double %_unwrap12, %76, !node !362
+  %augmented_load433 = load i32, i32* %reverse_op, align 4
+  %inc434 = add i32 %augmented_load433, 1
+  store i32 %inc434, i32* %reverse_op, align 4
+  %78 = fneg fast double %77, !node !362
+  %augmented_load435 = load i32, i32* %reverse_mem, align 4
+  %inc436 = add i32 %augmented_load435, 1
+  store i32 %inc436, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de10", align 8
-  %77 = load double, double* %"'de13", align 8
-  %78 = fadd fast double %77, %d0diffe
-  store double %78, double* %"'de13", align 8
-  %79 = load double, double* %"'de8", align 8, !node !362
-  %80 = fadd fast double %79, %76, !node !362
-  store double %80, double* %"'de8", align 8
-  %81 = load double, double* %"'de13", align 8
+  %augmented_load437 = load i32, i32* %reverse_mem, align 4
+  %inc438 = add i32 %augmented_load437, 1
+  store i32 %inc438, i32* %reverse_mem, align 4
+  %79 = load double, double* %"'de13", align 8
+  %80 = fadd fast double %79, %d0diffe
+  %augmented_load439 = load i32, i32* %reverse_op, align 4
+  %inc440 = add i32 %augmented_load439, 1
+  store i32 %inc440, i32* %reverse_op, align 4
+  %augmented_load441 = load i32, i32* %reverse_mem, align 4
+  %inc442 = add i32 %augmented_load441, 1
+  store i32 %inc442, i32* %reverse_mem, align 4
+  store double %80, double* %"'de13", align 8
+  %augmented_load443 = load i32, i32* %reverse_mem, align 4
+  %inc444 = add i32 %augmented_load443, 1
+  store i32 %inc444, i32* %reverse_mem, align 4
+  %81 = load double, double* %"'de8", align 8, !node !362
+  %82 = fadd fast double %81, %78, !node !362
+  %augmented_load445 = load i32, i32* %reverse_op, align 4
+  %inc446 = add i32 %augmented_load445, 1
+  store i32 %inc446, i32* %reverse_op, align 4
+  %augmented_load447 = load i32, i32* %reverse_mem, align 4
+  %inc448 = add i32 %augmented_load447, 1
+  store i32 %inc448, i32* %reverse_mem, align 4
+  store double %82, double* %"'de8", align 8
+  %augmented_load449 = load i32, i32* %reverse_mem, align 4
+  %inc450 = add i32 %augmented_load449, 1
+  store i32 %inc450, i32* %reverse_mem, align 4
+  %83 = load double, double* %"'de13", align 8
+  %augmented_load451 = load i32, i32* %reverse_mem, align 4
+  %inc452 = add i32 %augmented_load451, 1
+  store i32 %inc452, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de13", align 8
-  %82 = load i64, i64* %"iv1'ac", align 8
-  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %82, !node !362
-  %83 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !362
-  %84 = fadd fast double %83, %81, !node !362
-  store double %84, double* %"arrayidx'ipg_unwrap", align 8
-  %85 = load i64, i64* %"iv1'ac", align 8
-  %86 = icmp eq i64 %85, 0
-  %87 = xor i1 %86, true
-  br i1 %86, label %invertif.then, label %incinvertfor.body
+  %augmented_load453 = load i32, i32* %reverse_mem, align 4
+  %inc454 = add i32 %augmented_load453, 1
+  store i32 %inc454, i32* %reverse_mem, align 4
+  %84 = load i64, i64* %"iv1'ac", align 8
+  %"arrayidx'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 %84, !node !362
+  %augmented_load455 = load i32, i32* %reverse_mem, align 4
+  %inc456 = add i32 %augmented_load455, 1
+  store i32 %inc456, i32* %reverse_mem, align 4
+  %85 = load double, double* %"arrayidx'ipg_unwrap", align 8, !node !362
+  %86 = fadd fast double %85, %83, !node !362
+  %augmented_load457 = load i32, i32* %reverse_op, align 4
+  %inc458 = add i32 %augmented_load457, 1
+  store i32 %inc458, i32* %reverse_op, align 4
+  %augmented_load459 = load i32, i32* %reverse_mem, align 4
+  %inc460 = add i32 %augmented_load459, 1
+  store i32 %inc460, i32* %reverse_mem, align 4
+  store double %86, double* %"arrayidx'ipg_unwrap", align 8
+  %augmented_load461 = load i32, i32* %reverse_mem, align 4
+  %inc462 = add i32 %augmented_load461, 1
+  store i32 %inc462, i32* %reverse_mem, align 4
+  %87 = load i64, i64* %"iv1'ac", align 8
+  %88 = icmp eq i64 %87, 0
+  %89 = xor i1 %88, true
+  %augmented_load463 = load i32, i32* %reverse_op, align 4
+  %inc464 = add i32 %augmented_load463, 1
+  store i32 %inc464, i32* %reverse_op, align 4
+  br i1 %88, label %invertif.then, label %incinvertfor.body
 
 incinvertfor.body:                                ; preds = %invertfor.body
-  %88 = load i64, i64* %"iv1'ac", align 8
-  %89 = add nsw i64 %88, -1
-  store i64 %89, i64* %"iv1'ac", align 8
+  %augmented_load465 = load i32, i32* %reverse_mem, align 4
+  %inc466 = add i32 %augmented_load465, 1
+  store i32 %inc466, i32* %reverse_mem, align 4
+  %90 = load i64, i64* %"iv1'ac", align 8
+  %91 = add nsw i64 %90, -1
+  %augmented_load467 = load i32, i32* %reverse_op, align 4
+  %inc468 = add i32 %augmented_load467, 1
+  store i32 %inc468, i32* %reverse_op, align 4
+  %augmented_load469 = load i32, i32* %reverse_mem, align 4
+  %inc470 = add i32 %augmented_load469, 1
+  store i32 %inc470, i32* %reverse_mem, align 4
+  store i64 %91, i64* %"iv1'ac", align 8
   br label %invertfor.body
 
 invertfor.end:                                    ; preds = %invertfor.body18.for.body18_crit_edge
-  %90 = load double, double* %"rotatedPt'", align 8, !node !362
+  %augmented_load471 = load i32, i32* %reverse_mem, align 4
+  %inc472 = add i32 %augmented_load471, 1
+  store i32 %inc472, i32* %reverse_mem, align 4
+  %92 = load double, double* %"rotatedPt'", align 8, !node !362
+  %augmented_load473 = load i32, i32* %reverse_mem, align 4
+  %inc474 = add i32 %augmented_load473, 1
+  store i32 %inc474, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"rotatedPt'", align 8
-  %91 = load double, double* %"add29117'de", align 8, !node !362
-  %92 = fadd fast double %91, %90, !node !362
-  store double %92, double* %"add29117'de", align 8
+  %augmented_load475 = load i32, i32* %reverse_mem, align 4
+  %inc476 = add i32 %augmented_load475, 1
+  store i32 %inc476, i32* %reverse_mem, align 4
   %93 = load double, double* %"add29117'de", align 8, !node !362
+  %94 = fadd fast double %93, %92, !node !362
+  %augmented_load477 = load i32, i32* %reverse_op, align 4
+  %inc478 = add i32 %augmented_load477, 1
+  store i32 %inc478, i32* %reverse_op, align 4
+  %augmented_load479 = load i32, i32* %reverse_mem, align 4
+  %inc480 = add i32 %augmented_load479, 1
+  store i32 %inc480, i32* %reverse_mem, align 4
+  store double %94, double* %"add29117'de", align 8
+  %augmented_load481 = load i32, i32* %reverse_mem, align 4
+  %inc482 = add i32 %augmented_load481, 1
+  store i32 %inc482, i32* %reverse_mem, align 4
+  %95 = load double, double* %"add29117'de", align 8, !node !362
+  %augmented_load483 = load i32, i32* %reverse_mem, align 4
+  %inc484 = add i32 %augmented_load483, 1
+  store i32 %inc484, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add29117'de", align 8
-  %94 = load double, double* %"add25115'de", align 8, !node !362
-  %95 = fadd fast double %94, %93, !node !362
-  store double %95, double* %"add25115'de", align 8
-  %96 = load double, double* %"mul28116'de", align 8, !node !362
-  %97 = fadd fast double %96, %93, !node !362
-  store double %97, double* %"mul28116'de", align 8
+  %augmented_load485 = load i32, i32* %reverse_mem, align 4
+  %inc486 = add i32 %augmented_load485, 1
+  store i32 %inc486, i32* %reverse_mem, align 4
+  %96 = load double, double* %"add25115'de", align 8, !node !362
+  %97 = fadd fast double %96, %95, !node !362
+  %augmented_load487 = load i32, i32* %reverse_op, align 4
+  %inc488 = add i32 %augmented_load487, 1
+  store i32 %inc488, i32* %reverse_op, align 4
+  %augmented_load489 = load i32, i32* %reverse_mem, align 4
+  %inc490 = add i32 %augmented_load489, 1
+  store i32 %inc490, i32* %reverse_mem, align 4
+  store double %97, double* %"add25115'de", align 8
+  %augmented_load491 = load i32, i32* %reverse_mem, align 4
+  %inc492 = add i32 %augmented_load491, 1
+  store i32 %inc492, i32* %reverse_mem, align 4
   %98 = load double, double* %"mul28116'de", align 8, !node !362
+  %99 = fadd fast double %98, %95, !node !362
+  %augmented_load493 = load i32, i32* %reverse_op, align 4
+  %inc494 = add i32 %augmented_load493, 1
+  store i32 %inc494, i32* %reverse_op, align 4
+  %augmented_load495 = load i32, i32* %reverse_mem, align 4
+  %inc496 = add i32 %augmented_load495, 1
+  store i32 %inc496, i32* %reverse_mem, align 4
+  store double %99, double* %"mul28116'de", align 8
+  %augmented_load497 = load i32, i32* %reverse_mem, align 4
+  %inc498 = add i32 %augmented_load497, 1
+  store i32 %inc498, i32* %reverse_mem, align 4
+  %100 = load double, double* %"mul28116'de", align 8, !node !362
   %arraydecay_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
+  %augmented_load499 = load i32, i32* %reverse_mem, align 4
+  %inc500 = add i32 %augmented_load499, 1
+  store i32 %inc500, i32* %reverse_mem, align 4
   %_unwrap14 = load double, double* %arraydecay_unwrap, align 16, !tbaa !68, !invariant.group !377
-  %m0diffemul15 = fmul fast double %98, %_unwrap14, !node !362
+  %m0diffemul15 = fmul fast double %100, %_unwrap14, !node !362
+  %augmented_load501 = load i32, i32* %reverse_op, align 4
+  %inc502 = add i32 %augmented_load501, 1
+  store i32 %inc502, i32* %reverse_op, align 4
   %arrayidx.i85_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
+  %augmented_load503 = load i32, i32* %reverse_mem, align 4
+  %inc504 = add i32 %augmented_load503, 1
+  store i32 %inc504, i32* %reverse_mem, align 4
   %_unwrap15 = load double, double* %arrayidx.i85_unwrap, align 8, !tbaa !68, !invariant.group !372
   %arrayidx3.i89_unwrap = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %augmented_load505 = load i32, i32* %reverse_mem, align 4
+  %inc506 = add i32 %augmented_load505, 1
+  store i32 %inc506, i32* %reverse_mem, align 4
   %_unwrap16 = load double, double* %arrayidx3.i89_unwrap, align 8, !tbaa !68, !invariant.group !375, !node !362
   %mul10_unwrap = fmul fast double %_unwrap15, %_unwrap16, !node !362
+  %augmented_load507 = load i32, i32* %reverse_op, align 4
+  %inc508 = add i32 %augmented_load507, 1
+  store i32 %inc508, i32* %reverse_op, align 4
+  %augmented_load509 = load i32, i32* %reverse_mem, align 4
+  %inc510 = add i32 %augmented_load509, 1
+  store i32 %inc510, i32* %reverse_mem, align 4
   %_unwrap17 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
   %mul7_unwrap = fmul fast double %_unwrap14, %_unwrap17, !node !362
+  %augmented_load511 = load i32, i32* %reverse_op, align 4
+  %inc512 = add i32 %augmented_load511, 1
+  store i32 %inc512, i32* %reverse_op, align 4
   %add_unwrap = fadd fast double %mul10_unwrap, %mul7_unwrap, !node !362
+  %augmented_load513 = load i32, i32* %reverse_op, align 4
+  %inc514 = add i32 %augmented_load513, 1
+  store i32 %inc514, i32* %reverse_op, align 4
   %arrayidx2.i88_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
+  %augmented_load515 = load i32, i32* %reverse_mem, align 4
+  %inc516 = add i32 %augmented_load515, 1
+  store i32 %inc516, i32* %reverse_mem, align 4
   %_unwrap18 = load double, double* %arrayidx2.i88_unwrap, align 16, !tbaa !68, !invariant.group !374
   %arrayidx1.i86_unwrap = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %augmented_load517 = load i32, i32* %reverse_mem, align 4
+  %inc518 = add i32 %augmented_load517, 1
+  store i32 %inc518, i32* %reverse_mem, align 4
   %_unwrap19 = load double, double* %arrayidx1.i86_unwrap, align 8, !tbaa !68, !invariant.group !373, !node !362
   %mul13_unwrap = fmul fast double %_unwrap18, %_unwrap19, !node !362
+  %augmented_load519 = load i32, i32* %reverse_op, align 4
+  %inc520 = add i32 %augmented_load519, 1
+  store i32 %inc520, i32* %reverse_op, align 4
   %add14_unwrap = fadd fast double %add_unwrap, %mul13_unwrap, !node !362
-  %99 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
-  %100 = tail call fast double @llvm.sqrt.f64(double %99)
-  %101 = tail call fast double @llvm.cos.f64(double %100)
-  %sub_unwrap = fsub fast double 1.000000e+00, %101
+  %augmented_load521 = load i32, i32* %reverse_op, align 4
+  %inc522 = add i32 %augmented_load521, 1
+  store i32 %inc522, i32* %reverse_op, align 4
+  %augmented_load523 = load i32, i32* %reverse_mem, align 4
+  %inc524 = add i32 %augmented_load523, 1
+  store i32 %inc524, i32* %reverse_mem, align 4
+  %101 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
+  %102 = tail call fast double @llvm.sqrt.f64(double %101)
+  %103 = tail call fast double @llvm.cos.f64(double %102)
+  %sub_unwrap = fsub fast double 1.000000e+00, %103
+  %augmented_load525 = load i32, i32* %reverse_op, align 4
+  %inc526 = add i32 %augmented_load525, 1
+  store i32 %inc526, i32* %reverse_op, align 4
   %mul15_unwrap = fmul fast double %add14_unwrap, %sub_unwrap, !node !362
-  %m1diffe20 = fmul fast double %98, %mul15_unwrap, !node !362
+  %augmented_load527 = load i32, i32* %reverse_op, align 4
+  %inc528 = add i32 %augmented_load527, 1
+  store i32 %inc528, i32* %reverse_op, align 4
+  %m1diffe20 = fmul fast double %100, %mul15_unwrap, !node !362
+  %augmented_load529 = load i32, i32* %reverse_op, align 4
+  %inc530 = add i32 %augmented_load529, 1
+  store i32 %inc530, i32* %reverse_op, align 4
+  %augmented_load531 = load i32, i32* %reverse_mem, align 4
+  %inc532 = add i32 %augmented_load531, 1
+  store i32 %inc532, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul28116'de", align 8
-  %102 = load double, double* %"mul15'de", align 8, !node !362
-  %103 = fadd fast double %102, %m0diffemul15, !node !362
-  store double %103, double* %"mul15'de", align 8
-  %104 = load double, double* %"'de21", align 8, !node !362
-  %105 = fadd fast double %104, %m1diffe20, !node !362
-  store double %105, double* %"'de21", align 8
-  %106 = load double, double* %"add25115'de", align 8, !node !362
+  %augmented_load533 = load i32, i32* %reverse_mem, align 4
+  %inc534 = add i32 %augmented_load533, 1
+  store i32 %inc534, i32* %reverse_mem, align 4
+  %104 = load double, double* %"mul15'de", align 8, !node !362
+  %105 = fadd fast double %104, %m0diffemul15, !node !362
+  %augmented_load535 = load i32, i32* %reverse_op, align 4
+  %inc536 = add i32 %augmented_load535, 1
+  store i32 %inc536, i32* %reverse_op, align 4
+  %augmented_load537 = load i32, i32* %reverse_mem, align 4
+  %inc538 = add i32 %augmented_load537, 1
+  store i32 %inc538, i32* %reverse_mem, align 4
+  store double %105, double* %"mul15'de", align 8
+  %augmented_load539 = load i32, i32* %reverse_mem, align 4
+  %inc540 = add i32 %augmented_load539, 1
+  store i32 %inc540, i32* %reverse_mem, align 4
+  %106 = load double, double* %"'de21", align 8, !node !362
+  %107 = fadd fast double %106, %m1diffe20, !node !362
+  %augmented_load541 = load i32, i32* %reverse_op, align 4
+  %inc542 = add i32 %augmented_load541, 1
+  store i32 %inc542, i32* %reverse_op, align 4
+  %augmented_load543 = load i32, i32* %reverse_mem, align 4
+  %inc544 = add i32 %augmented_load543, 1
+  store i32 %inc544, i32* %reverse_mem, align 4
+  store double %107, double* %"'de21", align 8
+  %augmented_load545 = load i32, i32* %reverse_mem, align 4
+  %inc546 = add i32 %augmented_load545, 1
+  store i32 %inc546, i32* %reverse_mem, align 4
+  %108 = load double, double* %"add25115'de", align 8, !node !362
+  %augmented_load547 = load i32, i32* %reverse_mem, align 4
+  %inc548 = add i32 %augmented_load547, 1
+  store i32 %inc548, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add25115'de", align 8
-  %107 = load double, double* %"mul24114'de", align 8, !node !362
-  %108 = fadd fast double %107, %106, !node !362
-  store double %108, double* %"mul24114'de", align 8
-  %109 = load double, double* %"mul21113'de", align 8, !node !362
-  %110 = fadd fast double %109, %106, !node !362
-  store double %110, double* %"mul21113'de", align 8
-  %111 = load double, double* %"mul24114'de", align 8, !node !362
-  %112 = tail call fast double @llvm.sin.f64(double %100)
-  %m0diffesub.i91 = fmul fast double %111, %112, !node !362
+  %augmented_load549 = load i32, i32* %reverse_mem, align 4
+  %inc550 = add i32 %augmented_load549, 1
+  store i32 %inc550, i32* %reverse_mem, align 4
+  %109 = load double, double* %"mul24114'de", align 8, !node !362
+  %110 = fadd fast double %109, %108, !node !362
+  %augmented_load551 = load i32, i32* %reverse_op, align 4
+  %inc552 = add i32 %augmented_load551, 1
+  store i32 %inc552, i32* %reverse_op, align 4
+  %augmented_load553 = load i32, i32* %reverse_mem, align 4
+  %inc554 = add i32 %augmented_load553, 1
+  store i32 %inc554, i32* %reverse_mem, align 4
+  store double %110, double* %"mul24114'de", align 8
+  %augmented_load555 = load i32, i32* %reverse_mem, align 4
+  %inc556 = add i32 %augmented_load555, 1
+  store i32 %inc556, i32* %reverse_mem, align 4
+  %111 = load double, double* %"mul21113'de", align 8, !node !362
+  %112 = fadd fast double %111, %108, !node !362
+  %augmented_load557 = load i32, i32* %reverse_op, align 4
+  %inc558 = add i32 %augmented_load557, 1
+  store i32 %inc558, i32* %reverse_op, align 4
+  %augmented_load559 = load i32, i32* %reverse_mem, align 4
+  %inc560 = add i32 %augmented_load559, 1
+  store i32 %inc560, i32* %reverse_mem, align 4
+  store double %112, double* %"mul21113'de", align 8
+  %augmented_load561 = load i32, i32* %reverse_mem, align 4
+  %inc562 = add i32 %augmented_load561, 1
+  store i32 %inc562, i32* %reverse_mem, align 4
+  %113 = load double, double* %"mul24114'de", align 8, !node !362
+  %114 = tail call fast double @llvm.sin.f64(double %102)
+  %m0diffesub.i91 = fmul fast double %113, %114, !node !362
+  %augmented_load563 = load i32, i32* %reverse_op, align 4
+  %inc564 = add i32 %augmented_load563, 1
+  store i32 %inc564, i32* %reverse_op, align 4
   %mul.i87_unwrap = fmul fast double %_unwrap19, %_unwrap15, !node !362
+  %augmented_load565 = load i32, i32* %reverse_op, align 4
+  %inc566 = add i32 %augmented_load565, 1
+  store i32 %inc566, i32* %reverse_op, align 4
   %mul4.i90_unwrap = fmul fast double %_unwrap16, %_unwrap18, !node !362
+  %augmented_load567 = load i32, i32* %reverse_op, align 4
+  %inc568 = add i32 %augmented_load567, 1
+  store i32 %inc568, i32* %reverse_op, align 4
   %sub.i91_unwrap = fsub fast double %mul.i87_unwrap, %mul4.i90_unwrap, !node !362
-  %m1diffe22 = fmul fast double %111, %sub.i91_unwrap, !node !362
+  %augmented_load569 = load i32, i32* %reverse_op, align 4
+  %inc570 = add i32 %augmented_load569, 1
+  store i32 %inc570, i32* %reverse_op, align 4
+  %m1diffe22 = fmul fast double %113, %sub.i91_unwrap, !node !362
+  %augmented_load571 = load i32, i32* %reverse_op, align 4
+  %inc572 = add i32 %augmented_load571, 1
+  store i32 %inc572, i32* %reverse_op, align 4
+  %augmented_load573 = load i32, i32* %reverse_mem, align 4
+  %inc574 = add i32 %augmented_load573, 1
+  store i32 %inc574, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul24114'de", align 8
-  %113 = load double, double* %"sub.i91'de", align 8, !node !362
-  %114 = fadd fast double %113, %m0diffesub.i91, !node !362
-  store double %114, double* %"sub.i91'de", align 8
-  %115 = load double, double* %"'de23", align 8, !node !362
-  %116 = fadd fast double %115, %m1diffe22, !node !362
-  store double %116, double* %"'de23", align 8
-  %117 = load double, double* %"mul21113'de", align 8, !node !362
-  %m0diffe24 = fmul fast double %117, %101, !node !362
-  %m1diffe25 = fmul fast double %117, %_unwrap17, !node !362
+  %augmented_load575 = load i32, i32* %reverse_mem, align 4
+  %inc576 = add i32 %augmented_load575, 1
+  store i32 %inc576, i32* %reverse_mem, align 4
+  %115 = load double, double* %"sub.i91'de", align 8, !node !362
+  %116 = fadd fast double %115, %m0diffesub.i91, !node !362
+  %augmented_load577 = load i32, i32* %reverse_op, align 4
+  %inc578 = add i32 %augmented_load577, 1
+  store i32 %inc578, i32* %reverse_op, align 4
+  %augmented_load579 = load i32, i32* %reverse_mem, align 4
+  %inc580 = add i32 %augmented_load579, 1
+  store i32 %inc580, i32* %reverse_mem, align 4
+  store double %116, double* %"sub.i91'de", align 8
+  %augmented_load581 = load i32, i32* %reverse_mem, align 4
+  %inc582 = add i32 %augmented_load581, 1
+  store i32 %inc582, i32* %reverse_mem, align 4
+  %117 = load double, double* %"'de23", align 8, !node !362
+  %118 = fadd fast double %117, %m1diffe22, !node !362
+  %augmented_load583 = load i32, i32* %reverse_op, align 4
+  %inc584 = add i32 %augmented_load583, 1
+  store i32 %inc584, i32* %reverse_op, align 4
+  %augmented_load585 = load i32, i32* %reverse_mem, align 4
+  %inc586 = add i32 %augmented_load585, 1
+  store i32 %inc586, i32* %reverse_mem, align 4
+  store double %118, double* %"'de23", align 8
+  %augmented_load587 = load i32, i32* %reverse_mem, align 4
+  %inc588 = add i32 %augmented_load587, 1
+  store i32 %inc588, i32* %reverse_mem, align 4
+  %119 = load double, double* %"mul21113'de", align 8, !node !362
+  %m0diffe24 = fmul fast double %119, %103, !node !362
+  %augmented_load589 = load i32, i32* %reverse_op, align 4
+  %inc590 = add i32 %augmented_load589, 1
+  store i32 %inc590, i32* %reverse_op, align 4
+  %m1diffe25 = fmul fast double %119, %_unwrap17, !node !362
+  %augmented_load591 = load i32, i32* %reverse_op, align 4
+  %inc592 = add i32 %augmented_load591, 1
+  store i32 %inc592, i32* %reverse_op, align 4
+  %augmented_load593 = load i32, i32* %reverse_mem, align 4
+  %inc594 = add i32 %augmented_load593, 1
+  store i32 %inc594, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul21113'de", align 8
-  %118 = load double, double* %"'de26", align 8, !node !362
-  %119 = fadd fast double %118, %m0diffe24, !node !362
-  store double %119, double* %"'de26", align 8
-  %120 = load double, double* %"'de7", align 8, !node !362
-  %121 = fadd fast double %120, %m1diffe25, !node !362
-  store double %121, double* %"'de7", align 8
-  %122 = load double, double* %"mul15'de", align 8, !node !362
-  %m0diffeadd14 = fmul fast double %122, %sub_unwrap, !node !362
-  %m1diffesub = fmul fast double %122, %add14_unwrap, !node !362
+  %augmented_load595 = load i32, i32* %reverse_mem, align 4
+  %inc596 = add i32 %augmented_load595, 1
+  store i32 %inc596, i32* %reverse_mem, align 4
+  %120 = load double, double* %"'de26", align 8, !node !362
+  %121 = fadd fast double %120, %m0diffe24, !node !362
+  %augmented_load597 = load i32, i32* %reverse_op, align 4
+  %inc598 = add i32 %augmented_load597, 1
+  store i32 %inc598, i32* %reverse_op, align 4
+  %augmented_load599 = load i32, i32* %reverse_mem, align 4
+  %inc600 = add i32 %augmented_load599, 1
+  store i32 %inc600, i32* %reverse_mem, align 4
+  store double %121, double* %"'de26", align 8
+  %augmented_load601 = load i32, i32* %reverse_mem, align 4
+  %inc602 = add i32 %augmented_load601, 1
+  store i32 %inc602, i32* %reverse_mem, align 4
+  %122 = load double, double* %"'de7", align 8, !node !362
+  %123 = fadd fast double %122, %m1diffe25, !node !362
+  %augmented_load603 = load i32, i32* %reverse_op, align 4
+  %inc604 = add i32 %augmented_load603, 1
+  store i32 %inc604, i32* %reverse_op, align 4
+  %augmented_load605 = load i32, i32* %reverse_mem, align 4
+  %inc606 = add i32 %augmented_load605, 1
+  store i32 %inc606, i32* %reverse_mem, align 4
+  store double %123, double* %"'de7", align 8
+  %augmented_load607 = load i32, i32* %reverse_mem, align 4
+  %inc608 = add i32 %augmented_load607, 1
+  store i32 %inc608, i32* %reverse_mem, align 4
+  %124 = load double, double* %"mul15'de", align 8, !node !362
+  %m0diffeadd14 = fmul fast double %124, %sub_unwrap, !node !362
+  %augmented_load609 = load i32, i32* %reverse_op, align 4
+  %inc610 = add i32 %augmented_load609, 1
+  store i32 %inc610, i32* %reverse_op, align 4
+  %m1diffesub = fmul fast double %124, %add14_unwrap, !node !362
+  %augmented_load611 = load i32, i32* %reverse_op, align 4
+  %inc612 = add i32 %augmented_load611, 1
+  store i32 %inc612, i32* %reverse_op, align 4
+  %augmented_load613 = load i32, i32* %reverse_mem, align 4
+  %inc614 = add i32 %augmented_load613, 1
+  store i32 %inc614, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul15'de", align 8
-  %123 = load double, double* %"add14'de", align 8, !node !362
-  %124 = fadd fast double %123, %m0diffeadd14, !node !362
-  store double %124, double* %"add14'de", align 8
-  %125 = load double, double* %"sub'de", align 8, !node !362
-  %126 = fadd fast double %125, %m1diffesub, !node !362
-  store double %126, double* %"sub'de", align 8
+  %augmented_load615 = load i32, i32* %reverse_mem, align 4
+  %inc616 = add i32 %augmented_load615, 1
+  store i32 %inc616, i32* %reverse_mem, align 4
+  %125 = load double, double* %"add14'de", align 8, !node !362
+  %126 = fadd fast double %125, %m0diffeadd14, !node !362
+  %augmented_load617 = load i32, i32* %reverse_op, align 4
+  %inc618 = add i32 %augmented_load617, 1
+  store i32 %inc618, i32* %reverse_op, align 4
+  %augmented_load619 = load i32, i32* %reverse_mem, align 4
+  %inc620 = add i32 %augmented_load619, 1
+  store i32 %inc620, i32* %reverse_mem, align 4
+  store double %126, double* %"add14'de", align 8
+  %augmented_load621 = load i32, i32* %reverse_mem, align 4
+  %inc622 = add i32 %augmented_load621, 1
+  store i32 %inc622, i32* %reverse_mem, align 4
   %127 = load double, double* %"sub'de", align 8, !node !362
-  %128 = fneg fast double %127, !node !362
+  %128 = fadd fast double %127, %m1diffesub, !node !362
+  %augmented_load623 = load i32, i32* %reverse_op, align 4
+  %inc624 = add i32 %augmented_load623, 1
+  store i32 %inc624, i32* %reverse_op, align 4
+  %augmented_load625 = load i32, i32* %reverse_mem, align 4
+  %inc626 = add i32 %augmented_load625, 1
+  store i32 %inc626, i32* %reverse_mem, align 4
+  store double %128, double* %"sub'de", align 8
+  %augmented_load627 = load i32, i32* %reverse_mem, align 4
+  %inc628 = add i32 %augmented_load627, 1
+  store i32 %inc628, i32* %reverse_mem, align 4
+  %129 = load double, double* %"sub'de", align 8, !node !362
+  %130 = fneg fast double %129, !node !362
+  %augmented_load629 = load i32, i32* %reverse_mem, align 4
+  %inc630 = add i32 %augmented_load629, 1
+  store i32 %inc630, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub'de", align 8
-  %129 = load double, double* %"'de7", align 8, !node !362
-  %130 = fadd fast double %129, %128, !node !362
-  store double %130, double* %"'de7", align 8
-  %131 = load double, double* %"add14'de", align 8, !node !362
+  %augmented_load631 = load i32, i32* %reverse_mem, align 4
+  %inc632 = add i32 %augmented_load631, 1
+  store i32 %inc632, i32* %reverse_mem, align 4
+  %131 = load double, double* %"'de7", align 8, !node !362
+  %132 = fadd fast double %131, %130, !node !362
+  %augmented_load633 = load i32, i32* %reverse_op, align 4
+  %inc634 = add i32 %augmented_load633, 1
+  store i32 %inc634, i32* %reverse_op, align 4
+  %augmented_load635 = load i32, i32* %reverse_mem, align 4
+  %inc636 = add i32 %augmented_load635, 1
+  store i32 %inc636, i32* %reverse_mem, align 4
+  store double %132, double* %"'de7", align 8
+  %augmented_load637 = load i32, i32* %reverse_mem, align 4
+  %inc638 = add i32 %augmented_load637, 1
+  store i32 %inc638, i32* %reverse_mem, align 4
+  %133 = load double, double* %"add14'de", align 8, !node !362
+  %augmented_load639 = load i32, i32* %reverse_mem, align 4
+  %inc640 = add i32 %augmented_load639, 1
+  store i32 %inc640, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add14'de", align 8
-  %132 = load double, double* %"add'de", align 8, !node !362
-  %133 = fadd fast double %132, %131, !node !362
-  store double %133, double* %"add'de", align 8
-  %134 = load double, double* %"mul13'de", align 8, !node !362
-  %135 = fadd fast double %134, %131, !node !362
-  store double %135, double* %"mul13'de", align 8
+  %augmented_load641 = load i32, i32* %reverse_mem, align 4
+  %inc642 = add i32 %augmented_load641, 1
+  store i32 %inc642, i32* %reverse_mem, align 4
+  %134 = load double, double* %"add'de", align 8, !node !362
+  %135 = fadd fast double %134, %133, !node !362
+  %augmented_load643 = load i32, i32* %reverse_op, align 4
+  %inc644 = add i32 %augmented_load643, 1
+  store i32 %inc644, i32* %reverse_op, align 4
+  %augmented_load645 = load i32, i32* %reverse_mem, align 4
+  %inc646 = add i32 %augmented_load645, 1
+  store i32 %inc646, i32* %reverse_mem, align 4
+  store double %135, double* %"add'de", align 8
+  %augmented_load647 = load i32, i32* %reverse_mem, align 4
+  %inc648 = add i32 %augmented_load647, 1
+  store i32 %inc648, i32* %reverse_mem, align 4
   %136 = load double, double* %"mul13'de", align 8, !node !362
-  %m0diffe27 = fmul fast double %136, %_unwrap19, !node !362
-  %m1diffe28 = fmul fast double %136, %_unwrap18, !node !362
+  %137 = fadd fast double %136, %133, !node !362
+  %augmented_load649 = load i32, i32* %reverse_op, align 4
+  %inc650 = add i32 %augmented_load649, 1
+  store i32 %inc650, i32* %reverse_op, align 4
+  %augmented_load651 = load i32, i32* %reverse_mem, align 4
+  %inc652 = add i32 %augmented_load651, 1
+  store i32 %inc652, i32* %reverse_mem, align 4
+  store double %137, double* %"mul13'de", align 8
+  %augmented_load653 = load i32, i32* %reverse_mem, align 4
+  %inc654 = add i32 %augmented_load653, 1
+  store i32 %inc654, i32* %reverse_mem, align 4
+  %138 = load double, double* %"mul13'de", align 8, !node !362
+  %m0diffe27 = fmul fast double %138, %_unwrap19, !node !362
+  %augmented_load655 = load i32, i32* %reverse_op, align 4
+  %inc656 = add i32 %augmented_load655, 1
+  store i32 %inc656, i32* %reverse_op, align 4
+  %m1diffe28 = fmul fast double %138, %_unwrap18, !node !362
+  %augmented_load657 = load i32, i32* %reverse_op, align 4
+  %inc658 = add i32 %augmented_load657, 1
+  store i32 %inc658, i32* %reverse_op, align 4
+  %augmented_load659 = load i32, i32* %reverse_mem, align 4
+  %inc660 = add i32 %augmented_load659, 1
+  store i32 %inc660, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul13'de", align 8
-  %137 = load double, double* %"'de29", align 8, !node !362
-  %138 = fadd fast double %137, %m0diffe27, !node !362
-  store double %138, double* %"'de29", align 8
-  %139 = load double, double* %"'de30", align 8, !node !362
-  %140 = fadd fast double %139, %m1diffe28, !node !362
-  store double %140, double* %"'de30", align 8
-  %141 = load double, double* %"add'de", align 8, !node !362
+  %augmented_load661 = load i32, i32* %reverse_mem, align 4
+  %inc662 = add i32 %augmented_load661, 1
+  store i32 %inc662, i32* %reverse_mem, align 4
+  %139 = load double, double* %"'de29", align 8, !node !362
+  %140 = fadd fast double %139, %m0diffe27, !node !362
+  %augmented_load663 = load i32, i32* %reverse_op, align 4
+  %inc664 = add i32 %augmented_load663, 1
+  store i32 %inc664, i32* %reverse_op, align 4
+  %augmented_load665 = load i32, i32* %reverse_mem, align 4
+  %inc666 = add i32 %augmented_load665, 1
+  store i32 %inc666, i32* %reverse_mem, align 4
+  store double %140, double* %"'de29", align 8
+  %augmented_load667 = load i32, i32* %reverse_mem, align 4
+  %inc668 = add i32 %augmented_load667, 1
+  store i32 %inc668, i32* %reverse_mem, align 4
+  %141 = load double, double* %"'de30", align 8, !node !362
+  %142 = fadd fast double %141, %m1diffe28, !node !362
+  %augmented_load669 = load i32, i32* %reverse_op, align 4
+  %inc670 = add i32 %augmented_load669, 1
+  store i32 %inc670, i32* %reverse_op, align 4
+  %augmented_load671 = load i32, i32* %reverse_mem, align 4
+  %inc672 = add i32 %augmented_load671, 1
+  store i32 %inc672, i32* %reverse_mem, align 4
+  store double %142, double* %"'de30", align 8
+  %augmented_load673 = load i32, i32* %reverse_mem, align 4
+  %inc674 = add i32 %augmented_load673, 1
+  store i32 %inc674, i32* %reverse_mem, align 4
+  %143 = load double, double* %"add'de", align 8, !node !362
+  %augmented_load675 = load i32, i32* %reverse_mem, align 4
+  %inc676 = add i32 %augmented_load675, 1
+  store i32 %inc676, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add'de", align 8
-  %142 = load double, double* %"mul10'de", align 8, !node !362
-  %143 = fadd fast double %142, %141, !node !362
-  store double %143, double* %"mul10'de", align 8
-  %144 = load double, double* %"mul7'de", align 8, !node !362
-  %145 = fadd fast double %144, %141, !node !362
-  store double %145, double* %"mul7'de", align 8
-  %146 = load double, double* %"mul10'de", align 8, !node !362
-  %m0diffe31 = fmul fast double %146, %_unwrap16, !node !362
-  %m1diffe32 = fmul fast double %146, %_unwrap15, !node !362
+  %augmented_load677 = load i32, i32* %reverse_mem, align 4
+  %inc678 = add i32 %augmented_load677, 1
+  store i32 %inc678, i32* %reverse_mem, align 4
+  %144 = load double, double* %"mul10'de", align 8, !node !362
+  %145 = fadd fast double %144, %143, !node !362
+  %augmented_load679 = load i32, i32* %reverse_op, align 4
+  %inc680 = add i32 %augmented_load679, 1
+  store i32 %inc680, i32* %reverse_op, align 4
+  %augmented_load681 = load i32, i32* %reverse_mem, align 4
+  %inc682 = add i32 %augmented_load681, 1
+  store i32 %inc682, i32* %reverse_mem, align 4
+  store double %145, double* %"mul10'de", align 8
+  %augmented_load683 = load i32, i32* %reverse_mem, align 4
+  %inc684 = add i32 %augmented_load683, 1
+  store i32 %inc684, i32* %reverse_mem, align 4
+  %146 = load double, double* %"mul7'de", align 8, !node !362
+  %147 = fadd fast double %146, %143, !node !362
+  %augmented_load685 = load i32, i32* %reverse_op, align 4
+  %inc686 = add i32 %augmented_load685, 1
+  store i32 %inc686, i32* %reverse_op, align 4
+  %augmented_load687 = load i32, i32* %reverse_mem, align 4
+  %inc688 = add i32 %augmented_load687, 1
+  store i32 %inc688, i32* %reverse_mem, align 4
+  store double %147, double* %"mul7'de", align 8
+  %augmented_load689 = load i32, i32* %reverse_mem, align 4
+  %inc690 = add i32 %augmented_load689, 1
+  store i32 %inc690, i32* %reverse_mem, align 4
+  %148 = load double, double* %"mul10'de", align 8, !node !362
+  %m0diffe31 = fmul fast double %148, %_unwrap16, !node !362
+  %augmented_load691 = load i32, i32* %reverse_op, align 4
+  %inc692 = add i32 %augmented_load691, 1
+  store i32 %inc692, i32* %reverse_op, align 4
+  %m1diffe32 = fmul fast double %148, %_unwrap15, !node !362
+  %augmented_load693 = load i32, i32* %reverse_op, align 4
+  %inc694 = add i32 %augmented_load693, 1
+  store i32 %inc694, i32* %reverse_op, align 4
+  %augmented_load695 = load i32, i32* %reverse_mem, align 4
+  %inc696 = add i32 %augmented_load695, 1
+  store i32 %inc696, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul10'de", align 8
-  %147 = load double, double* %"'de33", align 8, !node !362
-  %148 = fadd fast double %147, %m0diffe31, !node !362
-  store double %148, double* %"'de33", align 8
-  %149 = load double, double* %"'de34", align 8, !node !362
-  %150 = fadd fast double %149, %m1diffe32, !node !362
-  store double %150, double* %"'de34", align 8
-  %151 = load double, double* %"mul7'de", align 8, !node !362
-  %m0diffe35 = fmul fast double %151, %_unwrap17, !node !362
-  %m1diffe36 = fmul fast double %151, %_unwrap14, !node !362
+  %augmented_load697 = load i32, i32* %reverse_mem, align 4
+  %inc698 = add i32 %augmented_load697, 1
+  store i32 %inc698, i32* %reverse_mem, align 4
+  %149 = load double, double* %"'de33", align 8, !node !362
+  %150 = fadd fast double %149, %m0diffe31, !node !362
+  %augmented_load699 = load i32, i32* %reverse_op, align 4
+  %inc700 = add i32 %augmented_load699, 1
+  store i32 %inc700, i32* %reverse_op, align 4
+  %augmented_load701 = load i32, i32* %reverse_mem, align 4
+  %inc702 = add i32 %augmented_load701, 1
+  store i32 %inc702, i32* %reverse_mem, align 4
+  store double %150, double* %"'de33", align 8
+  %augmented_load703 = load i32, i32* %reverse_mem, align 4
+  %inc704 = add i32 %augmented_load703, 1
+  store i32 %inc704, i32* %reverse_mem, align 4
+  %151 = load double, double* %"'de34", align 8, !node !362
+  %152 = fadd fast double %151, %m1diffe32, !node !362
+  %augmented_load705 = load i32, i32* %reverse_op, align 4
+  %inc706 = add i32 %augmented_load705, 1
+  store i32 %inc706, i32* %reverse_op, align 4
+  %augmented_load707 = load i32, i32* %reverse_mem, align 4
+  %inc708 = add i32 %augmented_load707, 1
+  store i32 %inc708, i32* %reverse_mem, align 4
+  store double %152, double* %"'de34", align 8
+  %augmented_load709 = load i32, i32* %reverse_mem, align 4
+  %inc710 = add i32 %augmented_load709, 1
+  store i32 %inc710, i32* %reverse_mem, align 4
+  %153 = load double, double* %"mul7'de", align 8, !node !362
+  %m0diffe35 = fmul fast double %153, %_unwrap17, !node !362
+  %augmented_load711 = load i32, i32* %reverse_op, align 4
+  %inc712 = add i32 %augmented_load711, 1
+  store i32 %inc712, i32* %reverse_op, align 4
+  %m1diffe36 = fmul fast double %153, %_unwrap14, !node !362
+  %augmented_load713 = load i32, i32* %reverse_op, align 4
+  %inc714 = add i32 %augmented_load713, 1
+  store i32 %inc714, i32* %reverse_op, align 4
+  %augmented_load715 = load i32, i32* %reverse_mem, align 4
+  %inc716 = add i32 %augmented_load715, 1
+  store i32 %inc716, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul7'de", align 8
-  %152 = load double, double* %"'de21", align 8, !node !362
-  %153 = fadd fast double %152, %m0diffe35, !node !362
-  store double %153, double* %"'de21", align 8
-  %154 = load double, double* %"'de26", align 8, !node !362
-  %155 = fadd fast double %154, %m1diffe36, !node !362
-  store double %155, double* %"'de26", align 8
+  %augmented_load717 = load i32, i32* %reverse_mem, align 4
+  %inc718 = add i32 %augmented_load717, 1
+  store i32 %inc718, i32* %reverse_mem, align 4
+  %154 = load double, double* %"'de21", align 8, !node !362
+  %155 = fadd fast double %154, %m0diffe35, !node !362
+  %augmented_load719 = load i32, i32* %reverse_op, align 4
+  %inc720 = add i32 %augmented_load719, 1
+  store i32 %inc720, i32* %reverse_op, align 4
+  %augmented_load721 = load i32, i32* %reverse_mem, align 4
+  %inc722 = add i32 %augmented_load721, 1
+  store i32 %inc722, i32* %reverse_mem, align 4
+  store double %155, double* %"'de21", align 8
+  %augmented_load723 = load i32, i32* %reverse_mem, align 4
+  %inc724 = add i32 %augmented_load723, 1
+  store i32 %inc724, i32* %reverse_mem, align 4
+  %156 = load double, double* %"'de26", align 8, !node !362
+  %157 = fadd fast double %156, %m1diffe36, !node !362
+  %augmented_load725 = load i32, i32* %reverse_op, align 4
+  %inc726 = add i32 %augmented_load725, 1
+  store i32 %inc726, i32* %reverse_op, align 4
+  %augmented_load727 = load i32, i32* %reverse_mem, align 4
+  %inc728 = add i32 %augmented_load727, 1
+  store i32 %inc728, i32* %reverse_mem, align 4
+  store double %157, double* %"'de26", align 8
   %"arrayidx21.i99'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 2
-  %156 = load double, double* %"arrayidx21.i99'ipg_unwrap", align 16
+  %augmented_load729 = load i32, i32* %reverse_mem, align 4
+  %inc730 = add i32 %augmented_load729, 1
+  store i32 %inc730, i32* %reverse_mem, align 4
+  %158 = load double, double* %"arrayidx21.i99'ipg_unwrap", align 16
+  %augmented_load731 = load i32, i32* %reverse_mem, align 4
+  %inc732 = add i32 %augmented_load731, 1
+  store i32 %inc732, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx21.i99'ipg_unwrap", align 16
-  %157 = load double, double* %"sub20.i98'de", align 8
-  %158 = fadd fast double %157, %156
-  store double %158, double* %"sub20.i98'de", align 8
+  %augmented_load733 = load i32, i32* %reverse_mem, align 4
+  %inc734 = add i32 %augmented_load733, 1
+  store i32 %inc734, i32* %reverse_mem, align 4
   %159 = load double, double* %"sub20.i98'de", align 8
-  %160 = fneg fast double %159
+  %160 = fadd fast double %159, %158
+  %augmented_load735 = load i32, i32* %reverse_op, align 4
+  %inc736 = add i32 %augmented_load735, 1
+  store i32 %inc736, i32* %reverse_op, align 4
+  %augmented_load737 = load i32, i32* %reverse_mem, align 4
+  %inc738 = add i32 %augmented_load737, 1
+  store i32 %inc738, i32* %reverse_mem, align 4
+  store double %160, double* %"sub20.i98'de", align 8
+  %augmented_load739 = load i32, i32* %reverse_mem, align 4
+  %inc740 = add i32 %augmented_load739, 1
+  store i32 %inc740, i32* %reverse_mem, align 4
+  %161 = load double, double* %"sub20.i98'de", align 8
+  %162 = fneg fast double %161
+  %augmented_load741 = load i32, i32* %reverse_mem, align 4
+  %inc742 = add i32 %augmented_load741, 1
+  store i32 %inc742, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub20.i98'de", align 8
-  %161 = load double, double* %"mul16.i96'de", align 8
-  %162 = fadd fast double %161, %159
-  store double %162, double* %"mul16.i96'de", align 8
-  %163 = load double, double* %"mul19.i97'de", align 8
-  %164 = fadd fast double %163, %160
-  store double %164, double* %"mul19.i97'de", align 8
+  %augmented_load743 = load i32, i32* %reverse_mem, align 4
+  %inc744 = add i32 %augmented_load743, 1
+  store i32 %inc744, i32* %reverse_mem, align 4
+  %163 = load double, double* %"mul16.i96'de", align 8
+  %164 = fadd fast double %163, %161
+  %augmented_load745 = load i32, i32* %reverse_op, align 4
+  %inc746 = add i32 %augmented_load745, 1
+  store i32 %inc746, i32* %reverse_op, align 4
+  %augmented_load747 = load i32, i32* %reverse_mem, align 4
+  %inc748 = add i32 %augmented_load747, 1
+  store i32 %inc748, i32* %reverse_mem, align 4
+  store double %164, double* %"mul16.i96'de", align 8
+  %augmented_load749 = load i32, i32* %reverse_mem, align 4
+  %inc750 = add i32 %augmented_load749, 1
+  store i32 %inc750, i32* %reverse_mem, align 4
   %165 = load double, double* %"mul19.i97'de", align 8
-  %m0diffe37 = fmul fast double %165, %_unwrap15
-  %m1diffe38 = fmul fast double %165, %_unwrap17, !node !362
+  %166 = fadd fast double %165, %162
+  %augmented_load751 = load i32, i32* %reverse_op, align 4
+  %inc752 = add i32 %augmented_load751, 1
+  store i32 %inc752, i32* %reverse_op, align 4
+  %augmented_load753 = load i32, i32* %reverse_mem, align 4
+  %inc754 = add i32 %augmented_load753, 1
+  store i32 %inc754, i32* %reverse_mem, align 4
+  store double %166, double* %"mul19.i97'de", align 8
+  %augmented_load755 = load i32, i32* %reverse_mem, align 4
+  %inc756 = add i32 %augmented_load755, 1
+  store i32 %inc756, i32* %reverse_mem, align 4
+  %167 = load double, double* %"mul19.i97'de", align 8
+  %m0diffe37 = fmul fast double %167, %_unwrap15
+  %augmented_load757 = load i32, i32* %reverse_op, align 4
+  %inc758 = add i32 %augmented_load757, 1
+  store i32 %inc758, i32* %reverse_op, align 4
+  %m1diffe38 = fmul fast double %167, %_unwrap17, !node !362
+  %augmented_load759 = load i32, i32* %reverse_op, align 4
+  %inc760 = add i32 %augmented_load759, 1
+  store i32 %inc760, i32* %reverse_op, align 4
+  %augmented_load761 = load i32, i32* %reverse_mem, align 4
+  %inc762 = add i32 %augmented_load761, 1
+  store i32 %inc762, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul19.i97'de", align 8
-  %166 = load double, double* %"'de26", align 8, !node !362
-  %167 = fadd fast double %166, %m0diffe37, !node !362
-  store double %167, double* %"'de26", align 8
-  %168 = load double, double* %"'de33", align 8, !node !362
-  %169 = fadd fast double %168, %m1diffe38, !node !362
-  store double %169, double* %"'de33", align 8
-  %170 = load double, double* %"mul16.i96'de", align 8
-  %m0diffe39 = fmul fast double %170, %_unwrap16, !node !362
-  %m1diffe40 = fmul fast double %170, %_unwrap14
+  %augmented_load763 = load i32, i32* %reverse_mem, align 4
+  %inc764 = add i32 %augmented_load763, 1
+  store i32 %inc764, i32* %reverse_mem, align 4
+  %168 = load double, double* %"'de26", align 8, !node !362
+  %169 = fadd fast double %168, %m0diffe37, !node !362
+  %augmented_load765 = load i32, i32* %reverse_op, align 4
+  %inc766 = add i32 %augmented_load765, 1
+  store i32 %inc766, i32* %reverse_op, align 4
+  %augmented_load767 = load i32, i32* %reverse_mem, align 4
+  %inc768 = add i32 %augmented_load767, 1
+  store i32 %inc768, i32* %reverse_mem, align 4
+  store double %169, double* %"'de26", align 8
+  %augmented_load769 = load i32, i32* %reverse_mem, align 4
+  %inc770 = add i32 %augmented_load769, 1
+  store i32 %inc770, i32* %reverse_mem, align 4
+  %170 = load double, double* %"'de33", align 8, !node !362
+  %171 = fadd fast double %170, %m1diffe38, !node !362
+  %augmented_load771 = load i32, i32* %reverse_op, align 4
+  %inc772 = add i32 %augmented_load771, 1
+  store i32 %inc772, i32* %reverse_op, align 4
+  %augmented_load773 = load i32, i32* %reverse_mem, align 4
+  %inc774 = add i32 %augmented_load773, 1
+  store i32 %inc774, i32* %reverse_mem, align 4
+  store double %171, double* %"'de33", align 8
+  %augmented_load775 = load i32, i32* %reverse_mem, align 4
+  %inc776 = add i32 %augmented_load775, 1
+  store i32 %inc776, i32* %reverse_mem, align 4
+  %172 = load double, double* %"mul16.i96'de", align 8
+  %m0diffe39 = fmul fast double %172, %_unwrap16, !node !362
+  %augmented_load777 = load i32, i32* %reverse_op, align 4
+  %inc778 = add i32 %augmented_load777, 1
+  store i32 %inc778, i32* %reverse_op, align 4
+  %m1diffe40 = fmul fast double %172, %_unwrap14
+  %augmented_load779 = load i32, i32* %reverse_op, align 4
+  %inc780 = add i32 %augmented_load779, 1
+  store i32 %inc780, i32* %reverse_op, align 4
+  %augmented_load781 = load i32, i32* %reverse_mem, align 4
+  %inc782 = add i32 %augmented_load781, 1
+  store i32 %inc782, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul16.i96'de", align 8
-  %171 = load double, double* %"'de21", align 8, !node !362
-  %172 = fadd fast double %171, %m0diffe39, !node !362
-  store double %172, double* %"'de21", align 8
-  %173 = load double, double* %"'de34", align 8, !node !362
-  %174 = fadd fast double %173, %m1diffe40, !node !362
-  store double %174, double* %"'de34", align 8
+  %augmented_load783 = load i32, i32* %reverse_mem, align 4
+  %inc784 = add i32 %augmented_load783, 1
+  store i32 %inc784, i32* %reverse_mem, align 4
+  %173 = load double, double* %"'de21", align 8, !node !362
+  %174 = fadd fast double %173, %m0diffe39, !node !362
+  %augmented_load785 = load i32, i32* %reverse_op, align 4
+  %inc786 = add i32 %augmented_load785, 1
+  store i32 %inc786, i32* %reverse_op, align 4
+  %augmented_load787 = load i32, i32* %reverse_mem, align 4
+  %inc788 = add i32 %augmented_load787, 1
+  store i32 %inc788, i32* %reverse_mem, align 4
+  store double %174, double* %"'de21", align 8
+  %augmented_load789 = load i32, i32* %reverse_mem, align 4
+  %inc790 = add i32 %augmented_load789, 1
+  store i32 %inc790, i32* %reverse_mem, align 4
+  %175 = load double, double* %"'de34", align 8, !node !362
+  %176 = fadd fast double %175, %m1diffe40, !node !362
+  %augmented_load791 = load i32, i32* %reverse_op, align 4
+  %inc792 = add i32 %augmented_load791, 1
+  store i32 %inc792, i32* %reverse_op, align 4
+  %augmented_load793 = load i32, i32* %reverse_mem, align 4
+  %inc794 = add i32 %augmented_load793, 1
+  store i32 %inc794, i32* %reverse_mem, align 4
+  store double %176, double* %"'de34", align 8
   %"arrayidx13.i95'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 1
-  %175 = load double, double* %"arrayidx13.i95'ipg_unwrap", align 8
+  %augmented_load795 = load i32, i32* %reverse_mem, align 4
+  %inc796 = add i32 %augmented_load795, 1
+  store i32 %inc796, i32* %reverse_mem, align 4
+  %177 = load double, double* %"arrayidx13.i95'ipg_unwrap", align 8
+  %augmented_load797 = load i32, i32* %reverse_mem, align 4
+  %inc798 = add i32 %augmented_load797, 1
+  store i32 %inc798, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx13.i95'ipg_unwrap", align 8
-  %176 = load double, double* %"sub12.i94'de", align 8
-  %177 = fadd fast double %176, %175
-  store double %177, double* %"sub12.i94'de", align 8
+  %augmented_load799 = load i32, i32* %reverse_mem, align 4
+  %inc800 = add i32 %augmented_load799, 1
+  store i32 %inc800, i32* %reverse_mem, align 4
   %178 = load double, double* %"sub12.i94'de", align 8
-  %179 = fneg fast double %178
+  %179 = fadd fast double %178, %177
+  %augmented_load801 = load i32, i32* %reverse_op, align 4
+  %inc802 = add i32 %augmented_load801, 1
+  store i32 %inc802, i32* %reverse_op, align 4
+  %augmented_load803 = load i32, i32* %reverse_mem, align 4
+  %inc804 = add i32 %augmented_load803, 1
+  store i32 %inc804, i32* %reverse_mem, align 4
+  store double %179, double* %"sub12.i94'de", align 8
+  %augmented_load805 = load i32, i32* %reverse_mem, align 4
+  %inc806 = add i32 %augmented_load805, 1
+  store i32 %inc806, i32* %reverse_mem, align 4
+  %180 = load double, double* %"sub12.i94'de", align 8
+  %181 = fneg fast double %180
+  %augmented_load807 = load i32, i32* %reverse_mem, align 4
+  %inc808 = add i32 %augmented_load807, 1
+  store i32 %inc808, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub12.i94'de", align 8
-  %180 = load double, double* %"mul8.i92'de", align 8
-  %181 = fadd fast double %180, %178
-  store double %181, double* %"mul8.i92'de", align 8
-  %182 = load double, double* %"mul11.i93'de", align 8
-  %183 = fadd fast double %182, %179
-  store double %183, double* %"mul11.i93'de", align 8
+  %augmented_load809 = load i32, i32* %reverse_mem, align 4
+  %inc810 = add i32 %augmented_load809, 1
+  store i32 %inc810, i32* %reverse_mem, align 4
+  %182 = load double, double* %"mul8.i92'de", align 8
+  %183 = fadd fast double %182, %180
+  %augmented_load811 = load i32, i32* %reverse_op, align 4
+  %inc812 = add i32 %augmented_load811, 1
+  store i32 %inc812, i32* %reverse_op, align 4
+  %augmented_load813 = load i32, i32* %reverse_mem, align 4
+  %inc814 = add i32 %augmented_load813, 1
+  store i32 %inc814, i32* %reverse_mem, align 4
+  store double %183, double* %"mul8.i92'de", align 8
+  %augmented_load815 = load i32, i32* %reverse_mem, align 4
+  %inc816 = add i32 %augmented_load815, 1
+  store i32 %inc816, i32* %reverse_mem, align 4
   %184 = load double, double* %"mul11.i93'de", align 8
-  %m0diffe41 = fmul fast double %184, %_unwrap19, !node !362
-  %m1diffe42 = fmul fast double %184, %_unwrap14
+  %185 = fadd fast double %184, %181
+  %augmented_load817 = load i32, i32* %reverse_op, align 4
+  %inc818 = add i32 %augmented_load817, 1
+  store i32 %inc818, i32* %reverse_op, align 4
+  %augmented_load819 = load i32, i32* %reverse_mem, align 4
+  %inc820 = add i32 %augmented_load819, 1
+  store i32 %inc820, i32* %reverse_mem, align 4
+  store double %185, double* %"mul11.i93'de", align 8
+  %augmented_load821 = load i32, i32* %reverse_mem, align 4
+  %inc822 = add i32 %augmented_load821, 1
+  store i32 %inc822, i32* %reverse_mem, align 4
+  %186 = load double, double* %"mul11.i93'de", align 8
+  %m0diffe41 = fmul fast double %186, %_unwrap19, !node !362
+  %augmented_load823 = load i32, i32* %reverse_op, align 4
+  %inc824 = add i32 %augmented_load823, 1
+  store i32 %inc824, i32* %reverse_op, align 4
+  %m1diffe42 = fmul fast double %186, %_unwrap14
+  %augmented_load825 = load i32, i32* %reverse_op, align 4
+  %inc826 = add i32 %augmented_load825, 1
+  store i32 %inc826, i32* %reverse_op, align 4
+  %augmented_load827 = load i32, i32* %reverse_mem, align 4
+  %inc828 = add i32 %augmented_load827, 1
+  store i32 %inc828, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul11.i93'de", align 8
-  %185 = load double, double* %"'de21", align 8, !node !362
-  %186 = fadd fast double %185, %m0diffe41, !node !362
-  store double %186, double* %"'de21", align 8
-  %187 = load double, double* %"'de30", align 8, !node !362
-  %188 = fadd fast double %187, %m1diffe42, !node !362
-  store double %188, double* %"'de30", align 8
-  %189 = load double, double* %"'de21", align 8, !node !362
+  %augmented_load829 = load i32, i32* %reverse_mem, align 4
+  %inc830 = add i32 %augmented_load829, 1
+  store i32 %inc830, i32* %reverse_mem, align 4
+  %187 = load double, double* %"'de21", align 8, !node !362
+  %188 = fadd fast double %187, %m0diffe41, !node !362
+  %augmented_load831 = load i32, i32* %reverse_op, align 4
+  %inc832 = add i32 %augmented_load831, 1
+  store i32 %inc832, i32* %reverse_op, align 4
+  %augmented_load833 = load i32, i32* %reverse_mem, align 4
+  %inc834 = add i32 %augmented_load833, 1
+  store i32 %inc834, i32* %reverse_mem, align 4
+  store double %188, double* %"'de21", align 8
+  %augmented_load835 = load i32, i32* %reverse_mem, align 4
+  %inc836 = add i32 %augmented_load835, 1
+  store i32 %inc836, i32* %reverse_mem, align 4
+  %189 = load double, double* %"'de30", align 8, !node !362
+  %190 = fadd fast double %189, %m1diffe42, !node !362
+  %augmented_load837 = load i32, i32* %reverse_op, align 4
+  %inc838 = add i32 %augmented_load837, 1
+  store i32 %inc838, i32* %reverse_op, align 4
+  %augmented_load839 = load i32, i32* %reverse_mem, align 4
+  %inc840 = add i32 %augmented_load839, 1
+  store i32 %inc840, i32* %reverse_mem, align 4
+  store double %190, double* %"'de30", align 8
+  %augmented_load841 = load i32, i32* %reverse_mem, align 4
+  %inc842 = add i32 %augmented_load841, 1
+  store i32 %inc842, i32* %reverse_mem, align 4
+  %191 = load double, double* %"'de21", align 8, !node !362
+  %augmented_load843 = load i32, i32* %reverse_mem, align 4
+  %inc844 = add i32 %augmented_load843, 1
+  store i32 %inc844, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de21", align 8
   %"arraydecay'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 0, !node !362
-  %190 = load double, double* %"arraydecay'ipg_unwrap", align 16, !node !362
-  %191 = fadd fast double %190, %189, !node !362
-  store double %191, double* %"arraydecay'ipg_unwrap", align 16
-  %192 = load double, double* %"mul8.i92'de", align 8
-  %m0diffe43 = fmul fast double %192, %_unwrap18
-  %m1diffe44 = fmul fast double %192, %_unwrap17, !node !362
+  %augmented_load845 = load i32, i32* %reverse_mem, align 4
+  %inc846 = add i32 %augmented_load845, 1
+  store i32 %inc846, i32* %reverse_mem, align 4
+  %192 = load double, double* %"arraydecay'ipg_unwrap", align 16, !node !362
+  %193 = fadd fast double %192, %191, !node !362
+  %augmented_load847 = load i32, i32* %reverse_op, align 4
+  %inc848 = add i32 %augmented_load847, 1
+  store i32 %inc848, i32* %reverse_op, align 4
+  %augmented_load849 = load i32, i32* %reverse_mem, align 4
+  %inc850 = add i32 %augmented_load849, 1
+  store i32 %inc850, i32* %reverse_mem, align 4
+  store double %193, double* %"arraydecay'ipg_unwrap", align 16
+  %augmented_load851 = load i32, i32* %reverse_mem, align 4
+  %inc852 = add i32 %augmented_load851, 1
+  store i32 %inc852, i32* %reverse_mem, align 4
+  %194 = load double, double* %"mul8.i92'de", align 8
+  %m0diffe43 = fmul fast double %194, %_unwrap18
+  %augmented_load853 = load i32, i32* %reverse_op, align 4
+  %inc854 = add i32 %augmented_load853, 1
+  store i32 %inc854, i32* %reverse_op, align 4
+  %m1diffe44 = fmul fast double %194, %_unwrap17, !node !362
+  %augmented_load855 = load i32, i32* %reverse_op, align 4
+  %inc856 = add i32 %augmented_load855, 1
+  store i32 %inc856, i32* %reverse_op, align 4
+  %augmented_load857 = load i32, i32* %reverse_mem, align 4
+  %inc858 = add i32 %augmented_load857, 1
+  store i32 %inc858, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul8.i92'de", align 8
-  %193 = load double, double* %"'de26", align 8, !node !362
-  %194 = fadd fast double %193, %m0diffe43, !node !362
-  store double %194, double* %"'de26", align 8
-  %195 = load double, double* %"'de29", align 8, !node !362
-  %196 = fadd fast double %195, %m1diffe44, !node !362
-  store double %196, double* %"'de29", align 8
-  %197 = load double, double* %"'de26", align 8, !node !362
+  %augmented_load859 = load i32, i32* %reverse_mem, align 4
+  %inc860 = add i32 %augmented_load859, 1
+  store i32 %inc860, i32* %reverse_mem, align 4
+  %195 = load double, double* %"'de26", align 8, !node !362
+  %196 = fadd fast double %195, %m0diffe43, !node !362
+  %augmented_load861 = load i32, i32* %reverse_op, align 4
+  %inc862 = add i32 %augmented_load861, 1
+  store i32 %inc862, i32* %reverse_op, align 4
+  %augmented_load863 = load i32, i32* %reverse_mem, align 4
+  %inc864 = add i32 %augmented_load863, 1
+  store i32 %inc864, i32* %reverse_mem, align 4
+  store double %196, double* %"'de26", align 8
+  %augmented_load865 = load i32, i32* %reverse_mem, align 4
+  %inc866 = add i32 %augmented_load865, 1
+  store i32 %inc866, i32* %reverse_mem, align 4
+  %197 = load double, double* %"'de29", align 8, !node !362
+  %198 = fadd fast double %197, %m1diffe44, !node !362
+  %augmented_load867 = load i32, i32* %reverse_op, align 4
+  %inc868 = add i32 %augmented_load867, 1
+  store i32 %inc868, i32* %reverse_op, align 4
+  %augmented_load869 = load i32, i32* %reverse_mem, align 4
+  %inc870 = add i32 %augmented_load869, 1
+  store i32 %inc870, i32* %reverse_mem, align 4
+  store double %198, double* %"'de29", align 8
+  %augmented_load871 = load i32, i32* %reverse_mem, align 4
+  %inc872 = add i32 %augmented_load871, 1
+  store i32 %inc872, i32* %reverse_mem, align 4
+  %199 = load double, double* %"'de26", align 8, !node !362
+  %augmented_load873 = load i32, i32* %reverse_mem, align 4
+  %inc874 = add i32 %augmented_load873, 1
+  store i32 %inc874, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de26", align 8
-  %198 = load double, double* %"pt'", align 8, !node !362
-  %199 = fadd fast double %198, %197, !node !362
-  store double %199, double* %"pt'", align 8
+  %augmented_load875 = load i32, i32* %reverse_mem, align 4
+  %inc876 = add i32 %augmented_load875, 1
+  store i32 %inc876, i32* %reverse_mem, align 4
+  %200 = load double, double* %"pt'", align 8, !node !362
+  %201 = fadd fast double %200, %199, !node !362
+  %augmented_load877 = load i32, i32* %reverse_op, align 4
+  %inc878 = add i32 %augmented_load877, 1
+  store i32 %inc878, i32* %reverse_op, align 4
+  %augmented_load879 = load i32, i32* %reverse_mem, align 4
+  %inc880 = add i32 %augmented_load879, 1
+  store i32 %inc880, i32* %reverse_mem, align 4
+  store double %201, double* %"pt'", align 8
   %"arraydecay4'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 0
-  %200 = load double, double* %"arraydecay4'ipg_unwrap", align 16
+  %augmented_load881 = load i32, i32* %reverse_mem, align 4
+  %inc882 = add i32 %augmented_load881, 1
+  store i32 %inc882, i32* %reverse_mem, align 4
+  %202 = load double, double* %"arraydecay4'ipg_unwrap", align 16
+  %augmented_load883 = load i32, i32* %reverse_mem, align 4
+  %inc884 = add i32 %augmented_load883, 1
+  store i32 %inc884, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arraydecay4'ipg_unwrap", align 16
-  %201 = load double, double* %"sub.i91'de", align 8, !node !362
-  %202 = fadd fast double %201, %200, !node !362
-  store double %202, double* %"sub.i91'de", align 8
+  %augmented_load885 = load i32, i32* %reverse_mem, align 4
+  %inc886 = add i32 %augmented_load885, 1
+  store i32 %inc886, i32* %reverse_mem, align 4
   %203 = load double, double* %"sub.i91'de", align 8, !node !362
-  %204 = fneg fast double %203, !node !362
+  %204 = fadd fast double %203, %202, !node !362
+  %augmented_load887 = load i32, i32* %reverse_op, align 4
+  %inc888 = add i32 %augmented_load887, 1
+  store i32 %inc888, i32* %reverse_op, align 4
+  %augmented_load889 = load i32, i32* %reverse_mem, align 4
+  %inc890 = add i32 %augmented_load889, 1
+  store i32 %inc890, i32* %reverse_mem, align 4
+  store double %204, double* %"sub.i91'de", align 8
+  %augmented_load891 = load i32, i32* %reverse_mem, align 4
+  %inc892 = add i32 %augmented_load891, 1
+  store i32 %inc892, i32* %reverse_mem, align 4
+  %205 = load double, double* %"sub.i91'de", align 8, !node !362
+  %206 = fneg fast double %205, !node !362
+  %augmented_load893 = load i32, i32* %reverse_mem, align 4
+  %inc894 = add i32 %augmented_load893, 1
+  store i32 %inc894, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub.i91'de", align 8
-  %205 = load double, double* %"mul.i87'de", align 8, !node !362
-  %206 = fadd fast double %205, %203, !node !362
-  store double %206, double* %"mul.i87'de", align 8
-  %207 = load double, double* %"mul4.i90'de", align 8, !node !362
-  %208 = fadd fast double %207, %204, !node !362
-  store double %208, double* %"mul4.i90'de", align 8
+  %augmented_load895 = load i32, i32* %reverse_mem, align 4
+  %inc896 = add i32 %augmented_load895, 1
+  store i32 %inc896, i32* %reverse_mem, align 4
+  %207 = load double, double* %"mul.i87'de", align 8, !node !362
+  %208 = fadd fast double %207, %205, !node !362
+  %augmented_load897 = load i32, i32* %reverse_op, align 4
+  %inc898 = add i32 %augmented_load897, 1
+  store i32 %inc898, i32* %reverse_op, align 4
+  %augmented_load899 = load i32, i32* %reverse_mem, align 4
+  %inc900 = add i32 %augmented_load899, 1
+  store i32 %inc900, i32* %reverse_mem, align 4
+  store double %208, double* %"mul.i87'de", align 8
+  %augmented_load901 = load i32, i32* %reverse_mem, align 4
+  %inc902 = add i32 %augmented_load901, 1
+  store i32 %inc902, i32* %reverse_mem, align 4
   %209 = load double, double* %"mul4.i90'de", align 8, !node !362
-  %m0diffe45 = fmul fast double %209, %_unwrap18, !node !362
-  %m1diffe46 = fmul fast double %209, %_unwrap16, !node !362
+  %210 = fadd fast double %209, %206, !node !362
+  %augmented_load903 = load i32, i32* %reverse_op, align 4
+  %inc904 = add i32 %augmented_load903, 1
+  store i32 %inc904, i32* %reverse_op, align 4
+  %augmented_load905 = load i32, i32* %reverse_mem, align 4
+  %inc906 = add i32 %augmented_load905, 1
+  store i32 %inc906, i32* %reverse_mem, align 4
+  store double %210, double* %"mul4.i90'de", align 8
+  %augmented_load907 = load i32, i32* %reverse_mem, align 4
+  %inc908 = add i32 %augmented_load907, 1
+  store i32 %inc908, i32* %reverse_mem, align 4
+  %211 = load double, double* %"mul4.i90'de", align 8, !node !362
+  %m0diffe45 = fmul fast double %211, %_unwrap18, !node !362
+  %augmented_load909 = load i32, i32* %reverse_op, align 4
+  %inc910 = add i32 %augmented_load909, 1
+  store i32 %inc910, i32* %reverse_op, align 4
+  %m1diffe46 = fmul fast double %211, %_unwrap16, !node !362
+  %augmented_load911 = load i32, i32* %reverse_op, align 4
+  %inc912 = add i32 %augmented_load911, 1
+  store i32 %inc912, i32* %reverse_op, align 4
+  %augmented_load913 = load i32, i32* %reverse_mem, align 4
+  %inc914 = add i32 %augmented_load913, 1
+  store i32 %inc914, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul4.i90'de", align 8
-  %210 = load double, double* %"'de34", align 8, !node !362
-  %211 = fadd fast double %210, %m0diffe45, !node !362
-  store double %211, double* %"'de34", align 8
-  %212 = load double, double* %"'de29", align 8, !node !362
-  %213 = fadd fast double %212, %m1diffe46, !node !362
-  store double %213, double* %"'de29", align 8
-  %214 = load double, double* %"'de34", align 8, !node !362
+  %augmented_load915 = load i32, i32* %reverse_mem, align 4
+  %inc916 = add i32 %augmented_load915, 1
+  store i32 %inc916, i32* %reverse_mem, align 4
+  %212 = load double, double* %"'de34", align 8, !node !362
+  %213 = fadd fast double %212, %m0diffe45, !node !362
+  %augmented_load917 = load i32, i32* %reverse_op, align 4
+  %inc918 = add i32 %augmented_load917, 1
+  store i32 %inc918, i32* %reverse_op, align 4
+  %augmented_load919 = load i32, i32* %reverse_mem, align 4
+  %inc920 = add i32 %augmented_load919, 1
+  store i32 %inc920, i32* %reverse_mem, align 4
+  store double %213, double* %"'de34", align 8
+  %augmented_load921 = load i32, i32* %reverse_mem, align 4
+  %inc922 = add i32 %augmented_load921, 1
+  store i32 %inc922, i32* %reverse_mem, align 4
+  %214 = load double, double* %"'de29", align 8, !node !362
+  %215 = fadd fast double %214, %m1diffe46, !node !362
+  %augmented_load923 = load i32, i32* %reverse_op, align 4
+  %inc924 = add i32 %augmented_load923, 1
+  store i32 %inc924, i32* %reverse_op, align 4
+  %augmented_load925 = load i32, i32* %reverse_mem, align 4
+  %inc926 = add i32 %augmented_load925, 1
+  store i32 %inc926, i32* %reverse_mem, align 4
+  store double %215, double* %"'de29", align 8
+  %augmented_load927 = load i32, i32* %reverse_mem, align 4
+  %inc928 = add i32 %augmented_load927, 1
+  store i32 %inc928, i32* %reverse_mem, align 4
+  %216 = load double, double* %"'de34", align 8, !node !362
+  %augmented_load929 = load i32, i32* %reverse_mem, align 4
+  %inc930 = add i32 %augmented_load929, 1
+  store i32 %inc930, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de34", align 8
   %"arrayidx3.i89'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
-  %215 = load double, double* %"arrayidx3.i89'ipg_unwrap", align 8, !node !362
-  %216 = fadd fast double %215, %214, !node !362
-  store double %216, double* %"arrayidx3.i89'ipg_unwrap", align 8
-  %217 = load double, double* %"'de29", align 8, !node !362
+  %augmented_load931 = load i32, i32* %reverse_mem, align 4
+  %inc932 = add i32 %augmented_load931, 1
+  store i32 %inc932, i32* %reverse_mem, align 4
+  %217 = load double, double* %"arrayidx3.i89'ipg_unwrap", align 8, !node !362
+  %218 = fadd fast double %217, %216, !node !362
+  %augmented_load933 = load i32, i32* %reverse_op, align 4
+  %inc934 = add i32 %augmented_load933, 1
+  store i32 %inc934, i32* %reverse_op, align 4
+  %augmented_load935 = load i32, i32* %reverse_mem, align 4
+  %inc936 = add i32 %augmented_load935, 1
+  store i32 %inc936, i32* %reverse_mem, align 4
+  store double %218, double* %"arrayidx3.i89'ipg_unwrap", align 8
+  %augmented_load937 = load i32, i32* %reverse_mem, align 4
+  %inc938 = add i32 %augmented_load937, 1
+  store i32 %inc938, i32* %reverse_mem, align 4
+  %219 = load double, double* %"'de29", align 8, !node !362
+  %augmented_load939 = load i32, i32* %reverse_mem, align 4
+  %inc940 = add i32 %augmented_load939, 1
+  store i32 %inc940, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de29", align 8
   %"arrayidx2.i88'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 2, !node !362
-  %218 = load double, double* %"arrayidx2.i88'ipg_unwrap", align 16, !node !362
-  %219 = fadd fast double %218, %217, !node !362
-  store double %219, double* %"arrayidx2.i88'ipg_unwrap", align 16
-  %220 = load double, double* %"mul.i87'de", align 8, !node !362
-  %m0diffe47 = fmul fast double %220, %_unwrap15, !node !362
-  %m1diffe48 = fmul fast double %220, %_unwrap19, !node !362
+  %augmented_load941 = load i32, i32* %reverse_mem, align 4
+  %inc942 = add i32 %augmented_load941, 1
+  store i32 %inc942, i32* %reverse_mem, align 4
+  %220 = load double, double* %"arrayidx2.i88'ipg_unwrap", align 16, !node !362
+  %221 = fadd fast double %220, %219, !node !362
+  %augmented_load943 = load i32, i32* %reverse_op, align 4
+  %inc944 = add i32 %augmented_load943, 1
+  store i32 %inc944, i32* %reverse_op, align 4
+  %augmented_load945 = load i32, i32* %reverse_mem, align 4
+  %inc946 = add i32 %augmented_load945, 1
+  store i32 %inc946, i32* %reverse_mem, align 4
+  store double %221, double* %"arrayidx2.i88'ipg_unwrap", align 16
+  %augmented_load947 = load i32, i32* %reverse_mem, align 4
+  %inc948 = add i32 %augmented_load947, 1
+  store i32 %inc948, i32* %reverse_mem, align 4
+  %222 = load double, double* %"mul.i87'de", align 8, !node !362
+  %m0diffe47 = fmul fast double %222, %_unwrap15, !node !362
+  %augmented_load949 = load i32, i32* %reverse_op, align 4
+  %inc950 = add i32 %augmented_load949, 1
+  store i32 %inc950, i32* %reverse_op, align 4
+  %m1diffe48 = fmul fast double %222, %_unwrap19, !node !362
+  %augmented_load951 = load i32, i32* %reverse_op, align 4
+  %inc952 = add i32 %augmented_load951, 1
+  store i32 %inc952, i32* %reverse_op, align 4
+  %augmented_load953 = load i32, i32* %reverse_mem, align 4
+  %inc954 = add i32 %augmented_load953, 1
+  store i32 %inc954, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i87'de", align 8
-  %221 = load double, double* %"'de30", align 8, !node !362
-  %222 = fadd fast double %221, %m0diffe47, !node !362
-  store double %222, double* %"'de30", align 8
-  %223 = load double, double* %"'de33", align 8, !node !362
-  %224 = fadd fast double %223, %m1diffe48, !node !362
-  store double %224, double* %"'de33", align 8
-  %225 = load double, double* %"'de30", align 8, !node !362
+  %augmented_load955 = load i32, i32* %reverse_mem, align 4
+  %inc956 = add i32 %augmented_load955, 1
+  store i32 %inc956, i32* %reverse_mem, align 4
+  %223 = load double, double* %"'de30", align 8, !node !362
+  %224 = fadd fast double %223, %m0diffe47, !node !362
+  %augmented_load957 = load i32, i32* %reverse_op, align 4
+  %inc958 = add i32 %augmented_load957, 1
+  store i32 %inc958, i32* %reverse_op, align 4
+  %augmented_load959 = load i32, i32* %reverse_mem, align 4
+  %inc960 = add i32 %augmented_load959, 1
+  store i32 %inc960, i32* %reverse_mem, align 4
+  store double %224, double* %"'de30", align 8
+  %augmented_load961 = load i32, i32* %reverse_mem, align 4
+  %inc962 = add i32 %augmented_load961, 1
+  store i32 %inc962, i32* %reverse_mem, align 4
+  %225 = load double, double* %"'de33", align 8, !node !362
+  %226 = fadd fast double %225, %m1diffe48, !node !362
+  %augmented_load963 = load i32, i32* %reverse_op, align 4
+  %inc964 = add i32 %augmented_load963, 1
+  store i32 %inc964, i32* %reverse_op, align 4
+  %augmented_load965 = load i32, i32* %reverse_mem, align 4
+  %inc966 = add i32 %augmented_load965, 1
+  store i32 %inc966, i32* %reverse_mem, align 4
+  store double %226, double* %"'de33", align 8
+  %augmented_load967 = load i32, i32* %reverse_mem, align 4
+  %inc968 = add i32 %augmented_load967, 1
+  store i32 %inc968, i32* %reverse_mem, align 4
+  %227 = load double, double* %"'de30", align 8, !node !362
+  %augmented_load969 = load i32, i32* %reverse_mem, align 4
+  %inc970 = add i32 %augmented_load969, 1
+  store i32 %inc970, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de30", align 8
   %"arrayidx1.i86'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
-  %226 = load double, double* %"arrayidx1.i86'ipg_unwrap", align 8, !node !362
-  %227 = fadd fast double %226, %225, !node !362
-  store double %227, double* %"arrayidx1.i86'ipg_unwrap", align 8
-  %228 = load double, double* %"'de33", align 8, !node !362
+  %augmented_load971 = load i32, i32* %reverse_mem, align 4
+  %inc972 = add i32 %augmented_load971, 1
+  store i32 %inc972, i32* %reverse_mem, align 4
+  %228 = load double, double* %"arrayidx1.i86'ipg_unwrap", align 8, !node !362
+  %229 = fadd fast double %228, %227, !node !362
+  %augmented_load973 = load i32, i32* %reverse_op, align 4
+  %inc974 = add i32 %augmented_load973, 1
+  store i32 %inc974, i32* %reverse_op, align 4
+  %augmented_load975 = load i32, i32* %reverse_mem, align 4
+  %inc976 = add i32 %augmented_load975, 1
+  store i32 %inc976, i32* %reverse_mem, align 4
+  store double %229, double* %"arrayidx1.i86'ipg_unwrap", align 8
+  %augmented_load977 = load i32, i32* %reverse_mem, align 4
+  %inc978 = add i32 %augmented_load977, 1
+  store i32 %inc978, i32* %reverse_mem, align 4
+  %230 = load double, double* %"'de33", align 8, !node !362
+  %augmented_load979 = load i32, i32* %reverse_mem, align 4
+  %inc980 = add i32 %augmented_load979, 1
+  store i32 %inc980, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de33", align 8
   %"arrayidx.i85'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 1, !node !362
-  %229 = load double, double* %"arrayidx.i85'ipg_unwrap", align 8, !node !362
-  %230 = fadd fast double %229, %228, !node !362
-  store double %230, double* %"arrayidx.i85'ipg_unwrap", align 8
-  %231 = load double, double* %"'de23", align 8, !node !362
+  %augmented_load981 = load i32, i32* %reverse_mem, align 4
+  %inc982 = add i32 %augmented_load981, 1
+  store i32 %inc982, i32* %reverse_mem, align 4
+  %231 = load double, double* %"arrayidx.i85'ipg_unwrap", align 8, !node !362
+  %232 = fadd fast double %231, %230, !node !362
+  %augmented_load983 = load i32, i32* %reverse_op, align 4
+  %inc984 = add i32 %augmented_load983, 1
+  store i32 %inc984, i32* %reverse_op, align 4
+  %augmented_load985 = load i32, i32* %reverse_mem, align 4
+  %inc986 = add i32 %augmented_load985, 1
+  store i32 %inc986, i32* %reverse_mem, align 4
+  store double %232, double* %"arrayidx.i85'ipg_unwrap", align 8
+  %augmented_load987 = load i32, i32* %reverse_mem, align 4
+  %inc988 = add i32 %augmented_load987, 1
+  store i32 %inc988, i32* %reverse_mem, align 4
+  %233 = load double, double* %"'de23", align 8, !node !362
+  %augmented_load989 = load i32, i32* %reverse_mem, align 4
+  %inc990 = add i32 %augmented_load989, 1
+  store i32 %inc990, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de23", align 8
-  %232 = call fast double @llvm.cos.f64(double %100)
-  %233 = fmul fast double %231, %232, !node !362
-  %234 = load double, double* %"'de8", align 8, !node !362
-  %235 = fadd fast double %234, %233, !node !362
-  store double %235, double* %"'de8", align 8
+  %234 = call fast double @llvm.cos.f64(double %102)
+  %235 = fmul fast double %233, %234, !node !362
+  %augmented_load991 = load i32, i32* %reverse_op, align 4
+  %inc992 = add i32 %augmented_load991, 1
+  store i32 %inc992, i32* %reverse_op, align 4
+  %augmented_load993 = load i32, i32* %reverse_mem, align 4
+  %inc994 = add i32 %augmented_load993, 1
+  store i32 %inc994, i32* %reverse_mem, align 4
+  %236 = load double, double* %"'de8", align 8, !node !362
+  %237 = fadd fast double %236, %235, !node !362
+  %augmented_load995 = load i32, i32* %reverse_op, align 4
+  %inc996 = add i32 %augmented_load995, 1
+  store i32 %inc996, i32* %reverse_op, align 4
+  %augmented_load997 = load i32, i32* %reverse_mem, align 4
+  %inc998 = add i32 %augmented_load997, 1
+  store i32 %inc998, i32* %reverse_mem, align 4
+  store double %237, double* %"'de8", align 8
   br label %mergeinvertfor.body_for.end
 
 mergeinvertfor.body_for.end:                      ; preds = %invertfor.end
+  %augmented_load999 = load i32, i32* %reverse_mem, align 4
+  %inc1000 = add i32 %augmented_load999, 1
+  store i32 %inc1000, i32* %reverse_mem, align 4
   store i64 2, i64* %"iv1'ac", align 8
   br label %invertfor.body
 
 invertfor.body18.for.body18_crit_edge:            ; preds = %mergeinvertfor.body18.for.body18_crit_edge_for.end34, %incinvertfor.body18.for.body18_crit_edge
-  %236 = load i64, i64* %"iv3'ac", align 8
-  %iv.next4_unwrap = add nuw nsw i64 %236, 1
+  %augmented_load1001 = load i32, i32* %reverse_mem, align 4
+  %inc1002 = add i32 %augmented_load1001, 1
+  store i32 %inc1002, i32* %reverse_mem, align 4
+  %238 = load i64, i64* %"iv3'ac", align 8
+  %iv.next4_unwrap = add nuw nsw i64 %238, 1
+  %augmented_load1003 = load i32, i32* %reverse_op, align 4
+  %inc1004 = add i32 %augmented_load1003, 1
+  store i32 %inc1004, i32* %reverse_op, align 4
   %"arrayidx31'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next4_unwrap, !node !362
-  %237 = load double, double* %"arrayidx31'ipg_unwrap", align 8, !node !362
+  %augmented_load1005 = load i32, i32* %reverse_mem, align 4
+  %inc1006 = add i32 %augmented_load1005, 1
+  store i32 %inc1006, i32* %reverse_mem, align 4
+  %239 = load double, double* %"arrayidx31'ipg_unwrap", align 8, !node !362
+  %augmented_load1007 = load i32, i32* %reverse_mem, align 4
+  %inc1008 = add i32 %augmented_load1007, 1
+  store i32 %inc1008, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx31'ipg_unwrap", align 8
-  %238 = load double, double* %"add29'de", align 8, !node !362
-  %239 = fadd fast double %238, %237, !node !362
-  store double %239, double* %"add29'de", align 8
+  %augmented_load1009 = load i32, i32* %reverse_mem, align 4
+  %inc1010 = add i32 %augmented_load1009, 1
+  store i32 %inc1010, i32* %reverse_mem, align 4
   %240 = load double, double* %"add29'de", align 8, !node !362
+  %241 = fadd fast double %240, %239, !node !362
+  %augmented_load1011 = load i32, i32* %reverse_op, align 4
+  %inc1012 = add i32 %augmented_load1011, 1
+  store i32 %inc1012, i32* %reverse_op, align 4
+  %augmented_load1013 = load i32, i32* %reverse_mem, align 4
+  %inc1014 = add i32 %augmented_load1013, 1
+  store i32 %inc1014, i32* %reverse_mem, align 4
+  store double %241, double* %"add29'de", align 8
+  %augmented_load1015 = load i32, i32* %reverse_mem, align 4
+  %inc1016 = add i32 %augmented_load1015, 1
+  store i32 %inc1016, i32* %reverse_mem, align 4
+  %242 = load double, double* %"add29'de", align 8, !node !362
+  %augmented_load1017 = load i32, i32* %reverse_mem, align 4
+  %inc1018 = add i32 %augmented_load1017, 1
+  store i32 %inc1018, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add29'de", align 8
-  %241 = load double, double* %"add25'de", align 8, !node !362
-  %242 = fadd fast double %241, %240, !node !362
-  store double %242, double* %"add25'de", align 8
-  %243 = load double, double* %"mul28'de", align 8, !node !362
-  %244 = fadd fast double %243, %240, !node !362
-  store double %244, double* %"mul28'de", align 8
+  %augmented_load1019 = load i32, i32* %reverse_mem, align 4
+  %inc1020 = add i32 %augmented_load1019, 1
+  store i32 %inc1020, i32* %reverse_mem, align 4
+  %243 = load double, double* %"add25'de", align 8, !node !362
+  %244 = fadd fast double %243, %242, !node !362
+  %augmented_load1021 = load i32, i32* %reverse_op, align 4
+  %inc1022 = add i32 %augmented_load1021, 1
+  store i32 %inc1022, i32* %reverse_op, align 4
+  %augmented_load1023 = load i32, i32* %reverse_mem, align 4
+  %inc1024 = add i32 %augmented_load1023, 1
+  store i32 %inc1024, i32* %reverse_mem, align 4
+  store double %244, double* %"add25'de", align 8
+  %augmented_load1025 = load i32, i32* %reverse_mem, align 4
+  %inc1026 = add i32 %augmented_load1025, 1
+  store i32 %inc1026, i32* %reverse_mem, align 4
   %245 = load double, double* %"mul28'de", align 8, !node !362
-  %246 = load i64, i64* %"iv3'ac", align 8
+  %246 = fadd fast double %245, %242, !node !362
+  %augmented_load1027 = load i32, i32* %reverse_op, align 4
+  %inc1028 = add i32 %augmented_load1027, 1
+  store i32 %inc1028, i32* %reverse_op, align 4
+  %augmented_load1029 = load i32, i32* %reverse_mem, align 4
+  %inc1030 = add i32 %augmented_load1029, 1
+  store i32 %inc1030, i32* %reverse_mem, align 4
+  store double %246, double* %"mul28'de", align 8
+  %augmented_load1031 = load i32, i32* %reverse_mem, align 4
+  %inc1032 = add i32 %augmented_load1031, 1
+  store i32 %inc1032, i32* %reverse_mem, align 4
+  %247 = load double, double* %"mul28'de", align 8, !node !362
+  %augmented_load1033 = load i32, i32* %reverse_mem, align 4
+  %inc1034 = add i32 %augmented_load1033, 1
+  store i32 %inc1034, i32* %reverse_mem, align 4
+  %248 = load i64, i64* %"iv3'ac", align 8
   %arrayidx27.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 %iv.next4_unwrap
+  %augmented_load1035 = load i32, i32* %reverse_mem, align 4
+  %inc1036 = add i32 %augmented_load1035, 1
+  store i32 %inc1036, i32* %reverse_mem, align 4
   %.pre112_unwrap = load double, double* %arrayidx27.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !380
-  %m0diffemul1549 = fmul fast double %245, %.pre112_unwrap, !node !362
-  %247 = load i64, i64* %"iv3'ac", align 8
+  %m0diffemul1549 = fmul fast double %247, %.pre112_unwrap, !node !362
+  %augmented_load1037 = load i32, i32* %reverse_op, align 4
+  %inc1038 = add i32 %augmented_load1037, 1
+  store i32 %inc1038, i32* %reverse_op, align 4
+  %augmented_load1039 = load i32, i32* %reverse_mem, align 4
+  %inc1040 = add i32 %augmented_load1039, 1
+  store i32 %inc1040, i32* %reverse_mem, align 4
+  %249 = load i64, i64* %"iv3'ac", align 8
   %arrayidx.i85_unwrap50 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 1
+  %augmented_load1041 = load i32, i32* %reverse_mem, align 4
+  %inc1042 = add i32 %augmented_load1041, 1
+  store i32 %inc1042, i32* %reverse_mem, align 4
   %_unwrap51 = load double, double* %arrayidx.i85_unwrap50, align 8, !tbaa !68, !invariant.group !372
   %arrayidx3.i89_unwrap52 = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %augmented_load1043 = load i32, i32* %reverse_mem, align 4
+  %inc1044 = add i32 %augmented_load1043, 1
+  store i32 %inc1044, i32* %reverse_mem, align 4
   %_unwrap53 = load double, double* %arrayidx3.i89_unwrap52, align 8, !tbaa !68, !invariant.group !375, !node !362
   %mul10_unwrap54 = fmul fast double %_unwrap51, %_unwrap53, !node !362
+  %augmented_load1045 = load i32, i32* %reverse_op, align 4
+  %inc1046 = add i32 %augmented_load1045, 1
+  store i32 %inc1046, i32* %reverse_op, align 4
   %arraydecay_unwrap55 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 0
+  %augmented_load1047 = load i32, i32* %reverse_mem, align 4
+  %inc1048 = add i32 %augmented_load1047, 1
+  store i32 %inc1048, i32* %reverse_mem, align 4
   %_unwrap56 = load double, double* %arraydecay_unwrap55, align 16, !tbaa !68, !invariant.group !377
+  %augmented_load1049 = load i32, i32* %reverse_mem, align 4
+  %inc1050 = add i32 %augmented_load1049, 1
+  store i32 %inc1050, i32* %reverse_mem, align 4
   %_unwrap57 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !376, !node !362
   %mul7_unwrap58 = fmul fast double %_unwrap56, %_unwrap57, !node !362
+  %augmented_load1051 = load i32, i32* %reverse_op, align 4
+  %inc1052 = add i32 %augmented_load1051, 1
+  store i32 %inc1052, i32* %reverse_op, align 4
   %add_unwrap59 = fadd fast double %mul10_unwrap54, %mul7_unwrap58, !node !362
+  %augmented_load1053 = load i32, i32* %reverse_op, align 4
+  %inc1054 = add i32 %augmented_load1053, 1
+  store i32 %inc1054, i32* %reverse_op, align 4
   %arrayidx2.i88_unwrap60 = getelementptr inbounds [3 x double], [3 x double]* %w, i64 0, i64 2
+  %augmented_load1055 = load i32, i32* %reverse_mem, align 4
+  %inc1056 = add i32 %augmented_load1055, 1
+  store i32 %inc1056, i32* %reverse_mem, align 4
   %_unwrap61 = load double, double* %arrayidx2.i88_unwrap60, align 16, !tbaa !68, !invariant.group !374
   %arrayidx1.i86_unwrap62 = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %augmented_load1057 = load i32, i32* %reverse_mem, align 4
+  %inc1058 = add i32 %augmented_load1057, 1
+  store i32 %inc1058, i32* %reverse_mem, align 4
   %_unwrap63 = load double, double* %arrayidx1.i86_unwrap62, align 8, !tbaa !68, !invariant.group !373, !node !362
   %mul13_unwrap64 = fmul fast double %_unwrap61, %_unwrap63, !node !362
+  %augmented_load1059 = load i32, i32* %reverse_op, align 4
+  %inc1060 = add i32 %augmented_load1059, 1
+  store i32 %inc1060, i32* %reverse_op, align 4
   %add14_unwrap65 = fadd fast double %add_unwrap59, %mul13_unwrap64, !node !362
-  %248 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
-  %249 = tail call fast double @llvm.sqrt.f64(double %248)
-  %250 = tail call fast double @llvm.cos.f64(double %249)
-  %sub_unwrap66 = fsub fast double 1.000000e+00, %250
+  %augmented_load1061 = load i32, i32* %reverse_op, align 4
+  %inc1062 = add i32 %augmented_load1061, 1
+  store i32 %inc1062, i32* %reverse_op, align 4
+  %augmented_load1063 = load i32, i32* %reverse_mem, align 4
+  %inc1064 = add i32 %augmented_load1063, 1
+  store i32 %inc1064, i32* %reverse_mem, align 4
+  %250 = load double, double* %"add.i!manual_lcssa_cache", align 8, !invariant.group !370
+  %251 = tail call fast double @llvm.sqrt.f64(double %250)
+  %252 = tail call fast double @llvm.cos.f64(double %251)
+  %sub_unwrap66 = fsub fast double 1.000000e+00, %252
+  %augmented_load1065 = load i32, i32* %reverse_op, align 4
+  %inc1066 = add i32 %augmented_load1065, 1
+  store i32 %inc1066, i32* %reverse_op, align 4
   %mul15_unwrap67 = fmul fast double %add14_unwrap65, %sub_unwrap66, !node !362
-  %m1diffe.pre112 = fmul fast double %245, %mul15_unwrap67, !node !362
+  %augmented_load1067 = load i32, i32* %reverse_op, align 4
+  %inc1068 = add i32 %augmented_load1067, 1
+  store i32 %inc1068, i32* %reverse_op, align 4
+  %m1diffe.pre112 = fmul fast double %247, %mul15_unwrap67, !node !362
+  %augmented_load1069 = load i32, i32* %reverse_op, align 4
+  %inc1070 = add i32 %augmented_load1069, 1
+  store i32 %inc1070, i32* %reverse_op, align 4
+  %augmented_load1071 = load i32, i32* %reverse_mem, align 4
+  %inc1072 = add i32 %augmented_load1071, 1
+  store i32 %inc1072, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul28'de", align 8
-  %251 = load double, double* %"mul15'de", align 8, !node !362
-  %252 = fadd fast double %251, %m0diffemul1549, !node !362
-  store double %252, double* %"mul15'de", align 8
-  %253 = load double, double* %".pre112'de", align 8, !node !362
-  %254 = fadd fast double %253, %m1diffe.pre112, !node !362
-  store double %254, double* %".pre112'de", align 8
-  %255 = load double, double* %"add25'de", align 8, !node !362
+  %augmented_load1073 = load i32, i32* %reverse_mem, align 4
+  %inc1074 = add i32 %augmented_load1073, 1
+  store i32 %inc1074, i32* %reverse_mem, align 4
+  %253 = load double, double* %"mul15'de", align 8, !node !362
+  %254 = fadd fast double %253, %m0diffemul1549, !node !362
+  %augmented_load1075 = load i32, i32* %reverse_op, align 4
+  %inc1076 = add i32 %augmented_load1075, 1
+  store i32 %inc1076, i32* %reverse_op, align 4
+  %augmented_load1077 = load i32, i32* %reverse_mem, align 4
+  %inc1078 = add i32 %augmented_load1077, 1
+  store i32 %inc1078, i32* %reverse_mem, align 4
+  store double %254, double* %"mul15'de", align 8
+  %augmented_load1079 = load i32, i32* %reverse_mem, align 4
+  %inc1080 = add i32 %augmented_load1079, 1
+  store i32 %inc1080, i32* %reverse_mem, align 4
+  %255 = load double, double* %".pre112'de", align 8, !node !362
+  %256 = fadd fast double %255, %m1diffe.pre112, !node !362
+  %augmented_load1081 = load i32, i32* %reverse_op, align 4
+  %inc1082 = add i32 %augmented_load1081, 1
+  store i32 %inc1082, i32* %reverse_op, align 4
+  %augmented_load1083 = load i32, i32* %reverse_mem, align 4
+  %inc1084 = add i32 %augmented_load1083, 1
+  store i32 %inc1084, i32* %reverse_mem, align 4
+  store double %256, double* %".pre112'de", align 8
+  %augmented_load1085 = load i32, i32* %reverse_mem, align 4
+  %inc1086 = add i32 %augmented_load1085, 1
+  store i32 %inc1086, i32* %reverse_mem, align 4
+  %257 = load double, double* %"add25'de", align 8, !node !362
+  %augmented_load1087 = load i32, i32* %reverse_mem, align 4
+  %inc1088 = add i32 %augmented_load1087, 1
+  store i32 %inc1088, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add25'de", align 8
-  %256 = load double, double* %"mul24'de", align 8, !node !362
-  %257 = fadd fast double %256, %255, !node !362
-  store double %257, double* %"mul24'de", align 8
-  %258 = load double, double* %"mul21'de", align 8, !node !362
-  %259 = fadd fast double %258, %255, !node !362
-  store double %259, double* %"mul21'de", align 8
-  %260 = load double, double* %"mul24'de", align 8, !node !362
-  %261 = load i64, i64* %"iv3'ac", align 8
-  %262 = tail call fast double @llvm.sin.f64(double %249)
-  %m0diffe.pre111 = fmul fast double %260, %262, !node !362
+  %augmented_load1089 = load i32, i32* %reverse_mem, align 4
+  %inc1090 = add i32 %augmented_load1089, 1
+  store i32 %inc1090, i32* %reverse_mem, align 4
+  %258 = load double, double* %"mul24'de", align 8, !node !362
+  %259 = fadd fast double %258, %257, !node !362
+  %augmented_load1091 = load i32, i32* %reverse_op, align 4
+  %inc1092 = add i32 %augmented_load1091, 1
+  store i32 %inc1092, i32* %reverse_op, align 4
+  %augmented_load1093 = load i32, i32* %reverse_mem, align 4
+  %inc1094 = add i32 %augmented_load1093, 1
+  store i32 %inc1094, i32* %reverse_mem, align 4
+  store double %259, double* %"mul24'de", align 8
+  %augmented_load1095 = load i32, i32* %reverse_mem, align 4
+  %inc1096 = add i32 %augmented_load1095, 1
+  store i32 %inc1096, i32* %reverse_mem, align 4
+  %260 = load double, double* %"mul21'de", align 8, !node !362
+  %261 = fadd fast double %260, %257, !node !362
+  %augmented_load1097 = load i32, i32* %reverse_op, align 4
+  %inc1098 = add i32 %augmented_load1097, 1
+  store i32 %inc1098, i32* %reverse_op, align 4
+  %augmented_load1099 = load i32, i32* %reverse_mem, align 4
+  %inc1100 = add i32 %augmented_load1099, 1
+  store i32 %inc1100, i32* %reverse_mem, align 4
+  store double %261, double* %"mul21'de", align 8
+  %augmented_load1101 = load i32, i32* %reverse_mem, align 4
+  %inc1102 = add i32 %augmented_load1101, 1
+  store i32 %inc1102, i32* %reverse_mem, align 4
+  %262 = load double, double* %"mul24'de", align 8, !node !362
+  %augmented_load1103 = load i32, i32* %reverse_mem, align 4
+  %inc1104 = add i32 %augmented_load1103, 1
+  store i32 %inc1104, i32* %reverse_mem, align 4
   %263 = load i64, i64* %"iv3'ac", align 8
+  %264 = tail call fast double @llvm.sin.f64(double %251)
+  %m0diffe.pre111 = fmul fast double %262, %264, !node !362
+  %augmented_load1105 = load i32, i32* %reverse_op, align 4
+  %inc1106 = add i32 %augmented_load1105, 1
+  store i32 %inc1106, i32* %reverse_op, align 4
+  %augmented_load1107 = load i32, i32* %reverse_mem, align 4
+  %inc1108 = add i32 %augmented_load1107, 1
+  store i32 %inc1108, i32* %reverse_mem, align 4
+  %265 = load i64, i64* %"iv3'ac", align 8
   %arrayidx23.phi.trans.insert_unwrap = getelementptr inbounds [3 x double], [3 x double]* %w_cross_pt, i64 0, i64 %iv.next4_unwrap
+  %augmented_load1109 = load i32, i32* %reverse_mem, align 4
+  %inc1110 = add i32 %augmented_load1109, 1
+  store i32 %inc1110, i32* %reverse_mem, align 4
   %.pre111_unwrap = load double, double* %arrayidx23.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !379
-  %m1diffe68 = fmul fast double %260, %.pre111_unwrap, !node !362
+  %m1diffe68 = fmul fast double %262, %.pre111_unwrap, !node !362
+  %augmented_load1111 = load i32, i32* %reverse_op, align 4
+  %inc1112 = add i32 %augmented_load1111, 1
+  store i32 %inc1112, i32* %reverse_op, align 4
+  %augmented_load1113 = load i32, i32* %reverse_mem, align 4
+  %inc1114 = add i32 %augmented_load1113, 1
+  store i32 %inc1114, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul24'de", align 8
-  %264 = load double, double* %".pre111'de", align 8, !node !362
-  %265 = fadd fast double %264, %m0diffe.pre111, !node !362
-  store double %265, double* %".pre111'de", align 8
-  %266 = load double, double* %"'de23", align 8, !node !362
-  %267 = fadd fast double %266, %m1diffe68, !node !362
-  store double %267, double* %"'de23", align 8
-  %268 = load double, double* %"mul21'de", align 8, !node !362
-  %m0diffe.pre110 = fmul fast double %268, %250, !node !362
-  %269 = load i64, i64* %"iv3'ac", align 8
+  %augmented_load1115 = load i32, i32* %reverse_mem, align 4
+  %inc1116 = add i32 %augmented_load1115, 1
+  store i32 %inc1116, i32* %reverse_mem, align 4
+  %266 = load double, double* %".pre111'de", align 8, !node !362
+  %267 = fadd fast double %266, %m0diffe.pre111, !node !362
+  %augmented_load1117 = load i32, i32* %reverse_op, align 4
+  %inc1118 = add i32 %augmented_load1117, 1
+  store i32 %inc1118, i32* %reverse_op, align 4
+  %augmented_load1119 = load i32, i32* %reverse_mem, align 4
+  %inc1120 = add i32 %augmented_load1119, 1
+  store i32 %inc1120, i32* %reverse_mem, align 4
+  store double %267, double* %".pre111'de", align 8
+  %augmented_load1121 = load i32, i32* %reverse_mem, align 4
+  %inc1122 = add i32 %augmented_load1121, 1
+  store i32 %inc1122, i32* %reverse_mem, align 4
+  %268 = load double, double* %"'de23", align 8, !node !362
+  %269 = fadd fast double %268, %m1diffe68, !node !362
+  %augmented_load1123 = load i32, i32* %reverse_op, align 4
+  %inc1124 = add i32 %augmented_load1123, 1
+  store i32 %inc1124, i32* %reverse_op, align 4
+  %augmented_load1125 = load i32, i32* %reverse_mem, align 4
+  %inc1126 = add i32 %augmented_load1125, 1
+  store i32 %inc1126, i32* %reverse_mem, align 4
+  store double %269, double* %"'de23", align 8
+  %augmented_load1127 = load i32, i32* %reverse_mem, align 4
+  %inc1128 = add i32 %augmented_load1127, 1
+  store i32 %inc1128, i32* %reverse_mem, align 4
+  %270 = load double, double* %"mul21'de", align 8, !node !362
+  %m0diffe.pre110 = fmul fast double %270, %252, !node !362
+  %augmented_load1129 = load i32, i32* %reverse_op, align 4
+  %inc1130 = add i32 %augmented_load1129, 1
+  store i32 %inc1130, i32* %reverse_op, align 4
+  %augmented_load1131 = load i32, i32* %reverse_mem, align 4
+  %inc1132 = add i32 %augmented_load1131, 1
+  store i32 %inc1132, i32* %reverse_mem, align 4
+  %271 = load i64, i64* %"iv3'ac", align 8
   %arrayidx20.phi.trans.insert_unwrap = getelementptr inbounds double, double* %pt, i64 %iv.next4_unwrap, !node !362
+  %augmented_load1133 = load i32, i32* %reverse_mem, align 4
+  %inc1134 = add i32 %augmented_load1133, 1
+  store i32 %inc1134, i32* %reverse_mem, align 4
   %.pre110_unwrap = load double, double* %arrayidx20.phi.trans.insert_unwrap, align 8, !tbaa !68, !invariant.group !378, !node !362
-  %m1diffe69 = fmul fast double %268, %.pre110_unwrap, !node !362
+  %m1diffe69 = fmul fast double %270, %.pre110_unwrap, !node !362
+  %augmented_load1135 = load i32, i32* %reverse_op, align 4
+  %inc1136 = add i32 %augmented_load1135, 1
+  store i32 %inc1136, i32* %reverse_op, align 4
+  %augmented_load1137 = load i32, i32* %reverse_mem, align 4
+  %inc1138 = add i32 %augmented_load1137, 1
+  store i32 %inc1138, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul21'de", align 8
-  %270 = load double, double* %".pre110'de", align 8, !node !362
-  %271 = fadd fast double %270, %m0diffe.pre110, !node !362
-  store double %271, double* %".pre110'de", align 8
-  %272 = load double, double* %"'de7", align 8, !node !362
-  %273 = fadd fast double %272, %m1diffe69, !node !362
-  store double %273, double* %"'de7", align 8
-  %274 = load double, double* %".pre112'de", align 8, !node !362
+  %augmented_load1139 = load i32, i32* %reverse_mem, align 4
+  %inc1140 = add i32 %augmented_load1139, 1
+  store i32 %inc1140, i32* %reverse_mem, align 4
+  %272 = load double, double* %".pre110'de", align 8, !node !362
+  %273 = fadd fast double %272, %m0diffe.pre110, !node !362
+  %augmented_load1141 = load i32, i32* %reverse_op, align 4
+  %inc1142 = add i32 %augmented_load1141, 1
+  store i32 %inc1142, i32* %reverse_op, align 4
+  %augmented_load1143 = load i32, i32* %reverse_mem, align 4
+  %inc1144 = add i32 %augmented_load1143, 1
+  store i32 %inc1144, i32* %reverse_mem, align 4
+  store double %273, double* %".pre110'de", align 8
+  %augmented_load1145 = load i32, i32* %reverse_mem, align 4
+  %inc1146 = add i32 %augmented_load1145, 1
+  store i32 %inc1146, i32* %reverse_mem, align 4
+  %274 = load double, double* %"'de7", align 8, !node !362
+  %275 = fadd fast double %274, %m1diffe69, !node !362
+  %augmented_load1147 = load i32, i32* %reverse_op, align 4
+  %inc1148 = add i32 %augmented_load1147, 1
+  store i32 %inc1148, i32* %reverse_op, align 4
+  %augmented_load1149 = load i32, i32* %reverse_mem, align 4
+  %inc1150 = add i32 %augmented_load1149, 1
+  store i32 %inc1150, i32* %reverse_mem, align 4
+  store double %275, double* %"'de7", align 8
+  %augmented_load1151 = load i32, i32* %reverse_mem, align 4
+  %inc1152 = add i32 %augmented_load1151, 1
+  store i32 %inc1152, i32* %reverse_mem, align 4
+  %276 = load double, double* %".pre112'de", align 8, !node !362
+  %augmented_load1153 = load i32, i32* %reverse_mem, align 4
+  %inc1154 = add i32 %augmented_load1153, 1
+  store i32 %inc1154, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %".pre112'de", align 8
-  %275 = load i64, i64* %"iv3'ac", align 8
+  %augmented_load1155 = load i32, i32* %reverse_mem, align 4
+  %inc1156 = add i32 %augmented_load1155, 1
+  store i32 %inc1156, i32* %reverse_mem, align 4
+  %277 = load i64, i64* %"iv3'ac", align 8
   %"arrayidx27.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w'ipc", i64 0, i64 %iv.next4_unwrap, !node !362
-  %276 = load double, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8, !node !362
-  %277 = fadd fast double %276, %274, !node !362
-  store double %277, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8
-  %278 = load double, double* %".pre111'de", align 8, !node !362
+  %augmented_load1157 = load i32, i32* %reverse_mem, align 4
+  %inc1158 = add i32 %augmented_load1157, 1
+  store i32 %inc1158, i32* %reverse_mem, align 4
+  %278 = load double, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %279 = fadd fast double %278, %276, !node !362
+  %augmented_load1159 = load i32, i32* %reverse_op, align 4
+  %inc1160 = add i32 %augmented_load1159, 1
+  store i32 %inc1160, i32* %reverse_op, align 4
+  %augmented_load1161 = load i32, i32* %reverse_mem, align 4
+  %inc1162 = add i32 %augmented_load1161, 1
+  store i32 %inc1162, i32* %reverse_mem, align 4
+  store double %279, double* %"arrayidx27.phi.trans.insert'ipg_unwrap", align 8
+  %augmented_load1163 = load i32, i32* %reverse_mem, align 4
+  %inc1164 = add i32 %augmented_load1163, 1
+  store i32 %inc1164, i32* %reverse_mem, align 4
+  %280 = load double, double* %".pre111'de", align 8, !node !362
+  %augmented_load1165 = load i32, i32* %reverse_mem, align 4
+  %inc1166 = add i32 %augmented_load1165, 1
+  store i32 %inc1166, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %".pre111'de", align 8
-  %279 = load i64, i64* %"iv3'ac", align 8
+  %augmented_load1167 = load i32, i32* %reverse_mem, align 4
+  %inc1168 = add i32 %augmented_load1167, 1
+  store i32 %inc1168, i32* %reverse_mem, align 4
+  %281 = load i64, i64* %"iv3'ac", align 8
   %"arrayidx23.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"w_cross_pt'ipc", i64 0, i64 %iv.next4_unwrap, !node !362
-  %280 = load double, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8, !node !362
-  %281 = fadd fast double %280, %278, !node !362
-  store double %281, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8
-  %282 = load double, double* %".pre110'de", align 8, !node !362
+  %augmented_load1169 = load i32, i32* %reverse_mem, align 4
+  %inc1170 = add i32 %augmented_load1169, 1
+  store i32 %inc1170, i32* %reverse_mem, align 4
+  %282 = load double, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %283 = fadd fast double %282, %280, !node !362
+  %augmented_load1171 = load i32, i32* %reverse_op, align 4
+  %inc1172 = add i32 %augmented_load1171, 1
+  store i32 %inc1172, i32* %reverse_op, align 4
+  %augmented_load1173 = load i32, i32* %reverse_mem, align 4
+  %inc1174 = add i32 %augmented_load1173, 1
+  store i32 %inc1174, i32* %reverse_mem, align 4
+  store double %283, double* %"arrayidx23.phi.trans.insert'ipg_unwrap", align 8
+  %augmented_load1175 = load i32, i32* %reverse_mem, align 4
+  %inc1176 = add i32 %augmented_load1175, 1
+  store i32 %inc1176, i32* %reverse_mem, align 4
+  %284 = load double, double* %".pre110'de", align 8, !node !362
+  %augmented_load1177 = load i32, i32* %reverse_mem, align 4
+  %inc1178 = add i32 %augmented_load1177, 1
+  store i32 %inc1178, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %".pre110'de", align 8
-  %283 = load i64, i64* %"iv3'ac", align 8
+  %augmented_load1179 = load i32, i32* %reverse_mem, align 4
+  %inc1180 = add i32 %augmented_load1179, 1
+  store i32 %inc1180, i32* %reverse_mem, align 4
+  %285 = load i64, i64* %"iv3'ac", align 8
   %"arrayidx20.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next4_unwrap, !node !362
-  %284 = load double, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8, !node !362
-  %285 = fadd fast double %284, %282, !node !362
-  store double %285, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8
-  %286 = load i64, i64* %"iv3'ac", align 8
-  %287 = icmp eq i64 %286, 0
-  %288 = xor i1 %287, true
-  br i1 %287, label %invertfor.end, label %incinvertfor.body18.for.body18_crit_edge
+  %augmented_load1181 = load i32, i32* %reverse_mem, align 4
+  %inc1182 = add i32 %augmented_load1181, 1
+  store i32 %inc1182, i32* %reverse_mem, align 4
+  %286 = load double, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %287 = fadd fast double %286, %284, !node !362
+  %augmented_load1183 = load i32, i32* %reverse_op, align 4
+  %inc1184 = add i32 %augmented_load1183, 1
+  store i32 %inc1184, i32* %reverse_op, align 4
+  %augmented_load1185 = load i32, i32* %reverse_mem, align 4
+  %inc1186 = add i32 %augmented_load1185, 1
+  store i32 %inc1186, i32* %reverse_mem, align 4
+  store double %287, double* %"arrayidx20.phi.trans.insert'ipg_unwrap", align 8
+  %augmented_load1187 = load i32, i32* %reverse_mem, align 4
+  %inc1188 = add i32 %augmented_load1187, 1
+  store i32 %inc1188, i32* %reverse_mem, align 4
+  %288 = load i64, i64* %"iv3'ac", align 8
+  %289 = icmp eq i64 %288, 0
+  %290 = xor i1 %289, true
+  %augmented_load1189 = load i32, i32* %reverse_op, align 4
+  %inc1190 = add i32 %augmented_load1189, 1
+  store i32 %inc1190, i32* %reverse_op, align 4
+  br i1 %289, label %invertfor.end, label %incinvertfor.body18.for.body18_crit_edge
 
 incinvertfor.body18.for.body18_crit_edge:         ; preds = %invertfor.body18.for.body18_crit_edge
-  %289 = load i64, i64* %"iv3'ac", align 8
-  %290 = add nsw i64 %289, -1
-  store i64 %290, i64* %"iv3'ac", align 8
+  %augmented_load1191 = load i32, i32* %reverse_mem, align 4
+  %inc1192 = add i32 %augmented_load1191, 1
+  store i32 %inc1192, i32* %reverse_mem, align 4
+  %291 = load i64, i64* %"iv3'ac", align 8
+  %292 = add nsw i64 %291, -1
+  %augmented_load1193 = load i32, i32* %reverse_op, align 4
+  %inc1194 = add i32 %augmented_load1193, 1
+  store i32 %inc1194, i32* %reverse_op, align 4
+  %augmented_load1195 = load i32, i32* %reverse_mem, align 4
+  %inc1196 = add i32 %augmented_load1195, 1
+  store i32 %inc1196, i32* %reverse_mem, align 4
+  store i64 %292, i64* %"iv3'ac", align 8
   br label %invertfor.body18.for.body18_crit_edge
 
 invertfor.end34:                                  ; preds = %invertif.end
   br label %mergeinvertfor.body18.for.body18_crit_edge_for.end34
 
 mergeinvertfor.body18.for.body18_crit_edge_for.end34: ; preds = %invertfor.end34
+  %augmented_load1197 = load i32, i32* %reverse_mem, align 4
+  %inc1198 = add i32 %augmented_load1197, 1
+  store i32 %inc1198, i32* %reverse_mem, align 4
   store i64 1, i64* %"iv3'ac", align 8
   br label %invertfor.body18.for.body18_crit_edge
 
 invertif.else:                                    ; preds = %invertfor.body38.for.body38_crit_edge
-  %291 = load double, double* %"rotatedPt'", align 8, !node !362
+  %augmented_load1199 = load i32, i32* %reverse_mem, align 4
+  %inc1200 = add i32 %augmented_load1199, 1
+  store i32 %inc1200, i32* %reverse_mem, align 4
+  %293 = load double, double* %"rotatedPt'", align 8, !node !362
+  %augmented_load1201 = load i32, i32* %reverse_mem, align 4
+  %inc1202 = add i32 %augmented_load1201, 1
+  store i32 %inc1202, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"rotatedPt'", align 8
-  %292 = load double, double* %"add43119'de", align 8, !node !362
-  %293 = fadd fast double %292, %291, !node !362
-  store double %293, double* %"add43119'de", align 8
+  %augmented_load1203 = load i32, i32* %reverse_mem, align 4
+  %inc1204 = add i32 %augmented_load1203, 1
+  store i32 %inc1204, i32* %reverse_mem, align 4
   %294 = load double, double* %"add43119'de", align 8, !node !362
+  %295 = fadd fast double %294, %293, !node !362
+  %augmented_load1205 = load i32, i32* %reverse_op, align 4
+  %inc1206 = add i32 %augmented_load1205, 1
+  store i32 %inc1206, i32* %reverse_op, align 4
+  %augmented_load1207 = load i32, i32* %reverse_mem, align 4
+  %inc1208 = add i32 %augmented_load1207, 1
+  store i32 %inc1208, i32* %reverse_mem, align 4
+  store double %295, double* %"add43119'de", align 8
+  %augmented_load1209 = load i32, i32* %reverse_mem, align 4
+  %inc1210 = add i32 %augmented_load1209, 1
+  store i32 %inc1210, i32* %reverse_mem, align 4
+  %296 = load double, double* %"add43119'de", align 8, !node !362
+  %augmented_load1211 = load i32, i32* %reverse_mem, align 4
+  %inc1212 = add i32 %augmented_load1211, 1
+  store i32 %inc1212, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add43119'de", align 8
-  %295 = load double, double* %"sub.i'de", align 8, !node !362
-  %296 = fadd fast double %295, %294, !node !362
-  store double %296, double* %"sub.i'de", align 8
-  %297 = load double, double* %"'de70", align 8, !node !362
-  %298 = fadd fast double %297, %294, !node !362
-  store double %298, double* %"'de70", align 8
+  %augmented_load1213 = load i32, i32* %reverse_mem, align 4
+  %inc1214 = add i32 %augmented_load1213, 1
+  store i32 %inc1214, i32* %reverse_mem, align 4
+  %297 = load double, double* %"sub.i'de", align 8, !node !362
+  %298 = fadd fast double %297, %296, !node !362
+  %augmented_load1215 = load i32, i32* %reverse_op, align 4
+  %inc1216 = add i32 %augmented_load1215, 1
+  store i32 %inc1216, i32* %reverse_op, align 4
+  %augmented_load1217 = load i32, i32* %reverse_mem, align 4
+  %inc1218 = add i32 %augmented_load1217, 1
+  store i32 %inc1218, i32* %reverse_mem, align 4
+  store double %298, double* %"sub.i'de", align 8
+  %augmented_load1219 = load i32, i32* %reverse_mem, align 4
+  %inc1220 = add i32 %augmented_load1219, 1
+  store i32 %inc1220, i32* %reverse_mem, align 4
+  %299 = load double, double* %"'de70", align 8, !node !362
+  %300 = fadd fast double %299, %296, !node !362
+  %augmented_load1221 = load i32, i32* %reverse_op, align 4
+  %inc1222 = add i32 %augmented_load1221, 1
+  store i32 %inc1222, i32* %reverse_op, align 4
+  %augmented_load1223 = load i32, i32* %reverse_mem, align 4
+  %inc1224 = add i32 %augmented_load1223, 1
+  store i32 %inc1224, i32* %reverse_mem, align 4
+  store double %300, double* %"'de70", align 8
   %"arrayidx21.i'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 2
-  %299 = load double, double* %"arrayidx21.i'ipg_unwrap", align 16
+  %augmented_load1225 = load i32, i32* %reverse_mem, align 4
+  %inc1226 = add i32 %augmented_load1225, 1
+  store i32 %inc1226, i32* %reverse_mem, align 4
+  %301 = load double, double* %"arrayidx21.i'ipg_unwrap", align 16
+  %augmented_load1227 = load i32, i32* %reverse_mem, align 4
+  %inc1228 = add i32 %augmented_load1227, 1
+  store i32 %inc1228, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx21.i'ipg_unwrap", align 16
-  %300 = load double, double* %"sub20.i'de", align 8
-  %301 = fadd fast double %300, %299
-  store double %301, double* %"sub20.i'de", align 8
+  %augmented_load1229 = load i32, i32* %reverse_mem, align 4
+  %inc1230 = add i32 %augmented_load1229, 1
+  store i32 %inc1230, i32* %reverse_mem, align 4
   %302 = load double, double* %"sub20.i'de", align 8
-  %303 = fneg fast double %302
+  %303 = fadd fast double %302, %301
+  %augmented_load1231 = load i32, i32* %reverse_op, align 4
+  %inc1232 = add i32 %augmented_load1231, 1
+  store i32 %inc1232, i32* %reverse_op, align 4
+  %augmented_load1233 = load i32, i32* %reverse_mem, align 4
+  %inc1234 = add i32 %augmented_load1233, 1
+  store i32 %inc1234, i32* %reverse_mem, align 4
+  store double %303, double* %"sub20.i'de", align 8
+  %augmented_load1235 = load i32, i32* %reverse_mem, align 4
+  %inc1236 = add i32 %augmented_load1235, 1
+  store i32 %inc1236, i32* %reverse_mem, align 4
+  %304 = load double, double* %"sub20.i'de", align 8
+  %305 = fneg fast double %304
+  %augmented_load1237 = load i32, i32* %reverse_mem, align 4
+  %inc1238 = add i32 %augmented_load1237, 1
+  store i32 %inc1238, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub20.i'de", align 8
-  %304 = load double, double* %"mul16.i'de", align 8
-  %305 = fadd fast double %304, %302
-  store double %305, double* %"mul16.i'de", align 8
-  %306 = load double, double* %"mul19.i'de", align 8
-  %307 = fadd fast double %306, %303
-  store double %307, double* %"mul19.i'de", align 8
+  %augmented_load1239 = load i32, i32* %reverse_mem, align 4
+  %inc1240 = add i32 %augmented_load1239, 1
+  store i32 %inc1240, i32* %reverse_mem, align 4
+  %306 = load double, double* %"mul16.i'de", align 8
+  %307 = fadd fast double %306, %304
+  %augmented_load1241 = load i32, i32* %reverse_op, align 4
+  %inc1242 = add i32 %augmented_load1241, 1
+  store i32 %inc1242, i32* %reverse_op, align 4
+  %augmented_load1243 = load i32, i32* %reverse_mem, align 4
+  %inc1244 = add i32 %augmented_load1243, 1
+  store i32 %inc1244, i32* %reverse_mem, align 4
+  store double %307, double* %"mul16.i'de", align 8
+  %augmented_load1245 = load i32, i32* %reverse_mem, align 4
+  %inc1246 = add i32 %augmented_load1245, 1
+  store i32 %inc1246, i32* %reverse_mem, align 4
   %308 = load double, double* %"mul19.i'de", align 8
+  %309 = fadd fast double %308, %305
+  %augmented_load1247 = load i32, i32* %reverse_op, align 4
+  %inc1248 = add i32 %augmented_load1247, 1
+  store i32 %inc1248, i32* %reverse_op, align 4
+  %augmented_load1249 = load i32, i32* %reverse_mem, align 4
+  %inc1250 = add i32 %augmented_load1249, 1
+  store i32 %inc1250, i32* %reverse_mem, align 4
+  store double %309, double* %"mul19.i'de", align 8
+  %augmented_load1251 = load i32, i32* %reverse_mem, align 4
+  %inc1252 = add i32 %augmented_load1251, 1
+  store i32 %inc1252, i32* %reverse_mem, align 4
+  %310 = load double, double* %"mul19.i'de", align 8
   %arrayidx.i83_unwrap = getelementptr inbounds double, double* %rot, i64 1, !node !362
+  %augmented_load1253 = load i32, i32* %reverse_mem, align 4
+  %inc1254 = add i32 %augmented_load1253, 1
+  store i32 %inc1254, i32* %reverse_mem, align 4
   %_unwrap71 = load double, double* %arrayidx.i83_unwrap, align 8, !tbaa !68, !invariant.group !381, !node !362
-  %m0diffe72 = fmul fast double %308, %_unwrap71, !node !362
+  %m0diffe72 = fmul fast double %310, %_unwrap71, !node !362
+  %augmented_load1255 = load i32, i32* %reverse_op, align 4
+  %inc1256 = add i32 %augmented_load1255, 1
+  store i32 %inc1256, i32* %reverse_op, align 4
+  %augmented_load1257 = load i32, i32* %reverse_mem, align 4
+  %inc1258 = add i32 %augmented_load1257, 1
+  store i32 %inc1258, i32* %reverse_mem, align 4
   %_unwrap73 = load double, double* %pt, align 8, !tbaa !68, !invariant.group !385, !node !362
-  %m1diffe74 = fmul fast double %308, %_unwrap73, !node !362
+  %m1diffe74 = fmul fast double %310, %_unwrap73, !node !362
+  %augmented_load1259 = load i32, i32* %reverse_op, align 4
+  %inc1260 = add i32 %augmented_load1259, 1
+  store i32 %inc1260, i32* %reverse_op, align 4
+  %augmented_load1261 = load i32, i32* %reverse_mem, align 4
+  %inc1262 = add i32 %augmented_load1261, 1
+  store i32 %inc1262, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul19.i'de", align 8
-  %309 = load double, double* %"'de70", align 8, !node !362
-  %310 = fadd fast double %309, %m0diffe72, !node !362
-  store double %310, double* %"'de70", align 8
-  %311 = load double, double* %"'de75", align 8, !node !362
-  %312 = fadd fast double %311, %m1diffe74, !node !362
-  store double %312, double* %"'de75", align 8
-  %313 = load double, double* %"mul16.i'de", align 8
+  %augmented_load1263 = load i32, i32* %reverse_mem, align 4
+  %inc1264 = add i32 %augmented_load1263, 1
+  store i32 %inc1264, i32* %reverse_mem, align 4
+  %311 = load double, double* %"'de70", align 8, !node !362
+  %312 = fadd fast double %311, %m0diffe72, !node !362
+  %augmented_load1265 = load i32, i32* %reverse_op, align 4
+  %inc1266 = add i32 %augmented_load1265, 1
+  store i32 %inc1266, i32* %reverse_op, align 4
+  %augmented_load1267 = load i32, i32* %reverse_mem, align 4
+  %inc1268 = add i32 %augmented_load1267, 1
+  store i32 %inc1268, i32* %reverse_mem, align 4
+  store double %312, double* %"'de70", align 8
+  %augmented_load1269 = load i32, i32* %reverse_mem, align 4
+  %inc1270 = add i32 %augmented_load1269, 1
+  store i32 %inc1270, i32* %reverse_mem, align 4
+  %313 = load double, double* %"'de75", align 8, !node !362
+  %314 = fadd fast double %313, %m1diffe74, !node !362
+  %augmented_load1271 = load i32, i32* %reverse_op, align 4
+  %inc1272 = add i32 %augmented_load1271, 1
+  store i32 %inc1272, i32* %reverse_op, align 4
+  %augmented_load1273 = load i32, i32* %reverse_mem, align 4
+  %inc1274 = add i32 %augmented_load1273, 1
+  store i32 %inc1274, i32* %reverse_mem, align 4
+  store double %314, double* %"'de75", align 8
+  %augmented_load1275 = load i32, i32* %reverse_mem, align 4
+  %inc1276 = add i32 %augmented_load1275, 1
+  store i32 %inc1276, i32* %reverse_mem, align 4
+  %315 = load double, double* %"mul16.i'de", align 8
   %arrayidx3.i_unwrap = getelementptr inbounds double, double* %pt, i64 1, !node !362
+  %augmented_load1277 = load i32, i32* %reverse_mem, align 4
+  %inc1278 = add i32 %augmented_load1277, 1
+  store i32 %inc1278, i32* %reverse_mem, align 4
   %_unwrap76 = load double, double* %arrayidx3.i_unwrap, align 8, !tbaa !68, !invariant.group !384, !node !362
-  %m0diffe77 = fmul fast double %313, %_unwrap76, !node !362
+  %m0diffe77 = fmul fast double %315, %_unwrap76, !node !362
+  %augmented_load1279 = load i32, i32* %reverse_op, align 4
+  %inc1280 = add i32 %augmented_load1279, 1
+  store i32 %inc1280, i32* %reverse_op, align 4
+  %augmented_load1281 = load i32, i32* %reverse_mem, align 4
+  %inc1282 = add i32 %augmented_load1281, 1
+  store i32 %inc1282, i32* %reverse_mem, align 4
   %_unwrap78 = load double, double* %rot, align 8, !tbaa !68, !invariant.group !386, !node !362
-  %m1diffe79 = fmul fast double %313, %_unwrap78, !node !362
+  %m1diffe79 = fmul fast double %315, %_unwrap78, !node !362
+  %augmented_load1283 = load i32, i32* %reverse_op, align 4
+  %inc1284 = add i32 %augmented_load1283, 1
+  store i32 %inc1284, i32* %reverse_op, align 4
+  %augmented_load1285 = load i32, i32* %reverse_mem, align 4
+  %inc1286 = add i32 %augmented_load1285, 1
+  store i32 %inc1286, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul16.i'de", align 8
-  %314 = load double, double* %"'de80", align 8, !node !362
-  %315 = fadd fast double %314, %m0diffe77, !node !362
-  store double %315, double* %"'de80", align 8
-  %316 = load double, double* %"'de81", align 8, !node !362
-  %317 = fadd fast double %316, %m1diffe79, !node !362
-  store double %317, double* %"'de81", align 8
+  %augmented_load1287 = load i32, i32* %reverse_mem, align 4
+  %inc1288 = add i32 %augmented_load1287, 1
+  store i32 %inc1288, i32* %reverse_mem, align 4
+  %316 = load double, double* %"'de80", align 8, !node !362
+  %317 = fadd fast double %316, %m0diffe77, !node !362
+  %augmented_load1289 = load i32, i32* %reverse_op, align 4
+  %inc1290 = add i32 %augmented_load1289, 1
+  store i32 %inc1290, i32* %reverse_op, align 4
+  %augmented_load1291 = load i32, i32* %reverse_mem, align 4
+  %inc1292 = add i32 %augmented_load1291, 1
+  store i32 %inc1292, i32* %reverse_mem, align 4
+  store double %317, double* %"'de80", align 8
+  %augmented_load1293 = load i32, i32* %reverse_mem, align 4
+  %inc1294 = add i32 %augmented_load1293, 1
+  store i32 %inc1294, i32* %reverse_mem, align 4
+  %318 = load double, double* %"'de81", align 8, !node !362
+  %319 = fadd fast double %318, %m1diffe79, !node !362
+  %augmented_load1295 = load i32, i32* %reverse_op, align 4
+  %inc1296 = add i32 %augmented_load1295, 1
+  store i32 %inc1296, i32* %reverse_op, align 4
+  %augmented_load1297 = load i32, i32* %reverse_mem, align 4
+  %inc1298 = add i32 %augmented_load1297, 1
+  store i32 %inc1298, i32* %reverse_mem, align 4
+  store double %319, double* %"'de81", align 8
   %"arrayidx13.i'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 1
-  %318 = load double, double* %"arrayidx13.i'ipg_unwrap", align 8
+  %augmented_load1299 = load i32, i32* %reverse_mem, align 4
+  %inc1300 = add i32 %augmented_load1299, 1
+  store i32 %inc1300, i32* %reverse_mem, align 4
+  %320 = load double, double* %"arrayidx13.i'ipg_unwrap", align 8
+  %augmented_load1301 = load i32, i32* %reverse_mem, align 4
+  %inc1302 = add i32 %augmented_load1301, 1
+  store i32 %inc1302, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx13.i'ipg_unwrap", align 8
-  %319 = load double, double* %"sub12.i'de", align 8
-  %320 = fadd fast double %319, %318
-  store double %320, double* %"sub12.i'de", align 8
+  %augmented_load1303 = load i32, i32* %reverse_mem, align 4
+  %inc1304 = add i32 %augmented_load1303, 1
+  store i32 %inc1304, i32* %reverse_mem, align 4
   %321 = load double, double* %"sub12.i'de", align 8
-  %322 = fneg fast double %321
+  %322 = fadd fast double %321, %320
+  %augmented_load1305 = load i32, i32* %reverse_op, align 4
+  %inc1306 = add i32 %augmented_load1305, 1
+  store i32 %inc1306, i32* %reverse_op, align 4
+  %augmented_load1307 = load i32, i32* %reverse_mem, align 4
+  %inc1308 = add i32 %augmented_load1307, 1
+  store i32 %inc1308, i32* %reverse_mem, align 4
+  store double %322, double* %"sub12.i'de", align 8
+  %augmented_load1309 = load i32, i32* %reverse_mem, align 4
+  %inc1310 = add i32 %augmented_load1309, 1
+  store i32 %inc1310, i32* %reverse_mem, align 4
+  %323 = load double, double* %"sub12.i'de", align 8
+  %324 = fneg fast double %323
+  %augmented_load1311 = load i32, i32* %reverse_mem, align 4
+  %inc1312 = add i32 %augmented_load1311, 1
+  store i32 %inc1312, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub12.i'de", align 8
-  %323 = load double, double* %"mul8.i'de", align 8
-  %324 = fadd fast double %323, %321
-  store double %324, double* %"mul8.i'de", align 8
-  %325 = load double, double* %"mul11.i'de", align 8
-  %326 = fadd fast double %325, %322
-  store double %326, double* %"mul11.i'de", align 8
+  %augmented_load1313 = load i32, i32* %reverse_mem, align 4
+  %inc1314 = add i32 %augmented_load1313, 1
+  store i32 %inc1314, i32* %reverse_mem, align 4
+  %325 = load double, double* %"mul8.i'de", align 8
+  %326 = fadd fast double %325, %323
+  %augmented_load1315 = load i32, i32* %reverse_op, align 4
+  %inc1316 = add i32 %augmented_load1315, 1
+  store i32 %inc1316, i32* %reverse_op, align 4
+  %augmented_load1317 = load i32, i32* %reverse_mem, align 4
+  %inc1318 = add i32 %augmented_load1317, 1
+  store i32 %inc1318, i32* %reverse_mem, align 4
+  store double %326, double* %"mul8.i'de", align 8
+  %augmented_load1319 = load i32, i32* %reverse_mem, align 4
+  %inc1320 = add i32 %augmented_load1319, 1
+  store i32 %inc1320, i32* %reverse_mem, align 4
   %327 = load double, double* %"mul11.i'de", align 8
+  %328 = fadd fast double %327, %324
+  %augmented_load1321 = load i32, i32* %reverse_op, align 4
+  %inc1322 = add i32 %augmented_load1321, 1
+  store i32 %inc1322, i32* %reverse_op, align 4
+  %augmented_load1323 = load i32, i32* %reverse_mem, align 4
+  %inc1324 = add i32 %augmented_load1323, 1
+  store i32 %inc1324, i32* %reverse_mem, align 4
+  store double %328, double* %"mul11.i'de", align 8
+  %augmented_load1325 = load i32, i32* %reverse_mem, align 4
+  %inc1326 = add i32 %augmented_load1325, 1
+  store i32 %inc1326, i32* %reverse_mem, align 4
+  %329 = load double, double* %"mul11.i'de", align 8
   %arrayidx1.i_unwrap = getelementptr inbounds double, double* %pt, i64 2, !node !362
+  %augmented_load1327 = load i32, i32* %reverse_mem, align 4
+  %inc1328 = add i32 %augmented_load1327, 1
+  store i32 %inc1328, i32* %reverse_mem, align 4
   %_unwrap82 = load double, double* %arrayidx1.i_unwrap, align 8, !tbaa !68, !invariant.group !382, !node !362
-  %m0diffe83 = fmul fast double %327, %_unwrap82, !node !362
-  %m1diffe84 = fmul fast double %327, %_unwrap78, !node !362
+  %m0diffe83 = fmul fast double %329, %_unwrap82, !node !362
+  %augmented_load1329 = load i32, i32* %reverse_op, align 4
+  %inc1330 = add i32 %augmented_load1329, 1
+  store i32 %inc1330, i32* %reverse_op, align 4
+  %m1diffe84 = fmul fast double %329, %_unwrap78, !node !362
+  %augmented_load1331 = load i32, i32* %reverse_op, align 4
+  %inc1332 = add i32 %augmented_load1331, 1
+  store i32 %inc1332, i32* %reverse_op, align 4
+  %augmented_load1333 = load i32, i32* %reverse_mem, align 4
+  %inc1334 = add i32 %augmented_load1333, 1
+  store i32 %inc1334, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul11.i'de", align 8
-  %328 = load double, double* %"'de80", align 8, !node !362
-  %329 = fadd fast double %328, %m0diffe83, !node !362
-  store double %329, double* %"'de80", align 8
-  %330 = load double, double* %"'de85", align 8, !node !362
-  %331 = fadd fast double %330, %m1diffe84, !node !362
-  store double %331, double* %"'de85", align 8
-  %332 = load double, double* %"'de80", align 8, !node !362
+  %augmented_load1335 = load i32, i32* %reverse_mem, align 4
+  %inc1336 = add i32 %augmented_load1335, 1
+  store i32 %inc1336, i32* %reverse_mem, align 4
+  %330 = load double, double* %"'de80", align 8, !node !362
+  %331 = fadd fast double %330, %m0diffe83, !node !362
+  %augmented_load1337 = load i32, i32* %reverse_op, align 4
+  %inc1338 = add i32 %augmented_load1337, 1
+  store i32 %inc1338, i32* %reverse_op, align 4
+  %augmented_load1339 = load i32, i32* %reverse_mem, align 4
+  %inc1340 = add i32 %augmented_load1339, 1
+  store i32 %inc1340, i32* %reverse_mem, align 4
+  store double %331, double* %"'de80", align 8
+  %augmented_load1341 = load i32, i32* %reverse_mem, align 4
+  %inc1342 = add i32 %augmented_load1341, 1
+  store i32 %inc1342, i32* %reverse_mem, align 4
+  %332 = load double, double* %"'de85", align 8, !node !362
+  %333 = fadd fast double %332, %m1diffe84, !node !362
+  %augmented_load1343 = load i32, i32* %reverse_op, align 4
+  %inc1344 = add i32 %augmented_load1343, 1
+  store i32 %inc1344, i32* %reverse_op, align 4
+  %augmented_load1345 = load i32, i32* %reverse_mem, align 4
+  %inc1346 = add i32 %augmented_load1345, 1
+  store i32 %inc1346, i32* %reverse_mem, align 4
+  store double %333, double* %"'de85", align 8
+  %augmented_load1347 = load i32, i32* %reverse_mem, align 4
+  %inc1348 = add i32 %augmented_load1347, 1
+  store i32 %inc1348, i32* %reverse_mem, align 4
+  %334 = load double, double* %"'de80", align 8, !node !362
+  %augmented_load1349 = load i32, i32* %reverse_mem, align 4
+  %inc1350 = add i32 %augmented_load1349, 1
+  store i32 %inc1350, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de80", align 8
-  %333 = load double, double* %"rot'", align 8, !node !362
-  %334 = fadd fast double %333, %332, !node !362
-  store double %334, double* %"rot'", align 8
-  %335 = load double, double* %"mul8.i'de", align 8
+  %augmented_load1351 = load i32, i32* %reverse_mem, align 4
+  %inc1352 = add i32 %augmented_load1351, 1
+  store i32 %inc1352, i32* %reverse_mem, align 4
+  %335 = load double, double* %"rot'", align 8, !node !362
+  %336 = fadd fast double %335, %334, !node !362
+  %augmented_load1353 = load i32, i32* %reverse_op, align 4
+  %inc1354 = add i32 %augmented_load1353, 1
+  store i32 %inc1354, i32* %reverse_op, align 4
+  %augmented_load1355 = load i32, i32* %reverse_mem, align 4
+  %inc1356 = add i32 %augmented_load1355, 1
+  store i32 %inc1356, i32* %reverse_mem, align 4
+  store double %336, double* %"rot'", align 8
+  %augmented_load1357 = load i32, i32* %reverse_mem, align 4
+  %inc1358 = add i32 %augmented_load1357, 1
+  store i32 %inc1358, i32* %reverse_mem, align 4
+  %337 = load double, double* %"mul8.i'de", align 8
   %arrayidx2.i_unwrap = getelementptr inbounds double, double* %rot, i64 2, !node !362
+  %augmented_load1359 = load i32, i32* %reverse_mem, align 4
+  %inc1360 = add i32 %augmented_load1359, 1
+  store i32 %inc1360, i32* %reverse_mem, align 4
   %_unwrap86 = load double, double* %arrayidx2.i_unwrap, align 8, !tbaa !68, !invariant.group !383, !node !362
-  %m0diffe87 = fmul fast double %335, %_unwrap86, !node !362
-  %m1diffe88 = fmul fast double %335, %_unwrap73, !node !362
+  %m0diffe87 = fmul fast double %337, %_unwrap86, !node !362
+  %augmented_load1361 = load i32, i32* %reverse_op, align 4
+  %inc1362 = add i32 %augmented_load1361, 1
+  store i32 %inc1362, i32* %reverse_op, align 4
+  %m1diffe88 = fmul fast double %337, %_unwrap73, !node !362
+  %augmented_load1363 = load i32, i32* %reverse_op, align 4
+  %inc1364 = add i32 %augmented_load1363, 1
+  store i32 %inc1364, i32* %reverse_op, align 4
+  %augmented_load1365 = load i32, i32* %reverse_mem, align 4
+  %inc1366 = add i32 %augmented_load1365, 1
+  store i32 %inc1366, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul8.i'de", align 8
-  %336 = load double, double* %"'de70", align 8, !node !362
-  %337 = fadd fast double %336, %m0diffe87, !node !362
-  store double %337, double* %"'de70", align 8
-  %338 = load double, double* %"'de89", align 8, !node !362
-  %339 = fadd fast double %338, %m1diffe88, !node !362
-  store double %339, double* %"'de89", align 8
-  %340 = load double, double* %"'de70", align 8, !node !362
+  %augmented_load1367 = load i32, i32* %reverse_mem, align 4
+  %inc1368 = add i32 %augmented_load1367, 1
+  store i32 %inc1368, i32* %reverse_mem, align 4
+  %338 = load double, double* %"'de70", align 8, !node !362
+  %339 = fadd fast double %338, %m0diffe87, !node !362
+  %augmented_load1369 = load i32, i32* %reverse_op, align 4
+  %inc1370 = add i32 %augmented_load1369, 1
+  store i32 %inc1370, i32* %reverse_op, align 4
+  %augmented_load1371 = load i32, i32* %reverse_mem, align 4
+  %inc1372 = add i32 %augmented_load1371, 1
+  store i32 %inc1372, i32* %reverse_mem, align 4
+  store double %339, double* %"'de70", align 8
+  %augmented_load1373 = load i32, i32* %reverse_mem, align 4
+  %inc1374 = add i32 %augmented_load1373, 1
+  store i32 %inc1374, i32* %reverse_mem, align 4
+  %340 = load double, double* %"'de89", align 8, !node !362
+  %341 = fadd fast double %340, %m1diffe88, !node !362
+  %augmented_load1375 = load i32, i32* %reverse_op, align 4
+  %inc1376 = add i32 %augmented_load1375, 1
+  store i32 %inc1376, i32* %reverse_op, align 4
+  %augmented_load1377 = load i32, i32* %reverse_mem, align 4
+  %inc1378 = add i32 %augmented_load1377, 1
+  store i32 %inc1378, i32* %reverse_mem, align 4
+  store double %341, double* %"'de89", align 8
+  %augmented_load1379 = load i32, i32* %reverse_mem, align 4
+  %inc1380 = add i32 %augmented_load1379, 1
+  store i32 %inc1380, i32* %reverse_mem, align 4
+  %342 = load double, double* %"'de70", align 8, !node !362
+  %augmented_load1381 = load i32, i32* %reverse_mem, align 4
+  %inc1382 = add i32 %augmented_load1381, 1
+  store i32 %inc1382, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de70", align 8
-  %341 = load double, double* %"pt'", align 8, !node !362
-  %342 = fadd fast double %341, %340, !node !362
-  store double %342, double* %"pt'", align 8
+  %augmented_load1383 = load i32, i32* %reverse_mem, align 4
+  %inc1384 = add i32 %augmented_load1383, 1
+  store i32 %inc1384, i32* %reverse_mem, align 4
+  %343 = load double, double* %"pt'", align 8, !node !362
+  %344 = fadd fast double %343, %342, !node !362
+  %augmented_load1385 = load i32, i32* %reverse_op, align 4
+  %inc1386 = add i32 %augmented_load1385, 1
+  store i32 %inc1386, i32* %reverse_op, align 4
+  %augmented_load1387 = load i32, i32* %reverse_mem, align 4
+  %inc1388 = add i32 %augmented_load1387, 1
+  store i32 %inc1388, i32* %reverse_mem, align 4
+  store double %344, double* %"pt'", align 8
   %"arraydecay35'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 0
-  %343 = load double, double* %"arraydecay35'ipg_unwrap", align 16
+  %augmented_load1389 = load i32, i32* %reverse_mem, align 4
+  %inc1390 = add i32 %augmented_load1389, 1
+  store i32 %inc1390, i32* %reverse_mem, align 4
+  %345 = load double, double* %"arraydecay35'ipg_unwrap", align 16
+  %augmented_load1391 = load i32, i32* %reverse_mem, align 4
+  %inc1392 = add i32 %augmented_load1391, 1
+  store i32 %inc1392, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arraydecay35'ipg_unwrap", align 16
-  %344 = load double, double* %"sub.i'de", align 8, !node !362
-  %345 = fadd fast double %344, %343, !node !362
-  store double %345, double* %"sub.i'de", align 8
+  %augmented_load1393 = load i32, i32* %reverse_mem, align 4
+  %inc1394 = add i32 %augmented_load1393, 1
+  store i32 %inc1394, i32* %reverse_mem, align 4
   %346 = load double, double* %"sub.i'de", align 8, !node !362
-  %347 = fneg fast double %346, !node !362
+  %347 = fadd fast double %346, %345, !node !362
+  %augmented_load1395 = load i32, i32* %reverse_op, align 4
+  %inc1396 = add i32 %augmented_load1395, 1
+  store i32 %inc1396, i32* %reverse_op, align 4
+  %augmented_load1397 = load i32, i32* %reverse_mem, align 4
+  %inc1398 = add i32 %augmented_load1397, 1
+  store i32 %inc1398, i32* %reverse_mem, align 4
+  store double %347, double* %"sub.i'de", align 8
+  %augmented_load1399 = load i32, i32* %reverse_mem, align 4
+  %inc1400 = add i32 %augmented_load1399, 1
+  store i32 %inc1400, i32* %reverse_mem, align 4
+  %348 = load double, double* %"sub.i'de", align 8, !node !362
+  %349 = fneg fast double %348, !node !362
+  %augmented_load1401 = load i32, i32* %reverse_mem, align 4
+  %inc1402 = add i32 %augmented_load1401, 1
+  store i32 %inc1402, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"sub.i'de", align 8
-  %348 = load double, double* %"mul.i84'de", align 8, !node !362
-  %349 = fadd fast double %348, %346, !node !362
-  store double %349, double* %"mul.i84'de", align 8
-  %350 = load double, double* %"mul4.i'de", align 8, !node !362
-  %351 = fadd fast double %350, %347, !node !362
-  store double %351, double* %"mul4.i'de", align 8
+  %augmented_load1403 = load i32, i32* %reverse_mem, align 4
+  %inc1404 = add i32 %augmented_load1403, 1
+  store i32 %inc1404, i32* %reverse_mem, align 4
+  %350 = load double, double* %"mul.i84'de", align 8, !node !362
+  %351 = fadd fast double %350, %348, !node !362
+  %augmented_load1405 = load i32, i32* %reverse_op, align 4
+  %inc1406 = add i32 %augmented_load1405, 1
+  store i32 %inc1406, i32* %reverse_op, align 4
+  %augmented_load1407 = load i32, i32* %reverse_mem, align 4
+  %inc1408 = add i32 %augmented_load1407, 1
+  store i32 %inc1408, i32* %reverse_mem, align 4
+  store double %351, double* %"mul.i84'de", align 8
+  %augmented_load1409 = load i32, i32* %reverse_mem, align 4
+  %inc1410 = add i32 %augmented_load1409, 1
+  store i32 %inc1410, i32* %reverse_mem, align 4
   %352 = load double, double* %"mul4.i'de", align 8, !node !362
-  %m0diffe90 = fmul fast double %352, %_unwrap86, !node !362
-  %m1diffe91 = fmul fast double %352, %_unwrap76, !node !362
+  %353 = fadd fast double %352, %349, !node !362
+  %augmented_load1411 = load i32, i32* %reverse_op, align 4
+  %inc1412 = add i32 %augmented_load1411, 1
+  store i32 %inc1412, i32* %reverse_op, align 4
+  %augmented_load1413 = load i32, i32* %reverse_mem, align 4
+  %inc1414 = add i32 %augmented_load1413, 1
+  store i32 %inc1414, i32* %reverse_mem, align 4
+  store double %353, double* %"mul4.i'de", align 8
+  %augmented_load1415 = load i32, i32* %reverse_mem, align 4
+  %inc1416 = add i32 %augmented_load1415, 1
+  store i32 %inc1416, i32* %reverse_mem, align 4
+  %354 = load double, double* %"mul4.i'de", align 8, !node !362
+  %m0diffe90 = fmul fast double %354, %_unwrap86, !node !362
+  %augmented_load1417 = load i32, i32* %reverse_op, align 4
+  %inc1418 = add i32 %augmented_load1417, 1
+  store i32 %inc1418, i32* %reverse_op, align 4
+  %m1diffe91 = fmul fast double %354, %_unwrap76, !node !362
+  %augmented_load1419 = load i32, i32* %reverse_op, align 4
+  %inc1420 = add i32 %augmented_load1419, 1
+  store i32 %inc1420, i32* %reverse_op, align 4
+  %augmented_load1421 = load i32, i32* %reverse_mem, align 4
+  %inc1422 = add i32 %augmented_load1421, 1
+  store i32 %inc1422, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul4.i'de", align 8
-  %353 = load double, double* %"'de81", align 8, !node !362
-  %354 = fadd fast double %353, %m0diffe90, !node !362
-  store double %354, double* %"'de81", align 8
-  %355 = load double, double* %"'de89", align 8, !node !362
-  %356 = fadd fast double %355, %m1diffe91, !node !362
-  store double %356, double* %"'de89", align 8
-  %357 = load double, double* %"'de81", align 8, !node !362
+  %augmented_load1423 = load i32, i32* %reverse_mem, align 4
+  %inc1424 = add i32 %augmented_load1423, 1
+  store i32 %inc1424, i32* %reverse_mem, align 4
+  %355 = load double, double* %"'de81", align 8, !node !362
+  %356 = fadd fast double %355, %m0diffe90, !node !362
+  %augmented_load1425 = load i32, i32* %reverse_op, align 4
+  %inc1426 = add i32 %augmented_load1425, 1
+  store i32 %inc1426, i32* %reverse_op, align 4
+  %augmented_load1427 = load i32, i32* %reverse_mem, align 4
+  %inc1428 = add i32 %augmented_load1427, 1
+  store i32 %inc1428, i32* %reverse_mem, align 4
+  store double %356, double* %"'de81", align 8
+  %augmented_load1429 = load i32, i32* %reverse_mem, align 4
+  %inc1430 = add i32 %augmented_load1429, 1
+  store i32 %inc1430, i32* %reverse_mem, align 4
+  %357 = load double, double* %"'de89", align 8, !node !362
+  %358 = fadd fast double %357, %m1diffe91, !node !362
+  %augmented_load1431 = load i32, i32* %reverse_op, align 4
+  %inc1432 = add i32 %augmented_load1431, 1
+  store i32 %inc1432, i32* %reverse_op, align 4
+  %augmented_load1433 = load i32, i32* %reverse_mem, align 4
+  %inc1434 = add i32 %augmented_load1433, 1
+  store i32 %inc1434, i32* %reverse_mem, align 4
+  store double %358, double* %"'de89", align 8
+  %augmented_load1435 = load i32, i32* %reverse_mem, align 4
+  %inc1436 = add i32 %augmented_load1435, 1
+  store i32 %inc1436, i32* %reverse_mem, align 4
+  %359 = load double, double* %"'de81", align 8, !node !362
+  %augmented_load1437 = load i32, i32* %reverse_mem, align 4
+  %inc1438 = add i32 %augmented_load1437, 1
+  store i32 %inc1438, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de81", align 8
   %"arrayidx3.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 1, !node !362
-  %358 = load double, double* %"arrayidx3.i'ipg_unwrap", align 8, !node !362
-  %359 = fadd fast double %358, %357, !node !362
-  store double %359, double* %"arrayidx3.i'ipg_unwrap", align 8
-  %360 = load double, double* %"'de89", align 8, !node !362
+  %augmented_load1439 = load i32, i32* %reverse_mem, align 4
+  %inc1440 = add i32 %augmented_load1439, 1
+  store i32 %inc1440, i32* %reverse_mem, align 4
+  %360 = load double, double* %"arrayidx3.i'ipg_unwrap", align 8, !node !362
+  %361 = fadd fast double %360, %359, !node !362
+  %augmented_load1441 = load i32, i32* %reverse_op, align 4
+  %inc1442 = add i32 %augmented_load1441, 1
+  store i32 %inc1442, i32* %reverse_op, align 4
+  %augmented_load1443 = load i32, i32* %reverse_mem, align 4
+  %inc1444 = add i32 %augmented_load1443, 1
+  store i32 %inc1444, i32* %reverse_mem, align 4
+  store double %361, double* %"arrayidx3.i'ipg_unwrap", align 8
+  %augmented_load1445 = load i32, i32* %reverse_mem, align 4
+  %inc1446 = add i32 %augmented_load1445, 1
+  store i32 %inc1446, i32* %reverse_mem, align 4
+  %362 = load double, double* %"'de89", align 8, !node !362
+  %augmented_load1447 = load i32, i32* %reverse_mem, align 4
+  %inc1448 = add i32 %augmented_load1447, 1
+  store i32 %inc1448, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de89", align 8
   %"arrayidx2.i'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 2, !node !362
-  %361 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8, !node !362
-  %362 = fadd fast double %361, %360, !node !362
-  store double %362, double* %"arrayidx2.i'ipg_unwrap", align 8
-  %363 = load double, double* %"mul.i84'de", align 8, !node !362
-  %m0diffe92 = fmul fast double %363, %_unwrap71, !node !362
-  %m1diffe93 = fmul fast double %363, %_unwrap82, !node !362
+  %augmented_load1449 = load i32, i32* %reverse_mem, align 4
+  %inc1450 = add i32 %augmented_load1449, 1
+  store i32 %inc1450, i32* %reverse_mem, align 4
+  %363 = load double, double* %"arrayidx2.i'ipg_unwrap", align 8, !node !362
+  %364 = fadd fast double %363, %362, !node !362
+  %augmented_load1451 = load i32, i32* %reverse_op, align 4
+  %inc1452 = add i32 %augmented_load1451, 1
+  store i32 %inc1452, i32* %reverse_op, align 4
+  %augmented_load1453 = load i32, i32* %reverse_mem, align 4
+  %inc1454 = add i32 %augmented_load1453, 1
+  store i32 %inc1454, i32* %reverse_mem, align 4
+  store double %364, double* %"arrayidx2.i'ipg_unwrap", align 8
+  %augmented_load1455 = load i32, i32* %reverse_mem, align 4
+  %inc1456 = add i32 %augmented_load1455, 1
+  store i32 %inc1456, i32* %reverse_mem, align 4
+  %365 = load double, double* %"mul.i84'de", align 8, !node !362
+  %m0diffe92 = fmul fast double %365, %_unwrap71, !node !362
+  %augmented_load1457 = load i32, i32* %reverse_op, align 4
+  %inc1458 = add i32 %augmented_load1457, 1
+  store i32 %inc1458, i32* %reverse_op, align 4
+  %m1diffe93 = fmul fast double %365, %_unwrap82, !node !362
+  %augmented_load1459 = load i32, i32* %reverse_op, align 4
+  %inc1460 = add i32 %augmented_load1459, 1
+  store i32 %inc1460, i32* %reverse_op, align 4
+  %augmented_load1461 = load i32, i32* %reverse_mem, align 4
+  %inc1462 = add i32 %augmented_load1461, 1
+  store i32 %inc1462, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"mul.i84'de", align 8
-  %364 = load double, double* %"'de85", align 8, !node !362
-  %365 = fadd fast double %364, %m0diffe92, !node !362
-  store double %365, double* %"'de85", align 8
-  %366 = load double, double* %"'de75", align 8, !node !362
-  %367 = fadd fast double %366, %m1diffe93, !node !362
-  store double %367, double* %"'de75", align 8
-  %368 = load double, double* %"'de85", align 8, !node !362
+  %augmented_load1463 = load i32, i32* %reverse_mem, align 4
+  %inc1464 = add i32 %augmented_load1463, 1
+  store i32 %inc1464, i32* %reverse_mem, align 4
+  %366 = load double, double* %"'de85", align 8, !node !362
+  %367 = fadd fast double %366, %m0diffe92, !node !362
+  %augmented_load1465 = load i32, i32* %reverse_op, align 4
+  %inc1466 = add i32 %augmented_load1465, 1
+  store i32 %inc1466, i32* %reverse_op, align 4
+  %augmented_load1467 = load i32, i32* %reverse_mem, align 4
+  %inc1468 = add i32 %augmented_load1467, 1
+  store i32 %inc1468, i32* %reverse_mem, align 4
+  store double %367, double* %"'de85", align 8
+  %augmented_load1469 = load i32, i32* %reverse_mem, align 4
+  %inc1470 = add i32 %augmented_load1469, 1
+  store i32 %inc1470, i32* %reverse_mem, align 4
+  %368 = load double, double* %"'de75", align 8, !node !362
+  %369 = fadd fast double %368, %m1diffe93, !node !362
+  %augmented_load1471 = load i32, i32* %reverse_op, align 4
+  %inc1472 = add i32 %augmented_load1471, 1
+  store i32 %inc1472, i32* %reverse_op, align 4
+  %augmented_load1473 = load i32, i32* %reverse_mem, align 4
+  %inc1474 = add i32 %augmented_load1473, 1
+  store i32 %inc1474, i32* %reverse_mem, align 4
+  store double %369, double* %"'de75", align 8
+  %augmented_load1475 = load i32, i32* %reverse_mem, align 4
+  %inc1476 = add i32 %augmented_load1475, 1
+  store i32 %inc1476, i32* %reverse_mem, align 4
+  %370 = load double, double* %"'de85", align 8, !node !362
+  %augmented_load1477 = load i32, i32* %reverse_mem, align 4
+  %inc1478 = add i32 %augmented_load1477, 1
+  store i32 %inc1478, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de85", align 8
   %"arrayidx1.i'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 2, !node !362
-  %369 = load double, double* %"arrayidx1.i'ipg_unwrap", align 8, !node !362
-  %370 = fadd fast double %369, %368, !node !362
-  store double %370, double* %"arrayidx1.i'ipg_unwrap", align 8
-  %371 = load double, double* %"'de75", align 8, !node !362
+  %augmented_load1479 = load i32, i32* %reverse_mem, align 4
+  %inc1480 = add i32 %augmented_load1479, 1
+  store i32 %inc1480, i32* %reverse_mem, align 4
+  %371 = load double, double* %"arrayidx1.i'ipg_unwrap", align 8, !node !362
+  %372 = fadd fast double %371, %370, !node !362
+  %augmented_load1481 = load i32, i32* %reverse_op, align 4
+  %inc1482 = add i32 %augmented_load1481, 1
+  store i32 %inc1482, i32* %reverse_op, align 4
+  %augmented_load1483 = load i32, i32* %reverse_mem, align 4
+  %inc1484 = add i32 %augmented_load1483, 1
+  store i32 %inc1484, i32* %reverse_mem, align 4
+  store double %372, double* %"arrayidx1.i'ipg_unwrap", align 8
+  %augmented_load1485 = load i32, i32* %reverse_mem, align 4
+  %inc1486 = add i32 %augmented_load1485, 1
+  store i32 %inc1486, i32* %reverse_mem, align 4
+  %373 = load double, double* %"'de75", align 8, !node !362
+  %augmented_load1487 = load i32, i32* %reverse_mem, align 4
+  %inc1488 = add i32 %augmented_load1487, 1
+  store i32 %inc1488, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"'de75", align 8
   %"arrayidx.i83'ipg_unwrap" = getelementptr inbounds double, double* %"rot'", i64 1, !node !362
-  %372 = load double, double* %"arrayidx.i83'ipg_unwrap", align 8, !node !362
-  %373 = fadd fast double %372, %371, !node !362
-  store double %373, double* %"arrayidx.i83'ipg_unwrap", align 8
+  %augmented_load1489 = load i32, i32* %reverse_mem, align 4
+  %inc1490 = add i32 %augmented_load1489, 1
+  store i32 %inc1490, i32* %reverse_mem, align 4
+  %374 = load double, double* %"arrayidx.i83'ipg_unwrap", align 8, !node !362
+  %375 = fadd fast double %374, %373, !node !362
+  %augmented_load1491 = load i32, i32* %reverse_op, align 4
+  %inc1492 = add i32 %augmented_load1491, 1
+  store i32 %inc1492, i32* %reverse_op, align 4
+  %augmented_load1493 = load i32, i32* %reverse_mem, align 4
+  %inc1494 = add i32 %augmented_load1493, 1
+  store i32 %inc1494, i32* %reverse_mem, align 4
+  store double %375, double* %"arrayidx.i83'ipg_unwrap", align 8
   br label %invertsqsum.exit
 
 invertfor.body38.for.body38_crit_edge:            ; preds = %mergeinvertfor.body38.for.body38_crit_edge_for.end48, %incinvertfor.body38.for.body38_crit_edge
-  %374 = load i64, i64* %"iv5'ac", align 8
-  %iv.next6_unwrap = add nuw nsw i64 %374, 1
+  %augmented_load1495 = load i32, i32* %reverse_mem, align 4
+  %inc1496 = add i32 %augmented_load1495, 1
+  store i32 %inc1496, i32* %reverse_mem, align 4
+  %376 = load i64, i64* %"iv5'ac", align 8
+  %iv.next6_unwrap = add nuw nsw i64 %376, 1
+  %augmented_load1497 = load i32, i32* %reverse_op, align 4
+  %inc1498 = add i32 %augmented_load1497, 1
+  store i32 %inc1498, i32* %reverse_op, align 4
   %"arrayidx45'ipg_unwrap" = getelementptr inbounds double, double* %"rotatedPt'", i64 %iv.next6_unwrap, !node !362
-  %375 = load double, double* %"arrayidx45'ipg_unwrap", align 8, !node !362
+  %augmented_load1499 = load i32, i32* %reverse_mem, align 4
+  %inc1500 = add i32 %augmented_load1499, 1
+  store i32 %inc1500, i32* %reverse_mem, align 4
+  %377 = load double, double* %"arrayidx45'ipg_unwrap", align 8, !node !362
+  %augmented_load1501 = load i32, i32* %reverse_mem, align 4
+  %inc1502 = add i32 %augmented_load1501, 1
+  store i32 %inc1502, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"arrayidx45'ipg_unwrap", align 8
-  %376 = load double, double* %"add43'de", align 8, !node !362
-  %377 = fadd fast double %376, %375, !node !362
-  store double %377, double* %"add43'de", align 8
+  %augmented_load1503 = load i32, i32* %reverse_mem, align 4
+  %inc1504 = add i32 %augmented_load1503, 1
+  store i32 %inc1504, i32* %reverse_mem, align 4
   %378 = load double, double* %"add43'de", align 8, !node !362
+  %379 = fadd fast double %378, %377, !node !362
+  %augmented_load1505 = load i32, i32* %reverse_op, align 4
+  %inc1506 = add i32 %augmented_load1505, 1
+  store i32 %inc1506, i32* %reverse_op, align 4
+  %augmented_load1507 = load i32, i32* %reverse_mem, align 4
+  %inc1508 = add i32 %augmented_load1507, 1
+  store i32 %inc1508, i32* %reverse_mem, align 4
+  store double %379, double* %"add43'de", align 8
+  %augmented_load1509 = load i32, i32* %reverse_mem, align 4
+  %inc1510 = add i32 %augmented_load1509, 1
+  store i32 %inc1510, i32* %reverse_mem, align 4
+  %380 = load double, double* %"add43'de", align 8, !node !362
+  %augmented_load1511 = load i32, i32* %reverse_mem, align 4
+  %inc1512 = add i32 %augmented_load1511, 1
+  store i32 %inc1512, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %"add43'de", align 8
-  %379 = load double, double* %".pre109'de", align 8, !node !362
-  %380 = fadd fast double %379, %378, !node !362
-  store double %380, double* %".pre109'de", align 8
-  %381 = load double, double* %".pre'de", align 8, !node !362
-  %382 = fadd fast double %381, %378, !node !362
-  store double %382, double* %".pre'de", align 8
-  %383 = load double, double* %".pre109'de", align 8, !node !362
+  %augmented_load1513 = load i32, i32* %reverse_mem, align 4
+  %inc1514 = add i32 %augmented_load1513, 1
+  store i32 %inc1514, i32* %reverse_mem, align 4
+  %381 = load double, double* %".pre109'de", align 8, !node !362
+  %382 = fadd fast double %381, %380, !node !362
+  %augmented_load1515 = load i32, i32* %reverse_op, align 4
+  %inc1516 = add i32 %augmented_load1515, 1
+  store i32 %inc1516, i32* %reverse_op, align 4
+  %augmented_load1517 = load i32, i32* %reverse_mem, align 4
+  %inc1518 = add i32 %augmented_load1517, 1
+  store i32 %inc1518, i32* %reverse_mem, align 4
+  store double %382, double* %".pre109'de", align 8
+  %augmented_load1519 = load i32, i32* %reverse_mem, align 4
+  %inc1520 = add i32 %augmented_load1519, 1
+  store i32 %inc1520, i32* %reverse_mem, align 4
+  %383 = load double, double* %".pre'de", align 8, !node !362
+  %384 = fadd fast double %383, %380, !node !362
+  %augmented_load1521 = load i32, i32* %reverse_op, align 4
+  %inc1522 = add i32 %augmented_load1521, 1
+  store i32 %inc1522, i32* %reverse_op, align 4
+  %augmented_load1523 = load i32, i32* %reverse_mem, align 4
+  %inc1524 = add i32 %augmented_load1523, 1
+  store i32 %inc1524, i32* %reverse_mem, align 4
+  store double %384, double* %".pre'de", align 8
+  %augmented_load1525 = load i32, i32* %reverse_mem, align 4
+  %inc1526 = add i32 %augmented_load1525, 1
+  store i32 %inc1526, i32* %reverse_mem, align 4
+  %385 = load double, double* %".pre109'de", align 8, !node !362
+  %augmented_load1527 = load i32, i32* %reverse_mem, align 4
+  %inc1528 = add i32 %augmented_load1527, 1
+  store i32 %inc1528, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %".pre109'de", align 8
-  %384 = load i64, i64* %"iv5'ac", align 8
+  %augmented_load1529 = load i32, i32* %reverse_mem, align 4
+  %inc1530 = add i32 %augmented_load1529, 1
+  store i32 %inc1530, i32* %reverse_mem, align 4
+  %386 = load i64, i64* %"iv5'ac", align 8
   %"arrayidx42.phi.trans.insert'ipg_unwrap" = getelementptr inbounds [3 x double], [3 x double]* %"rot_cross_pt'ipc", i64 0, i64 %iv.next6_unwrap, !node !362
-  %385 = load double, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8, !node !362
-  %386 = fadd fast double %385, %383, !node !362
-  store double %386, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8
-  %387 = load double, double* %".pre'de", align 8, !node !362
+  %augmented_load1531 = load i32, i32* %reverse_mem, align 4
+  %inc1532 = add i32 %augmented_load1531, 1
+  store i32 %inc1532, i32* %reverse_mem, align 4
+  %387 = load double, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %388 = fadd fast double %387, %385, !node !362
+  %augmented_load1533 = load i32, i32* %reverse_op, align 4
+  %inc1534 = add i32 %augmented_load1533, 1
+  store i32 %inc1534, i32* %reverse_op, align 4
+  %augmented_load1535 = load i32, i32* %reverse_mem, align 4
+  %inc1536 = add i32 %augmented_load1535, 1
+  store i32 %inc1536, i32* %reverse_mem, align 4
+  store double %388, double* %"arrayidx42.phi.trans.insert'ipg_unwrap", align 8
+  %augmented_load1537 = load i32, i32* %reverse_mem, align 4
+  %inc1538 = add i32 %augmented_load1537, 1
+  store i32 %inc1538, i32* %reverse_mem, align 4
+  %389 = load double, double* %".pre'de", align 8, !node !362
+  %augmented_load1539 = load i32, i32* %reverse_mem, align 4
+  %inc1540 = add i32 %augmented_load1539, 1
+  store i32 %inc1540, i32* %reverse_mem, align 4
   store double 0.000000e+00, double* %".pre'de", align 8
-  %388 = load i64, i64* %"iv5'ac", align 8
+  %augmented_load1541 = load i32, i32* %reverse_mem, align 4
+  %inc1542 = add i32 %augmented_load1541, 1
+  store i32 %inc1542, i32* %reverse_mem, align 4
+  %390 = load i64, i64* %"iv5'ac", align 8
   %"arrayidx40.phi.trans.insert'ipg_unwrap" = getelementptr inbounds double, double* %"pt'", i64 %iv.next6_unwrap, !node !362
-  %389 = load double, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8, !node !362
-  %390 = fadd fast double %389, %387, !node !362
-  store double %390, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8
-  %391 = load i64, i64* %"iv5'ac", align 8
-  %392 = icmp eq i64 %391, 0
-  %393 = xor i1 %392, true
-  br i1 %392, label %invertif.else, label %incinvertfor.body38.for.body38_crit_edge
+  %augmented_load1543 = load i32, i32* %reverse_mem, align 4
+  %inc1544 = add i32 %augmented_load1543, 1
+  store i32 %inc1544, i32* %reverse_mem, align 4
+  %391 = load double, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8, !node !362
+  %392 = fadd fast double %391, %389, !node !362
+  %augmented_load1545 = load i32, i32* %reverse_op, align 4
+  %inc1546 = add i32 %augmented_load1545, 1
+  store i32 %inc1546, i32* %reverse_op, align 4
+  %augmented_load1547 = load i32, i32* %reverse_mem, align 4
+  %inc1548 = add i32 %augmented_load1547, 1
+  store i32 %inc1548, i32* %reverse_mem, align 4
+  store double %392, double* %"arrayidx40.phi.trans.insert'ipg_unwrap", align 8
+  %augmented_load1549 = load i32, i32* %reverse_mem, align 4
+  %inc1550 = add i32 %augmented_load1549, 1
+  store i32 %inc1550, i32* %reverse_mem, align 4
+  %393 = load i64, i64* %"iv5'ac", align 8
+  %394 = icmp eq i64 %393, 0
+  %395 = xor i1 %394, true
+  %augmented_load1551 = load i32, i32* %reverse_op, align 4
+  %inc1552 = add i32 %augmented_load1551, 1
+  store i32 %inc1552, i32* %reverse_op, align 4
+  br i1 %394, label %invertif.else, label %incinvertfor.body38.for.body38_crit_edge
 
 incinvertfor.body38.for.body38_crit_edge:         ; preds = %invertfor.body38.for.body38_crit_edge
-  %394 = load i64, i64* %"iv5'ac", align 8
-  %395 = add nsw i64 %394, -1
-  store i64 %395, i64* %"iv5'ac", align 8
+  %augmented_load1553 = load i32, i32* %reverse_mem, align 4
+  %inc1554 = add i32 %augmented_load1553, 1
+  store i32 %inc1554, i32* %reverse_mem, align 4
+  %396 = load i64, i64* %"iv5'ac", align 8
+  %397 = add nsw i64 %396, -1
+  %augmented_load1555 = load i32, i32* %reverse_op, align 4
+  %inc1556 = add i32 %augmented_load1555, 1
+  store i32 %inc1556, i32* %reverse_op, align 4
+  %augmented_load1557 = load i32, i32* %reverse_mem, align 4
+  %inc1558 = add i32 %augmented_load1557, 1
+  store i32 %inc1558, i32* %reverse_mem, align 4
+  store i64 %397, i64* %"iv5'ac", align 8
   br label %invertfor.body38.for.body38_crit_edge
 
 invertfor.end48:                                  ; preds = %invertif.end
   br label %mergeinvertfor.body38.for.body38_crit_edge_for.end48
 
 mergeinvertfor.body38.for.body38_crit_edge_for.end48: ; preds = %invertfor.end48
+  %augmented_load1559 = load i32, i32* %reverse_mem, align 4
+  %inc1560 = add i32 %augmented_load1559, 1
+  store i32 %inc1560, i32* %reverse_mem, align 4
   store i64 1, i64* %"iv5'ac", align 8
   br label %invertfor.body38.for.body38_crit_edge
 

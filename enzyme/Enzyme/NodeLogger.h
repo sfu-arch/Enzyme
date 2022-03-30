@@ -25,6 +25,11 @@ struct NodeLogger : public FunctionPass,
 
         void visitLoadInst(LoadInst &inst);
         void visitStoreInst(StoreInst &inst);
+        void visitInstruction(Instruction &inst);
+
+    private:
+        std::map<Value*, unsigned> node_ids;
+
 };
 
 } // namespace instrumem

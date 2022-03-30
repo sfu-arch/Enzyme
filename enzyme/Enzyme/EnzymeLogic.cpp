@@ -108,7 +108,7 @@ cl::opt<bool> EnzymeJuliaAddrLoad(
     cl::desc("Mark all loads resulting in an addr(13)* to be legal to redo"));
 
 cl::opt<bool>
-    CreateDDDG("milad-create-dddg", cl::init(false), cl::Hidden,
+    CreateDDDG("enable-dddg", cl::init(false), cl::Hidden,
                          cl::desc("Enables creating a dynamic data dependence graph"));
 }
 

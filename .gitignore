@@ -1,5 +1,6 @@
 *.swp
 *.swo
 *.out
+**/results.txt
 build
 .vscode

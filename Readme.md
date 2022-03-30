@@ -40,6 +40,8 @@ brew install enzyme
 spack install enzyme
 ```
 
+To enable creating dynamic data dependence graph add `-enable-dddg` to opt.
+
 To get involved or if you have questions, please join our [mailing list](https://groups.google.com/d/forum/enzyme-dev).
 
 If using this code in an academic setting, please cite the following:
@@ -65,3 +67,4 @@ To generate synthetic function you can use synthetic_function.py. The INPUT_COUN
     OUTPUT_ARRAY = [1, 2, 1, 3, 4]
 
 Means we have 5 outputs and output_0 depeneds on 1 input, and output_4 depends on 4 inputs. 
+

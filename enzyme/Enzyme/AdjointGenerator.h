@@ -1605,7 +1605,7 @@ public:
     eraseIfUnused(BO);
     if (gutils->isConstantInstruction(&BO))
       return;
-
+    errs() << "BinaryOperator: " << BO << "\n";
     size_t size = 1;
     if (BO.getType()->isSized())
       size = (gutils->newFunc->getParent()->getDataLayout().getTypeSizeInBits(
@@ -1656,14 +1656,14 @@ public:
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "m0diffe" + orig_op0->getName());
             // ADDED BY ME
-            errs() << dif0->getNameOrAsOperand()<< " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+            errs() << *lookup(gutils->getNewFromOriginal(orig_op1), Builder2) << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
       }
       if (!constantval1) {
         dif1 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op0), Builder2),
             "m1diffe" + orig_op1->getName());
             // ADDED BY ME
-            errs() << dif1->getNameOrAsOperand() << " -> " << orig_op0->getNameOrAsOperand()<< "\n";
+            errs() << *lookup(gutils->getNewFromOriginal(orig_op0), Builder2) << " -> " << orig_op0->getNameOrAsOperand()<< "\n";
       }
       break;
     }
@@ -1723,12 +1723,19 @@ public:
                 dif1 = Builder2.CreateFDiv(
                     Builder2.CreateFNeg(Builder2.CreateFMul(idiff, lop0)),
                     lop1);
+                // ADDED BY ME
+                errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+                errs() << BO << " -> " << lop0->getNameOrAsOperand()<< "\n";
+
               } else {
                 auto product = gutils->getOrInsertTotalMultiplicativeProduct(
                     gutils->getNewFromOriginal(orig_op1), lc);
                 IRBuilder<> EB(*lc.exitBlocks.begin());
                 getReverseBuilder(EB, /*original=*/false);
                 Value *s = lookup(gutils->getNewFromOriginal(Pstart), Builder2);
+                // ADDED BY ME
+                errs() << "Pstart: " << Pstart << " -> " << s << "\n";
+                errs() << "Producut: " << *product << " -> " << *orig_op1 << "\n";
                 Value *lop0 = lookup(product, EB);
                 Value *lop1 =
                     lookup(gutils->getNewFromOriginal(orig_op1), Builder2);
@@ -1736,7 +1743,11 @@ public:
                     Builder2.CreateFNeg(Builder2.CreateFMul(
                         s, Builder2.CreateFDiv(idiff, lop0))),
                     lop1);
+                // ADDED BY ME
+                errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+                errs() << BO << " -> " << lop0->getNameOrAsOperand()<< "\n";
               }
+
               addToDiffe(orig_op1, dif1, Builder2, addingType);
             }
             return;
@@ -1757,6 +1768,8 @@ public:
             Builder2.CreateFMul(lastdiv, Builder2.CreateFDiv(idiff, lop1)));
             // ADDED BY ME
             errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+            errs() << BO << " -> " << lastdiv->getNameOrAsOperand()<< "\n";
+
       }
       break;
     }
@@ -1963,6 +1976,8 @@ public:
               setDiffe(&BO, Constant::getNullValue(BO.getType()), Builder2);
               auto arg = lookup(
                   gutils->getNewFromOriginal(BO.getOperand(1 - i)), Builder2);
+              // ADDED BY ME
+              errs() << "OR: " << BO << ": orig: " << *BO.getOperand(1 - i) << " -> " << arg<< "\n";
               auto prev = Builder2.CreateOr(arg, BO.getOperand(i));
               prev = Builder2.CreateSub(prev, arg, "", /*NUW*/ true,
                                         /*NSW*/ false);
@@ -2023,10 +2038,12 @@ public:
   done:;
     if (dif0 || dif1)
       setDiffe(&BO, Constant::getNullValue(BO.getType()), Builder2);
-    if (dif0)
+    if (dif0) {
       addToDiffe(orig_op0, dif0, Builder2, addingType);
-    if (dif1)
+    }
+    if (dif1) {
       addToDiffe(orig_op1, dif1, Builder2, addingType);
+    }
   }
 
   void createBinaryOperatorDual(llvm::BinaryOperator &BO) {

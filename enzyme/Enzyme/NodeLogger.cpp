@@ -53,7 +53,6 @@ std::string ModePrefix(Instruction *i) {
 
 void NodeLogger::visitLoadInst(LoadInst &inst) {
     std::string write_format = ModePrefix(&inst) + "Node: " + inst.getNameOrAsOperand() + ", Parent: %x, load\n";
-    // auto *load_id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[&inst]);
     CallPrintf(&inst, &write_format[0], {inst.getPointerOperand()}, write_format);
 }
 
@@ -68,7 +67,24 @@ std::string GenerateWriteFormat(Instruction &inst, std::map<Value*, unsigned> &n
     std::string write_format = "";
     if (isa<Instruction>(inst)) {
         if (isa<BinaryOperator>(inst)) {
-            write_format += "arithmetic\n";
+            write_format += "arithmetic";
+
+            switch (inst.getOpcode())
+            {
+            case Instruction::FMul:
+                write_format += "_mul";
+                break;
+            case Instruction::FDiv:
+                write_format += "_div";
+                break;
+            case Instruction::Or:
+                write_format += "_or";
+                break;
+            default:
+                break;
+            }
+            write_format += "\n";
+
         } else{
             write_format += std::string(inst.getOpcodeName())+  "\n";
         }

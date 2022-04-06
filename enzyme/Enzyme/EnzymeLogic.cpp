@@ -110,6 +110,10 @@ cl::opt<bool> EnzymeJuliaAddrLoad(
 cl::opt<bool>
     CreateDDDG("enable-dddg", cl::init(false), cl::Hidden,
                          cl::desc("Enables creating a dynamic data dependence graph"));
+
+cl::opt<bool>
+    LogMain("log-main", cl::init(false), cl::Hidden,
+                         cl::desc("Instruments the main function as well."));
 }
 
 struct CacheAnalysis {
@@ -3705,6 +3709,36 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   }
 
   auto nf = gutils->newFunc;
+  // auto i = gutils->GetUnwrapCache();
+  // for (auto &bb: *gutils->GetOldFunc()) {
+  //   IRBuilder<> Builder2(&bb);
+  //   gutils->getReverseBuilder(Builder2);
+  //   for (auto &i: bb) {
+  //     if (isa<BinaryOperator>(i) && isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&i), Builder2)))
+  //       errs() << gutils->lookupM(gutils->getNewFromOriginal(&i), Builder2)->getNameOrAsOperand() << "\n";
+  //   }
+  // }
+  // for (auto &block: gutils->reverseBlockToPrimal) {
+  //   IRBuilder<> Builder2(block.second);
+  //   gutils->getReverseBuilder(Builder2);
+  //   for (auto &inst: *gutils->reverseBlocks[cast<BasicBlock>(gutils->getNewFromOriginal(orig->getParent()))].back()) 
+  //     if (isa<BinaryOperator>(inst) && gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2) && isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2)))
+  //       errs() << "LOGGING: " << inst << " -> " << gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2)->getNameOrAsOperand() << "\n";
+
+  // }
+  // for (auto &entry: i) {
+  //   for (auto U : entry.second) {
+  //     errs() << "set " << *U.first << "\n";
+  //   }
+  // }
+  std::ofstream myfile;
+  myfile.open("live_vars.txt");
+  for (auto i: gutils->alias_map) {
+    errs() << *i.first << " -> " << *i.second << "\n";
+    myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+  }
+  for (auto val: gutils->GetscopeMap())
+    errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
   delete gutils;
 
   {
@@ -3715,27 +3749,18 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
 
-
-  // for (auto &bb: *nf)
-  //       errs() << bb.getName() << "\n";
-  PassManagerBuilder Builder;
-  legacy::FunctionPassManager PM(nf->getParent());
-  // PM.add(createLoopUnrollPass());
-  // PM.run(*nf);
-
-  // PM.add(new instrumem::InstruMemPass());
-  // PM.add(new instrumem::NodeDetectorPass());
-  PM.add(new instrumem::BFSPass());
-  // PM.add(new instrumem::AddressInstPass());
-  // PM.add(new instrumem::ForwardNodeInstPass());
-  // PM.add(new instrumem::SchedulerPass());
-  // PM.add(new life::LifetimePass());
-  if (CreateDDDG)
+  if (LogMain) {
+    legacy::FunctionPassManager PM(key.todiff->getParent());
     PM.add(new instrumem::NodeLogger());
-  // PM.add(new instrumem::OPCounterPass());
+    PM.run(*key.todiff);
+  }
+  if (CreateDDDG) {
+    legacy::FunctionPassManager PM(nf->getParent());
+    PM.add(new instrumem::BFSPass());
+    PM.add(new instrumem::NodeLogger());
+    PM.run(*nf);
+  }
 
-  // Builder.populateFunctionPassManager(PM);
-  PM.run(*nf);
   if (PostOpt)
     PPC.optimizeIntermediate(nf);
   if (EnzymePrint) {

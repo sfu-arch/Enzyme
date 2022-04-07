@@ -1,6 +1,3 @@
-from turtle import forward
-
-
 STEP = 20
 class Node:
     def __init__(self, id, occurance, parents, type, mode='F'):
@@ -154,7 +151,7 @@ class Graph:
             self.handle_mem_op(new_node)
         self.handle_max_level(new_node)
         if self.log_address and new_node.is_mem_op():
-            self.addr_file.write(new_node.get_address() + '\n')
+            self.addr_file.write(mode + '_' + new_node.get_address() + '\n')
         if new_node.level not in self.insts_per_level:
             self.insts_per_level[new_node.level] = 1
         else:

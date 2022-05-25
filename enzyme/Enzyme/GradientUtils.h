@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <deque>
 #include <map>
+#include <set> 
 
 #include <llvm/Config/llvm-config.h>
 
@@ -117,6 +118,360 @@ public:
 enum class AugmentedStruct;
 class GradientUtils : public CacheUtility {
 public:
+  std::map<BasicBlock *, std::map<Value*, int>> region_map;
+  std::map<Value*, int> binned_values; 
+  // void printActiveValue() {
+  //   errs() << "Last active: " << *ATA.get()->last_active_inst << "\n";
+  //   for (auto i: ATA.get()->ActiveInstructions) {
+  //     for (int j=0; j < i->getNumOperands(); j++) {
+  //       if (isConstantValue(i->getOperand(j))) {
+  //         errs() << "constant: " << *i << " :: " << *i->getOperand(j) << "\n";
+  //       }
+  //     }
+
+  //   }
+  // }
+  StoreInst* getStoreInstUser(Value* v) {
+    auto inst = dyn_cast<Instruction>(v);
+    for (auto i: inst->users()) {
+      if (isa<StoreInst>(i)) {
+        return dyn_cast<StoreInst>(i);
+        break;
+      }
+    }
+    return nullptr;
+  }
+  void setWriteMetadata(Value* v, int index) {
+    auto inst = dyn_cast<Instruction>(v);
+    if (inst) {
+      inst->setMetadata("write", MDNode::get(inst->getContext(),
+                                                   MDString::get(inst->getContext(),
+                                                                 std::to_string(index))));
+    }
+  }
+  bool checkUnused(Value* original_value) {
+    if (isa<LoadInst>(original_value)) {
+      auto inst = dyn_cast<LoadInst>(original_value);
+      return inst->getPointerOperand()->getName().contains("replacement");
+    }
+    return false;
+  }
+  // The original value will be stored in the cache in the forward phase.
+  // The load is the operation which reads the value from the cache in the reverse
+  void handleCachedValue(Value* original_value, Value* load) {
+    errs() << "handling cache ... " << "\n";
+    errs() << *original_value << " -> " << *load << "\n";
+    if (checkUnused(original_value))
+      return;
+    if (!isa<Instruction>(load))
+      return;
+    // Finding the store instruction
+    auto si = getStoreInstUser(original_value);
+    if (si == nullptr) {
+      errs() << "Could not find store instruction for " << *original_value << "\n";
+      return;
+    }
+    auto load_inst = dyn_cast<Instruction>(load);
+    int index = addToRegionMap(si, load_inst->getParent());
+    setWriteMetadata(si, index);
+    
+    updateForwardBB(si);
+    updateReverseBB(load_inst);
+    // Put values in a list to be handled later
+    binned_values[load_inst] = index;
+    
+  }
+
+  bool hasReverseUse(Value *inst) {
+    auto new_inst = getNewFromOriginal(inst);
+    for (auto use: new_inst->users()) {
+      if (isa<Instruction>(use) && dyn_cast<Instruction>(use)->getParent()->getName().contains("inv")) 
+        return true;
+    }
+    return false;
+  }
+  std::set<Value*> createActiveSet() {
+    std::set<Value*> active_set;
+    for (auto i: ATA.get()->ActiveValues) 
+      active_set.insert(i);
+    return active_set;
+  }
+  bool allUsesInReverse(Value *inst) {
+    if (!originalToNewFn.count(inst))
+      return false;
+    auto new_inst = originalToNewFn[inst];
+    // auto new_inst = getNewFromOriginal(inst);
+    for (auto use: new_inst->users()) {
+      if (isa<Instruction>(use) && !dyn_cast<Instruction>(use)->getParent()->getName().contains("inv")) 
+        return false;
+    }
+    return new_inst->getNumUses() > 0;
+  }
+
+  std::map<int, std::vector<Value*> > levels;
+  std::map<Value*, int> op_to_level_map;
+  std::map<Value*, int> edge_to_level_map;
+  std::map<int, std::vector<Value*> > level_to_edge_map;
+  std::string last_mem_op = "load";
+
+  inline int handleLoadStore(Instruction* curr_inst, int last_load_level) {
+     if (isa<StoreInst>(curr_inst) && last_mem_op == "load") {
+        op_to_level_map[curr_inst] = last_load_level + 1;
+        last_mem_op = "store";
+     }
+      if (isa<LoadInst>(curr_inst) && last_mem_op == "store") {
+        last_load_level = op_to_level_map[curr_inst];
+        last_mem_op = "load";
+      }
+      return last_load_level;
+  }
+  inline Instruction* getCurrentInst(std::deque<Instruction*>& queue) {
+    Instruction *curr = queue.front();
+    queue.pop_front();
+    return curr;
+  }
+
+  inline bool checkLHSUseInReverse(Value *curr_inst, std::set<Value*> &active_set) {
+    if (!isa<Instruction>(curr_inst))
+      return false;
+    auto inst = dyn_cast<Instruction>(curr_inst);
+    if (inst->getOpcode() == Instruction::FDiv && active_set.count(inst->getOperand(1)))
+      return true;
+    return false;
+  }
+
+  int getNumUsesInReverse(Value *op) {
+    int num_uses = 0;
+    if (!originalToNewFn.count(op))
+      return 0;
+    auto new_op = originalToNewFn[op];
+    for (auto use: new_op->users()) {
+      if (isa<Instruction>(use) && dyn_cast<Instruction>(use)->getParent()->getName().contains("inv")) 
+        num_uses++;
+    }
+    return num_uses;
+  }
+  
+  inline void handleEdge(Value *op, int curr_level, std::set<Value*>& active_set) {
+    if (checkLHSUseInReverse(op, active_set)) {
+        level_to_edge_map[curr_level+1].push_back(op);
+        edge_to_level_map[op] = curr_level + 1;
+        if (getNumUsesInReverse(op) > 1) {
+          level_to_edge_map[curr_level].push_back(op);
+        }
+    } else if (hasReverseUse(op)) {
+      edge_to_level_map[op] = curr_level;
+      level_to_edge_map[curr_level].push_back(op);
+    }
+  }
+  inline void handleActiveValue(Value* op, std::deque<Instruction*>& unvisited_insts, int current_level) {
+    if (isa<Instruction>(op))
+      unvisited_insts.push_back(cast<Instruction>(op));
+
+    levels[current_level].push_back(op);
+    op_to_level_map[op] = current_level;
+  }
+  inline void considerUnvisitedActiveInsts(std::vector<Instruction*> &active_inst_vec, std::deque<Instruction*>& unvisited_insts) {
+    while (!active_inst_vec.empty() && op_to_level_map.count(active_inst_vec.back())) // Skip visited instructions
+      active_inst_vec.pop_back();
+
+    if (active_inst_vec.empty())
+      return;
+
+    if (!op_to_level_map.count(active_inst_vec.back()))
+      op_to_level_map[active_inst_vec.back()] = 0;
+      
+    unvisited_insts.push_back(active_inst_vec.back());
+    active_inst_vec.pop_back();
+  }
+
+  void performLevelAnalysis() {
+    auto active_set = createActiveSet();
+    std::deque<Instruction*> unvisited_insts;
+
+    auto active_inst_vec = ATA.get()->active_inst_vec;
+    if (active_inst_vec.empty())
+      return;
+    auto last_inst = active_inst_vec.back();
+    active_inst_vec.pop_back();
+    unvisited_insts.push_back(last_inst);
+    op_to_level_map[last_inst] = 0;
+    int last_load_level = 0;
+    while(!unvisited_insts.empty() || !active_inst_vec.empty()) {
+      Instruction* curr_inst = getCurrentInst(unvisited_insts);
+      last_load_level = handleLoadStore(curr_inst, last_load_level);
+
+      int curr_level = op_to_level_map[curr_inst] + 1;
+
+      if (!levels.count(curr_level)) 
+        levels[curr_level] = std::vector<Value*>();
+
+      if (!level_to_edge_map.count(curr_level))
+        level_to_edge_map[curr_level] = std::vector<Value*>();
+
+
+      for (int i = 0; i < curr_inst->getNumOperands(); i++) {
+        auto op = curr_inst->getOperand(i);
+        if (op_to_level_map.count(op) || isa<Constant>(op)) // TODO: Do something with duplicates
+          continue;
+
+        handleEdge(op, curr_level, active_set);
+        if (active_set.count(op))  // If it's active
+          handleActiveValue(op, unvisited_insts, curr_level);
+      }
+  
+      if (unvisited_insts.empty()) {
+        considerUnvisitedActiveInsts(active_inst_vec, unvisited_insts);
+
+        last_load_level = 0;
+      }
+    }
+
+  }
+  void printLevelAnalysis() {
+    for (auto i: level_to_edge_map) {
+      if (i.second.size() == 0)
+        continue;
+      errs() << "Level " << i.first << ": ";
+      for (auto j: i.second) {
+        errs() << originalToNewFn[j]->getNameOrAsOperand() << ", ";
+      }
+      errs() << "\n";
+    }
+    
+  }
+  std::vector<int> bins_capacity;
+  std::map<Value*, std::pair<int, int> > op_to_region_map;
+  std::map<int, std::vector<Value*> > region_to_op_map;
+  std::map<int, int> region_to_bin_map;
+  std::map<int, std::vector<int> > bin_to_region_map;
+
+  void setBins(std::vector<int> bins) {
+    this->bins_capacity = bins;
+  }
+
+  int getNextAvailableBin(int last_bin_used, int region_size) {
+    for (int i = 0; i < bins_capacity.size(); i++) {
+      if (bins_capacity[i] >= region_size) {
+        return i;
+      }
+    }
+    errs() << "No bin available for region of size " << region_size << "\n";
+    return bins_capacity.size()-1;
+  }
+  
+  void simpleMapForPerformance() { // putting each region in the closest empty bin
+    int max_region_size = bins_capacity[0]; // Bin 0 determines the max region size
+    int last_bin_used = 0;
+
+    for (auto level: level_to_edge_map) {
+      if (level.second.size() == 0)
+        continue;
+      std::vector<Value*> region_ops_list;
+      int region_id = region_to_op_map.size();
+      for (int i = 0; i < level.second.size(); i++) {
+        op_to_region_map[level.second[i]] = std::make_pair(region_id, region_ops_list.size());
+        region_ops_list.push_back(level.second[i]);
+        if (region_ops_list.size() == max_region_size || i == level.second.size() - 1) {
+
+          int bin_id = getNextAvailableBin(last_bin_used, max_region_size);
+          if (i != level.second.size() - 1) {
+            errs() << "Breaking region to fit in bin " << bin_id << "\n";
+          }
+          errs() << "Adding region " << region_id << " with size " << region_ops_list.size() << " to bin " << bin_id << "\n";
+          last_bin_used = bin_id;
+          bins_capacity[bin_id] -= region_ops_list.size();
+          region_to_op_map[region_id] = region_ops_list;
+          region_to_bin_map[region_id] = bin_id;
+          if (!bin_to_region_map.count(bin_id))
+            bin_to_region_map[bin_id] = std::vector<int>();
+          bin_to_region_map[bin_id].push_back(region_id);
+          region_id++;
+          region_ops_list.clear();
+        }
+      }
+    }
+  }
+  uint getUseOffset(Value* inst, User* use) {
+    if (!isa<Instruction>(use))
+      return -1;
+    for (int i = 0; i <  dyn_cast<Instruction>(use)->getNumOperands(); i++) {
+      if (dyn_cast<Instruction>(use)->getOperand(i) == inst)
+        return i;
+    }
+    return 0;
+  }
+
+  void handleBinnedValues() {
+    errs() << "size of bin_to_region_map: " << binned_values.size() << "\n";
+    for (auto i: binned_values) {
+      if (i.first == nullptr || !isa<Instruction>(i.first))
+        continue;
+      // errs() << "i: " << i << "\n";
+      for (auto use: i.first->users()) {
+        if (!isa<Instruction>(use))
+          continue;
+        uint use_offset = getUseOffset(i.first, use);
+        auto inst = dyn_cast<Instruction>(use);
+        inst->setMetadata("read_from_bin", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), "1")));
+        inst->setMetadata("operand" + std::to_string(use_offset), MDNode::get(inst->getContext(), MDString::get(inst->getContext(), std::to_string(i.second))));
+      }
+    }
+  }
+  int addToRegionMap(Value* original_val, BasicBlock* my_parent) {
+    auto prelcssaInst = dyn_cast<Instruction>(original_val);
+    int index = 0;
+    if (!region_map.count(my_parent)) {
+      region_map[my_parent] = std::map<Value*, int>();
+      region_map[my_parent][prelcssaInst] = 0;
+    } else {
+      region_map[prelcssaInst->getParent()][prelcssaInst] = region_map[prelcssaInst->getParent()].size();
+      index = region_map[prelcssaInst->getParent()].size();
+    }
+    return index;
+  }
+  void updateForwardBB(Instruction *inst) { 
+    auto parent = inst->getParent();
+    auto last_inst = parent->getTerminator();
+    auto metaNode = last_inst->getMetadata("push_to_bin");
+    Instruction *alloca = nullptr;
+    int size = 0;
+    if (!metaNode) {
+      last_inst->setMetadata("push_to_bin", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), "1")));
+      alloca = new AllocaInst(Type::getInt32Ty(inst->getContext()), 0, "", last_inst);
+
+    } else {
+      if (last_inst->getPrevNode() && !last_inst->getPrevNode()->hasMetadata("size")) {
+        alloca = new AllocaInst(Type::getInt32Ty(inst->getContext()), 0, "", last_inst);
+      } else { 
+        alloca = last_inst->getPrevNode();
+        if (!alloca->hasMetadata("size")) {
+          errs() << "No size metadata for alloca\n" << *alloca  << " last inst : " << *last_inst << "\n";
+          abort();
+        }
+        size = atoi(dyn_cast<MDString>(alloca->getMetadata("size")->getOperand(0))->getString().str().c_str());
+      }
+    }
+    alloca->setMetadata("size", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), std::to_string(size + 1))));
+  }
+  void updateReverseBB(Instruction *inst) {
+    auto parent = inst->getParent();
+    auto first_inst = &(*parent->getFirstInsertionPt());
+    auto metaNode = first_inst->getMetadata("pop_from_bin");
+    Instruction *alloca = nullptr;
+    int size = 0;
+    if (!metaNode) {
+      first_inst->setMetadata("pop_from_bin", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), "1")));
+      alloca = new AllocaInst(Type::getInt32Ty(inst->getContext()), 0, "", first_inst);
+      alloca->setMetadata("pop_from_bin", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), "1")));
+    } else {
+      alloca = first_inst;
+      size = atoi(dyn_cast<MDString>(alloca->getMetadata("size")->getOperand(0))->getString().str().c_str());
+    }
+    alloca->setMetadata("size", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), std::to_string(size + 1))));
+  }
+  std::map<const Value*, Value*> recomputed_vals;
+  std::map<Value*, Value*> alias_map;
   EnzymeLogic &Logic;
   bool AtomicAdd;
   DerivativeMode mode;
@@ -163,6 +518,10 @@ public:
 
   const std::map<Instruction *, bool> *can_modref_map;
 
+  std::map<llvm::Value *,
+           std::pair<llvm::AssertingVH<llvm::AllocaInst>, LimitContext>> GetscopeMap() {
+    return scopeMap;
+  }
   Value *getNewIfOriginal(Value *originst) const {
     assert(originst);
     auto f = originalToNewFn.find(originst);
@@ -433,6 +792,7 @@ public:
   }
 
   Value *getNewFromOriginal(const Value *originst) const {
+
     assert(originst);
     auto f = originalToNewFn.find(originst);
     if (f == originalToNewFn.end()) {
@@ -463,7 +823,9 @@ public:
     return f->second;
   }
   Instruction *getNewFromOriginal(const Instruction *newinst) const {
+    
     auto ninst = getNewFromOriginal((Value *)newinst);
+
     if (!isa<Instruction>(ninst)) {
       llvm::errs() << *oldFunc << "\n";
       llvm::errs() << *newFunc << "\n";
@@ -595,13 +957,13 @@ public:
   std::map<const Value *, bool> knownRecomputeHeuristic;
   bool shouldRecompute(const Value *val, const ValueToValueMapTy &available,
                        IRBuilder<> *BuilderM);
-
+  bool shouldRecomputeOrig(const Value *val, const ValueToValueMapTy &available,
+                       IRBuilder<> *BuilderM);
   ValueMap<const Instruction *, AssertingReplacingVH> unwrappedLoads;
   void replaceAWithB(Value *A, Value *B, bool storeInCache = false) override {
     if (A == B)
       return;
     assert(A->getType() == B->getType());
-
     if (auto iA = dyn_cast<Instruction>(A)) {
       if (unwrappedLoads.find(iA) != unwrappedLoads.end()) {
         auto iB = cast<Instruction>(B);
@@ -662,6 +1024,9 @@ public:
         pair.second.erase(I);
     }
     CacheUtility::erase(I);
+
+    // erase from binned values
+    binned_values.erase(I);
   }
   // TODO consider invariant group and/or valueInvariant group
 
@@ -892,7 +1257,9 @@ public:
 
   Value *cacheForReverse(IRBuilder<> &BuilderQ, Value *malloc, int idx,
                          bool ignoreType = false, bool replace = true);
-
+  Value *cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
+                                      int idx, bool ignoreType, bool replace);
+                                      
   const SmallVectorImpl<WeakTrackingVH> &getTapeValues() const {
     return addedTapeVals;
   }
@@ -1082,6 +1449,9 @@ public:
   }
 
   TypeResults *my_TR;
+  // bool isConstantValue(Value *v) {
+  //   return ATA->isConstantValue(*my_TR, v);
+  // }
   void forceActiveDetection(TypeResults &TR) {
     my_TR = &TR;
     for (auto &Arg : oldFunc->args()) {
@@ -1238,6 +1608,10 @@ public:
   /// if full unwrap, don't just unwrap this instruction, but also its operands,
   /// etc
   Value *unwrapM(Value *const val, IRBuilder<> &BuilderM,
+                 const ValueToValueMapTy &available, UnwrapMode unwrapMode,
+                 BasicBlock *scope = nullptr,
+                 bool permitCache = true) override final;
+  Value *unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
                  const ValueToValueMapTy &available, UnwrapMode unwrapMode,
                  BasicBlock *scope = nullptr,
                  bool permitCache = true) override final;
@@ -1830,7 +2204,7 @@ public:
           antimap[idx.var] = tbuild.CreateLoad(idx.antivaralloc);
       }
     }
-
+    errs() << "antimap: " << *storeInto << " \n";
     auto forfree = cast<LoadInst>(tbuild.CreateLoad(
         unwrapM(storeInto, tbuild, antimap, UnwrapMode::LegalFullUnwrap)));
     forfree->setMetadata(LLVMContext::MD_invariant_group, InvariantMD);

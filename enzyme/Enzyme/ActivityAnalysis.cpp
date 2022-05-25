@@ -601,6 +601,8 @@ bool ActivityAnalyzer::isConstantInstruction(TypeResults &TR, Instruction *I) {
 
   // Otherwise we must fall back and assume this instruction to be active.
   ActiveInstructions.insert(I);
+  
+  active_inst_vec.push_back(I);
   if (EnzymePrintActivity)
     llvm::errs() << "couldnt decide fallback as nonconstant instruction("
                  << (int)directions << "):" << *I << "\n";
@@ -650,6 +652,7 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
     ConstantValues.insert(CD);
     for (size_t i = 0, len = CD->getNumElements(); i < len; i++) {
       if (!isConstantValue(TR, CD->getElementAsConstant(i))) {
+        errs() << "1. constant value " << *CD << " is not constant\n";
         ConstantValues.erase(CD);
         ActiveValues.insert(CD);
         return false;
@@ -662,6 +665,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
     ConstantValues.insert(CD);
     for (size_t i = 0, len = CD->getNumOperands(); i < len; i++) {
       if (!isConstantValue(TR, CD->getOperand(i))) {
+        errs() << "2. constant value " << *CD << " is not constant\n";
+
         ConstantValues.erase(CD);
         ActiveValues.insert(CD);
         return false;
@@ -856,6 +861,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
       llvm::errs() << " VALUE nonconst unknown global " << *Val << " type - "
                    << res.str() << "\n";
     ActiveValues.insert(Val);
+    // errs() << "constant value " << *Val << " is not constant\n";
+
     return false;
   }
 
@@ -871,6 +878,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
                 << " VALUE nonconst as cast to pointer of functiontype " << *Val
                 << "\n";
           ActiveValues.insert(Val);
+          // errs() << "constant value " << *Val << " is not constant\n";
+          
           return false;
         }
       }
@@ -894,6 +903,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
     if (EnzymePrintActivity)
       llvm::errs() << " VALUE nonconst unknown expr " << *Val << "\n";
     ActiveValues.insert(Val);
+    // errs() << "constant value " << *Val << " is not constant\n";
+
     return false;
   }
 
@@ -931,6 +942,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
             InsertConstantValue(TR, Val);
           } else {
             ActiveValues.insert(Val);
+    // errs() << "constant value " << *Val << " is not constant\n";
+
           }
           return res;
         }
@@ -1113,6 +1126,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
         llvm::errs() << " <Potential Pointer assumed active at "
                      << (int)directions << ">" << *Val << "\n";
       ActiveValues.insert(Val);
+    // errs() << "constant value " << *Val << " is not constant\n";
+
       return false;
     }
 
@@ -1131,6 +1146,7 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
         std::shared_ptr<ActivityAnalyzer>(
             new ActivityAnalyzer(*this, directions));
     Hypothesis->ActiveValues.insert(Val);
+    // errs() << "constant value " << *Val << " is not constant\n";
 
     if (isa<Instruction>(Val) || isa<Argument>(Val)) {
       // These are handled by iterating through all
@@ -1464,6 +1480,8 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
 
       if (ActiveMemory) {
         ActiveValues.insert(Val);
+        // errs() << "constant value " << *Val << " is not constant\n";
+
         assert(Hypothesis->directions == directions);
         assert(Hypothesis->ActiveValues.count(Val));
         insertAllFrom(TR, *Hypothesis, Val);
@@ -2162,8 +2180,8 @@ void ActivityAnalyzer::InsertConstantValue(TypeResults &TR, llvm::Value *V) {
         continue;
       ActiveInstructions.erase(toeval);
       if (EnzymePrintActivity)
-        llvm::errs() << " re-evaluating activity of inst " << *toeval
-                     << " due to value " << *V << "\n";
+        // llvm::errs() << " re-evaluating activity of inst " << *toeval
+        //              << " due to value " << *V << "\n";
       isConstantInstruction(TR, toeval);
     }
   }

@@ -216,22 +216,24 @@ unsigned max(unsigned A, unsigned B){
 }
 
 int main(int argc, char** argv) {
-
   if (argc < 2) {
     printf("usage %s n [must be power of 2]\n", argv[0]);
     return 1;
   }
   unsigned N = atoi(argv[1]);
+  printf("argv[1]=%d\n", N);
+
   if (!isPowerOfTwo(N)) {
     printf("usage %s n [must be power of 2]\n", argv[0]);
     return 1;
   }
   double inp = -2.1;
 
-  for(unsigned iters=max(1, N>>5); iters <= N; iters*=2) {
+  for(unsigned iters=max(1, N>>5); iters <= N; iters*=32768) {
     printf("iters=%d\n", iters);
     // adept_sincos(inp, iters);
     // tapenade_sincos(inp, iters);
-    enzyme_sincos(inp, iters);
+    enzyme_sincos(inp, 16);
+    break;
   }
 }

@@ -1,6 +1,7 @@
 #include "NodeLogger.h"
 #include "llvm/IR/IRBuilder.h"
 #include "Utils.h"
+#include "llvm/Option/Arg.h"
 
 using namespace instrumem;
 
@@ -14,34 +15,47 @@ NodeLogger::NodeLogger() : FunctionPass(ID) {} // NodeLogger
 
 void PrintFunctionArgs(Function &f) {
     Instruction *first_inst = &f.front().front();
-
     for (int i=0; i<f.arg_size(); i++) {
         ConstantInt *id = ConstantInt::get(Type::getInt32Ty(first_inst->getContext()), i+1);
-        std::string write_format = "F_Node: " + f.getArg(i)->getNameOrAsOperand() + ", Parent: %x, load\n";
-
+        std::string write_format = "F_Node: " + f.getArg(i)->getNameOrAsOperand() + ", Parent: root, arg\n";
         CallPrintf(first_inst, &write_format[0], {}, write_format);
     }
 
 }
 
+void LogCrossingEdge(Instruction *inst, std::ofstream &myfile) {
+    if (!IsReverseOp(inst) || isa<LoadInst>(inst) || isa<StoreInst>(inst) || isa<CallInst>(inst)) // Only considering reverse ops
+        return;
+
+    for (int i=0; i<inst->getNumOperands(); i++) {
+        if (isa<Instruction>(inst->getOperand(i))) 
+            if (!IsReverseOp(inst->getOperand(i))) // If I'm a reverse and I have a parent in the forward
+                myfile << inst->getOperand(i)->getNameOrAsOperand() << "\n";
+    }
+} 
+
 bool NodeLogger::runOnFunction(Function &f) {
     errs() << "Creatint DDDG\n";
-
     uint32_t index = f.arg_size()+1;
-    
+    std::vector<Instruction*> insts;
     for (auto &bb: f) {
         for (auto &i: bb) {
-            node_ids[&i] = index++;
+            // node_ids[&i] = index++;
+            if (i.getOpcode() != 2 && i.getOpcode() != 57) 
+                insts.push_back(&i);
         }
     }
-    
-    for (auto i: node_ids)
-        if (isa<Instruction>(i.first))
-            if (!ignore_reverse || !cast<Instruction>(i.first)->getParent()->getName().contains("invert") )
-                visit(cast<Instruction>(i.first));
-
+    myfile.open("crossing_nodes.txt");
+    for (auto i: insts)
+        if (i && isa<Instruction>(i)) {
+            if (!ignore_reverse || !cast<Instruction>(i)->getParent()->getName().contains("invert") ) {
+                visit(cast<Instruction>(i));
+            }
+            LogCrossingEdge(cast<Instruction>(i), myfile);
+        }
+    myfile.close();
     PrintFunctionArgs(f);
-    errs() << "Live value count: " << num_live_values << "\n";
+    // errs() << "Live value count: " << num_live_values << "\n";
     return true;
 }
 
@@ -58,8 +72,10 @@ void NodeLogger::visitLoadInst(LoadInst &inst) {
 
 
 void NodeLogger::visitStoreInst(StoreInst &inst) {
+    if (isa<Constant>(inst.getValueOperand()))
+        return;
     std::string write_format = ModePrefix(&inst) + "Node: %x, Parent: " + inst.getValueOperand()->getNameOrAsOperand()+ ", store\n";
-    auto *value_id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[inst.getValueOperand()]);
+    // auto *value_id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[inst.getValueOperand()]);
     CallPrintf(&inst, &write_format[0], {inst.getPointerOperand()}, write_format);
 }
 
@@ -67,24 +83,15 @@ std::string GenerateWriteFormat(Instruction &inst, std::map<Value*, unsigned> &n
     std::string write_format = "";
     if (isa<Instruction>(inst)) {
         if (isa<BinaryOperator>(inst)) {
-            write_format += "arithmetic";
-
-            switch (inst.getOpcode())
-            {
-            case Instruction::FMul:
-                write_format += "_mul";
-                break;
-            case Instruction::FDiv:
-                write_format += "_div";
-                break;
-            case Instruction::Or:
-                write_format += "_or";
-                break;
-            default:
-                break;
-            }
+            write_format += "arithmetic_" + std::string(inst.getOpcodeName());
             write_format += "\n";
 
+        } else if (isa<UnaryInstruction>(inst)) {
+            if (isa<AllocaInst>(inst)) {
+                write_format += std::string(inst.getOpcodeName())+  "\n";
+            } else {
+                write_format += "arithmetic_" + std::string(inst.getOpcodeName())+  "\n";
+            }
         } else{
             write_format += std::string(inst.getOpcodeName())+  "\n";
         }
@@ -96,23 +103,26 @@ std::string GenerateWriteFormat(Instruction &inst, std::map<Value*, unsigned> &n
 
 
 void NodeLogger::visitInstruction(Instruction &inst) {
-    if (isa<ReturnInst>(inst) || isa<BranchInst>(inst))
+    if (inst.getOpcode() == 57)
         return;
-    std::string write_format = "Node: " + inst.getNameOrAsOperand() + ", ";
-    ConstantInt *id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[&inst]);
-    std::vector<Value*> args={};
+    if (isa<ReturnInst>(inst) || isa<BranchInst>(inst) || isa<SelectInst>(inst) | isa<PHINode>(inst) || isa<AllocaInst>(inst))
+        return;
 
+    std::string write_format = "Node: " + inst.getNameOrAsOperand() + ", ";
+    // ConstantInt *id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[&inst]);
+    std::vector<Value*> args={};
     for (int i=0; i < inst.getNumOperands(); i++) {
         Value *operand = inst.getOperand(i);
-        if (!isa<Constant>(operand)) {
+        if (operand && !isa<Constant>(operand)) {
             // args.push_back(ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[operand]));
             write_format += "Parent: " + operand->getNameOrAsOperand() + ", ";
+            // write_format += "Parent: " + std::to_string(node_ids[operand]) + ", ";
         }
     }
 
     write_format += GenerateWriteFormat(inst, node_ids);
     write_format =  ModePrefix(&inst) + write_format;
-    CallPrintf(&inst, &write_format[0], {}, write_format);
+    CallPrintf(&inst, &write_format[0], {}, write_format + std::to_string(node_ids[&inst]));
 }
 
 char NodeLogger::ID = 0;

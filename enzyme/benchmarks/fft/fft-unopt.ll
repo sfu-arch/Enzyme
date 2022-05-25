@@ -307,8 +307,9 @@ $_ZTVN5adept17invalid_dimensionE = comdat any
 @.str.82 = private unnamed_addr constant [47 x i8] c"linspace(x1,x2,n) with n=1 only valid if x1=x2\00", align 1
 @enzyme_dupnoneed = dso_local local_unnamed_addr global i32 0, align 4
 @.str.83 = private unnamed_addr constant [33 x i8] c"usage %s n [must be power of 2]\0A\00", align 1
-@.str.84 = private unnamed_addr constant [10 x i8] c"iters=%d\0A\00", align 1
-@.str.85 = private unnamed_addr constant [28 x i8] c"A misuse of arrays occurred\00", align 1
+@.str.84 = private unnamed_addr constant [12 x i8] c"argv[1]=%d\0A\00", align 1
+@.str.85 = private unnamed_addr constant [10 x i8] c"iters=%d\0A\00", align 1
+@.str.86 = private unnamed_addr constant [28 x i8] c"A misuse of arrays occurred\00", align 1
 @_ZTVN5adept17invalid_operationE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept17invalid_operationE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::invalid_operation"*)* @_ZN5adept17invalid_operationD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept15array_exceptionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept15array_exceptionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::array_exception"*)* @_ZN5adept15array_exceptionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept9exceptionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept9exceptionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
@@ -316,23 +317,23 @@ $_ZTVN5adept17invalid_dimensionE = comdat any
 @_ZTVN5adept25gradients_not_initializedE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept25gradients_not_initializedE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::gradients_not_initialized"*)* @_ZN5adept25gradients_not_initializedD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept21feature_not_availableE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept21feature_not_availableE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::feature_not_available"*)* @_ZN5adept21feature_not_availableD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept41dependents_or_independents_not_identifiedE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept41dependents_or_independents_not_identifiedE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::dependents_or_independents_not_identified"*)* @_ZN5adept41dependents_or_independents_not_identifiedD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
-@.str.86 = private unnamed_addr constant [26 x i8] c"Enzyme real %0.6f res=%f\0A\00", align 1
-@.str.87 = private unnamed_addr constant [29 x i8] c"Enzyme forward %0.6f res=%f\0A\00", align 1
-@.str.88 = private unnamed_addr constant [31 x i8] c"Enzyme combined %0.6f res'=%f\0A\00", align 1
+@.str.87 = private unnamed_addr constant [26 x i8] c"Enzyme real %0.6f res=%f\0A\00", align 1
+@.str.88 = private unnamed_addr constant [29 x i8] c"Enzyme forward %0.6f res=%f\0A\00", align 1
+@.str.89 = private unnamed_addr constant [31 x i8] c"Enzyme combined %0.6f res'=%f\0A\00", align 1
 @_ZTTNSt7__cxx1118basic_stringstreamIcSt11char_traitsIcESaIcEEE = external unnamed_addr constant [10 x i8*], align 8
 @_ZTVNSt7__cxx1115basic_stringbufIcSt11char_traitsIcESaIcEEE = external dso_local unnamed_addr constant { [16 x i8*] }, align 8
 @_ZTVSt15basic_streambufIcSt11char_traitsIcEE = external dso_local unnamed_addr constant { [16 x i8*] }, align 8
 @_ZTISt9bad_alloc = external dso_local constant i8*
 @_ZTVSt9bad_alloc = external dso_local unnamed_addr constant { [5 x i8*] }, align 8
-@.str.92 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
-@.str.94 = private unnamed_addr constant [35 x i8] c"Negative array dimension requested\00", align 1
-@.str.95 = private unnamed_addr constant [89 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Array.h\00", align 1
+@.str.93 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
+@.str.95 = private unnamed_addr constant [35 x i8] c"Negative array dimension requested\00", align 1
+@.str.96 = private unnamed_addr constant [89 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Array.h\00", align 1
 @_ZTSN5adept17invalid_dimensionE = linkonce_odr dso_local constant [28 x i8] c"N5adept17invalid_dimensionE\00", comdat, align 1
 @_ZTIN5adept17invalid_dimensionE = linkonce_odr dso_local constant { i8*, i8*, i8* } { i8* bitcast (i8** getelementptr inbounds (i8*, i8** @_ZTVN10__cxxabiv120__si_class_type_infoE, i64 2) to i8*), i8* getelementptr inbounds ([28 x i8], [28 x i8]* @_ZTSN5adept17invalid_dimensionE, i32 0, i32 0), i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept15array_exceptionE to i8*) }, comdat, align 8
-@.str.96 = private unnamed_addr constant [58 x i8] c"Attempt to remove more links to a storage object than set\00", align 1
-@.str.97 = private unnamed_addr constant [91 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Storage.h\00", align 1
-@.str.98 = private unnamed_addr constant [6 x i8] c" (in \00", align 1
-@.str.99 = private unnamed_addr constant [2 x i8] c")\00", align 1
+@.str.97 = private unnamed_addr constant [58 x i8] c"Attempt to remove more links to a storage object than set\00", align 1
+@.str.98 = private unnamed_addr constant [91 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Storage.h\00", align 1
+@.str.99 = private unnamed_addr constant [6 x i8] c" (in \00", align 1
+@.str.100 = private unnamed_addr constant [2 x i8] c")\00", align 1
 @_ZTVN5adept17invalid_dimensionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept17invalid_dimensionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::invalid_dimension"*)* @_ZN5adept17invalid_dimensionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_fft.cpp, i8* null }]
 
@@ -764,7 +765,7 @@ call5.i.i.i10.i.noexc:                            ; preds = %entry
   %5 = load i64, i64* %__dnew.i.i.i.i, align 8, !tbaa !14
   %_M_allocated_capacity.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
   store i64 %5, i64* %_M_allocated_capacity.i.i.i.i.i, align 8, !tbaa !15
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i10.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.85, i64 0, i64 0), i64 27, i1 false) #4
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i10.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.86, i64 0, i64 0), i64 27, i1 false) #4
   %_M_string_length.i.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
   store i64 %5, i64* %_M_string_length.i.i.i.i.i.i, align 8, !tbaa !12
   %6 = load i8*, i8** %_M_p.i13.i.i.i.i, align 8, !tbaa !8
@@ -5292,7 +5293,7 @@ entry:
   br i1 %cmp.i.i, label %if.then.i.i, label %_ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i
 
 if.then.i.i:                                      ; preds = %entry
-  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.92, i64 0, i64 0)) #31
+  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.93, i64 0, i64 0)) #31
   unreachable
 
 _ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i: ; preds = %entry
@@ -5658,7 +5659,7 @@ if.end:                                           ; preds = %lor.lhs.false
   br i1 %cmp.i.i511, label %if.then.i.i, label %_ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i
 
 if.then.i.i:                                      ; preds = %if.end
-  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.92, i64 0, i64 0)) #31
+  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.93, i64 0, i64 0)) #31
   unreachable
 
 _ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i: ; preds = %if.end
@@ -8094,14 +8095,19 @@ for.body.lr.ph.i6.i:                              ; preds = %while.end.i.i32
   br label %for.body.i10.i
 
 for.body.i10.i:                                   ; preds = %for.body.i10.i, %for.body.lr.ph.i6.i
-  %indvars.iv.i7.i = phi i64 [ 0, %for.body.lr.ph.i6.i ], [ %indvars.iv.next.i9.i, %for.body.i10.i ]
+  %indvars.iv.i7.i = phi i64 [ 0, %for.body.lr.ph.i6.i ], [ %indvars.iv.next.i9.i.1, %for.body.i10.i ]
   %arrayidx.i8.i = getelementptr inbounds double, double* %data, i64 %indvars.iv.i7.i
   %17 = load double, double* %arrayidx.i8.i, align 8, !tbaa !46
   %18 = fdiv fast double %17, %conv.i.i
   store double %18, double* %arrayidx.i8.i, align 8, !tbaa !46
   %indvars.iv.next.i9.i = add nuw nsw i64 %indvars.iv.i7.i, 1
-  %exitcond.not.i.i = icmp eq i64 %indvars.iv.next.i9.i, %0
-  br i1 %exitcond.not.i.i, label %_ZL4ifftPdj.exit, label %for.body.i10.i, !llvm.loop !147
+  %arrayidx.i8.i.1 = getelementptr inbounds double, double* %data, i64 %indvars.iv.next.i9.i
+  %19 = load double, double* %arrayidx.i8.i.1, align 8, !tbaa !46
+  %20 = fdiv fast double %19, %conv.i.i
+  store double %20, double* %arrayidx.i8.i.1, align 8, !tbaa !46
+  %indvars.iv.next.i9.i.1 = add nuw nsw i64 %indvars.iv.next.i9.i, 1
+  %exitcond.not.i.i.1 = icmp eq i64 %indvars.iv.next.i9.i.1, %0
+  br i1 %exitcond.not.i.i.1, label %_ZL4ifftPdj.exit, label %for.body.i10.i, !llvm.loop !147
 
 _ZL4ifftPdj.exit:                                 ; preds = %for.body.i10.i, %_ZL8scramblePdj.exit.thread.i
   ret void
@@ -8153,182 +8159,167 @@ if.end:                                           ; preds = %entry
   %1 = load i8*, i8** %arrayidx1, align 8, !tbaa !29
   %call.i = tail call i64 @strtol(i8* nocapture nonnull %1, i8** null, i32 10) #4
   %conv.i = trunc i64 %call.i to i32
+  %call3 = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([12 x i8], [12 x i8]* @.str.84, i64 0, i64 0), i32 %conv.i)
   %2 = tail call i32 @llvm.ctpop.i32(i32 %conv.i) #4, !range !148
   %3 = icmp eq i32 %2, 1
-  br i1 %3, label %if.end7, label %if.then4
+  br i1 %3, label %if.end8, label %if.then5
 
-if.then4:                                         ; preds = %if.end
+if.then5:                                         ; preds = %if.end
   %4 = load i8*, i8** %argv, align 8, !tbaa !29
-  %call6 = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([33 x i8], [33 x i8]* @.str.83, i64 0, i64 0), i8* %4)
+  %call7 = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([33 x i8], [33 x i8]* @.str.83, i64 0, i64 0), i8* %4)
   br label %cleanup.cont
 
-if.end7:                                          ; preds = %if.end
+if.end8:                                          ; preds = %if.end
   %shr = lshr i32 %conv.i, 5
   %cmp.i = icmp eq i32 %shr, 0
   %retval.0.i = select i1 %cmp.i, i32 1, i32 %shr
-  %cmp9.not23 = icmp ugt i32 %retval.0.i, %conv.i
-  br i1 %cmp9.not23, label %cleanup.cont, label %for.body.lr.ph
+  %cmp10.not = icmp ugt i32 %retval.0.i, %conv.i
+  br i1 %cmp10.not, label %cleanup.cont, label %for.body
 
-for.body.lr.ph:                                   ; preds = %if.end7
+for.body:                                         ; preds = %if.end8
+  %call11 = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([10 x i8], [10 x i8]* @.str.85, i64 0, i64 0), i32 %retval.0.i)
   %5 = bitcast %struct.timeval* %start.i to i8*
-  %6 = bitcast %struct.timeval* %end.i to i8*
-  %tv_sec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 0
-  %tv_sec1.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 0
-  %tv_usec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 1
-  %tv_usec2.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 1
-  %7 = bitcast %struct.timeval* %start8.i to i8*
-  %8 = bitcast %struct.timeval* %end9.i to i8*
-  %tv_sec.i14.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 0
-  %tv_sec1.i15.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 0
-  %tv_usec.i18.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 1
-  %tv_usec2.i19.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 1
-  %9 = bitcast %struct.timeval* %start35.i to i8*
-  %10 = bitcast %struct.timeval* %end36.i to i8*
-  %tv_sec.i1.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 0
-  %tv_sec1.i2.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 0
-  %tv_usec.i5.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 1
-  %tv_usec2.i6.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 1
-  br label %for.body
-
-for.body:                                         ; preds = %for.body.lr.ph, %_ZL13enzyme_sincosdj.exit
-  %iters.024 = phi i32 [ %retval.0.i, %for.body.lr.ph ], [ %mul.i, %_ZL13enzyme_sincosdj.exit ]
-  %call10 = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([10 x i8], [10 x i8]* @.str.84, i64 0, i64 0), i32 %iters.024)
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %5) #4
+  %6 = bitcast %struct.timeval* %end.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #4
-  %call.i21 = call i32 @gettimeofday(%struct.timeval* nonnull %start.i, i8* null) #4
-  %mul.i = shl i32 %iters.024, 1
-  %conv.i22 = zext i32 %mul.i to i64
-  %11 = shl nuw nsw i64 %conv.i22, 3
-  %call1.i = tail call noalias nonnull i8* @_Znam(i64 %11) #34
-  %12 = bitcast i8* %call1.i to double*
-  %cmp27.not.i = icmp eq i32 %mul.i, 0
-  br i1 %cmp27.not.i, label %for.cond.cleanup.i, label %for.body.i
+  %call.i22 = call i32 @gettimeofday(%struct.timeval* nonnull %start.i, i8* null) #4
+  %call1.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
+  %7 = bitcast i8* %call1.i to double*
+  br label %for.body.i
 
-for.cond.cleanup.i:                               ; preds = %for.body.i, %for.body
-  tail call void @_Z6foobarPdj(double* nonnull %12, i32 %iters.024)
-  %13 = load double, double* %12, align 8, !tbaa !46
+for.cond.cleanup.i:                               ; preds = %for.body.i
+  tail call void @_Z6foobarPdj(double* nonnull %7, i32 16)
+  %8 = load double, double* %7, align 8, !tbaa !46
   %call4.i = call i32 @gettimeofday(%struct.timeval* nonnull %end.i, i8* null) #4
-  %14 = load i64, i64* %tv_sec.i.i, align 8, !tbaa !2
-  %15 = load i64, i64* %tv_sec1.i.i, align 8, !tbaa !2
-  %sub.i.i = sub nsw i64 %14, %15
+  %tv_sec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 0
+  %9 = load i64, i64* %tv_sec.i.i, align 8, !tbaa !2
+  %tv_sec1.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 0
+  %10 = load i64, i64* %tv_sec1.i.i, align 8, !tbaa !2
+  %sub.i.i = sub nsw i64 %9, %10
   %conv.i.i = sitofp i64 %sub.i.i to double
-  %16 = load i64, i64* %tv_usec.i.i, align 8, !tbaa !7
-  %17 = load i64, i64* %tv_usec2.i.i, align 8, !tbaa !7
-  %sub3.i.i = sub nsw i64 %16, %17
+  %tv_usec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 1
+  %11 = load i64, i64* %tv_usec.i.i, align 8, !tbaa !7
+  %tv_usec2.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 1
+  %12 = load i64, i64* %tv_usec2.i.i, align 8, !tbaa !7
+  %sub3.i.i = sub nsw i64 %11, %12
   %conv4.i.i = sitofp i64 %sub3.i.i to double
   %mul.i.i = fmul fast double %conv4.i.i, 0x3EB0C6F7A0B5ED8D
   %add.i.i = fadd fast double %mul.i.i, %conv.i.i
   %conv5.i.i = fptrunc double %add.i.i to float
   %conv6.i = fpext float %conv5.i.i to double
-  %call7.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([26 x i8], [26 x i8]* @.str.86, i64 0, i64 0), double %conv6.i, double %13)
+  %call7.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([26 x i8], [26 x i8]* @.str.87, i64 0, i64 0), double %conv6.i, double %8)
   tail call void @_ZdaPv(i8* nonnull %call1.i) #32
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #4
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %5) #4
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #4
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %8) #4
+  %13 = bitcast %struct.timeval* %start8.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %13) #4
+  %14 = bitcast %struct.timeval* %end9.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %14) #4
   %call10.i = call i32 @gettimeofday(%struct.timeval* nonnull %start8.i, i8* null) #4
-  %call14.i = tail call noalias nonnull i8* @_Znam(i64 %11) #34
-  %18 = bitcast i8* %call14.i to double*
-  br i1 %cmp27.not.i, label %for.cond.cleanup19.i, label %for.body20.i
+  %call14.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
+  %15 = bitcast i8* %call14.i to double*
+  br label %for.body20.i
 
-for.body.i:                                       ; preds = %for.body, %for.body.i
-  %indvars.iv29.i = phi i64 [ %indvars.iv.next30.i, %for.body.i ], [ 0, %for.body ]
-  %arrayidx.i = getelementptr inbounds double, double* %12, i64 %indvars.iv29.i
+for.body.i:                                       ; preds = %for.body.i, %for.body
+  %indvars.iv25.i = phi i64 [ 0, %for.body ], [ %indvars.iv.next26.i, %for.body.i ]
+  %arrayidx.i = getelementptr inbounds double, double* %7, i64 %indvars.iv25.i
   store double 2.000000e+00, double* %arrayidx.i, align 8, !tbaa !46
-  %indvars.iv.next30.i = add nuw nsw i64 %indvars.iv29.i, 1
-  %exitcond32.not.i = icmp eq i64 %indvars.iv.next30.i, %conv.i22
-  br i1 %exitcond32.not.i, label %for.cond.cleanup.i, label %for.body.i, !llvm.loop !149
+  %indvars.iv.next26.i = add nuw nsw i64 %indvars.iv25.i, 1
+  %exitcond27.not.i = icmp eq i64 %indvars.iv.next26.i, 32
+  br i1 %exitcond27.not.i, label %for.cond.cleanup.i, label %for.body.i, !llvm.loop !149
 
-for.cond.cleanup19.i:                             ; preds = %for.body20.i, %for.cond.cleanup.i
-  tail call void @_Z6foobarPdj(double* nonnull %18, i32 %iters.024)
-  %19 = load double, double* %18, align 8, !tbaa !46
+for.cond.cleanup19.i:                             ; preds = %for.body20.i
+  tail call void @_Z6foobarPdj(double* nonnull %15, i32 16)
+  %16 = load double, double* %15, align 8, !tbaa !46
   %call28.i = call i32 @gettimeofday(%struct.timeval* nonnull %end9.i, i8* null) #4
-  %20 = load i64, i64* %tv_sec.i14.i, align 8, !tbaa !2
-  %21 = load i64, i64* %tv_sec1.i15.i, align 8, !tbaa !2
-  %sub.i16.i = sub nsw i64 %20, %21
-  %conv.i17.i = sitofp i64 %sub.i16.i to double
-  %22 = load i64, i64* %tv_usec.i18.i, align 8, !tbaa !7
-  %23 = load i64, i64* %tv_usec2.i19.i, align 8, !tbaa !7
-  %sub3.i20.i = sub nsw i64 %22, %23
-  %conv4.i21.i = sitofp i64 %sub3.i20.i to double
-  %mul.i22.i = fmul fast double %conv4.i21.i, 0x3EB0C6F7A0B5ED8D
-  %add.i23.i = fadd fast double %mul.i22.i, %conv.i17.i
-  %conv5.i24.i = fptrunc double %add.i23.i to float
-  %conv30.i = fpext float %conv5.i24.i to double
-  %call31.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([29 x i8], [29 x i8]* @.str.87, i64 0, i64 0), double %conv30.i, double %19)
+  %tv_sec.i12.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 0
+  %17 = load i64, i64* %tv_sec.i12.i, align 8, !tbaa !2
+  %tv_sec1.i13.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 0
+  %18 = load i64, i64* %tv_sec1.i13.i, align 8, !tbaa !2
+  %sub.i14.i = sub nsw i64 %17, %18
+  %conv.i15.i = sitofp i64 %sub.i14.i to double
+  %tv_usec.i16.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 1
+  %19 = load i64, i64* %tv_usec.i16.i, align 8, !tbaa !7
+  %tv_usec2.i17.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 1
+  %20 = load i64, i64* %tv_usec2.i17.i, align 8, !tbaa !7
+  %sub3.i18.i = sub nsw i64 %19, %20
+  %conv4.i19.i = sitofp i64 %sub3.i18.i to double
+  %mul.i20.i = fmul fast double %conv4.i19.i, 0x3EB0C6F7A0B5ED8D
+  %add.i21.i = fadd fast double %mul.i20.i, %conv.i15.i
+  %conv5.i22.i = fptrunc double %add.i21.i to float
+  %conv30.i = fpext float %conv5.i22.i to double
+  %call31.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([29 x i8], [29 x i8]* @.str.88, i64 0, i64 0), double %conv30.i, double %16)
   tail call void @_ZdaPv(i8* nonnull %call14.i) #32
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %8) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #4
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %9) #4
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %10) #4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %14) #4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %13) #4
+  %21 = bitcast %struct.timeval* %start35.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %21) #4
+  %22 = bitcast %struct.timeval* %end36.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %22) #4
   %call37.i = call i32 @gettimeofday(%struct.timeval* nonnull %start35.i, i8* null) #4
-  %call.i.i = tail call noalias nonnull i8* @_Znam(i64 %11) #34
-  %24 = bitcast i8* %call.i.i to double*
-  br i1 %cmp27.not.i, label %for.cond.cleanup.thread.i.i, label %for.body.i.i
+  %call.i.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
+  %23 = bitcast i8* %call.i.i to double*
+  br label %for.body.i.i
 
-for.cond.cleanup.thread.i.i:                      ; preds = %for.cond.cleanup19.i
-  %call446.i.i = tail call noalias nonnull i8* @_Znam(i64 %11) #34
-  %25 = bitcast i8* %call446.i.i to double*
-  br label %_ZL13enzyme_sincosdj.exit
-
-for.body10.i.preheader.i:                         ; preds = %for.body.i.i
-  %call4.i.i = tail call noalias nonnull i8* @_Znam(i64 %11) #34
-  %26 = bitcast i8* %call4.i.i to double*
+for.cond.cleanup.i.i:                             ; preds = %for.body.i.i
+  %call4.i.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
+  %24 = bitcast i8* %call4.i.i to double*
   br label %for.body10.i.i
 
-for.body.i.i:                                     ; preds = %for.cond.cleanup19.i, %for.body.i.i
-  %indvars.iv42.i.i = phi i64 [ %indvars.iv.next43.i.i, %for.body.i.i ], [ 0, %for.cond.cleanup19.i ]
-  %arrayidx.i.i = getelementptr inbounds double, double* %24, i64 %indvars.iv42.i.i
+for.body.i.i:                                     ; preds = %for.body.i.i, %for.cond.cleanup19.i
+  %indvars.iv3.i.i = phi i64 [ 0, %for.cond.cleanup19.i ], [ %indvars.iv.next4.i.i, %for.body.i.i ]
+  %arrayidx.i.i = getelementptr inbounds double, double* %23, i64 %indvars.iv3.i.i
   store double 2.000000e+00, double* %arrayidx.i.i, align 8, !tbaa !46
-  %indvars.iv.next43.i.i = add nuw nsw i64 %indvars.iv42.i.i, 1
-  %exitcond45.not.i.i = icmp eq i64 %indvars.iv.next43.i.i, %conv.i22
-  br i1 %exitcond45.not.i.i, label %for.body10.i.preheader.i, label %for.body.i.i, !llvm.loop !150
+  %indvars.iv.next4.i.i = add nuw nsw i64 %indvars.iv3.i.i, 1
+  %exitcond5.not.i.i = icmp eq i64 %indvars.iv.next4.i.i, 32
+  br i1 %exitcond5.not.i.i, label %for.cond.cleanup.i.i, label %for.body.i.i, !llvm.loop !150
 
-for.body10.i.i:                                   ; preds = %for.body10.i.i, %for.body10.i.preheader.i
-  %indvars.iv.i.i = phi i64 [ %indvars.iv.next.i.i, %for.body10.i.i ], [ 0, %for.body10.i.preheader.i ]
-  %arrayidx12.i.i = getelementptr inbounds double, double* %26, i64 %indvars.iv.i.i
+for.body10.i.i:                                   ; preds = %for.body10.i.i, %for.cond.cleanup.i.i
+  %indvars.iv.i.i = phi i64 [ 0, %for.cond.cleanup.i.i ], [ %indvars.iv.next.i.i, %for.body10.i.i ]
+  %arrayidx12.i.i = getelementptr inbounds double, double* %24, i64 %indvars.iv.i.i
   store double 1.000000e+00, double* %arrayidx12.i.i, align 8, !tbaa !46
   %indvars.iv.next.i.i = add nuw nsw i64 %indvars.iv.i.i, 1
-  %exitcond.not.i.i = icmp eq i64 %indvars.iv.next.i.i, %conv.i22
+  %exitcond.not.i.i = icmp eq i64 %indvars.iv.next.i.i, 32
   br i1 %exitcond.not.i.i, label %_ZL13enzyme_sincosdj.exit, label %for.body10.i.i, !llvm.loop !151
 
-for.body20.i:                                     ; preds = %for.cond.cleanup.i, %for.body20.i
-  %indvars.iv.i = phi i64 [ %indvars.iv.next.i, %for.body20.i ], [ 0, %for.cond.cleanup.i ]
-  %arrayidx22.i = getelementptr inbounds double, double* %18, i64 %indvars.iv.i
+for.body20.i:                                     ; preds = %for.body20.i, %for.cond.cleanup.i
+  %indvars.iv.i = phi i64 [ 0, %for.cond.cleanup.i ], [ %indvars.iv.next.i, %for.body20.i ]
+  %arrayidx22.i = getelementptr inbounds double, double* %15, i64 %indvars.iv.i
   store double 2.000000e+00, double* %arrayidx22.i, align 8, !tbaa !46
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
-  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, %conv.i22
+  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 32
   br i1 %exitcond.not.i, label %for.cond.cleanup19.i, label %for.body20.i, !llvm.loop !152
 
-_ZL13enzyme_sincosdj.exit:                        ; preds = %for.body10.i.i, %for.cond.cleanup.thread.i.i
-  %27 = phi double* [ %25, %for.cond.cleanup.thread.i.i ], [ %26, %for.body10.i.i ]
-  %call447.i.i = phi i8* [ %call446.i.i, %for.cond.cleanup.thread.i.i ], [ %call4.i.i, %for.body10.i.i ]
-  %28 = load i32, i32* @enzyme_dupnoneed, align 4, !tbaa !49
-  tail call void @_Z17__enzyme_autodiffIvJPFvPdjEiS0_S0_jEET_DpT0_(void (double*, i32)* nonnull @_Z6foobarPdj, i32 %28, double* nonnull %24, double* nonnull %27, i32 %iters.024)
-  %29 = load double, double* %27, align 8, !tbaa !46
-  tail call void @_ZdaPv(i8* nonnull %call447.i.i) #32
+_ZL13enzyme_sincosdj.exit:                        ; preds = %for.body10.i.i
+  %25 = load i32, i32* @enzyme_dupnoneed, align 4, !tbaa !49
+  tail call void @_Z17__enzyme_autodiffIvJPFvPdjEiS0_S0_jEET_DpT0_(void (double*, i32)* nonnull @_Z6foobarPdj, i32 %25, double* nonnull %23, double* nonnull %24, i32 16)
+  %26 = load double, double* %24, align 8, !tbaa !46
+  tail call void @_ZdaPv(i8* nonnull %call4.i.i) #32
   tail call void @_ZdaPv(i8* nonnull %call.i.i) #32
   %call39.i = call i32 @gettimeofday(%struct.timeval* nonnull %end36.i, i8* null) #4
-  %30 = load i64, i64* %tv_sec.i1.i, align 8, !tbaa !2
-  %31 = load i64, i64* %tv_sec1.i2.i, align 8, !tbaa !2
-  %sub.i3.i = sub nsw i64 %30, %31
+  %tv_sec.i1.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 0
+  %27 = load i64, i64* %tv_sec.i1.i, align 8, !tbaa !2
+  %tv_sec1.i2.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 0
+  %28 = load i64, i64* %tv_sec1.i2.i, align 8, !tbaa !2
+  %sub.i3.i = sub nsw i64 %27, %28
   %conv.i4.i = sitofp i64 %sub.i3.i to double
-  %32 = load i64, i64* %tv_usec.i5.i, align 8, !tbaa !7
-  %33 = load i64, i64* %tv_usec2.i6.i, align 8, !tbaa !7
-  %sub3.i7.i = sub nsw i64 %32, %33
+  %tv_usec.i5.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 1
+  %29 = load i64, i64* %tv_usec.i5.i, align 8, !tbaa !7
+  %tv_usec2.i6.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 1
+  %30 = load i64, i64* %tv_usec2.i6.i, align 8, !tbaa !7
+  %sub3.i7.i = sub nsw i64 %29, %30
   %conv4.i8.i = sitofp i64 %sub3.i7.i to double
   %mul.i9.i = fmul fast double %conv4.i8.i, 0x3EB0C6F7A0B5ED8D
   %add.i10.i = fadd fast double %mul.i9.i, %conv.i4.i
   %conv5.i11.i = fptrunc double %add.i10.i to float
   %conv41.i = fpext float %conv5.i11.i to double
-  %call42.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([31 x i8], [31 x i8]* @.str.88, i64 0, i64 0), double %conv41.i, double %29)
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %10) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %9) #4
-  %cmp9.not = icmp ugt i32 %mul.i, %conv.i
-  br i1 %cmp9.not, label %cleanup.cont, label %for.body, !llvm.loop !153
+  %call42.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([31 x i8], [31 x i8]* @.str.89, i64 0, i64 0), double %conv41.i, double %26)
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %22) #4
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %21) #4
+  br label %cleanup.cont
 
-cleanup.cont:                                     ; preds = %_ZL13enzyme_sincosdj.exit, %if.end7, %if.then4, %if.then
-  %retval.1 = phi i32 [ 1, %if.then ], [ 1, %if.then4 ], [ 0, %if.end7 ], [ 0, %_ZL13enzyme_sincosdj.exit ]
+cleanup.cont:                                     ; preds = %if.then5, %if.end8, %_ZL13enzyme_sincosdj.exit, %if.then
+  %retval.1 = phi i32 [ 1, %if.then ], [ 1, %if.then5 ], [ 0, %if.end8 ], [ 0, %_ZL13enzyme_sincosdj.exit ]
   ret i32 %retval.1
 }
 
@@ -8614,7 +8605,7 @@ for.body:                                         ; preds = %if.then, %for.body
   tail call void @pushInteger4(i32 %add)
   %add36 = add nuw nsw i32 %i.0173, 2
   %cmp13.not = icmp ugt i32 %add36, %sub12
-  br i1 %cmp13.not, label %for.cond.cleanup, label %for.body, !llvm.loop !154
+  br i1 %cmp13.not, label %for.cond.cleanup, label %for.body, !llvm.loop !153
 
 for.cond.cleanup43:                               ; preds = %for.body44, %for.cond.cleanup
   %13 = load double*, double** %arg10b, align 8, !tbaa !29
@@ -8678,7 +8669,7 @@ for.body44:                                       ; preds = %for.body44.lr.ph, %
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %11) #4
   %sub96 = add nsw i32 %i37.0172, -2
   %cmp42 = icmp sgt i32 %i37.0172, 1
-  br i1 %cmp42, label %for.body44, label %for.cond.cleanup43, !llvm.loop !155
+  br i1 %cmp42, label %for.body44, label %for.cond.cleanup43, !llvm.loop !154
 
 if.end:                                           ; preds = %for.cond.cleanup43, %entry
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %2) #4
@@ -8732,7 +8723,7 @@ while.body:                                       ; preds = %for.body, %while.bo
   %cmp2 = icmp ugt i32 %m.086, 3
   %cmp3 = icmp sgt i32 %sub4, %shr77
   %4 = and i1 %cmp2, %cmp3
-  br i1 %4, label %while.body, label %while.end, !llvm.loop !156
+  br i1 %4, label %while.body, label %while.end, !llvm.loop !155
 
 while.end:                                        ; preds = %while.body, %for.body
   %sub4.lcssa94 = phi i32 [ %sub4.lcssa93, %for.body ], [ %sub4, %while.body ]
@@ -8743,7 +8734,7 @@ while.end:                                        ; preds = %while.body, %for.bo
   %add5 = add nsw i32 %sub4.lcssa94, %m.0.lcssa
   %add6 = add nuw nsw i32 %i.089, 2
   %cmp.not = icmp ugt i32 %add6, %sub
-  br i1 %cmp.not, label %for.cond13.preheader, label %for.body, !llvm.loop !157
+  br i1 %cmp.not, label %for.cond13.preheader, label %for.body, !llvm.loop !156
 
 for.cond.cleanup15:                               ; preds = %if.end45, %for.cond13.preheader
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %1) #4
@@ -8765,7 +8756,7 @@ for.body22:                                       ; preds = %for.body16, %for.bo
   %inc = add nuw nsw i32 %i0.079, 1
   %6 = load i32, i32* %adCount18, align 4, !tbaa !49
   %cmp21.not.not = icmp slt i32 %i0.079, %6
-  br i1 %cmp21.not.not, label %for.body22, label %for.end24, !llvm.loop !158
+  br i1 %cmp21.not.not, label %for.body22, label %for.end24, !llvm.loop !157
 
 for.end24:                                        ; preds = %for.body22, %for.body16
   call void @popControl1b(i32* nonnull %branch)
@@ -8799,7 +8790,7 @@ if.end45:                                         ; preds = %if.then26, %for.end
   call void @llvm.lifetime.end.p0i8(i64 4, i8* nonnull %2) #4
   %sub47 = add nsw i32 %i7.081, -2
   %cmp14 = icmp sgt i32 %i7.081, 2
-  br i1 %cmp14, label %for.body16, label %for.cond.cleanup15, !llvm.loop !159
+  br i1 %cmp14, label %for.body16, label %for.cond.cleanup15, !llvm.loop !158
 }
 
 declare dso_local void @pushReal8(double) local_unnamed_addr #1
@@ -8893,7 +8884,7 @@ for.body:                                         ; preds = %if.end, %for.body
   %add51 = fadd fast double %add50, %mul49
   %add52 = add i32 %i.0109, 2
   %cmp10 = icmp ult i32 %add52, %N
-  br i1 %cmp10, label %for.body, label %return, !llvm.loop !160
+  br i1 %cmp10, label %for.body, label %return, !llvm.loop !159
 
 return:                                           ; preds = %for.body, %if.end, %entry
   ret void
@@ -8984,17 +8975,17 @@ if.then5:                                         ; preds = %for.body.critedge
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %3) #4
   %4 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp6 to i8*
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %4) #4
-  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp6, i8* getelementptr inbounds ([89 x i8], [89 x i8]* @.str.95, i64 0, i64 0), i32 1969)
+  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp6, i8* getelementptr inbounds ([89 x i8], [89 x i8]* @.str.96, i64 0, i64 0), i32 1969)
           to label %invoke.cont unwind label %ehcleanup11.thread
 
 invoke.cont:                                      ; preds = %if.then5
-  %call3.i.i.i57 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp6, i64 0, i64 0, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.94, i64 0, i64 0), i64 34)
+  %call3.i.i.i57 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp6, i64 0, i64 0, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.95, i64 0, i64 0), i64 34)
           to label %call3.i.i.i.noexc unwind label %lpad7
 
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %5 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %6 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !13, !alias.scope !161
+  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !13, !alias.scope !160
   %_M_p.i.i25.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 0, i32 0
   %7 = load i8*, i8** %_M_p.i.i25.i.i, align 8, !tbaa !8
   %8 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2
@@ -9009,18 +9000,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i23.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %7, i8** %_M_p.i23.i.i, align 8, !tbaa !8, !alias.scope !161
+  store i8* %7, i8** %_M_p.i23.i.i, align 8, !tbaa !8, !alias.scope !160
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2, i32 0
   %9 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !15
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !15, !alias.scope !161
+  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !15, !alias.scope !160
   br label %invoke.cont8
 
 invoke.cont8:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i22.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 1
   %10 = load i64, i64* %_M_string_length.i22.i.i, align 8, !tbaa !12
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !12, !alias.scope !161
+  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !12, !alias.scope !160
   %11 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i57 to %union.anon**
   store %union.anon* %8, %union.anon** %11, align 8, !tbaa !8
   store i64 0, i64* %_M_string_length.i22.i.i, align 8, !tbaa !12
@@ -9086,7 +9077,7 @@ cleanup.action:                                   ; preds = %if.then.i.i64, %ehc
 
 if.else:                                          ; preds = %for.body.critedge
   %cmp16 = icmp eq i32 %1, 0
-  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !164
+  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !163
 
 _ZN5adept5ArrayILi1EdLb0EE5clearEv.exit:          ; preds = %if.else
   %data_.i = getelementptr inbounds %"class.adept::Array.28", %"class.adept::Array.28"* %this, i64 0, i32 0
@@ -9105,13 +9096,13 @@ for.end:                                          ; preds = %if.else
   %call32 = tail call noalias nonnull dereferenceable(24) i8* @_Znwm(i64 24) #34
   %n_.i = getelementptr inbounds i8, i8* %call32, i64 8
   %19 = bitcast i8* %n_.i to i32*
-  store i32 %1, i32* %19, align 8, !tbaa !165
+  store i32 %1, i32* %19, align 8, !tbaa !164
   %n_links_.i = getelementptr inbounds i8, i8* %call32, i64 12
   %20 = bitcast i8* %n_links_.i to i32*
-  store i32 1, i32* %20, align 4, !tbaa !167
+  store i32 1, i32* %20, align 4, !tbaa !166
   %gradient_index_.i = getelementptr inbounds i8, i8* %call32, i64 16
   %21 = bitcast i8* %gradient_index_.i to i32*
-  store i32 -1, i32* %21, align 8, !tbaa !168
+  store i32 -1, i32* %21, align 8, !tbaa !167
   %22 = bitcast double** %result.i.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %22) #4
   %23 = bitcast double** %result.i.i to i8**
@@ -9135,7 +9126,7 @@ invoke.cont34:                                    ; preds = %for.end
   %25 = load double*, double** %result.i.i, align 8, !tbaa !29
   call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %22) #4
   %data_.i67 = bitcast i8* %call32 to double**
-  store double* %25, double** %data_.i67, align 8, !tbaa !169
+  store double* %25, double** %data_.i67, align 8, !tbaa !168
   %26 = load i32, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !49
   %inc.i = add nsw i32 %26, 1
   store i32 %inc.i, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !49
@@ -9168,7 +9159,7 @@ entry:
   %ref.tmp = alloca %"class.std::__cxx11::basic_string", align 8
   %ref.tmp2 = alloca %"class.std::__cxx11::basic_string", align 8
   %n_links_ = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 2
-  %0 = load i32, i32* %n_links_, align 4, !tbaa !167
+  %0 = load i32, i32* %n_links_, align 4, !tbaa !166
   %cmp = icmp eq i32 %0, 0
   br i1 %cmp, label %if.then, label %if.else
 
@@ -9179,17 +9170,17 @@ if.then:                                          ; preds = %entry
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %2) #4
   %3 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp2 to i8*
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %3) #4
-  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp2, i8* getelementptr inbounds ([91 x i8], [91 x i8]* @.str.97, i64 0, i64 0), i32 112)
+  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp2, i8* getelementptr inbounds ([91 x i8], [91 x i8]* @.str.98, i64 0, i64 0), i32 112)
           to label %invoke.cont unwind label %ehcleanup7.thread
 
 invoke.cont:                                      ; preds = %if.then
-  %call3.i.i.i17 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp2, i64 0, i64 0, i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.96, i64 0, i64 0), i64 57)
+  %call3.i.i.i17 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp2, i64 0, i64 0, i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.97, i64 0, i64 0), i64 57)
           to label %call3.i.i.i.noexc unwind label %lpad3
 
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %4 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %5 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !13, !alias.scope !170
+  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !13, !alias.scope !169
   %_M_p.i.i25.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 0, i32 0
   %6 = load i8*, i8** %_M_p.i.i25.i.i, align 8, !tbaa !8
   %7 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2
@@ -9204,18 +9195,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i23.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %6, i8** %_M_p.i23.i.i, align 8, !tbaa !8, !alias.scope !170
+  store i8* %6, i8** %_M_p.i23.i.i, align 8, !tbaa !8, !alias.scope !169
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2, i32 0
   %8 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !15
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !15, !alias.scope !170
+  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !15, !alias.scope !169
   br label %invoke.cont4
 
 invoke.cont4:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i22.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 1
   %9 = load i64, i64* %_M_string_length.i22.i.i, align 8, !tbaa !12
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !12, !alias.scope !170
+  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !12, !alias.scope !169
   %10 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i17 to %union.anon**
   store %union.anon* %7, %union.anon** %10, align 8, !tbaa !8
   store i64 0, i64* %_M_string_length.i22.i.i, align 8, !tbaa !12
@@ -9281,16 +9272,16 @@ cleanup.action:                                   ; preds = %if.then.i.i24, %ehc
 
 if.else:                                          ; preds = %entry
   %dec = add nsw i32 %0, -1
-  store i32 %dec, i32* %n_links_, align 4, !tbaa !167
+  store i32 %dec, i32* %n_links_, align 4, !tbaa !166
   %cmp11.not = icmp eq i32 %dec, 0
   br i1 %cmp11.not, label %delete.notnull, label %if.end13
 
 delete.notnull:                                   ; preds = %if.else
   %17 = bitcast %"class.adept::Storage.14"* %this to i8**
-  %18 = load i8*, i8** %17, align 8, !tbaa !169
+  %18 = load i8*, i8** %17, align 8, !tbaa !168
   tail call void @free(i8* %18) #4
   %gradient_index_.i = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 3
-  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !168
+  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !167
   %cmp.i = icmp sgt i32 %19, -1
   br i1 %cmp.i, label %if.then.i, label %_ZN5adept7StorageIdED2Ev.exit
 
@@ -9335,7 +9326,7 @@ entry:
   call void @_ZNSt7__cxx1118basic_stringstreamIcSt11char_traitsIcESaIcEEC1Ev(%"class.std::__cxx11::basic_stringstream"* nonnull dereferenceable(128) %s)
   %add.ptr = getelementptr inbounds %"class.std::__cxx11::basic_stringstream", %"class.std::__cxx11::basic_stringstream"* %s, i64 0, i32 0, i32 1
   %1 = bitcast %"class.std::basic_ostream.base"* %add.ptr to %"class.std::basic_ostream"*
-  %call1.i11 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %1, i8* nonnull getelementptr inbounds ([6 x i8], [6 x i8]* @.str.98, i64 0, i64 0), i64 5)
+  %call1.i11 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %1, i8* nonnull getelementptr inbounds ([6 x i8], [6 x i8]* @.str.99, i64 0, i64 0), i64 5)
           to label %invoke.cont unwind label %lpad
 
 invoke.cont:                                      ; preds = %entry
@@ -9353,7 +9344,7 @@ if.then.i:                                        ; preds = %invoke.cont
   %5 = bitcast i8* %add.ptr.i to %"class.std::basic_ios"*
   %_M_streambuf_state.i.i.i = getelementptr inbounds i8, i8* %add.ptr.i, i64 32
   %6 = bitcast i8* %_M_streambuf_state.i.i.i to i32*
-  %7 = load i32, i32* %6, align 8, !tbaa !173
+  %7 = load i32, i32* %6, align 8, !tbaa !172
   %or.i.i.i = or i32 %7, 1
   invoke void @_ZNSt9basic_iosIcSt11char_traitsIcEE5clearESt12_Ios_Iostate(%"class.std::basic_ios"* nonnull dereferenceable(264) %5, i32 %or.i.i.i)
           to label %invoke.cont1 unwind label %lpad
@@ -9372,7 +9363,7 @@ invoke.cont3:                                     ; preds = %invoke.cont1
           to label %invoke.cont5 unwind label %lpad
 
 invoke.cont5:                                     ; preds = %invoke.cont3
-  %call1.i23 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %call6, i8* nonnull getelementptr inbounds ([2 x i8], [2 x i8]* @.str.99, i64 0, i64 0), i64 1)
+  %call1.i23 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %call6, i8* nonnull getelementptr inbounds ([2 x i8], [2 x i8]* @.str.100, i64 0, i64 0), i64 1)
           to label %invoke.cont7 unwind label %lpad
 
 invoke.cont7:                                     ; preds = %invoke.cont5
@@ -9500,7 +9491,7 @@ call5.i.i.i10.i.noexc:                            ; preds = %entry
   %5 = load i64, i64* %__dnew.i.i.i.i, align 8, !tbaa !14
   %_M_allocated_capacity.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
   store i64 %5, i64* %_M_allocated_capacity.i.i.i.i.i, align 8, !tbaa !15
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i10.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.85, i64 0, i64 0), i64 27, i1 false) #4
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i10.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.86, i64 0, i64 0), i64 27, i1 false) #4
   %_M_string_length.i.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
   store i64 %5, i64* %_M_string_length.i.i.i.i.i.i, align 8, !tbaa !12
   %6 = load i8*, i8** %_M_p.i13.i.i.i.i, align 8, !tbaa !8
@@ -9918,22 +9909,21 @@ attributes #35 = { noreturn nounwind }
 !157 = distinct !{!157, !34, !35}
 !158 = distinct !{!158, !34, !35}
 !159 = distinct !{!159, !34, !35}
-!160 = distinct !{!160, !34, !35}
-!161 = !{!162}
-!162 = distinct !{!162, !163, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!163 = distinct !{!163, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!164 = distinct !{!164, !34, !35}
-!165 = !{!166, !27, i64 8}
-!166 = !{!"_ZTSN5adept7StorageIdEE", !11, i64 0, !27, i64 8, !27, i64 12, !27, i64 16}
-!167 = !{!166, !27, i64 12}
-!168 = !{!166, !27, i64 16}
-!169 = !{!166, !11, i64 0}
-!170 = !{!171}
-!171 = distinct !{!171, !172, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!172 = distinct !{!172, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!173 = !{!174, !176, i64 32}
-!174 = !{!"_ZTSSt8ios_base", !4, i64 8, !4, i64 16, !175, i64 24, !176, i64 28, !176, i64 32, !11, i64 40, !177, i64 48, !5, i64 64, !27, i64 192, !11, i64 200, !178, i64 208}
-!175 = !{!"_ZTSSt13_Ios_Fmtflags", !5, i64 0}
-!176 = !{!"_ZTSSt12_Ios_Iostate", !5, i64 0}
-!177 = !{!"_ZTSNSt8ios_base6_WordsE", !11, i64 0, !4, i64 8}
-!178 = !{!"_ZTSSt6locale", !11, i64 0}
+!160 = !{!161}
+!161 = distinct !{!161, !162, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!162 = distinct !{!162, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!163 = distinct !{!163, !34, !35}
+!164 = !{!165, !27, i64 8}
+!165 = !{!"_ZTSN5adept7StorageIdEE", !11, i64 0, !27, i64 8, !27, i64 12, !27, i64 16}
+!166 = !{!165, !27, i64 12}
+!167 = !{!165, !27, i64 16}
+!168 = !{!165, !11, i64 0}
+!169 = !{!170}
+!170 = distinct !{!170, !171, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!171 = distinct !{!171, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!172 = !{!173, !175, i64 32}
+!173 = !{!"_ZTSSt8ios_base", !4, i64 8, !4, i64 16, !174, i64 24, !175, i64 28, !175, i64 32, !11, i64 40, !176, i64 48, !5, i64 64, !27, i64 192, !11, i64 200, !177, i64 208}
+!174 = !{!"_ZTSSt13_Ios_Fmtflags", !5, i64 0}
+!175 = !{!"_ZTSSt12_Ios_Iostate", !5, i64 0}
+!176 = !{!"_ZTSNSt8ios_base6_WordsE", !11, i64 0, !4, i64 8}
+!177 = !{!"_ZTSSt6locale", !11, i64 0}

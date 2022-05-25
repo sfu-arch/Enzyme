@@ -83,8 +83,9 @@ void brusselator_2d_loop(double* __restrict du, double* __restrict dv, const dou
   double dx = (double)1/(N-1);
 
   alpha = alpha/(dx*dx);
-
+// #pragma clang loop unroll(full)
   for(int i=0; i<N; i++) {
+// #pragma clang loop unroll(full)
     for(int j=0; j<N; j++) {
 
       double x = RANGE(xmin, xmax, i, N);
@@ -705,11 +706,11 @@ int main(int argc, char** argv) {
   int max_iters = atoi(argv[1]) ;
   double inp = 2.1;
 
-  //for(int iters=max_iters/20; iters<=max_iters; iters+=max_iters/20) {
-  auto iters = max_iters;
-    printf("iters=%d\n", iters);
-    adept_sincos(inp, iters);
+  for(int iters=max_iters/20; iters<=max_iters; iters+=max_iters/20) {
+  // auto iters = max_iters;
+    // printf("iters=%d\n", iters);
+    // adept_sincos(inp, iters);
     enzyme_sincos(inp, iters);
-  //}
+  }
 }
 #endif

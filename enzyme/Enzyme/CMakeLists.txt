@@ -81,9 +81,9 @@ endif()
 if (APPLE)
 # Darwin-specific linker flags for loadable modules.
 set_target_properties(LLVMEnzyme-${LLVM_VERSION_MAJOR} PROPERTIES
-    LINK_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
+    LINK_FLAGS "-Wl,-flat_namespace -Wl")
 set_target_properties(ClangEnzyme-${LLVM_VERSION_MAJOR} PROPERTIES
-        LINK_FLAGS "-Wl,-flat_namespace -Wl,-undefined -Wl,suppress")
+        LINK_FLAGS "-Wl,-flat_namespace -Wl")
 endif()
 
 install(TARGETS LLVMEnzyme-${LLVM_VERSION_MAJOR} ClangEnzyme-${LLVM_VERSION_MAJOR}

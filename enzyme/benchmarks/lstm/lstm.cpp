@@ -665,16 +665,18 @@ void lstm_objective(
     T lse;
 
     __builtin_assume(b>0);
+// #pragma clang loop unroll (full)
     for (t = 0; t <= (c - 1) * b - 1; t += b)
     {
         lstm_predict(l, b, main_params, extra_params, state, input, ypred);
         lse = logsumexp(ypred, b);
+// #pragma clang loop unroll (full)
         for (i = 0; i < b; i++)
         {
             ynorm[i] = ypred[i] - lse;
         }
-
         ygold = &(sequence[t + b]);
+// #pragma clang loop unroll (full)
         for (i = 0; i < b; i++)
         {
             total += ygold[i] * ynorm[i];

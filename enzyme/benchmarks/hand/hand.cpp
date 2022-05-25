@@ -574,8 +574,11 @@ void hand_objective(
     );
 
     int i, j;
+// #pragma clang loop unroll(full)
     for (i = 0; i < corresp_count; i++)
     {
+// #pragma clang loop unroll(full)
+
         for (j = 0; j < 3; j++)
         {
             err[i * 3 + j] =

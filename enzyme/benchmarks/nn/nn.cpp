@@ -1,12 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
 #include <math.h>
-#include <stdlib.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
+#include <iostream>
+#include <chrono>
 
 #define DADEPT_FLOATING_POINT_TYPE float
 #include <adept_source.h>
@@ -24,8 +23,8 @@ using adept::aReal;
 
 #define MNIST_LABEL_MAGIC 0x00000801
 #define MNIST_IMAGE_MAGIC 0x00000803
-#define MNIST_IMAGE_WIDTH 28
-#define MNIST_IMAGE_HEIGHT 28
+#define MNIST_IMAGE_WIDTH 10
+#define MNIST_IMAGE_HEIGHT 10
 #define MNIST_IMAGE_SIZE MNIST_IMAGE_WIDTH * MNIST_IMAGE_HEIGHT
 #define MNIST_LABELS 10
 
@@ -394,17 +393,18 @@ static void neural_network_softmax_v2(const float * activations, float* outp, in
 {
     int i;
     float sum, max;
-
+#pragma clang loop unroll(full)
     for (i = 1, max = activations[0]; i < length; i++) {
         if (activations[i] > max) {
             max = activations[i];
         }
     }
-
+#pragma clang loop unroll(full)
     for (i = 0, sum = 0; i < length; i++) {
         sum += exp(activations[i] - max);
     }
 
+#pragma clang loop unroll(full)
     for (i = 0; i < length; i++) {
         outp[i] = exp(activations[i] - max) / sum;
     }
@@ -452,8 +452,10 @@ static float neural_network_hypothesis_v2(const mnist_image_t * image, const neu
 {
     float activations[MNIST_LABELS] = {0};
     int i, j;
+#pragma clang loop unroll(full)
     for (i = 0; i < MNIST_LABELS; i++) {
         activations[i] = network->b[i];
+#pragma clang loop unroll(full)
         for (j = 0; j < MNIST_IMAGE_SIZE; j++) {
             activations[i] += network->W[i][j] * PIXEL_SCALE(image->pixels[j]);
         }
@@ -658,7 +660,23 @@ template<typename Return, typename... T>
 Return __enzyme_autodiff(T...);
 
 static void calculateDerivatives(mnist_image_t * image, const neural_network_t * network, neural_network_t* gradient, uint8_t label) {
+    using std::chrono::high_resolution_clock;
+    using std::chrono::duration_cast;
+    using std::chrono::duration;
+    using std::chrono::milliseconds;
+    auto t1 = high_resolution_clock::now();
     __enzyme_autodiff<void>(neural_network_hypothesis_v2, enzyme_const, image, network, gradient, enzyme_const, label);
+    auto t2 = high_resolution_clock::now();
+    // /* Getting number of milliseconds as a double. */
+    duration<double, std::milli> ms_double = t2 - t1;
+    // std::cout << ms_double.count() * 1000  << "us\n";
+
+    // t1 = high_resolution_clock::now();
+    // neural_network_hypothesis_v2(image, network, label);
+    // t2 = high_resolution_clock::now();
+    // ms_double = t2 - t1;
+    // std::cout << ms_double.count() * 1000  << "us\n";
+
 }
 
 /**
@@ -729,7 +747,9 @@ float neural_network_training_step_enzyme(mnist_dataset_t * dataset, neural_netw
     int i, j;
 
     // Calculate the gradient and the loss by looping through the training set
-    for (i = 0, total_loss = 0; i < dataset->size; i++) {
+    // for (i = 0, total_loss = 0; i < dataset->size; i++) {
+    for (i = 0, total_loss = 0; i < 1; i++) {
+
 		mnist_image_t* image = &dataset->images[i];
 		uint8_t label = dataset->labels[i];
 

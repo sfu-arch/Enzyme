@@ -148,7 +148,7 @@ typedef void(*deriv_t)(
 template<deriv_t deriv>
 void calculate_jacobian(struct LSTMInput &input, struct LSTMOutput &result)
 {
-    for(int i=0; i<100; i++) {
+    for(int i=0; i<1; i++) {
 
         double* main_params_gradient_part = result.gradient.data();
         double* extra_params_gradient_part = result.gradient.data() + input.main_params.size();

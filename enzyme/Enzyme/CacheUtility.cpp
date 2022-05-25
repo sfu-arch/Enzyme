@@ -627,8 +627,10 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
   // Allocate the outermost type on the stack
   IRBuilder<> entryBuilder(inversionAllocs);
   entryBuilder.setFastMathFlags(getFast());
+
   AllocaInst *alloc =
       entryBuilder.CreateAlloca(types.back(), nullptr, name + "_cache");
+      errs() << "Allocated " << name << " cache: " << *alloc << "\n";
   {
     ConstantInt *byteSizeOfType = ConstantInt::get(
         Type::getInt64Ty(T->getContext()),
@@ -687,6 +689,8 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
               available[cl.first.var] = cl.first.var;
           }
         }
+          errs() << "es " << *extraSize << "\n";
+
         Value *es = unwrapM(extraSize, allocationBuilder, available,
                             UnwrapMode::AttemptFullUnwrapWithLookup);
         assert(es);
@@ -788,7 +792,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
 
         IRBuilder<> build(containedloops.back().first.incvar->getNextNode());
         Value *allocation = build.CreateLoad(storeInto);
-
+        errs() << "Load-1: " << *allocation << "\n";
         Value *tsize = ConstantInt::get(
             size->getType(),
             newFunc->getParent()->getDataLayout().getTypeAllocSizeInBits(
@@ -889,6 +893,7 @@ Value *CacheUtility::computeIndexOfChunk(
       var = ConstantInt::get(Type::getInt64Ty(newFunc->getContext()), 0);
     else if (!inForwardPass) {
       var = v.CreateLoad(idx.antivaralloc);
+      errs() << "Load-2: " << *var << "\n";
       available[idx.var] = var;
     } else {
       var = idx.var;
@@ -1028,6 +1033,7 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
       // allocation preheader. This is null if it was not legal to compute
       limitMinus1 = unwrapM(contexts[i].maxLimit, allocationBuilder, prevMap,
                             UnwrapMode::AttemptFullUnwrap);
+      errs() << "es \n";
 
       // We have a loop with static bounds, but whose limit is not available
       // to be computed at the current loop preheader (such as the innermost
@@ -1046,9 +1052,12 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
         allocationBuilder.SetInsertPoint(&allocationPreheaders[i]->back());
         limitMinus1 = unwrapM(contexts[i].maxLimit, allocationBuilder, prevMap,
                               UnwrapMode::AttemptFullUnwrap);
+
       } else if (i == 0 && extraSize &&
                  unwrapM(extraSize, allocationBuilder, prevMap,
                          UnwrapMode::AttemptFullUnwrap) == nullptr) {
+      errs() << "extraSize \n";
+
         EmitWarning(
             "NoOuterLimit", cast<Instruction>(extraSize)->getDebugLoc(),
             newFunc, cast<Instruction>(extraSize)->getParent(),
@@ -1072,6 +1081,7 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
           if (!inForwardPass) {
             reverseMap[contexts[j].var] =
                 RB->CreateLoad(contexts[j].antivaralloc);
+                errs() << "Load-3 " << *reverseMap[contexts[j].var] << "\n";
           }
         } else {
           break;
@@ -1094,6 +1104,8 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
                   limitMinus1, ConstantInt::get(limitMinus1->getType(), 1));
         }
       } else {
+      errs() << "lim \n";
+
         Value *lim = unwrapM(contexts[i].maxLimit, *RB, reverseMap,
                              UnwrapMode::AttemptFullUnwrapWithLookup);
         if (!lim) {
@@ -1214,7 +1226,7 @@ void CacheUtility::storeInstructionInCache(LimitContext ctx,
           ConstantInt::get(Type::getInt8Ty(cache->getContext()), 1), subidx));
 
       auto cleared = v.CreateAnd(v.CreateLoad(loc), mask);
-
+      errs() << "Load-4: " << *cleared << "\n";
       auto toset = v.CreateShl(
           v.CreateZExt(val, Type::getInt8Ty(cache->getContext())), subidx);
       tostore = v.CreateOr(cleared, toset);
@@ -1310,6 +1322,7 @@ Value *CacheUtility::getCachePointer(bool inForwardPass, IRBuilder<> &BuilderM,
   for (int i = sublimits.size() - 1; i >= 0; i--) {
     // Lookup the next allocation pointer
     next = BuilderM.CreateLoad(next);
+    errs() << "Load-5: " << *next << "\n";
     if (storeInInstructionsMap && isa<AllocaInst>(cache))
       scopeInstructions[cast<AllocaInst>(cache)].push_back(
           cast<Instruction>(next));
@@ -1383,7 +1396,7 @@ llvm::Value *CacheUtility::loadFromCachePointer(llvm::IRBuilder<> &BuilderM,
                                                 llvm::Value *cache) {
   // Retrieve the actual result
   auto result = BuilderM.CreateLoad(cptr);
-
+  errs() << "Load-6: " << *result << "\n";
   // Apply requisite invariant, alignment, etc
   if (ValueInvariantGroups.find(cache) == ValueInvariantGroups.end()) {
     MDNode *invgroup = MDNode::getDistinct(cache->getContext(), {});

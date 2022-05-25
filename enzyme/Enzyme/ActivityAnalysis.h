@@ -85,17 +85,21 @@ private:
   /// do not propagate adjoints themselves
   llvm::SmallPtrSet<llvm::Instruction *, 4> ConstantInstructions;
 
-  /// Instructions that could propagate adjoints
-  llvm::SmallPtrSet<llvm::Instruction *, 20> ActiveInstructions;
 
   /// Values that do not contain derivative information, either
   /// directly or as a pointer to
   llvm::SmallPtrSet<llvm::Value *, 4> ConstantValues;
 
-  /// Values that may contain derivative information
-  llvm::SmallPtrSet<llvm::Value *, 2> ActiveValues;
+
 
 public:
+  std::vector<llvm::Instruction*> active_inst_vec;
+  /// Instructions that could propagate adjoints
+  llvm::SmallPtrSet<llvm::Instruction *, 20> ActiveInstructions;
+  
+  /// Values that may contain derivative information
+  llvm::SmallPtrSet<llvm::Value *, 2> ActiveValues;
+  
   /// Construct the analyzer from the a previous set of constant and active
   /// values and whether returns are active. The all arguments of the functions
   /// being analyzed must be in the set of constant and active values, lest an
@@ -171,6 +175,8 @@ private:
       bool inserted = ActiveValues.insert(V).second;
       if (inserted && directions == 3) {
         ReEvaluateValueIfInactiveValue[Orig].insert(V);
+        // llvm::errs() << " re-evaluating activity of inst " << *Orig
+        //         << " due to value " << *V << "\n";
       }
     }
   }

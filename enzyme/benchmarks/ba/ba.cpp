@@ -35,6 +35,7 @@ double sqsum(int n, double const* x)
 {
     int i;
     double res = 0;
+// #pragma clang loop unroll(full)
     for (i = 0; i < n; i++)
     {
         res = res + x[i] * x[i];
@@ -81,7 +82,7 @@ void rodrigues_rotate_point(double const* __restrict rot, double const* __restri
         costheta = cos(theta);
         sintheta = sin(theta);
         theta_inverse = 1.0 / theta;
-
+// #pragma clang loop unroll(full)
         for (i = 0; i < 3; i++)
         {
             w[i] = rot[i] * theta_inverse;
@@ -91,7 +92,7 @@ void rodrigues_rotate_point(double const* __restrict rot, double const* __restri
 
         tmp = (w[0] * pt[0] + w[1] * pt[1] + w[2] * pt[2]) *
             (1. - costheta);
-
+// #pragma clang loop unroll(full)
         for (i = 0; i < 3; i++)
         {
             rotatedPt[i] = pt[i] * costheta + w_cross_pt[i] * sintheta + w[i] * tmp;
@@ -101,7 +102,7 @@ void rodrigues_rotate_point(double const* __restrict rot, double const* __restri
     {
         double rot_cross_pt[3];
         cross(rot, pt, rot_cross_pt);
-
+// #pragma clang loop unroll(full)
         for (i = 0; i < 3; i++)
         {
             rotatedPt[i] = pt[i] + rot_cross_pt[i];

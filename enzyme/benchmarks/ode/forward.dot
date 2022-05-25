@@ -1,11 +1,101 @@
 digraph G {
+		"mul'de : Alloca : entry" -> "mul'de : Alloca : entry" 
+		"mul'de : Alloca : entry" -> "$%36 : Load : invertentry" 
+		"mul'de : Alloca : entry" -> "$%24 : Load : invertentry" 
+		"mul'de : Alloca : entry" -> "$%4 : Load : invertentry" 
+		"m0diffe : FMul : invertentry" [color = yellow style=filled];
+		"m0diffe : FMul : invertentry" -> "$%23 : FAdd : invertentry" 
+		"$%5 : FAdd : invertentry" [color = yellow style=filled];
+		"$%5 : FAdd : invertentry" -> "mul'de : Alloca : entry" 
+		"$%4 : Load : invertentry" [color = gray style=filled];
+		"$%4 : Load : invertentry" -> "$%5 : FAdd : invertentry" 
+		"in_0 : " -> "m1diffein_0 : FMul : invertentry" 
+		"in_0 : " -> "m0diffein_0 : FMul : invertentry" 
 		"in_0 : " -> "mul : FMul : entry" 
+		"in_1 : " -> "m1diffein_1 : FMul : invertentry" 
+		"in_1 : " -> "m0diffein_1 : FMul : invertentry" 
 		"in_1 : " -> "$%0 : FMul : entry" 
 		"mul : FMul : entry" [color = yellow style=filled];
+		"mul : FMul : entry" -> "m0diffe : FMul : invertentry" 
 		"mul : FMul : entry" -> "mul4 : FMul : entry" 
 		"$%0 : FMul : entry" [color = yellow style=filled];
+		"$%0 : FMul : entry" -> "m1diffe : FMul : invertentry" 
+		"$%0 : FMul : entry" -> "m0diffe1 : FMul : invertentry" 
 		"$%0 : FMul : entry" -> "$%1 : FMul : entry" 
 		"$%1 : FMul : entry" [color = yellow style=filled];
 		"$%1 : FMul : entry" -> "mul4 : FMul : entry" 
+		"$%1 : FMul : entry" -> "m1diffemul : FMul : invertentry" 
 		"mul4 : FMul : entry" [color = yellow style=filled];
+		"m1diffemul : FMul : invertentry" [color = yellow style=filled];
+		"m1diffemul : FMul : invertentry" -> "$%25 : FAdd : invertentry" 
+		"$%24 : Load : invertentry" [color = gray style=filled];
+		"$%24 : Load : invertentry" -> "$%25 : FAdd : invertentry" 
+		"'de : Alloca : entry" -> "'de : Alloca : entry" 
+		"'de : Alloca : entry" -> "$%26 : Load : invertentry" 
+		"'de : Alloca : entry" -> "$%22 : Load : invertentry" 
+		"$%22 : Load : invertentry" [color = gray style=filled];
+		"$%22 : Load : invertentry" -> "$%23 : FAdd : invertentry" 
+		"$%23 : FAdd : invertentry" [color = yellow style=filled];
+		"$%23 : FAdd : invertentry" -> "'de : Alloca : entry" 
+		"$%25 : FAdd : invertentry" [color = yellow style=filled];
+		"$%25 : FAdd : invertentry" -> "mul'de : Alloca : entry" 
+		"$%26 : Load : invertentry" [color = gray style=filled];
+		"$%26 : Load : invertentry" -> "m1diffe : FMul : invertentry" 
+		"$%26 : Load : invertentry" -> "m0diffe1 : FMul : invertentry" 
+		"m0diffe1 : FMul : invertentry" [color = yellow style=filled];
+		"m0diffe1 : FMul : invertentry" -> "$%28 : FAdd : invertentry" 
+		"m1diffe : FMul : invertentry" [color = yellow style=filled];
+		"m1diffe : FMul : invertentry" -> "$%30 : FAdd : invertentry" 
+		"'de2 : Alloca : entry" -> "'de2 : Alloca : entry" 
+		"'de2 : Alloca : entry" -> "$%31 : Load : invertentry" 
+		"'de2 : Alloca : entry" -> "$%29 : Load : invertentry" 
+		"'de2 : Alloca : entry" -> "$%27 : Load : invertentry" 
+		"$%27 : Load : invertentry" [color = gray style=filled];
+		"$%27 : Load : invertentry" -> "$%28 : FAdd : invertentry" 
+		"$%28 : FAdd : invertentry" [color = yellow style=filled];
+		"$%28 : FAdd : invertentry" -> "'de2 : Alloca : entry" 
+		"$%29 : Load : invertentry" [color = gray style=filled];
+		"$%29 : Load : invertentry" -> "$%30 : FAdd : invertentry" 
+		"$%30 : FAdd : invertentry" [color = yellow style=filled];
+		"$%30 : FAdd : invertentry" -> "'de2 : Alloca : entry" 
+		"$%31 : Load : invertentry" [color = gray style=filled];
+		"$%31 : Load : invertentry" -> "m1diffein_1 : FMul : invertentry" 
+		"$%31 : Load : invertentry" -> "m0diffein_1 : FMul : invertentry" 
+		"m0diffein_1 : FMul : invertentry" [color = yellow style=filled];
+		"m0diffein_1 : FMul : invertentry" -> "$%33 : FAdd : invertentry" 
+		"m1diffein_1 : FMul : invertentry" [color = yellow style=filled];
+		"m1diffein_1 : FMul : invertentry" -> "$%35 : FAdd : invertentry" 
+		"in_1'de : Alloca : entry" -> "in_1'de : Alloca : entry" 
+		"in_1'de : Alloca : entry" -> "$%42 : Load : invertentry" 
+		"in_1'de : Alloca : entry" -> "$%34 : Load : invertentry" 
+		"in_1'de : Alloca : entry" -> "$%32 : Load : invertentry" 
+		"$%32 : Load : invertentry" [color = gray style=filled];
+		"$%32 : Load : invertentry" -> "$%33 : FAdd : invertentry" 
+		"$%33 : FAdd : invertentry" [color = yellow style=filled];
+		"$%33 : FAdd : invertentry" -> "in_1'de : Alloca : entry" 
+		"$%34 : Load : invertentry" [color = gray style=filled];
+		"$%34 : Load : invertentry" -> "$%35 : FAdd : invertentry" 
+		"$%35 : FAdd : invertentry" [color = yellow style=filled];
+		"$%35 : FAdd : invertentry" -> "in_1'de : Alloca : entry" 
+		"$%36 : Load : invertentry" [color = gray style=filled];
+		"$%36 : Load : invertentry" -> "m1diffein_0 : FMul : invertentry" 
+		"$%36 : Load : invertentry" -> "m0diffein_0 : FMul : invertentry" 
+		"m0diffein_0 : FMul : invertentry" [color = yellow style=filled];
+		"m0diffein_0 : FMul : invertentry" -> "$%38 : FAdd : invertentry" 
+		"m1diffein_0 : FMul : invertentry" [color = yellow style=filled];
+		"m1diffein_0 : FMul : invertentry" -> "$%40 : FAdd : invertentry" 
+		"in_0'de : Alloca : entry" -> "$%37 : Load : invertentry" 
+		"in_0'de : Alloca : entry" -> "in_0'de : Alloca : entry" 
+		"in_0'de : Alloca : entry" -> "$%41 : Load : invertentry" 
+		"in_0'de : Alloca : entry" -> "$%39 : Load : invertentry" 
+		"$%37 : Load : invertentry" [color = gray style=filled];
+		"$%37 : Load : invertentry" -> "$%38 : FAdd : invertentry" 
+		"$%38 : FAdd : invertentry" [color = yellow style=filled];
+		"$%38 : FAdd : invertentry" -> "in_0'de : Alloca : entry" 
+		"$%39 : Load : invertentry" [color = gray style=filled];
+		"$%39 : Load : invertentry" -> "$%40 : FAdd : invertentry" 
+		"$%40 : FAdd : invertentry" [color = yellow style=filled];
+		"$%40 : FAdd : invertentry" -> "in_0'de : Alloca : entry" 
+		"$%41 : Load : invertentry" [color = gray style=filled];
+		"$%42 : Load : invertentry" [color = gray style=filled];
 }

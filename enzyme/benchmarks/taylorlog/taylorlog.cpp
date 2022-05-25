@@ -18,10 +18,11 @@ float tdiff(struct timeval *start, struct timeval *end) {
 #include <adept.h>
 using adept::adouble;
 
-#define SINCOSN 10000000
+#define SINCOSN 100
 static 
 double sincos_real(double x) {
   double sum = 0;
+  // #pragma clang loop unroll(full)
   for(int i=1; i<=SINCOSN; i++) {
     sum += pow(x, i) / i;
   }

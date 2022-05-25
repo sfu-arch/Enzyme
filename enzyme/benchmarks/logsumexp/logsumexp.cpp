@@ -311,9 +311,9 @@ int main(int argc, char** argv) {
   
   //adept_sincos(input, inputp, n, repeat);
   
-  adept2_sincos(input, inputp, n, repeat);
+  // adept2_sincos(input, inputp, n, repeat);
 
-  tapenade_sincos(input, inputp, n, repeat);
+  // tapenade_sincos(input, inputp, n, repeat);
 
   enzyme_sincos(input, inputp, n, repeat);
 }

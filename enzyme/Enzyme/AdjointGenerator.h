@@ -40,6 +40,10 @@
 #define DEBUG_TYPE "enzyme"
 using namespace llvm;
 
+extern "C" {
+  extern int num_live_values;
+
+}
 // Helper instruction visitor that generates adjoints
 template <class AugmentedReturnType = AugmentedReturn *>
 class AdjointGenerator
@@ -119,7 +123,7 @@ public:
     auto iload = gutils->getNewFromOriginal((Value *)&I);
     if (used && check)
       return;
-
+    errs() << "erasing: " << I << "\n";
     PHINode *pn = nullptr;
     if (!I.getType()->isVoidTy() && isa<Instruction>(iload)) {
       IRBuilder<> BuilderZ(cast<Instruction>(iload));
@@ -128,7 +132,7 @@ public:
       gutils->fictiousPHIs[pn] = &I;
       gutils->replaceAWithB(iload, pn);
     }
-
+    
     erased.insert(&I);
     if (erase) {
       if (auto inst = dyn_cast<Instruction>(iload)) {
@@ -1605,7 +1609,7 @@ public:
     eraseIfUnused(BO);
     if (gutils->isConstantInstruction(&BO))
       return;
-    errs() << "BinaryOperator: " << BO << "\n";
+    // errs() << "BinaryOperator: " << BO << "\n";
     size_t size = 1;
     if (BO.getType()->isSized())
       size = (gutils->newFunc->getParent()->getDataLayout().getTypeSizeInBits(
@@ -1633,6 +1637,13 @@ public:
       return;
     }
   }
+  void LogAndIncreaseLives(Value *new_val, Value *orig_op1, GradientUtils *gutils) {
+    if (isa<Constant>(new_val))
+      return;
+    num_live_values++;
+    gutils->alias_map[orig_op1] = new_val;
+    errs() << new_val->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+  }
 
   void createBinaryOperatorAdjoint(llvm::BinaryOperator &BO) {
     IRBuilder<> Builder2(BO.getParent());
@@ -1646,7 +1657,7 @@ public:
     Value *dif0 = nullptr;
     Value *dif1 = nullptr;
     Value *idiff = diffe(&BO, Builder2);
-
+    // errs() << "idiff: " << *idiff << "\n";
     Type *addingType = BO.getType();
 
     switch (BO.getOpcode()) {
@@ -1656,14 +1667,14 @@ public:
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "m0diffe" + orig_op0->getName());
             // ADDED BY ME
-            errs() << *lookup(gutils->getNewFromOriginal(orig_op1), Builder2) << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1, gutils);
       }
       if (!constantval1) {
         dif1 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op0), Builder2),
             "m1diffe" + orig_op1->getName());
             // ADDED BY ME
-            errs() << *lookup(gutils->getNewFromOriginal(orig_op0), Builder2) << " -> " << orig_op0->getNameOrAsOperand()<< "\n";
+            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op0), Builder2), orig_op0, gutils);
       }
       break;
     }
@@ -1724,8 +1735,8 @@ public:
                     Builder2.CreateFNeg(Builder2.CreateFMul(idiff, lop0)),
                     lop1);
                 // ADDED BY ME
-                errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
-                errs() << BO << " -> " << lop0->getNameOrAsOperand()<< "\n";
+                LogAndIncreaseLives(lop1, orig_op1, gutils);
+                LogAndIncreaseLives(lop0, &BO, gutils);
 
               } else {
                 auto product = gutils->getOrInsertTotalMultiplicativeProduct(
@@ -1744,8 +1755,8 @@ public:
                         s, Builder2.CreateFDiv(idiff, lop0))),
                     lop1);
                 // ADDED BY ME
-                errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
-                errs() << BO << " -> " << lop0->getNameOrAsOperand()<< "\n";
+                LogAndIncreaseLives(lop1, orig_op1, gutils);
+                LogAndIncreaseLives(lop0, &BO, gutils);
               }
 
               addToDiffe(orig_op1, dif1, Builder2, addingType);
@@ -1759,7 +1770,7 @@ public:
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "d0diffe" + orig_op0->getName());
             // ADDED BY ME
-            errs() << dif0->getNameOrAsOperand()<< " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1, gutils);
       }
       if (!constantval1) {
         Value *lop1 = lookup(gutils->getNewFromOriginal(orig_op1), Builder2);
@@ -1767,9 +1778,8 @@ public:
         dif1 = Builder2.CreateFNeg(
             Builder2.CreateFMul(lastdiv, Builder2.CreateFDiv(idiff, lop1)));
             // ADDED BY ME
-            errs() << lop1->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
-            errs() << BO << " -> " << lastdiv->getNameOrAsOperand()<< "\n";
-
+            LogAndIncreaseLives(lop1, orig_op1, gutils);
+            LogAndIncreaseLives(lastdiv, &BO, gutils);
       }
       break;
     }
@@ -1977,7 +1987,9 @@ public:
               auto arg = lookup(
                   gutils->getNewFromOriginal(BO.getOperand(1 - i)), Builder2);
               // ADDED BY ME
+              LogAndIncreaseLives(arg, BO.getOperand(1 - i), gutils);
               errs() << "OR: " << BO << ": orig: " << *BO.getOperand(1 - i) << " -> " << arg<< "\n";
+
               auto prev = Builder2.CreateOr(arg, BO.getOperand(i));
               prev = Builder2.CreateSub(prev, arg, "", /*NUW*/ true,
                                         /*NSW*/ false);
@@ -2047,6 +2059,7 @@ public:
   }
 
   void createBinaryOperatorDual(llvm::BinaryOperator &BO) {
+    errs() << "createBinaryOperatorDual: " << BO << "\n";
     IRBuilder<> Builder2(&BO);
     getForwardBuilder(Builder2);
 
@@ -2063,7 +2076,7 @@ public:
     case Instruction::FMul: {
 
       if (!constantval0 && !constantval1) {
-        errs() << BO << " : " << *dif0 << ", " << *dif1 << "\n";
+        errs() << BO << " -> " << *dif0 << ", " << *dif1 << "\n";
 
         Value *idiff0 =
             Builder2.CreateFMul(dif0, gutils->getNewFromOriginal(orig_op1));
@@ -2072,13 +2085,13 @@ public:
         Value *diff = Builder2.CreateFAdd(idiff0, idiff1);
         setDiffe(&BO, diff, Builder2);
       } else if (!constantval0) {
-        errs() << BO << " : " << *dif0 << "\n";
+        errs() << BO << " -> " << *dif0 << "\n";
 
         Value *idiff0 =
             Builder2.CreateFMul(dif0, gutils->getNewFromOriginal(orig_op1));
         setDiffe(&BO, idiff0, Builder2);
       } else if (!constantval1) {
-        errs() << BO << " : "  << *dif1 << "\n";
+        errs() << BO << " -> "  << *dif1 << "\n";
 
         Value *idiff1 =
             Builder2.CreateFMul(dif1, gutils->getNewFromOriginal(orig_op0));
@@ -3664,6 +3677,8 @@ public:
           for (auto pair : geps) {
             Value *op = pair.second;
             Value *alloc = op;
+              errs() << "replacement " << *op  << "\n"; \
+
             Value *replacement = gutils->unwrapM(op, BuilderZ, available,
                                                  UnwrapMode::LegalFullUnwrap);
             tape =
@@ -5904,11 +5919,16 @@ public:
     } else if (!orig->getType()->isFPOrFPVectorTy() &&
                TR.query(orig).Inner0().isPossiblePointer()) {
       if (is_value_needed_in_reverse<ValueType::ShadowPtr>(
-              TR, gutils, orig, Mode, oldUnreachable))
+              TR, gutils, orig, Mode, oldUnreachable)) {
         subretType = DIFFE_TYPE::DUP_ARG;
-      else
+        errs() << "value needed in the reverse" << *orig << "\n";
+        }
+      else {
         subretType = DIFFE_TYPE::CONSTANT;
+        errs() << "value not needed in the reverse" << *orig << "\n";
+      }
     } else {
+      // errs() << "Out Diffe " << *orig << "\n";
       subretType = DIFFE_TYPE::OUT_DIFF;
     }
 
@@ -8659,6 +8679,8 @@ public:
         for (auto &pair : *replacedReturns) {
           if (pair.second == a) {
             for (unsigned i = 0; i < a->getNumOperands(); ++i) {
+              errs() << "a->setOperand2 " << *a->getOperand(i)  << "\n"; \
+
               a->setOperand(i, gutils->unwrapM(a->getOperand(i), Builder2, mapp,
                                                UnwrapMode::LegalFullUnwrap));
             }
@@ -8674,6 +8696,8 @@ public:
         auto orig_a = gutils->isOriginal(a);
         if (orig_a) {
           for (unsigned i = 0; i < a->getNumOperands(); ++i) {
+          errs() << "a->setOperand " << *gutils->getNewFromOriginal(orig_a->getOperand(i)) << "\n"; \
+
             a->setOperand(i,
                           gutils->unwrapM(
                               gutils->getNewFromOriginal(orig_a->getOperand(i)),

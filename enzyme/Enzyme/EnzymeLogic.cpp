@@ -69,6 +69,7 @@
 #include "BFSPass.h"
 #include "NodeLogger.h"
 #include "ForwardNodeInstrument.h"
+#include "LoadLogger.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
@@ -3525,6 +3526,8 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
         // the wrong order may result in first replacing the later unwrapped
         // value, caching it, then attempting to reuse it for an earlier
         // replacement.
+        errs() << "nexti " << *nexti << "\n"; 
+        
         Value *nval = gutils->unwrapM(nexti, lb, empty,
                                       UnwrapMode::LegalFullUnwrapNoTapeReplace,
                                       /*scope*/ nullptr, /*permitCache*/ false);
@@ -3731,14 +3734,28 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //     errs() << "set " << *U.first << "\n";
   //   }
   // }
-  std::ofstream myfile;
-  myfile.open("live_vars.txt");
-  for (auto i: gutils->alias_map) {
-    errs() << *i.first << " -> " << *i.second << "\n";
-    myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
-  }
-  for (auto val: gutils->GetscopeMap())
-    errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
+  // std::ofstream myfile;
+  // myfile.open("live_vars.txt");
+  // for (auto i: gutils->alias_map) {
+  //   // errs() << *i.first << " -> " << *i.second << "\n";
+  //   myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+  // }
+  // for (auto i: gutils->recomputed_vals) {
+  //   // errs() << i.first->getNameOrAsOperand() << " -> " << i.second->getNameOrAsOperand() << "\n";
+  //   // myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+  //   // errs() << "\tConstant: " << gutils->isConstantValue(i.second) << "\n";
+  // }
+  // for (auto val: gutils->GetscopeMap())
+  //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
+  // gutils->printActiveValue();
+  gutils->handleBinnedValues();
+  // for (auto &i: gutils->binned_values) {
+  //   errs() << "binned: " << *i << "\n";
+  // }
+  // gutils->performLevelAnalysis();
+  // gutils->printLevelAnalysis();
+  // gutils->setBins({3, 3, 10, 25, 100, 1000});
+  // gutils->simpleMapForPerformance();
   delete gutils;
 
   {
@@ -3748,6 +3765,10 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   PPC.AlwaysInline(nf);
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
+  
+  legacy::FunctionPassManager PM(key.todiff->getParent());
+  PM.add(new instrumem::LoadLoggerPass());
+  PM.run(*nf);
 
   if (LogMain) {
     legacy::FunctionPassManager PM(key.todiff->getParent());
@@ -3756,7 +3777,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   }
   if (CreateDDDG) {
     legacy::FunctionPassManager PM(nf->getParent());
-    PM.add(new instrumem::BFSPass());
+    // PM.add(new instrumem::BFSPass());
     PM.add(new instrumem::NodeLogger());
     PM.run(*nf);
   }

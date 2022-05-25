@@ -8038,7 +8038,7 @@ for.body.i.i:                                     ; preds = %for.body.i.i, %entr
   %div.i.i = fdiv fast double %5, %conv.i.i
   %add.i.i = fadd fast double %div.i.i, %sum.07.i.i
   %inc.i.i = add nuw nsw i32 %i.08.i.i, 1
-  %exitcond.not.i.i = icmp eq i32 %inc.i.i, 10000001
+  %exitcond.not.i.i = icmp eq i32 %inc.i.i, 101
   br i1 %exitcond.not.i.i, label %_ZL11sincos_reald.exit.i, label %for.body.i.i, !llvm.loop !144
 
 _ZL11sincos_reald.exit.i:                         ; preds = %for.body.i.i
@@ -8119,7 +8119,7 @@ invoke.cont4.i.i:                                 ; preds = %invoke.cont3.i.i
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %16) #29, !noalias !145
   call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %15) #29, !noalias !145
   %inc.i38.i = add nuw nsw i32 %storemerge13.i.i, 1
-  %exitcond.not.i39.i = icmp eq i32 %inc.i38.i, 10000001
+  %exitcond.not.i39.i = icmp eq i32 %inc.i38.i, 101
   br i1 %exitcond.not.i39.i, label %invoke.cont9.i, label %invoke.cont3.i.i, !llvm.loop !151
 
 lpad.i.i:                                         ; preds = %invoke.cont3.i.i
@@ -8312,7 +8312,7 @@ invoke.cont4.i.i.i:                               ; preds = %invoke.cont3.i.i.i
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %56) #29, !noalias !154
   call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %55) #29, !noalias !154
   %inc.i.i.i = add nuw nsw i32 %storemerge13.i.i.i, 1
-  %exitcond.not.i.i.i = icmp eq i32 %inc.i.i.i, 10000001
+  %exitcond.not.i.i.i = icmp eq i32 %inc.i.i.i, 101
   br i1 %exitcond.not.i.i.i, label %invoke.cont6.i.i, label %invoke.cont3.i.i.i, !llvm.loop !151
 
 lpad.i.i.i:                                       ; preds = %invoke.cont3.i.i.i
@@ -8482,7 +8482,7 @@ for.body.i.i22:                                   ; preds = %for.body.i.i22, %_Z
   %div.i.i18 = fdiv fast double %86, %conv.i.i17
   %add.i.i19 = fadd fast double %div.i.i18, %sum.07.i.i16
   %inc.i.i20 = add nuw nsw i32 %i.08.i.i15, 1
-  %exitcond.not.i.i21 = icmp eq i32 %inc.i.i20, 10000001
+  %exitcond.not.i.i21 = icmp eq i32 %inc.i.i20, 101
   br i1 %exitcond.not.i.i21, label %_ZL11sincos_reald.exit.i27, label %for.body.i.i22, !llvm.loop !144
 
 _ZL11sincos_reald.exit.i27:                       ; preds = %for.body.i.i22
@@ -8522,7 +8522,7 @@ for.body.i48.i:                                   ; preds = %for.body.i48.i, %_Z
   %div.i44.i = fdiv fast double %93, %conv.i43.i28
   %add.i45.i = fadd fast double %div.i44.i, %sum.07.i42.i
   %inc.i46.i = add nuw nsw i32 %i.08.i41.i, 1
-  %exitcond.not.i47.i = icmp eq i32 %inc.i46.i, 10000001
+  %exitcond.not.i47.i = icmp eq i32 %inc.i46.i, 101
   br i1 %exitcond.not.i47.i, label %_ZL11sincos_reald.exit49.i, label %for.body.i48.i, !llvm.loop !144
 
 _ZL11sincos_reald.exit49.i:                       ; preds = %for.body.i48.i
@@ -8556,7 +8556,7 @@ _ZL11sincos_reald.exit49.i:                       ; preds = %for.body.i48.i
 
 for.body.i29.i:                                   ; preds = %for.body.i29.i, %_ZL11sincos_reald.exit49.i
   %add2.i.i = phi double [ 0.000000e+00, %_ZL11sincos_reald.exit49.i ], [ %add.i28.i, %for.body.i29.i ]
-  %i.01.i.i = phi i32 [ 10000000, %_ZL11sincos_reald.exit49.i ], [ %sub.i27.i, %for.body.i29.i ]
+  %i.01.i.i = phi i32 [ 100, %_ZL11sincos_reald.exit49.i ], [ %sub.i27.i, %for.body.i29.i ]
   %sub.i27.i = add nsw i32 %i.01.i.i, -1
   %100 = call fast double @llvm.powi.f64(double %call.i, i32 %sub.i27.i) #29
   %add.i28.i = fadd fast double %100, %add2.i.i
@@ -8601,7 +8601,7 @@ for.body.i.i52:                                   ; preds = %for.body.i.i52, %_Z
   %div.i.i48 = fdiv fast double %107, %conv.i.i47
   %add.i.i49 = fadd fast double %div.i.i48, %sum.07.i.i46
   %inc.i.i50 = add nuw nsw i32 %i.08.i.i45, 1
-  %exitcond.not.i.i51 = icmp eq i32 %inc.i.i50, 10000001
+  %exitcond.not.i.i51 = icmp eq i32 %inc.i.i50, 101
   br i1 %exitcond.not.i.i51, label %_ZL11sincos_reald.exit.i57, label %for.body.i.i52, !llvm.loop !144
 
 _ZL11sincos_reald.exit.i57:                       ; preds = %for.body.i.i52
@@ -8641,7 +8641,7 @@ for.body.i47.i:                                   ; preds = %for.body.i47.i, %_Z
   %div.i43.i = fdiv fast double %114, %conv.i42.i
   %add.i44.i = fadd fast double %div.i43.i, %sum.07.i41.i
   %inc.i45.i = add nuw nsw i32 %i.08.i40.i, 1
-  %exitcond.not.i46.i = icmp eq i32 %inc.i45.i, 10000001
+  %exitcond.not.i46.i = icmp eq i32 %inc.i45.i, 101
   br i1 %exitcond.not.i46.i, label %_ZL13enzyme_sincosd.exit, label %for.body.i47.i, !llvm.loop !144
 
 _ZL13enzyme_sincosd.exit:                         ; preds = %for.body.i47.i
@@ -8917,7 +8917,7 @@ for.body:                                         ; preds = %for.body, %entry
   %div = fdiv fast double %0, %conv
   %add = fadd fast double %div, %sum.07
   %inc = add nuw nsw i32 %i.08, 1
-  %exitcond.not = icmp eq i32 %inc, 10000001
+  %exitcond.not = icmp eq i32 %inc, 101
   br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !144
 }
 
@@ -11073,7 +11073,7 @@ for.body:                                         ; preds = %for.body, %entry
   %div = fdiv fast double %2, %conv
   %add = fadd fast double %div, %sum.07
   %inc = add nuw nsw i32 %1, 1
-  %exitcond.not = icmp eq i32 %inc, 10000001
+  %exitcond.not = icmp eq i32 %inc, 101
   br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !144
 }
 
@@ -11098,7 +11098,7 @@ mergeinvertfor.body_for.cond.cleanup:             ; preds = %invertfor.cond.clea
 
 invertfor.body:                                   ; preds = %incinvertfor.body, %mergeinvertfor.body_for.cond.cleanup
   %"x'de.0" = phi double [ 0.000000e+00, %mergeinvertfor.body_for.cond.cleanup ], [ %5, %incinvertfor.body ]
-  %"iv'ac.0" = phi i64 [ 9999999, %mergeinvertfor.body_for.cond.cleanup ], [ %7, %incinvertfor.body ]
+  %"iv'ac.0" = phi i64 [ 99, %mergeinvertfor.body_for.cond.cleanup ], [ %7, %incinvertfor.body ]
   %iv.next_unwrap = add nuw nsw i64 %"iv'ac.0", 1
   %_unwrap = trunc i64 %iv.next_unwrap to i32
   %conv_unwrap = sitofp i32 %_unwrap to double

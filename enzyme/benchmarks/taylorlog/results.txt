@@ -1,12 +1,12 @@
 adept
-0.776105 res=inf
-1.503099 res=inf
-1.678909 res'=0.000000
+0.000005 res=inf
+0.000024 res=inf
+0.000018 res'=0.000000
 tapenade
-tapenade 0.780597 res=inf
-tapenade 0.803187 res=inf
-tapendade 0.808093 res'=inf
+tapenade 0.000004 res=inf
+tapenade 0.000004 res=inf
+tapendade 0.000004 res'=inf
 enzyme
-0.814819 res=inf
-0.799881 res=inf
-0.645775 res'=inf
+0.000004 res=inf
+0.000003 res=inf
+0.000004 res'=inf

@@ -1,0 +1,2 @@
+mul.i_unwrap, mul.i
+x.sroa.0.0_cache, x.sroa.0.0_cache

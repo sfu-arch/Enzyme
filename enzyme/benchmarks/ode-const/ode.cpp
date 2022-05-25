@@ -92,9 +92,9 @@ int main(int argc, char** argv) {
   unsigned i=0;
   for(int iters=max_iters/20; iters<=max_iters; iters+=max_iters/20) {
     printf("iters=%d\n", iters);
-    adept_sincos(inp, iters);
+    // adept_sincos(inp, iters);
     enzyme_sincos(inp, iters);
     i++;
-    if (i == 10) break;
+    // if (i == 10) break;
   }
 }

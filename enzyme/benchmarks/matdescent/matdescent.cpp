@@ -6,6 +6,7 @@
 #include <math.h>
 #include <inttypes.h>
 #include <string.h>
+#include <time.h>
 
 extern int enzyme_const;
 template<typename Return, typename... T>
@@ -22,22 +23,25 @@ using adept::aVector;
 
 using adept::Vector;
 
-#define N 2000
-#define M 2000
-#define ITERS 1000
+#define N 30
+#define M 30
+#define ITERS 1
 #define RATE 0.00000001
 
 inline double matvec_real(double* mat, double* vec) {
   double *out = (double*)malloc(sizeof(double)*N);
   //double *out = new double[N];
+// #pragma clang loop unroll(full)
   for(int i=0; i<N; i++) {
     out[i] = 0;
-    #pragma clang loop unroll(full)
+// #pragma clang loop unroll(full)
     for(int j=0; j<M; j++) {
         out[i] += mat[i*M+j] * vec[j];
     }
   }
   double sum = 0;
+
+#pragma clang loop unroll(full)
   for(int i=0; i<N; i++) {
     sum += out[i] * out[i];
   }
@@ -333,7 +337,14 @@ static void enzyme_sincos(double *Min, double *Mout, double *Vin, double *Vout) 
   for(int i=0; i<ITERS; i++) {
   for(int i=0; i<N*M; i++) { Mout[i] = 0; }
   //for(int i=0; i<M; i++) { Vout[i] = 0; }
+  clock_t tStart = clock();
   res2 = __enzyme_autodiff<double>(matvec_real, Min, Mout, enzyme_const, Vin);
+  printf("Time taken AD: %f\n", (double)(clock() - tStart));
+
+  tStart = clock();
+  res2 = matvec_real(Min, Vin);
+  printf("Time taken Normal: %f\n", (double)(clock() - tStart));
+
   //res2 = __builtin_autodiff(matvec_real, Min, Mout, Vin, Vout);
   for(int i=0; i<N*M; i++) { Min[i] -= Mout[i] * RATE; }
   }

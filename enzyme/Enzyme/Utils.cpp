@@ -675,11 +675,12 @@ void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> a
 
     llvm::Constant *ResultFormatStr = llvm::ConstantDataArray::getString(context, format);
     Constant *ResultFormatStrVar =
-        m.getOrInsertGlobal("ResultFormatStrIR" + unique_id, ResultFormatStr->getType());
+        m.getOrInsertGlobal(unique_id, ResultFormatStr->getType());
     dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
 
-    Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "");
-    ResultHeaderStrPtr->insertAfter(I);
+    auto next_node = I->getNextNode()? I->getNextNode(): I;
+    Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "", next_node);
+    // ResultHeaderStrPtr->insertAfter(I);
     std::vector<Value *> print_args = {ResultHeaderStrPtr};
     print_args.insert(print_args.end(), args.begin(), args.end());
     CallInst::Create(Printf, print_args, "", ResultHeaderStrPtr->getNextNode());

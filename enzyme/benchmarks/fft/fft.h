@@ -39,7 +39,7 @@ static void recursiveApply(double* data, int iSign, unsigned N) {
   double wpr = -2.0*wtemp*wtemp;
   double wr = 1.0;
   double wi = 0.0;
-
+// #pragma clang loop unroll (full)
   for (unsigned i=0; i<N; i+=2) {
     int iN = i+N;
 
@@ -59,12 +59,14 @@ static void recursiveApply(double* data, int iSign, unsigned N) {
 
 static void scramble(double* data, unsigned N) {
   int j=1;
+// #pragma clang loop unroll (full)
   for (int i=1; i<2*N; i+=2) {
     if (j>i) {
       swap(&data[j-1], &data[i-1]);
       swap(&data[j], &data[i]);
     }
     int m = N;
+// #pragma clang loop unroll (full)
     while (m>=2 && j>m) {
       j -= m;
       m >>= 1;
@@ -75,6 +77,7 @@ static void scramble(double* data, unsigned N) {
 
 static void rescale(double* data, unsigned N) {
   double scale = ((double)1)/N;
+#pragma clang loop unroll (full)
   for (unsigned i=0; i<2*N; i++) {
     data[i] *= scale;
   }

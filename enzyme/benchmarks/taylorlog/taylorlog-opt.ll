@@ -7936,7 +7936,7 @@ for.body.i.i:                                     ; preds = %for.body.i.i, %entr
   %div.i.i = fdiv fast double %5, %conv.i.i
   %add.i.i = fadd fast double %div.i.i, %sum.07.i.i
   %inc.i.i = add nuw nsw i32 %i.08.i.i, 1
-  %exitcond.not.i.i = icmp eq i32 %inc.i.i, 10000001
+  %exitcond.not.i.i = icmp eq i32 %inc.i.i, 101
   br i1 %exitcond.not.i.i, label %_ZL11sincos_reald.exit.i, label %for.body.i.i, !llvm.loop !146
 
 _ZL11sincos_reald.exit.i:                         ; preds = %for.body.i.i
@@ -8016,7 +8016,7 @@ invoke.cont4.i.i:                                 ; preds = %invoke.cont3.i.i
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %16) #30, !noalias !147
   call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %15) #30, !noalias !147
   %inc.i38.i = add nuw nsw i32 %storemerge13.i.i, 1
-  %exitcond.not.i39.i = icmp eq i32 %inc.i38.i, 10000001
+  %exitcond.not.i39.i = icmp eq i32 %inc.i38.i, 101
   br i1 %exitcond.not.i39.i, label %invoke.cont9.i, label %invoke.cont3.i.i, !llvm.loop !153
 
 lpad.i.i:                                         ; preds = %invoke.cont3.i.i
@@ -8209,7 +8209,7 @@ invoke.cont4.i.i.i:                               ; preds = %invoke.cont3.i.i.i
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %56) #30, !noalias !156
   call void @llvm.lifetime.end.p0i8(i64 32, i8* nonnull %55) #30, !noalias !156
   %inc.i.i.i = add nuw nsw i32 %storemerge13.i.i.i, 1
-  %exitcond.not.i.i.i = icmp eq i32 %inc.i.i.i, 10000001
+  %exitcond.not.i.i.i = icmp eq i32 %inc.i.i.i, 101
   br i1 %exitcond.not.i.i.i, label %invoke.cont6.i.i, label %invoke.cont3.i.i.i, !llvm.loop !153
 
 lpad.i.i.i:                                       ; preds = %invoke.cont3.i.i.i
@@ -8379,7 +8379,7 @@ for.body.i.i22:                                   ; preds = %for.body.i.i22, %_Z
   %div.i.i18 = fdiv fast double %86, %conv.i.i17
   %add.i.i19 = fadd fast double %div.i.i18, %sum.07.i.i16
   %inc.i.i20 = add nuw nsw i32 %i.08.i.i15, 1
-  %exitcond.not.i.i21 = icmp eq i32 %inc.i.i20, 10000001
+  %exitcond.not.i.i21 = icmp eq i32 %inc.i.i20, 101
   br i1 %exitcond.not.i.i21, label %_ZL11sincos_reald.exit.i27, label %for.body.i.i22, !llvm.loop !146
 
 _ZL11sincos_reald.exit.i27:                       ; preds = %for.body.i.i22
@@ -8418,7 +8418,7 @@ for.body.i48.i:                                   ; preds = %for.body.i48.i, %_Z
   %div.i44.i = fdiv fast double %93, %conv.i43.i28
   %add.i45.i = fadd fast double %div.i44.i, %sum.07.i42.i
   %inc.i46.i = add nuw nsw i32 %i.08.i41.i, 1
-  %exitcond.not.i47.i = icmp eq i32 %inc.i46.i, 10000001
+  %exitcond.not.i47.i = icmp eq i32 %inc.i46.i, 101
   br i1 %exitcond.not.i47.i, label %_ZL11sincos_reald.exit49.i, label %for.body.i48.i, !llvm.loop !146
 
 _ZL11sincos_reald.exit49.i:                       ; preds = %for.body.i48.i
@@ -8451,7 +8451,7 @@ _ZL11sincos_reald.exit49.i:                       ; preds = %for.body.i48.i
 
 for.body.i29.i:                                   ; preds = %for.body.i29.i, %_ZL11sincos_reald.exit49.i
   %add2.i.i = phi double [ 0.000000e+00, %_ZL11sincos_reald.exit49.i ], [ %add.i28.i, %for.body.i29.i ]
-  %i.01.i.i = phi i32 [ 10000000, %_ZL11sincos_reald.exit49.i ], [ %sub.i27.i, %for.body.i29.i ]
+  %i.01.i.i = phi i32 [ 100, %_ZL11sincos_reald.exit49.i ], [ %sub.i27.i, %for.body.i29.i ]
   %sub.i27.i = add nsw i32 %i.01.i.i, -1
   %100 = call fast double @llvm.powi.f64(double %call.i, i32 %sub.i27.i) #30
   %add.i28.i = fadd fast double %100, %add2.i.i
@@ -8495,7 +8495,7 @@ for.body.i.i52:                                   ; preds = %for.body.i.i52, %_Z
   %div.i.i48 = fdiv fast double %107, %conv.i.i47
   %add.i.i49 = fadd fast double %div.i.i48, %sum.07.i.i46
   %inc.i.i50 = add nuw nsw i32 %i.08.i.i45, 1
-  %exitcond.not.i.i51 = icmp eq i32 %inc.i.i50, 10000001
+  %exitcond.not.i.i51 = icmp eq i32 %inc.i.i50, 101
   br i1 %exitcond.not.i.i51, label %_ZL11sincos_reald.exit.i57, label %for.body.i.i52, !llvm.loop !146
 
 _ZL11sincos_reald.exit.i57:                       ; preds = %for.body.i.i52
@@ -8534,7 +8534,7 @@ for.body.i47.i:                                   ; preds = %for.body.i47.i, %_Z
   %div.i43.i = fdiv fast double %114, %conv.i42.i
   %add.i44.i = fadd fast double %div.i43.i, %sum.07.i41.i
   %inc.i45.i = add nuw nsw i32 %i.08.i40.i, 1
-  %exitcond.not.i46.i = icmp eq i32 %inc.i45.i, 10000001
+  %exitcond.not.i46.i = icmp eq i32 %inc.i45.i, 101
   br i1 %exitcond.not.i46.i, label %_ZL13enzyme_sincosd.exit, label %for.body.i47.i, !llvm.loop !146
 
 _ZL13enzyme_sincosd.exit:                         ; preds = %for.body.i47.i
@@ -8566,8 +8566,8 @@ _ZL13enzyme_sincosd.exit:                         ; preds = %for.body.i47.i
   br label %invertfor.body.i
 
 invertfor.body.i:                                 ; preds = %invertfor.body.i, %_ZL13enzyme_sincosd.exit
-  %"x'de.0.i" = phi double [ 0.000000e+00, %_ZL13enzyme_sincosd.exit ], [ %151, %invertfor.body.i ]
-  %"iv'ac.0.i" = phi i64 [ 9999999, %_ZL13enzyme_sincosd.exit ], [ %153, %invertfor.body.i ]
+  %"x'de.0.i" = phi double [ 0.000000e+00, %_ZL13enzyme_sincosd.exit ], [ %139, %invertfor.body.i ]
+  %"iv'ac.0.i" = phi i64 [ 99, %_ZL13enzyme_sincosd.exit ], [ %141, %invertfor.body.i ]
   %121 = trunc i64 %"iv'ac.0.i" to i32
   %122 = call fast double @llvm.powi.f64(double %call.i, i32 %121) #30
   %123 = fadd fast double %122, %"x'de.0.i"
@@ -8583,45 +8583,33 @@ invertfor.body.i:                                 ; preds = %invertfor.body.i, %
   %133 = add i32 %132, -3
   %134 = call fast double @llvm.powi.f64(double %call.i, i32 %133) #30
   %135 = fadd fast double %134, %131
-  %136 = trunc i64 %"iv'ac.0.i" to i32
-  %137 = add i32 %136, -4
+  %136 = add nsw i64 %"iv'ac.0.i", -4
+  %137 = trunc i64 %136 to i32
   %138 = call fast double @llvm.powi.f64(double %call.i, i32 %137) #30
   %139 = fadd fast double %138, %135
-  %140 = trunc i64 %"iv'ac.0.i" to i32
-  %141 = add i32 %140, -5
-  %142 = call fast double @llvm.powi.f64(double %call.i, i32 %141) #30
-  %143 = fadd fast double %142, %139
-  %144 = trunc i64 %"iv'ac.0.i" to i32
-  %145 = add i32 %144, -6
-  %146 = call fast double @llvm.powi.f64(double %call.i, i32 %145) #30
-  %147 = fadd fast double %146, %143
-  %148 = add nsw i64 %"iv'ac.0.i", -7
-  %149 = trunc i64 %148 to i32
-  %150 = call fast double @llvm.powi.f64(double %call.i, i32 %149) #30
-  %151 = fadd fast double %150, %147
-  %152 = icmp eq i64 %148, 0
-  %153 = add nsw i64 %"iv'ac.0.i", -8
-  br i1 %152, label %diffe_ZL11sincos_reald.exit, label %invertfor.body.i
+  %140 = icmp eq i64 %136, 0
+  %141 = add nsw i64 %"iv'ac.0.i", -5
+  br i1 %140, label %diffe_ZL11sincos_reald.exit, label %invertfor.body.i
 
 diffe_ZL11sincos_reald.exit:                      ; preds = %invertfor.body.i
   %call18.i63 = call i32 @gettimeofday(%struct.timeval* nonnull %end15.i43, i8* null) #30
   %tv_sec.i.i64 = getelementptr inbounds %struct.timeval, %struct.timeval* %end15.i43, i64 0, i32 0
-  %154 = load i64, i64* %tv_sec.i.i64, align 8, !tbaa !2
+  %142 = load i64, i64* %tv_sec.i.i64, align 8, !tbaa !2
   %tv_sec1.i.i65 = getelementptr inbounds %struct.timeval, %struct.timeval* %start14.i42, i64 0, i32 0
-  %155 = load i64, i64* %tv_sec1.i.i65, align 8, !tbaa !2
-  %sub.i.i66 = sub nsw i64 %154, %155
+  %143 = load i64, i64* %tv_sec1.i.i65, align 8, !tbaa !2
+  %sub.i.i66 = sub nsw i64 %142, %143
   %conv.i27.i = sitofp i64 %sub.i.i66 to double
   %tv_usec.i.i67 = getelementptr inbounds %struct.timeval, %struct.timeval* %end15.i43, i64 0, i32 1
-  %156 = load i64, i64* %tv_usec.i.i67, align 8, !tbaa !7
+  %144 = load i64, i64* %tv_usec.i.i67, align 8, !tbaa !7
   %tv_usec2.i.i68 = getelementptr inbounds %struct.timeval, %struct.timeval* %start14.i42, i64 0, i32 1
-  %157 = load i64, i64* %tv_usec2.i.i68, align 8, !tbaa !7
-  %sub3.i.i69 = sub nsw i64 %156, %157
+  %145 = load i64, i64* %tv_usec2.i.i68, align 8, !tbaa !7
+  %sub3.i.i69 = sub nsw i64 %144, %145
   %conv4.i.i70 = sitofp i64 %sub3.i.i69 to double
   %mul.i.i71 = fmul fast double %conv4.i.i70, 0x3EB0C6F7A0B5ED8D
   %add.i28.i72 = fadd fast double %mul.i.i71, %conv.i27.i
   %conv5.i.i73 = fptrunc double %add.i28.i72 to float
   %conv20.i = fpext float %conv5.i.i73 to double
-  %call21.i = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([15 x i8], [15 x i8]* @.str.88, i64 0, i64 0), double %conv20.i, double %151)
+  %call21.i = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([15 x i8], [15 x i8]* @.str.88, i64 0, i64 0), double %conv20.i, double %139)
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %120) #30
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %119) #30
   ret i32 0

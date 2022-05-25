@@ -1,2549 +1,311 @@
 --------------------------------
 Arithmetic Ops
-Forward unique addresses: 110, Reverse unique addresses: 210            
-Total Arithmetic: 115356 (mul: 4950, div: 9900, or: 0), Forward Arithmetic: 30404 (0, 4950, 0), Reverse Arithmetic: 84952 (4950, 4950, 0)            
-Max Forward Level: 10100, Max Reverse Level: 25154
+Forward unique addresses: 264, Reverse unique addresses: 345            
+Total Arithmetic: 6180 (mul: 394, div: 40, or: 256), Forward Arithmetic: 1794 (138, 8, 64), Reverse Arithmetic: 4386 (256, 32, 192)            
+Max Forward Level: 217, Max Reverse Level: 381
 --------------------------------
 Mem Ops Count
-Forward Loads: 9903
-Forward Stores: 8
-Reverse Loads: 144453
-Reverse Stores: 89804
-Total Loads: 154356
-Total Stores: 89812
-Total Mem Ops: 244168
+Forward Loads: 315
+Forward Stores: 243
+Reverse Loads: 4826
+Reverse Stores: 1968
+Total Loads: 5141
+Total Stores: 2211
+Total Mem Ops: 7352
 --------------------------------
 Lives Level
 
-Levels: 0 - 20, AVG Lives: 19831.0
-Levels: 20 - 40, AVG Lives: 10171.65
-Levels: 40 - 60, AVG Lives: 9229.4
-Levels: 60 - 80, AVG Lives: 8394.3
-Levels: 80 - 100, AVG Lives: 7663.95
-Levels: 100 - 120, AVG Lives: 7020.2
-Levels: 120 - 140, AVG Lives: 6488.55
-Levels: 140 - 160, AVG Lives: 6056.2
-Levels: 160 - 180, AVG Lives: 5716.45
-Levels: 180 - 200, AVG Lives: 5482.7
-Levels: 200 - 220, AVG Lives: 5363.95
-Levels: 220 - 240, AVG Lives: 5347.45
-Levels: 240 - 260, AVG Lives: 5333.4
-Levels: 260 - 280, AVG Lives: 5327.7
-Levels: 280 - 300, AVG Lives: 5297.25
-Levels: 300 - 320, AVG Lives: 5035.3
-Levels: 320 - 340, AVG Lives: 5030.55
-Levels: 340 - 360, AVG Lives: 5014.5
-Levels: 360 - 380, AVG Lives: 5004.85
-Levels: 380 - 400, AVG Lives: 4999.8
-Levels: 400 - 420, AVG Lives: 4982.85
-Levels: 420 - 440, AVG Lives: 4973.25
-Levels: 440 - 460, AVG Lives: 4968.45
-Levels: 460 - 480, AVG Lives: 4952.45
-Levels: 480 - 500, AVG Lives: 4942.1
-Levels: 500 - 520, AVG Lives: 4938.8
-Levels: 520 - 540, AVG Lives: 4921.7
-Levels: 540 - 560, AVG Lives: 4911.0
-Levels: 560 - 580, AVG Lives: 4908.95
-Levels: 580 - 600, AVG Lives: 4890.95
-Levels: 600 - 620, AVG Lives: 4879.6
-Levels: 620 - 640, AVG Lives: 4877.45
-Levels: 640 - 660, AVG Lives: 4859.9
-Levels: 660 - 680, AVG Lives: 4849.4
-Levels: 680 - 700, AVG Lives: 4838.65
-Levels: 700 - 720, AVG Lives: 4837.45
-Levels: 720 - 740, AVG Lives: 4818.85
-Levels: 740 - 760, AVG Lives: 4808.5
-Levels: 760 - 780, AVG Lives: 4798.85
-Levels: 780 - 800, AVG Lives: 4795.9
-Levels: 800 - 820, AVG Lives: 4777.15
-Levels: 820 - 840, AVG Lives: 4767.65
-Levels: 840 - 860, AVG Lives: 4756.85
-Levels: 860 - 880, AVG Lives: 4754.95
-Levels: 880 - 900, AVG Lives: 4736.7
-Levels: 900 - 920, AVG Lives: 4726.85
-Levels: 920 - 940, AVG Lives: 4716.45
-Levels: 940 - 960, AVG Lives: 4715.05
-Levels: 960 - 980, AVG Lives: 4695.65
-Levels: 980 - 1000, AVG Lives: 4685.05
-Levels: 1000 - 1020, AVG Lives: 4675.15
-Levels: 1020 - 1040, AVG Lives: 4664.7
-Levels: 1040 - 1060, AVG Lives: 4663.35
-Levels: 1060 - 1080, AVG Lives: 4644.65
-Levels: 1080 - 1100, AVG Lives: 4634.15
-Levels: 1100 - 1120, AVG Lives: 4623.65
-Levels: 1120 - 1140, AVG Lives: 4624.45
-Levels: 1140 - 1160, AVG Lives: 4603.95
-Levels: 1160 - 1180, AVG Lives: 4592.6
-Levels: 1180 - 1200, AVG Lives: 4582.25
-Levels: 1200 - 1220, AVG Lives: 4572.65
-Levels: 1220 - 1240, AVG Lives: 4573.15
-Levels: 1240 - 1260, AVG Lives: 4551.9
-Levels: 1260 - 1280, AVG Lives: 4541.6
-Levels: 1280 - 1300, AVG Lives: 4531.85
-Levels: 1300 - 1320, AVG Lives: 4521.65
-Levels: 1320 - 1340, AVG Lives: 4522.8
-Levels: 1340 - 1360, AVG Lives: 4501.8
-Levels: 1360 - 1380, AVG Lives: 4489.85
-Levels: 1380 - 1400, AVG Lives: 4479.85
-Levels: 1400 - 1420, AVG Lives: 4470.25
-Levels: 1420 - 1440, AVG Lives: 4471.55
-Levels: 1440 - 1460, AVG Lives: 4449.7
-Levels: 1460 - 1480, AVG Lives: 4439.75
-Levels: 1480 - 1500, AVG Lives: 4429.7
-Levels: 1500 - 1520, AVG Lives: 4419.65
-Levels: 1520 - 1540, AVG Lives: 4409.15
-Levels: 1540 - 1560, AVG Lives: 4409.5
-Levels: 1560 - 1580, AVG Lives: 4388.6
-Levels: 1580 - 1600, AVG Lives: 4378.85
-Levels: 1600 - 1620, AVG Lives: 4368.0
-Levels: 1620 - 1640, AVG Lives: 4357.0
-Levels: 1640 - 1660, AVG Lives: 4353.65
-Levels: 1660 - 1680, AVG Lives: 4343.65
-Levels: 1680 - 1700, AVG Lives: 4327.85
-Levels: 1700 - 1720, AVG Lives: 4317.65
-Levels: 1720 - 1740, AVG Lives: 4307.05
-Levels: 1740 - 1760, AVG Lives: 4295.65
-Levels: 1760 - 1780, AVG Lives: 4298.1
-Levels: 1780 - 1800, AVG Lives: 4275.85
-Levels: 1800 - 1820, AVG Lives: 4266.25
-Levels: 1820 - 1840, AVG Lives: 4256.15
-Levels: 1840 - 1860, AVG Lives: 4245.65
-Levels: 1860 - 1880, AVG Lives: 4235.15
-Levels: 1880 - 1900, AVG Lives: 4237.85
-Levels: 1900 - 1920, AVG Lives: 4215.25
-Levels: 1920 - 1940, AVG Lives: 4204.45
-Levels: 1940 - 1960, AVG Lives: 4193.65
-Levels: 1960 - 1980, AVG Lives: 4183.7
-Levels: 1980 - 2000, AVG Lives: 4174.75
-Levels: 2000 - 2020, AVG Lives: 4164.15
-Levels: 2020 - 2040, AVG Lives: 4166.8
-Levels: 2040 - 2060, AVG Lives: 4142.85
-Levels: 2060 - 2080, AVG Lives: 4133.1
-Levels: 2080 - 2100, AVG Lives: 4123.4
-Levels: 2100 - 2120, AVG Lives: 4112.65
-Levels: 2120 - 2140, AVG Lives: 4102.7
-Levels: 2140 - 2160, AVG Lives: 4105.7
-Levels: 2160 - 2180, AVG Lives: 4081.5
-Levels: 2180 - 2200, AVG Lives: 4071.85
-Levels: 2200 - 2220, AVG Lives: 4061.65
-Levels: 2220 - 2240, AVG Lives: 4051.7
-Levels: 2240 - 2260, AVG Lives: 4041.95
-Levels: 2260 - 2280, AVG Lives: 4031.5
-Levels: 2280 - 2300, AVG Lives: 4034.9
-Levels: 2300 - 2320, AVG Lives: 4009.7
-Levels: 2320 - 2340, AVG Lives: 3999.7
-Levels: 2340 - 2360, AVG Lives: 3990.15
-Levels: 2360 - 2380, AVG Lives: 3980.65
-Levels: 2380 - 2400, AVG Lives: 3970.15
-Levels: 2400 - 2420, AVG Lives: 3959.8
-Levels: 2420 - 2440, AVG Lives: 3963.9
-Levels: 2440 - 2460, AVG Lives: 3939.3
-Levels: 2460 - 2480, AVG Lives: 3928.65
-Levels: 2480 - 2500, AVG Lives: 3918.7
-Levels: 2500 - 2520, AVG Lives: 3908.15
-Levels: 2520 - 2540, AVG Lives: 3897.7
-Levels: 2540 - 2560, AVG Lives: 3888.35
-Levels: 2560 - 2580, AVG Lives: 3893.35
-Levels: 2580 - 2600, AVG Lives: 3868.7
-Levels: 2600 - 2620, AVG Lives: 3858.5
-Levels: 2620 - 2640, AVG Lives: 3846.2
-Levels: 2640 - 2660, AVG Lives: 3836.15
-Levels: 2660 - 2680, AVG Lives: 3826.65
-Levels: 2680 - 2700, AVG Lives: 3816.7
-Levels: 2700 - 2720, AVG Lives: 3822.1
-Levels: 2720 - 2740, AVG Lives: 3796.65
-Levels: 2740 - 2760, AVG Lives: 3786.8
-Levels: 2760 - 2780, AVG Lives: 3776.6
-Levels: 2780 - 2800, AVG Lives: 3765.25
-Levels: 2800 - 2820, AVG Lives: 3754.85
-Levels: 2820 - 2840, AVG Lives: 3744.65
-Levels: 2840 - 2860, AVG Lives: 3750.3
-Levels: 2860 - 2880, AVG Lives: 3725.65
-Levels: 2880 - 2900, AVG Lives: 3715.05
-Levels: 2900 - 2920, AVG Lives: 3704.85
-Levels: 2920 - 2940, AVG Lives: 3694.65
-Levels: 2940 - 2960, AVG Lives: 3684.05
-Levels: 2960 - 2980, AVG Lives: 3673.3
-Levels: 2980 - 3000, AVG Lives: 3663.65
-Levels: 3000 - 3020, AVG Lives: 3669.65
-Levels: 3020 - 3040, AVG Lives: 3642.85
-Levels: 3040 - 3060, AVG Lives: 3632.7
-Levels: 3060 - 3080, AVG Lives: 3622.85
-Levels: 3080 - 3100, AVG Lives: 3613.55
-Levels: 3100 - 3120, AVG Lives: 3603.75
-Levels: 3120 - 3140, AVG Lives: 3592.35
-Levels: 3140 - 3160, AVG Lives: 3581.5
-Levels: 3160 - 3180, AVG Lives: 3587.25
-Levels: 3180 - 3200, AVG Lives: 3560.95
-Levels: 3200 - 3220, AVG Lives: 3551.7
-Levels: 3220 - 3240, AVG Lives: 3541.85
-Levels: 3240 - 3260, AVG Lives: 3531.65
-Levels: 3260 - 3280, AVG Lives: 3521.7
-Levels: 3280 - 3300, AVG Lives: 3511.3
-Levels: 3300 - 3320, AVG Lives: 3499.4
-Levels: 3320 - 3340, AVG Lives: 3506.7
-Levels: 3340 - 3360, AVG Lives: 3479.65
-Levels: 3360 - 3380, AVG Lives: 3469.7
-Levels: 3380 - 3400, AVG Lives: 3459.85
-Levels: 3400 - 3420, AVG Lives: 3449.65
-Levels: 3420 - 3440, AVG Lives: 3440.5
-Levels: 3440 - 3460, AVG Lives: 3429.65
-Levels: 3460 - 3480, AVG Lives: 3418.7
-Levels: 3480 - 3500, AVG Lives: 3425.25
-Levels: 3500 - 3520, AVG Lives: 3397.65
-Levels: 3520 - 3540, AVG Lives: 3387.7
-Levels: 3540 - 3560, AVG Lives: 3378.75
-Levels: 3560 - 3580, AVG Lives: 3368.65
-Levels: 3580 - 3600, AVG Lives: 3358.0
-Levels: 3600 - 3620, AVG Lives: 3347.65
-Levels: 3620 - 3640, AVG Lives: 3336.75
-Levels: 3640 - 3660, AVG Lives: 3327.0
-Levels: 3660 - 3680, AVG Lives: 3334.6
-Levels: 3680 - 3700, AVG Lives: 3306.7
-Levels: 3700 - 3720, AVG Lives: 3296.85
-Levels: 3720 - 3740, AVG Lives: 3286.2
-Levels: 3740 - 3760, AVG Lives: 3275.85
-Levels: 3760 - 3780, AVG Lives: 3265.65
-Levels: 3780 - 3800, AVG Lives: 3255.55
-Levels: 3800 - 3820, AVG Lives: 3245.85
-Levels: 3820 - 3840, AVG Lives: 3253.65
-Levels: 3840 - 3860, AVG Lives: 3225.7
-Levels: 3860 - 3880, AVG Lives: 3215.2
-Levels: 3880 - 3900, AVG Lives: 3203.75
-Levels: 3900 - 3920, AVG Lives: 3194.45
-Levels: 3920 - 3940, AVG Lives: 3184.6
-Levels: 3940 - 3960, AVG Lives: 3173.7
-Levels: 3960 - 3980, AVG Lives: 3163.85
-Levels: 3980 - 4000, AVG Lives: 3153.65
-Levels: 4000 - 4020, AVG Lives: 3162.15
-Levels: 4020 - 4040, AVG Lives: 3133.9
-Levels: 4040 - 4060, AVG Lives: 3123.7
-Levels: 4060 - 4080, AVG Lives: 3113.2
-Levels: 4080 - 4100, AVG Lives: 3102.4
-Levels: 4100 - 4120, AVG Lives: 3091.7
-Levels: 4120 - 4140, AVG Lives: 3081.85
-Levels: 4140 - 4160, AVG Lives: 3071.65
-Levels: 4160 - 4180, AVG Lives: 3062.6
-Levels: 4180 - 4200, AVG Lives: 3071.25
-Levels: 4200 - 4220, AVG Lives: 3041.7
-Levels: 4220 - 4240, AVG Lives: 3031.85
-Levels: 4240 - 4260, AVG Lives: 3021.1
-Levels: 4260 - 4280, AVG Lives: 3010.25
-Levels: 4280 - 4300, AVG Lives: 3000.25
-Levels: 4300 - 4320, AVG Lives: 2990.65
-Levels: 4320 - 4340, AVG Lives: 2980.7
-Levels: 4340 - 4360, AVG Lives: 2970.45
-Levels: 4360 - 4380, AVG Lives: 2978.8
-Levels: 4380 - 4400, AVG Lives: 2949.9
-Levels: 4400 - 4420, AVG Lives: 2938.7
-Levels: 4420 - 4440, AVG Lives: 2929.5
-Levels: 4440 - 4460, AVG Lives: 2919.85
-Levels: 4460 - 4480, AVG Lives: 2909.55
-Levels: 4480 - 4500, AVG Lives: 2898.75
-Levels: 4500 - 4520, AVG Lives: 2888.6
-Levels: 4520 - 4540, AVG Lives: 2877.7
-Levels: 4540 - 4560, AVG Lives: 2867.5
-Levels: 4560 - 4580, AVG Lives: 2877.25
-Levels: 4580 - 4600, AVG Lives: 2847.7
-Levels: 4600 - 4620, AVG Lives: 2837.85
-Levels: 4620 - 4640, AVG Lives: 2827.65
-Levels: 4640 - 4660, AVG Lives: 2817.7
-Levels: 4660 - 4680, AVG Lives: 2807.85
-Levels: 4680 - 4700, AVG Lives: 2796.65
-Levels: 4700 - 4720, AVG Lives: 2785.85
-Levels: 4720 - 4740, AVG Lives: 2775.65
-Levels: 4740 - 4760, AVG Lives: 2775.8
-Levels: 4760 - 4780, AVG Lives: 2765.8
-Levels: 4780 - 4800, AVG Lives: 2745.65
-Levels: 4800 - 4820, AVG Lives: 2735.7
-Levels: 4820 - 4840, AVG Lives: 2726.25
-Levels: 4840 - 4860, AVG Lives: 2715.45
-Levels: 4860 - 4880, AVG Lives: 2704.85
-Levels: 4880 - 4900, AVG Lives: 2694.65
-Levels: 4900 - 4920, AVG Lives: 2684.3
-Levels: 4920 - 4940, AVG Lives: 2673.85
-Levels: 4940 - 4960, AVG Lives: 2684.05
-Levels: 4960 - 4980, AVG Lives: 2654.1
-Levels: 4980 - 5000, AVG Lives: 2644.3
-Levels: 5000 - 5020, AVG Lives: 2633.65
-Levels: 5020 - 5040, AVG Lives: 2623.0
-Levels: 5040 - 5060, AVG Lives: 2612.65
-Levels: 5060 - 5080, AVG Lives: 2602.7
-Levels: 5080 - 5100, AVG Lives: 2592.85
-Levels: 5100 - 5120, AVG Lives: 2582.95
-Levels: 5120 - 5140, AVG Lives: 2573.1
-Levels: 5140 - 5160, AVG Lives: 2582.55
-Levels: 5160 - 5180, AVG Lives: 2551.7
-Levels: 5180 - 5200, AVG Lives: 2541.7
-Levels: 5200 - 5220, AVG Lives: 2530.7
-Levels: 5220 - 5240, AVG Lives: 2520.7
-Levels: 5240 - 5260, AVG Lives: 2510.95
-Levels: 5260 - 5280, AVG Lives: 2501.2
-Levels: 5280 - 5300, AVG Lives: 2490.7
-Levels: 5300 - 5320, AVG Lives: 2480.85
-Levels: 5320 - 5340, AVG Lives: 2470.65
-Levels: 5340 - 5360, AVG Lives: 2460.8
-Levels: 5360 - 5380, AVG Lives: 2471.0
-Levels: 5380 - 5400, AVG Lives: 2438.7
-Levels: 5400 - 5420, AVG Lives: 2429.1
-Levels: 5420 - 5440, AVG Lives: 2418.65
-Levels: 5440 - 5460, AVG Lives: 2408.7
-Levels: 5460 - 5480, AVG Lives: 2398.85
-Levels: 5480 - 5500, AVG Lives: 2388.65
-Levels: 5500 - 5520, AVG Lives: 2378.7
-Levels: 5520 - 5540, AVG Lives: 2368.85
-Levels: 5540 - 5560, AVG Lives: 2358.15
-Levels: 5560 - 5580, AVG Lives: 2369.5
-Levels: 5580 - 5600, AVG Lives: 2337.55
-Levels: 5600 - 5620, AVG Lives: 2326.75
-Levels: 5620 - 5640, AVG Lives: 2316.85
-Levels: 5640 - 5660, AVG Lives: 2306.65
-Levels: 5660 - 5680, AVG Lives: 2296.65
-Levels: 5680 - 5700, AVG Lives: 2285.85
-Levels: 5700 - 5720, AVG Lives: 2276.55
-Levels: 5720 - 5740, AVG Lives: 2266.7
-Levels: 5740 - 5760, AVG Lives: 2255.85
-Levels: 5760 - 5780, AVG Lives: 2245.7
-Levels: 5780 - 5800, AVG Lives: 2257.85
-Levels: 5800 - 5820, AVG Lives: 2225.2
-Levels: 5820 - 5840, AVG Lives: 2214.6
-Levels: 5840 - 5860, AVG Lives: 2204.15
-Levels: 5860 - 5880, AVG Lives: 2194.65
-Levels: 5880 - 5900, AVG Lives: 2184.7
-Levels: 5900 - 5920, AVG Lives: 2174.85
-Levels: 5920 - 5940, AVG Lives: 2164.05
-Levels: 5940 - 5960, AVG Lives: 2152.9
-Levels: 5960 - 5980, AVG Lives: 2142.65
-Levels: 5980 - 6000, AVG Lives: 2132.85
-Levels: 6000 - 6020, AVG Lives: 2145.65
-Levels: 6020 - 6040, AVG Lives: 2113.65
-Levels: 6040 - 6060, AVG Lives: 2103.7
-Levels: 6060 - 6080, AVG Lives: 2093.35
-Levels: 6080 - 6100, AVG Lives: 2081.7
-Levels: 6100 - 6120, AVG Lives: 2071.7
-Levels: 6120 - 6140, AVG Lives: 2060.7
-Levels: 6140 - 6160, AVG Lives: 2050.7
-Levels: 6160 - 6180, AVG Lives: 2041.65
-Levels: 6180 - 6200, AVG Lives: 2031.4
-Levels: 6200 - 6220, AVG Lives: 2020.8
-Levels: 6220 - 6240, AVG Lives: 2033.55
-Levels: 6240 - 6260, AVG Lives: 2000.65
-Levels: 6260 - 6280, AVG Lives: 1990.7
-Levels: 6280 - 6300, AVG Lives: 1980.85
-Levels: 6300 - 6320, AVG Lives: 1970.15
-Levels: 6320 - 6340, AVG Lives: 1959.35
-Levels: 6340 - 6360, AVG Lives: 1948.65
-Levels: 6360 - 6380, AVG Lives: 1938.7
-Levels: 6380 - 6400, AVG Lives: 1928.85
-Levels: 6400 - 6420, AVG Lives: 1918.65
-Levels: 6420 - 6440, AVG Lives: 1908.7
-Levels: 6440 - 6460, AVG Lives: 1921.15
-Levels: 6460 - 6480, AVG Lives: 1887.65
-Levels: 6480 - 6500, AVG Lives: 1878.6
-Levels: 6500 - 6520, AVG Lives: 1868.15
-Levels: 6520 - 6540, AVG Lives: 1857.7
-Levels: 6540 - 6560, AVG Lives: 1847.85
-Levels: 6560 - 6580, AVG Lives: 1836.7
-Levels: 6580 - 6600, AVG Lives: 1826.0
-Levels: 6600 - 6620, AVG Lives: 1815.85
-Levels: 6620 - 6640, AVG Lives: 1805.65
-Levels: 6640 - 6660, AVG Lives: 1796.5
-Levels: 6660 - 6680, AVG Lives: 1810.4
-Levels: 6680 - 6700, AVG Lives: 1775.65
-Levels: 6700 - 6720, AVG Lives: 1765.15
-Levels: 6720 - 6740, AVG Lives: 1754.65
-Levels: 6740 - 6760, AVG Lives: 1744.7
-Levels: 6760 - 6780, AVG Lives: 1734.85
-Levels: 6780 - 6800, AVG Lives: 1724.4
-Levels: 6800 - 6820, AVG Lives: 1714.3
-Levels: 6820 - 6840, AVG Lives: 1704.85
-Levels: 6840 - 6860, AVG Lives: 1693.85
-Levels: 6860 - 6880, AVG Lives: 1683.7
-Levels: 6880 - 6900, AVG Lives: 1673.85
-Levels: 6900 - 6920, AVG Lives: 1686.45
-Levels: 6920 - 6940, AVG Lives: 1651.85
-Levels: 6940 - 6960, AVG Lives: 1641.65
-Levels: 6960 - 6980, AVG Lives: 1632.0
-Levels: 6980 - 7000, AVG Lives: 1622.85
-Levels: 7000 - 7020, AVG Lives: 1612.65
-Levels: 7020 - 7040, AVG Lives: 1601.75
-Levels: 7040 - 7060, AVG Lives: 1591.85
-Levels: 7060 - 7080, AVG Lives: 1581.65
-Levels: 7080 - 7100, AVG Lives: 1571.7
-Levels: 7100 - 7120, AVG Lives: 1560.85
-Levels: 7120 - 7140, AVG Lives: 1549.25
-Levels: 7140 - 7160, AVG Lives: 1564.15
-Levels: 7160 - 7180, AVG Lives: 1529.65
-Levels: 7180 - 7200, AVG Lives: 1519.7
-Levels: 7200 - 7220, AVG Lives: 1509.85
-Levels: 7220 - 7240, AVG Lives: 1499.6
-Levels: 7240 - 7260, AVG Lives: 1488.7
-Levels: 7260 - 7280, AVG Lives: 1478.85
-Levels: 7280 - 7300, AVG Lives: 1468.65
-Levels: 7300 - 7320, AVG Lives: 1459.1
-Levels: 7320 - 7340, AVG Lives: 1448.85
-Levels: 7340 - 7360, AVG Lives: 1437.95
-Levels: 7360 - 7380, AVG Lives: 1427.7
-Levels: 7380 - 7400, AVG Lives: 1441.5
-Levels: 7400 - 7420, AVG Lives: 1406.7
-Levels: 7420 - 7440, AVG Lives: 1396.85
-Levels: 7440 - 7460, AVG Lives: 1386.1
-Levels: 7460 - 7480, AVG Lives: 1375.7
-Levels: 7480 - 7500, AVG Lives: 1366.65
-Levels: 7500 - 7520, AVG Lives: 1356.65
-Levels: 7520 - 7540, AVG Lives: 1346.45
-Levels: 7540 - 7560, AVG Lives: 1335.2
-Levels: 7560 - 7580, AVG Lives: 1324.7
-Levels: 7580 - 7600, AVG Lives: 1314.85
-Levels: 7600 - 7620, AVG Lives: 1304.65
-Levels: 7620 - 7640, AVG Lives: 1319.9
-Levels: 7640 - 7660, AVG Lives: 1284.1
-Levels: 7660 - 7680, AVG Lives: 1273.65
-Levels: 7680 - 7700, AVG Lives: 1263.7
-Levels: 7700 - 7720, AVG Lives: 1253.85
-Levels: 7720 - 7740, AVG Lives: 1243.65
-Levels: 7740 - 7760, AVG Lives: 1232.6
-Levels: 7760 - 7780, AVG Lives: 1221.65
-Levels: 7780 - 7800, AVG Lives: 1211.7
-Levels: 7800 - 7820, AVG Lives: 1201.85
-Levels: 7820 - 7840, AVG Lives: 1191.95
-Levels: 7840 - 7860, AVG Lives: 1181.95
-Levels: 7860 - 7880, AVG Lives: 1172.0
-Levels: 7880 - 7900, AVG Lives: 1187.05
-Levels: 7900 - 7920, AVG Lives: 1151.7
-Levels: 7920 - 7940, AVG Lives: 1141.35
-Levels: 7940 - 7960, AVG Lives: 1129.65
-Levels: 7960 - 7980, AVG Lives: 1119.0
-Levels: 7980 - 8000, AVG Lives: 1108.65
-Levels: 8000 - 8020, AVG Lives: 1099.1
-Levels: 8020 - 8040, AVG Lives: 1089.4
-Levels: 8040 - 8060, AVG Lives: 1078.65
-Levels: 8060 - 8080, AVG Lives: 1068.7
-Levels: 8080 - 8100, AVG Lives: 1058.85
-Levels: 8100 - 8120, AVG Lives: 1048.65
-Levels: 8120 - 8140, AVG Lives: 1063.75
-Levels: 8140 - 8160, AVG Lives: 1027.85
-Levels: 8160 - 8180, AVG Lives: 1017.65
-Levels: 8180 - 8200, AVG Lives: 1007.4
-Levels: 8200 - 8220, AVG Lives: 996.8
-Levels: 8220 - 8240, AVG Lives: 985.7
-Levels: 8240 - 8260, AVG Lives: 975.85
-Levels: 8260 - 8280, AVG Lives: 965.65
-Levels: 8280 - 8300, AVG Lives: 955.45
-Levels: 8300 - 8320, AVG Lives: 944.85
-Levels: 8320 - 8340, AVG Lives: 934.65
-Levels: 8340 - 8360, AVG Lives: 924.7
-Levels: 8360 - 8380, AVG Lives: 915.1
-Levels: 8380 - 8400, AVG Lives: 931.1
-Levels: 8400 - 8420, AVG Lives: 894.15
-Levels: 8420 - 8440, AVG Lives: 883.65
-Levels: 8440 - 8460, AVG Lives: 873.7
-Levels: 8460 - 8480, AVG Lives: 862.9
-Levels: 8480 - 8500, AVG Lives: 852.65
-Levels: 8500 - 8520, AVG Lives: 841.85
-Levels: 8520 - 8540, AVG Lives: 831.85
-Levels: 8540 - 8560, AVG Lives: 820.8
-Levels: 8560 - 8580, AVG Lives: 811.7
-Levels: 8580 - 8600, AVG Lives: 801.85
-Levels: 8600 - 8620, AVG Lives: 791.6
-Levels: 8620 - 8640, AVG Lives: 780.45
-Levels: 8640 - 8660, AVG Lives: 796.45
-Levels: 8660 - 8680, AVG Lives: 759.7
-Levels: 8680 - 8700, AVG Lives: 749.6
-Levels: 8700 - 8720, AVG Lives: 738.65
-Levels: 8720 - 8740, AVG Lives: 728.7
-Levels: 8740 - 8760, AVG Lives: 719.65
-Levels: 8760 - 8780, AVG Lives: 709.1
-Levels: 8780 - 8800, AVG Lives: 698.55
-Levels: 8800 - 8820, AVG Lives: 687.85
-Levels: 8820 - 8840, AVG Lives: 677.65
-Levels: 8840 - 8860, AVG Lives: 666.75
-Levels: 8860 - 8880, AVG Lives: 655.85
-Levels: 8880 - 8900, AVG Lives: 645.7
-Levels: 8900 - 8920, AVG Lives: 662.5
-Levels: 8920 - 8940, AVG Lives: 625.1
-Levels: 8940 - 8960, AVG Lives: 615.7
-Levels: 8960 - 8980, AVG Lives: 605.8
-Levels: 8980 - 9000, AVG Lives: 594.65
-Levels: 9000 - 9020, AVG Lives: 584.7
-Levels: 9020 - 9040, AVG Lives: 574.85
-Levels: 9040 - 9060, AVG Lives: 563.9
-Levels: 9060 - 9080, AVG Lives: 553.7
-Levels: 9080 - 9100, AVG Lives: 543.3
-Levels: 9100 - 9120, AVG Lives: 531.15
-Levels: 9120 - 9140, AVG Lives: 521.75
-Levels: 9140 - 9160, AVG Lives: 511.65
-Levels: 9160 - 9180, AVG Lives: 501.25
-Levels: 9180 - 9200, AVG Lives: 518.45
-Levels: 9200 - 9220, AVG Lives: 480.65
-Levels: 9220 - 9240, AVG Lives: 470.25
-Levels: 9240 - 9260, AVG Lives: 459.85
-Levels: 9260 - 9280, AVG Lives: 449.65
-Levels: 9280 - 9300, AVG Lives: 439.15
-Levels: 9300 - 9320, AVG Lives: 429.15
-Levels: 9320 - 9340, AVG Lives: 419.05
-Levels: 9340 - 9360, AVG Lives: 408.1
-Levels: 9360 - 9380, AVG Lives: 397.65
-Levels: 9380 - 9400, AVG Lives: 387.6
-Levels: 9400 - 9420, AVG Lives: 375.95
-Levels: 9420 - 9440, AVG Lives: 365.65
-Levels: 9440 - 9460, AVG Lives: 369.35
-Levels: 9460 - 9480, AVG Lives: 358.8
-Levels: 9480 - 9500, AVG Lives: 334.65
-Levels: 9500 - 9520, AVG Lives: 324.35
-Levels: 9520 - 9540, AVG Lives: 314.85
-Levels: 9540 - 9560, AVG Lives: 304.1
-Levels: 9560 - 9580, AVG Lives: 293.15
-Levels: 9580 - 9600, AVG Lives: 282.4
-Levels: 9600 - 9620, AVG Lives: 271.7
-Levels: 9620 - 9640, AVG Lives: 261.8
-Levels: 9640 - 9660, AVG Lives: 250.65
-Levels: 9660 - 9680, AVG Lives: 240.7
-Levels: 9680 - 9700, AVG Lives: 229.9
-Levels: 9700 - 9720, AVG Lives: 219.9
-Levels: 9720 - 9740, AVG Lives: 237.15
-Levels: 9740 - 9760, AVG Lives: 198.8
-Levels: 9760 - 9780, AVG Lives: 187.65
-Levels: 9780 - 9800, AVG Lives: 177.45
-Levels: 9800 - 9820, AVG Lives: 166.15
-Levels: 9820 - 9840, AVG Lives: 155.15
-Levels: 9840 - 9860, AVG Lives: 144.85
-Levels: 9860 - 9880, AVG Lives: 133.7
-Levels: 9880 - 9900, AVG Lives: 123.25
-Levels: 9900 - 9920, AVG Lives: 113.45
-Levels: 9920 - 9940, AVG Lives: 111.65
-Levels: 9940 - 9960, AVG Lives: 110.95
-Levels: 9960 - 9980, AVG Lives: 110.3
-Levels: 9980 - 10000, AVG Lives: 109.2
-Levels: 10000 - 10020, AVG Lives: 136.95
-Levels: 10020 - 10040, AVG Lives: 106.5
-Levels: 10040 - 10060, AVG Lives: 104.4
-Levels: 10060 - 10080, AVG Lives: 102.4
-Levels: 10080 - 10100, AVG Lives: 99.85
-Levels: 10100 - 10120, AVG Lives: 94.0
-Levels: 10120 - 10140, AVG Lives: 93.85
-Levels: 10140 - 10160, AVG Lives: 93.65
-Levels: 10160 - 10180, AVG Lives: 93.7
-Levels: 10180 - 10200, AVG Lives: 93.85
-Levels: 10200 - 10220, AVG Lives: 93.65
-Levels: 10220 - 10240, AVG Lives: 93.7
-Levels: 10240 - 10260, AVG Lives: 93.85
-Levels: 10260 - 10280, AVG Lives: 93.65
-Levels: 10280 - 10300, AVG Lives: 93.8
-Levels: 10300 - 10320, AVG Lives: 121.8
-Levels: 10320 - 10340, AVG Lives: 92.75
-Levels: 10340 - 10360, AVG Lives: 91.9
-Levels: 10360 - 10380, AVG Lives: 91.65
-Levels: 10380 - 10400, AVG Lives: 91.7
-Levels: 10400 - 10420, AVG Lives: 91.85
-Levels: 10420 - 10440, AVG Lives: 91.65
-Levels: 10440 - 10460, AVG Lives: 91.7
-Levels: 10460 - 10480, AVG Lives: 91.85
-Levels: 10480 - 10500, AVG Lives: 91.65
-Levels: 10500 - 10520, AVG Lives: 91.7
-Levels: 10520 - 10540, AVG Lives: 91.85
-Levels: 10540 - 10560, AVG Lives: 91.05
-Levels: 10560 - 10580, AVG Lives: 90.85
-Levels: 10580 - 10600, AVG Lives: 120.3
-Levels: 10600 - 10620, AVG Lives: 90.7
-Levels: 10620 - 10640, AVG Lives: 90.85
-Levels: 10640 - 10660, AVG Lives: 90.65
-Levels: 10660 - 10680, AVG Lives: 90.05
-Levels: 10680 - 10700, AVG Lives: 89.85
-Levels: 10700 - 10720, AVG Lives: 89.65
-Levels: 10720 - 10740, AVG Lives: 89.7
-Levels: 10740 - 10760, AVG Lives: 89.85
-Levels: 10760 - 10780, AVG Lives: 89.65
-Levels: 10780 - 10800, AVG Lives: 89.7
-Levels: 10800 - 10820, AVG Lives: 88.85
-Levels: 10820 - 10840, AVG Lives: 88.7
-Levels: 10840 - 10860, AVG Lives: 88.85
-Levels: 10860 - 10880, AVG Lives: 88.65
-Levels: 10880 - 10900, AVG Lives: 118.7
-Levels: 10900 - 10920, AVG Lives: 88.85
-Levels: 10920 - 10940, AVG Lives: 88.65
-Levels: 10940 - 10960, AVG Lives: 88.7
-Levels: 10960 - 10980, AVG Lives: 88.85
-Levels: 10980 - 11000, AVG Lives: 88.45
-Levels: 11000 - 11020, AVG Lives: 87.7
-Levels: 11020 - 11040, AVG Lives: 87.85
-Levels: 11040 - 11060, AVG Lives: 87.5
-Levels: 11060 - 11080, AVG Lives: 86.85
-Levels: 11080 - 11100, AVG Lives: 86.65
-Levels: 11100 - 11120, AVG Lives: 86.7
-Levels: 11120 - 11140, AVG Lives: 86.85
-Levels: 11140 - 11160, AVG Lives: 86.65
-Levels: 11160 - 11180, AVG Lives: 86.85
-Levels: 11180 - 11200, AVG Lives: 117.05
-Levels: 11200 - 11220, AVG Lives: 86.65
-Levels: 11220 - 11240, AVG Lives: 86.7
-Levels: 11240 - 11260, AVG Lives: 86.85
-Levels: 11260 - 11280, AVG Lives: 86.65
-Levels: 11280 - 11300, AVG Lives: 86.7
-Levels: 11300 - 11320, AVG Lives: 86.6
-Levels: 11320 - 11340, AVG Lives: 85.15
-Levels: 11340 - 11360, AVG Lives: 84.85
-Levels: 11360 - 11380, AVG Lives: 84.65
-Levels: 11380 - 11400, AVG Lives: 84.7
-Levels: 11400 - 11420, AVG Lives: 84.85
-Levels: 11420 - 11440, AVG Lives: 84.65
-Levels: 11440 - 11460, AVG Lives: 84.7
-Levels: 11460 - 11480, AVG Lives: 84.95
-Levels: 11480 - 11500, AVG Lives: 115.35
-Levels: 11500 - 11520, AVG Lives: 84.7
-Levels: 11520 - 11540, AVG Lives: 84.85
-Levels: 11540 - 11560, AVG Lives: 84.65
-Levels: 11560 - 11580, AVG Lives: 84.7
-Levels: 11580 - 11600, AVG Lives: 83.7
-Levels: 11600 - 11620, AVG Lives: 83.7
-Levels: 11620 - 11640, AVG Lives: 83.85
-Levels: 11640 - 11660, AVG Lives: 83.65
-Levels: 11660 - 11680, AVG Lives: 83.1
-Levels: 11680 - 11700, AVG Lives: 82.85
-Levels: 11700 - 11720, AVG Lives: 82.65
-Levels: 11720 - 11740, AVG Lives: 82.7
-Levels: 11740 - 11760, AVG Lives: 82.85
-Levels: 11760 - 11780, AVG Lives: 82.65
-Levels: 11780 - 11800, AVG Lives: 113.95
-Levels: 11800 - 11820, AVG Lives: 82.85
-Levels: 11820 - 11840, AVG Lives: 82.65
-Levels: 11840 - 11860, AVG Lives: 82.0
-Levels: 11860 - 11880, AVG Lives: 81.65
-Levels: 11880 - 11900, AVG Lives: 81.7
-Levels: 11900 - 11920, AVG Lives: 81.85
-Levels: 11920 - 11940, AVG Lives: 81.65
-Levels: 11940 - 11960, AVG Lives: 81.7
-Levels: 11960 - 11980, AVG Lives: 81.85
-Levels: 11980 - 12000, AVG Lives: 81.65
-Levels: 12000 - 12020, AVG Lives: 81.3
-Levels: 12020 - 12040, AVG Lives: 80.85
-Levels: 12040 - 12060, AVG Lives: 80.65
-Levels: 12060 - 12080, AVG Lives: 80.7
-Levels: 12080 - 12100, AVG Lives: 112.45
-Levels: 12100 - 12120, AVG Lives: 80.2
-Levels: 12120 - 12140, AVG Lives: 79.85
-Levels: 12140 - 12160, AVG Lives: 79.65
-Levels: 12160 - 12180, AVG Lives: 79.7
-Levels: 12180 - 12200, AVG Lives: 79.85
-Levels: 12200 - 12220, AVG Lives: 79.65
-Levels: 12220 - 12240, AVG Lives: 79.7
-Levels: 12240 - 12260, AVG Lives: 79.85
-Levels: 12260 - 12280, AVG Lives: 79.65
-Levels: 12280 - 12300, AVG Lives: 79.7
-Levels: 12300 - 12320, AVG Lives: 79.85
-Levels: 12320 - 12340, AVG Lives: 79.65
-Levels: 12340 - 12360, AVG Lives: 79.75
-Levels: 12360 - 12380, AVG Lives: 78.9
-Levels: 12380 - 12400, AVG Lives: 77.75
-Levels: 12400 - 12420, AVG Lives: 109.8
-Levels: 12420 - 12440, AVG Lives: 77.65
-Levels: 12440 - 12460, AVG Lives: 77.7
-Levels: 12460 - 12480, AVG Lives: 77.85
-Levels: 12480 - 12500, AVG Lives: 77.65
-Levels: 12500 - 12520, AVG Lives: 77.7
-Levels: 12520 - 12540, AVG Lives: 77.85
-Levels: 12540 - 12560, AVG Lives: 77.65
-Levels: 12560 - 12580, AVG Lives: 77.7
-Levels: 12580 - 12600, AVG Lives: 77.85
-Levels: 12600 - 12620, AVG Lives: 77.65
-Levels: 12620 - 12640, AVG Lives: 77.7
-Levels: 12640 - 12660, AVG Lives: 77.6
-Levels: 12660 - 12680, AVG Lives: 76.7
-Levels: 12680 - 12700, AVG Lives: 76.85
-Levels: 12700 - 12720, AVG Lives: 76.45
-Levels: 12720 - 12740, AVG Lives: 108.1
-Levels: 12740 - 12760, AVG Lives: 75.85
-Levels: 12760 - 12780, AVG Lives: 75.65
-Levels: 12780 - 12800, AVG Lives: 75.7
-Levels: 12800 - 12820, AVG Lives: 75.85
-Levels: 12820 - 12840, AVG Lives: 75.65
-Levels: 12840 - 12860, AVG Lives: 75.7
-Levels: 12860 - 12880, AVG Lives: 75.85
-Levels: 12880 - 12900, AVG Lives: 75.65
-Levels: 12900 - 12920, AVG Lives: 75.7
-Levels: 12920 - 12940, AVG Lives: 75.45
-Levels: 12940 - 12960, AVG Lives: 74.7
-Levels: 12960 - 12980, AVG Lives: 74.85
-Levels: 12980 - 13000, AVG Lives: 74.65
-Levels: 13000 - 13020, AVG Lives: 74.7
-Levels: 13020 - 13040, AVG Lives: 74.85
-Levels: 13040 - 13060, AVG Lives: 107.5
-Levels: 13060 - 13080, AVG Lives: 74.4
-Levels: 13080 - 13100, AVG Lives: 73.85
-Levels: 13100 - 13120, AVG Lives: 73.65
-Levels: 13120 - 13140, AVG Lives: 73.7
-Levels: 13140 - 13160, AVG Lives: 73.85
-Levels: 13160 - 13180, AVG Lives: 73.65
-Levels: 13180 - 13200, AVG Lives: 73.7
-Levels: 13200 - 13220, AVG Lives: 73.45
-Levels: 13220 - 13240, AVG Lives: 72.7
-Levels: 13240 - 13260, AVG Lives: 72.85
-Levels: 13260 - 13280, AVG Lives: 72.65
-Levels: 13280 - 13300, AVG Lives: 72.7
-Levels: 13300 - 13320, AVG Lives: 72.85
-Levels: 13320 - 13340, AVG Lives: 72.65
-Levels: 13340 - 13360, AVG Lives: 72.7
-Levels: 13360 - 13380, AVG Lives: 106.05
-Levels: 13380 - 13400, AVG Lives: 72.65
-Levels: 13400 - 13420, AVG Lives: 72.7
-Levels: 13420 - 13440, AVG Lives: 72.75
-Levels: 13440 - 13460, AVG Lives: 71.65
-Levels: 13460 - 13480, AVG Lives: 71.7
-Levels: 13480 - 13500, AVG Lives: 71.6
-Levels: 13500 - 13520, AVG Lives: 70.7
-Levels: 13520 - 13540, AVG Lives: 70.85
-Levels: 13540 - 13560, AVG Lives: 70.65
-Levels: 13560 - 13580, AVG Lives: 70.7
-Levels: 13580 - 13600, AVG Lives: 70.85
-Levels: 13600 - 13620, AVG Lives: 70.65
-Levels: 13620 - 13640, AVG Lives: 70.7
-Levels: 13640 - 13660, AVG Lives: 70.85
-Levels: 13660 - 13680, AVG Lives: 70.65
-Levels: 13680 - 13700, AVG Lives: 70.85
-Levels: 13700 - 13720, AVG Lives: 104.25
-Levels: 13720 - 13740, AVG Lives: 70.65
-Levels: 13740 - 13760, AVG Lives: 70.7
-Levels: 13760 - 13780, AVG Lives: 70.85
-Levels: 13780 - 13800, AVG Lives: 69.75
-Levels: 13800 - 13820, AVG Lives: 69.2
-Levels: 13820 - 13840, AVG Lives: 68.65
-Levels: 13840 - 13860, AVG Lives: 68.7
-Levels: 13860 - 13880, AVG Lives: 68.85
-Levels: 13880 - 13900, AVG Lives: 68.65
-Levels: 13900 - 13920, AVG Lives: 68.7
-Levels: 13920 - 13940, AVG Lives: 68.85
-Levels: 13940 - 13960, AVG Lives: 68.65
-Levels: 13960 - 13980, AVG Lives: 68.7
-Levels: 13980 - 14000, AVG Lives: 68.85
-Levels: 14000 - 14020, AVG Lives: 68.65
-Levels: 14020 - 14040, AVG Lives: 102.7
-Levels: 14040 - 14060, AVG Lives: 68.85
-Levels: 14060 - 14080, AVG Lives: 68.2
-Levels: 14080 - 14100, AVG Lives: 67.85
-Levels: 14100 - 14120, AVG Lives: 67.65
-Levels: 14120 - 14140, AVG Lives: 67.7
-Levels: 14140 - 14160, AVG Lives: 67.85
-Levels: 14160 - 14180, AVG Lives: 67.7
-Levels: 14180 - 14200, AVG Lives: 66.75
-Levels: 14200 - 14220, AVG Lives: 66.85
-Levels: 14220 - 14240, AVG Lives: 66.65
-Levels: 14240 - 14260, AVG Lives: 66.7
-Levels: 14260 - 14280, AVG Lives: 66.85
-Levels: 14280 - 14300, AVG Lives: 66.65
-Levels: 14300 - 14320, AVG Lives: 66.7
-Levels: 14320 - 14340, AVG Lives: 66.85
-Levels: 14340 - 14360, AVG Lives: 66.65
-Levels: 14360 - 14380, AVG Lives: 100.45
-Levels: 14380 - 14400, AVG Lives: 65.65
-Levels: 14400 - 14420, AVG Lives: 65.7
-Levels: 14420 - 14440, AVG Lives: 65.85
-Levels: 14440 - 14460, AVG Lives: 65.65
-Levels: 14460 - 14480, AVG Lives: 65.7
-Levels: 14480 - 14500, AVG Lives: 65.85
-Levels: 14500 - 14520, AVG Lives: 65.65
-Levels: 14520 - 14540, AVG Lives: 65.7
-Levels: 14540 - 14560, AVG Lives: 65.8
-Levels: 14560 - 14580, AVG Lives: 64.75
-Levels: 14580 - 14600, AVG Lives: 64.7
-Levels: 14600 - 14620, AVG Lives: 64.85
-Levels: 14620 - 14640, AVG Lives: 64.65
-Levels: 14640 - 14660, AVG Lives: 64.7
-Levels: 14660 - 14680, AVG Lives: 63.7
-Levels: 14680 - 14700, AVG Lives: 63.7
-Levels: 14700 - 14720, AVG Lives: 98.65
-Levels: 14720 - 14740, AVG Lives: 63.65
-Levels: 14740 - 14760, AVG Lives: 63.7
-Levels: 14760 - 14780, AVG Lives: 63.85
-Levels: 14780 - 14800, AVG Lives: 63.65
-Levels: 14800 - 14820, AVG Lives: 63.7
-Levels: 14820 - 14840, AVG Lives: 63.85
-Levels: 14840 - 14860, AVG Lives: 63.65
-Levels: 14860 - 14880, AVG Lives: 63.7
-Levels: 14880 - 14900, AVG Lives: 63.85
-Levels: 14900 - 14920, AVG Lives: 63.65
-Levels: 14920 - 14940, AVG Lives: 63.7
-Levels: 14940 - 14960, AVG Lives: 61.9
-Levels: 14960 - 14980, AVG Lives: 55.4
-Levels: 14980 - 15000, AVG Lives: 55.4
-Levels: 15000 - 15020, AVG Lives: 55.4
-Levels: 15020 - 15040, AVG Lives: 55.4
-Levels: 15040 - 15060, AVG Lives: 90.5
-Levels: 15060 - 15080, AVG Lives: 55.45
-Levels: 15080 - 15100, AVG Lives: 55.4
-Levels: 15100 - 15120, AVG Lives: 55.4
-Levels: 15120 - 15140, AVG Lives: 55.4
-Levels: 15140 - 15160, AVG Lives: 55.4
-Levels: 15160 - 15180, AVG Lives: 55.4
-Levels: 15180 - 15200, AVG Lives: 55.4
-Levels: 15200 - 15220, AVG Lives: 55.4
-Levels: 15220 - 15240, AVG Lives: 55.4
-Levels: 15240 - 15260, AVG Lives: 55.4
-Levels: 15260 - 15280, AVG Lives: 55.4
-Levels: 15280 - 15300, AVG Lives: 55.4
-Levels: 15300 - 15320, AVG Lives: 55.4
-Levels: 15320 - 15340, AVG Lives: 55.05
-Levels: 15340 - 15360, AVG Lives: 54.4
-Levels: 15360 - 15380, AVG Lives: 54.4
-Levels: 15380 - 15400, AVG Lives: 54.4
-Levels: 15400 - 15420, AVG Lives: 90.0
-Levels: 15420 - 15440, AVG Lives: 54.4
-Levels: 15440 - 15460, AVG Lives: 54.4
-Levels: 15460 - 15480, AVG Lives: 54.4
-Levels: 15480 - 15500, AVG Lives: 54.4
-Levels: 15500 - 15520, AVG Lives: 54.4
-Levels: 15520 - 15540, AVG Lives: 54.4
-Levels: 15540 - 15560, AVG Lives: 54.4
-Levels: 15560 - 15580, AVG Lives: 54.4
-Levels: 15580 - 15600, AVG Lives: 54.4
-Levels: 15600 - 15620, AVG Lives: 54.4
-Levels: 15620 - 15640, AVG Lives: 54.4
-Levels: 15640 - 15660, AVG Lives: 54.4
-Levels: 15660 - 15680, AVG Lives: 54.4
-Levels: 15680 - 15700, AVG Lives: 54.4
-Levels: 15700 - 15720, AVG Lives: 54.4
-Levels: 15720 - 15740, AVG Lives: 53.75
-Levels: 15740 - 15760, AVG Lives: 71.5
-Levels: 15760 - 15780, AVG Lives: 71.35
-Levels: 15780 - 15800, AVG Lives: 53.4
-Levels: 15800 - 15820, AVG Lives: 53.4
-Levels: 15820 - 15840, AVG Lives: 53.4
-Levels: 15840 - 15860, AVG Lives: 53.4
-Levels: 15860 - 15880, AVG Lives: 53.4
-Levels: 15880 - 15900, AVG Lives: 53.4
-Levels: 15900 - 15920, AVG Lives: 53.4
-Levels: 15920 - 15940, AVG Lives: 53.4
-Levels: 15940 - 15960, AVG Lives: 53.4
-Levels: 15960 - 15980, AVG Lives: 53.4
-Levels: 15980 - 16000, AVG Lives: 53.4
-Levels: 16000 - 16020, AVG Lives: 53.4
-Levels: 16020 - 16040, AVG Lives: 53.4
-Levels: 16040 - 16060, AVG Lives: 53.4
-Levels: 16060 - 16080, AVG Lives: 53.4
-Levels: 16080 - 16100, AVG Lives: 53.4
-Levels: 16100 - 16120, AVG Lives: 89.8
-Levels: 16120 - 16140, AVG Lives: 52.75
-Levels: 16140 - 16160, AVG Lives: 52.4
-Levels: 16160 - 16180, AVG Lives: 52.4
-Levels: 16180 - 16200, AVG Lives: 52.4
-Levels: 16200 - 16220, AVG Lives: 52.4
-Levels: 16220 - 16240, AVG Lives: 52.4
-Levels: 16240 - 16260, AVG Lives: 52.4
-Levels: 16260 - 16280, AVG Lives: 52.4
-Levels: 16280 - 16300, AVG Lives: 52.4
-Levels: 16300 - 16320, AVG Lives: 52.4
-Levels: 16320 - 16340, AVG Lives: 52.4
-Levels: 16340 - 16360, AVG Lives: 52.4
-Levels: 16360 - 16380, AVG Lives: 52.4
-Levels: 16380 - 16400, AVG Lives: 52.4
-Levels: 16400 - 16420, AVG Lives: 52.4
-Levels: 16420 - 16440, AVG Lives: 52.4
-Levels: 16440 - 16460, AVG Lives: 52.4
-Levels: 16460 - 16480, AVG Lives: 89.1
-Levels: 16480 - 16500, AVG Lives: 52.45
-Levels: 16500 - 16520, AVG Lives: 52.4
-Levels: 16520 - 16540, AVG Lives: 51.95
-Levels: 16540 - 16560, AVG Lives: 51.4
-Levels: 16560 - 16580, AVG Lives: 51.4
-Levels: 16580 - 16600, AVG Lives: 51.4
-Levels: 16600 - 16620, AVG Lives: 51.4
-Levels: 16620 - 16640, AVG Lives: 51.4
-Levels: 16640 - 16660, AVG Lives: 51.4
-Levels: 16660 - 16680, AVG Lives: 51.4
-Levels: 16680 - 16700, AVG Lives: 51.4
-Levels: 16700 - 16720, AVG Lives: 51.4
-Levels: 16720 - 16740, AVG Lives: 51.4
-Levels: 16740 - 16760, AVG Lives: 51.4
-Levels: 16760 - 16780, AVG Lives: 51.4
-Levels: 16780 - 16800, AVG Lives: 51.4
-Levels: 16800 - 16820, AVG Lives: 51.4
-Levels: 16820 - 16840, AVG Lives: 51.5
-Levels: 16840 - 16860, AVG Lives: 88.5
-Levels: 16860 - 16880, AVG Lives: 51.4
-Levels: 16880 - 16900, AVG Lives: 51.4
-Levels: 16900 - 16920, AVG Lives: 51.4
-Levels: 16920 - 16940, AVG Lives: 51.3
-Levels: 16940 - 16960, AVG Lives: 50.45
-Levels: 16960 - 16980, AVG Lives: 50.4
-Levels: 16980 - 17000, AVG Lives: 50.4
-Levels: 17000 - 17020, AVG Lives: 50.4
-Levels: 17020 - 17040, AVG Lives: 50.4
-Levels: 17040 - 17060, AVG Lives: 50.4
-Levels: 17060 - 17080, AVG Lives: 50.4
-Levels: 17080 - 17100, AVG Lives: 50.4
-Levels: 17100 - 17120, AVG Lives: 50.4
-Levels: 17120 - 17140, AVG Lives: 50.4
-Levels: 17140 - 17160, AVG Lives: 50.4
-Levels: 17160 - 17180, AVG Lives: 50.4
-Levels: 17180 - 17200, AVG Lives: 50.4
-Levels: 17200 - 17220, AVG Lives: 88.05
-Levels: 17220 - 17240, AVG Lives: 50.4
-Levels: 17240 - 17260, AVG Lives: 50.4
-Levels: 17260 - 17280, AVG Lives: 50.4
-Levels: 17280 - 17300, AVG Lives: 50.4
-Levels: 17300 - 17320, AVG Lives: 50.4
-Levels: 17320 - 17340, AVG Lives: 50.4
-Levels: 17340 - 17360, AVG Lives: 50.05
-Levels: 17360 - 17380, AVG Lives: 49.4
-Levels: 17380 - 17400, AVG Lives: 49.4
-Levels: 17400 - 17420, AVG Lives: 49.4
-Levels: 17420 - 17440, AVG Lives: 49.4
-Levels: 17440 - 17460, AVG Lives: 49.4
-Levels: 17460 - 17480, AVG Lives: 49.4
-Levels: 17480 - 17500, AVG Lives: 49.4
-Levels: 17500 - 17520, AVG Lives: 49.4
-Levels: 17520 - 17540, AVG Lives: 49.4
-Levels: 17540 - 17560, AVG Lives: 49.4
-Levels: 17560 - 17580, AVG Lives: 49.4
-Levels: 17580 - 17600, AVG Lives: 87.4
-Levels: 17600 - 17620, AVG Lives: 49.4
-Levels: 17620 - 17640, AVG Lives: 49.4
-Levels: 17640 - 17660, AVG Lives: 49.4
-Levels: 17660 - 17680, AVG Lives: 49.4
-Levels: 17680 - 17700, AVG Lives: 49.4
-Levels: 17700 - 17720, AVG Lives: 49.4
-Levels: 17720 - 17740, AVG Lives: 49.4
-Levels: 17740 - 17760, AVG Lives: 49.4
-Levels: 17760 - 17780, AVG Lives: 49.0
-Levels: 17780 - 17800, AVG Lives: 48.4
-Levels: 17800 - 17820, AVG Lives: 48.4
-Levels: 17820 - 17840, AVG Lives: 48.4
-Levels: 17840 - 17860, AVG Lives: 48.4
-Levels: 17860 - 17880, AVG Lives: 48.4
-Levels: 17880 - 17900, AVG Lives: 48.4
-Levels: 17900 - 17920, AVG Lives: 48.4
-Levels: 17920 - 17940, AVG Lives: 48.4
-Levels: 17940 - 17960, AVG Lives: 48.55
-Levels: 17960 - 17980, AVG Lives: 86.6
-Levels: 17980 - 18000, AVG Lives: 48.4
-Levels: 18000 - 18020, AVG Lives: 48.4
-Levels: 18020 - 18040, AVG Lives: 48.4
-Levels: 18040 - 18060, AVG Lives: 48.4
-Levels: 18060 - 18080, AVG Lives: 48.4
-Levels: 18080 - 18100, AVG Lives: 48.4
-Levels: 18100 - 18120, AVG Lives: 48.4
-Levels: 18120 - 18140, AVG Lives: 48.4
-Levels: 18140 - 18160, AVG Lives: 48.4
-Levels: 18160 - 18180, AVG Lives: 48.4
-Levels: 18180 - 18200, AVG Lives: 48.25
-Levels: 18200 - 18220, AVG Lives: 47.4
-Levels: 18220 - 18240, AVG Lives: 47.4
-Levels: 18240 - 18260, AVG Lives: 47.4
-Levels: 18260 - 18280, AVG Lives: 47.4
-Levels: 18280 - 18300, AVG Lives: 47.4
-Levels: 18300 - 18320, AVG Lives: 47.4
-Levels: 18320 - 18340, AVG Lives: 47.5
-Levels: 18340 - 18360, AVG Lives: 86.1
-Levels: 18360 - 18380, AVG Lives: 47.4
-Levels: 18380 - 18400, AVG Lives: 47.4
-Levels: 18400 - 18420, AVG Lives: 47.4
-Levels: 18420 - 18440, AVG Lives: 47.4
-Levels: 18440 - 18460, AVG Lives: 47.4
-Levels: 18460 - 18480, AVG Lives: 47.4
-Levels: 18480 - 18500, AVG Lives: 47.4
-Levels: 18500 - 18520, AVG Lives: 47.4
-Levels: 18520 - 18540, AVG Lives: 47.4
-Levels: 18540 - 18560, AVG Lives: 47.4
-Levels: 18560 - 18580, AVG Lives: 47.4
-Levels: 18580 - 18600, AVG Lives: 47.4
-Levels: 18600 - 18620, AVG Lives: 47.4
-Levels: 18620 - 18640, AVG Lives: 46.7
-Levels: 18640 - 18660, AVG Lives: 46.4
-Levels: 18660 - 18680, AVG Lives: 46.4
-Levels: 18680 - 18700, AVG Lives: 46.4
-Levels: 18700 - 18720, AVG Lives: 46.4
-Levels: 18720 - 18740, AVG Lives: 85.65
-Levels: 18740 - 18760, AVG Lives: 46.4
-Levels: 18760 - 18780, AVG Lives: 46.4
-Levels: 18780 - 18800, AVG Lives: 46.4
-Levels: 18800 - 18820, AVG Lives: 46.4
-Levels: 18820 - 18840, AVG Lives: 46.4
-Levels: 18840 - 18860, AVG Lives: 46.4
-Levels: 18860 - 18880, AVG Lives: 46.4
-Levels: 18880 - 18900, AVG Lives: 46.4
-Levels: 18900 - 18920, AVG Lives: 46.4
-Levels: 18920 - 18940, AVG Lives: 46.4
-Levels: 18940 - 18960, AVG Lives: 46.4
-Levels: 18960 - 18980, AVG Lives: 46.4
-Levels: 18980 - 19000, AVG Lives: 46.4
-Levels: 19000 - 19020, AVG Lives: 46.4
-Levels: 19020 - 19040, AVG Lives: 46.4
-Levels: 19040 - 19060, AVG Lives: 46.3
-Levels: 19060 - 19080, AVG Lives: 45.45
-Levels: 19080 - 19100, AVG Lives: 45.4
-Levels: 19100 - 19120, AVG Lives: 85.0
-Levels: 19120 - 19140, AVG Lives: 45.4
-Levels: 19140 - 19160, AVG Lives: 45.4
-Levels: 19160 - 19180, AVG Lives: 45.4
-Levels: 19180 - 19200, AVG Lives: 45.4
-Levels: 19200 - 19220, AVG Lives: 45.4
-Levels: 19220 - 19240, AVG Lives: 45.4
-Levels: 19240 - 19260, AVG Lives: 45.4
-Levels: 19260 - 19280, AVG Lives: 45.4
-Levels: 19280 - 19300, AVG Lives: 45.4
-Levels: 19300 - 19320, AVG Lives: 45.4
-Levels: 19320 - 19340, AVG Lives: 45.4
-Levels: 19340 - 19360, AVG Lives: 45.4
-Levels: 19360 - 19380, AVG Lives: 45.4
-Levels: 19380 - 19400, AVG Lives: 45.4
-Levels: 19400 - 19420, AVG Lives: 45.4
-Levels: 19420 - 19440, AVG Lives: 45.4
-Levels: 19440 - 19460, AVG Lives: 45.4
-Levels: 19460 - 19480, AVG Lives: 45.4
-Levels: 19480 - 19500, AVG Lives: 45.3
-Levels: 19500 - 19520, AVG Lives: 84.35
-Levels: 19520 - 19540, AVG Lives: 44.4
-Levels: 19540 - 19560, AVG Lives: 44.4
-Levels: 19560 - 19580, AVG Lives: 44.4
-Levels: 19580 - 19600, AVG Lives: 44.4
-Levels: 19600 - 19620, AVG Lives: 44.4
-Levels: 19620 - 19640, AVG Lives: 44.4
-Levels: 19640 - 19660, AVG Lives: 44.4
-Levels: 19660 - 19680, AVG Lives: 44.4
-Levels: 19680 - 19700, AVG Lives: 44.4
-Levels: 19700 - 19720, AVG Lives: 44.4
-Levels: 19720 - 19740, AVG Lives: 44.4
-Levels: 19740 - 19760, AVG Lives: 44.4
-Levels: 19760 - 19780, AVG Lives: 44.4
-Levels: 19780 - 19800, AVG Lives: 44.4
-Levels: 19800 - 19820, AVG Lives: 30.0
-Levels: 19820 - 19840, AVG Lives: 28.4
-Levels: 19840 - 19860, AVG Lives: 28.4
-Levels: 19860 - 19880, AVG Lives: 28.4
-Levels: 19880 - 19900, AVG Lives: 28.4
-Levels: 19900 - 19920, AVG Lives: 68.05
-Levels: 19920 - 19940, AVG Lives: 27.45
-Levels: 19940 - 19960, AVG Lives: 26.45
-Levels: 19960 - 19980, AVG Lives: 26.4
-Levels: 19980 - 20000, AVG Lives: 26.4
-Levels: 20000 - 20020, AVG Lives: 26.4
-Levels: 20020 - 20040, AVG Lives: 26.4
-Levels: 20040 - 20060, AVG Lives: 26.4
-Levels: 20060 - 20080, AVG Lives: 26.4
-Levels: 20080 - 20100, AVG Lives: 26.4
-Levels: 20100 - 20120, AVG Lives: 26.4
-Levels: 20120 - 20140, AVG Lives: 26.4
-Levels: 20140 - 20160, AVG Lives: 26.4
-Levels: 20160 - 20180, AVG Lives: 26.4
-Levels: 20180 - 20200, AVG Lives: 26.4
-Levels: 20200 - 20220, AVG Lives: 26.4
-Levels: 20220 - 20240, AVG Lives: 26.4
-Levels: 20240 - 20260, AVG Lives: 26.4
-Levels: 20260 - 20280, AVG Lives: 26.4
-Levels: 20280 - 20300, AVG Lives: 26.4
-Levels: 20300 - 20320, AVG Lives: 23.5
-Levels: 20320 - 20340, AVG Lives: 22.4
-Levels: 20340 - 20360, AVG Lives: 22.4
-Levels: 20360 - 20380, AVG Lives: 22.4
-Levels: 20380 - 20400, AVG Lives: 22.0
-Levels: 20400 - 20420, AVG Lives: 21.4
-Levels: 20420 - 20440, AVG Lives: 21.4
-Levels: 20440 - 20460, AVG Lives: 21.4
-Levels: 20460 - 20480, AVG Lives: 21.4
-Levels: 20480 - 20500, AVG Lives: 21.4
-Levels: 20500 - 20520, AVG Lives: 21.4
-Levels: 20520 - 20540, AVG Lives: 21.4
-Levels: 20540 - 20560, AVG Lives: 21.4
-Levels: 20560 - 20580, AVG Lives: 21.4
-Levels: 20580 - 20600, AVG Lives: 21.4
-Levels: 20600 - 20620, AVG Lives: 21.4
-Levels: 20620 - 20640, AVG Lives: 21.4
-Levels: 20640 - 20660, AVG Lives: 21.4
-Levels: 20660 - 20680, AVG Lives: 21.4
-Levels: 20680 - 20700, AVG Lives: 21.4
-Levels: 20700 - 20720, AVG Lives: 21.4
-Levels: 20720 - 20740, AVG Lives: 21.4
-Levels: 20740 - 20760, AVG Lives: 21.4
-Levels: 20760 - 20780, AVG Lives: 21.4
-Levels: 20780 - 20800, AVG Lives: 21.4
-Levels: 20800 - 20820, AVG Lives: 21.4
-Levels: 20820 - 20840, AVG Lives: 21.4
-Levels: 20840 - 20860, AVG Lives: 20.7
-Levels: 20860 - 20880, AVG Lives: 20.4
-Levels: 20880 - 20900, AVG Lives: 20.4
-Levels: 20900 - 20920, AVG Lives: 20.4
-Levels: 20920 - 20940, AVG Lives: 20.4
-Levels: 20940 - 20960, AVG Lives: 20.4
-Levels: 20960 - 20980, AVG Lives: 20.4
-Levels: 20980 - 21000, AVG Lives: 20.4
-Levels: 21000 - 21020, AVG Lives: 20.4
-Levels: 21020 - 21040, AVG Lives: 20.4
-Levels: 21040 - 21060, AVG Lives: 20.4
-Levels: 21060 - 21080, AVG Lives: 20.4
-Levels: 21080 - 21100, AVG Lives: 20.4
-Levels: 21100 - 21120, AVG Lives: 20.4
-Levels: 21120 - 21140, AVG Lives: 20.4
-Levels: 21140 - 21160, AVG Lives: 20.4
-Levels: 21160 - 21180, AVG Lives: 20.4
-Levels: 21180 - 21200, AVG Lives: 20.4
-Levels: 21200 - 21220, AVG Lives: 20.4
-Levels: 21220 - 21240, AVG Lives: 20.4
-Levels: 21240 - 21260, AVG Lives: 20.4
-Levels: 21260 - 21280, AVG Lives: 20.4
-Levels: 21280 - 21300, AVG Lives: 20.4
-Levels: 21300 - 21320, AVG Lives: 19.6
-Levels: 21320 - 21340, AVG Lives: 19.4
-Levels: 21340 - 21360, AVG Lives: 19.4
-Levels: 21360 - 21380, AVG Lives: 19.4
-Levels: 21380 - 21400, AVG Lives: 19.4
-Levels: 21400 - 21420, AVG Lives: 19.4
-Levels: 21420 - 21440, AVG Lives: 19.4
-Levels: 21440 - 21460, AVG Lives: 19.4
-Levels: 21460 - 21480, AVG Lives: 19.4
-Levels: 21480 - 21500, AVG Lives: 19.4
-Levels: 21500 - 21520, AVG Lives: 19.4
-Levels: 21520 - 21540, AVG Lives: 19.4
-Levels: 21540 - 21560, AVG Lives: 19.4
-Levels: 21560 - 21580, AVG Lives: 19.4
-Levels: 21580 - 21600, AVG Lives: 19.4
-Levels: 21600 - 21620, AVG Lives: 19.4
-Levels: 21620 - 21640, AVG Lives: 19.4
-Levels: 21640 - 21660, AVG Lives: 19.4
-Levels: 21660 - 21680, AVG Lives: 19.4
-Levels: 21680 - 21700, AVG Lives: 19.4
-Levels: 21700 - 21720, AVG Lives: 19.4
-Levels: 21720 - 21740, AVG Lives: 19.4
-Levels: 21740 - 21760, AVG Lives: 19.4
-Levels: 21760 - 21780, AVG Lives: 18.8
-Levels: 21780 - 21800, AVG Lives: 18.4
-Levels: 21800 - 21820, AVG Lives: 18.4
-Levels: 21820 - 21840, AVG Lives: 18.4
-Levels: 21840 - 21860, AVG Lives: 18.4
-Levels: 21860 - 21880, AVG Lives: 18.4
-Levels: 21880 - 21900, AVG Lives: 18.4
-Levels: 21900 - 21920, AVG Lives: 18.4
-Levels: 21920 - 21940, AVG Lives: 18.4
-Levels: 21940 - 21960, AVG Lives: 18.4
-Levels: 21960 - 21980, AVG Lives: 18.4
-Levels: 21980 - 22000, AVG Lives: 18.4
-Levels: 22000 - 22020, AVG Lives: 18.4
-Levels: 22020 - 22040, AVG Lives: 18.4
-Levels: 22040 - 22060, AVG Lives: 18.4
-Levels: 22060 - 22080, AVG Lives: 18.4
-Levels: 22080 - 22100, AVG Lives: 18.4
-Levels: 22100 - 22120, AVG Lives: 18.4
-Levels: 22120 - 22140, AVG Lives: 18.4
-Levels: 22140 - 22160, AVG Lives: 18.4
-Levels: 22160 - 22180, AVG Lives: 18.4
-Levels: 22180 - 22200, AVG Lives: 18.4
-Levels: 22200 - 22220, AVG Lives: 18.4
-Levels: 22220 - 22240, AVG Lives: 18.25
-Levels: 22240 - 22260, AVG Lives: 17.4
-Levels: 22260 - 22280, AVG Lives: 17.4
-Levels: 22280 - 22300, AVG Lives: 17.4
-Levels: 22300 - 22320, AVG Lives: 17.4
-Levels: 22320 - 22340, AVG Lives: 17.4
-Levels: 22340 - 22360, AVG Lives: 17.4
-Levels: 22360 - 22380, AVG Lives: 17.4
-Levels: 22380 - 22400, AVG Lives: 17.4
-Levels: 22400 - 22420, AVG Lives: 17.4
-Levels: 22420 - 22440, AVG Lives: 17.4
-Levels: 22440 - 22460, AVG Lives: 17.4
-Levels: 22460 - 22480, AVG Lives: 17.4
-Levels: 22480 - 22500, AVG Lives: 17.4
-Levels: 22500 - 22520, AVG Lives: 17.4
-Levels: 22520 - 22540, AVG Lives: 17.4
-Levels: 22540 - 22560, AVG Lives: 17.4
-Levels: 22560 - 22580, AVG Lives: 17.4
-Levels: 22580 - 22600, AVG Lives: 17.4
-Levels: 22600 - 22620, AVG Lives: 17.4
-Levels: 22620 - 22640, AVG Lives: 17.4
-Levels: 22640 - 22660, AVG Lives: 17.4
-Levels: 22660 - 22680, AVG Lives: 17.4
-Levels: 22680 - 22700, AVG Lives: 17.4
-Levels: 22700 - 22720, AVG Lives: 17.0
-Levels: 22720 - 22740, AVG Lives: 16.4
-Levels: 22740 - 22760, AVG Lives: 16.4
-Levels: 22760 - 22780, AVG Lives: 16.4
-Levels: 22780 - 22800, AVG Lives: 16.4
-Levels: 22800 - 22820, AVG Lives: 16.4
-Levels: 22820 - 22840, AVG Lives: 16.4
-Levels: 22840 - 22860, AVG Lives: 16.4
-Levels: 22860 - 22880, AVG Lives: 16.4
-Levels: 22880 - 22900, AVG Lives: 16.4
-Levels: 22900 - 22920, AVG Lives: 16.4
-Levels: 22920 - 22940, AVG Lives: 16.4
-Levels: 22940 - 22960, AVG Lives: 16.4
-Levels: 22960 - 22980, AVG Lives: 16.4
-Levels: 22980 - 23000, AVG Lives: 16.4
-Levels: 23000 - 23020, AVG Lives: 16.4
-Levels: 23020 - 23040, AVG Lives: 16.4
-Levels: 23040 - 23060, AVG Lives: 16.4
-Levels: 23060 - 23080, AVG Lives: 16.4
-Levels: 23080 - 23100, AVG Lives: 16.4
-Levels: 23100 - 23120, AVG Lives: 16.4
-Levels: 23120 - 23140, AVG Lives: 16.4
-Levels: 23140 - 23160, AVG Lives: 16.4
-Levels: 23160 - 23180, AVG Lives: 16.4
-Levels: 23180 - 23200, AVG Lives: 15.95
-Levels: 23200 - 23220, AVG Lives: 15.4
-Levels: 23220 - 23240, AVG Lives: 15.4
-Levels: 23240 - 23260, AVG Lives: 15.4
-Levels: 23260 - 23280, AVG Lives: 15.4
-Levels: 23280 - 23300, AVG Lives: 15.4
-Levels: 23300 - 23320, AVG Lives: 15.4
-Levels: 23320 - 23340, AVG Lives: 15.4
-Levels: 23340 - 23360, AVG Lives: 15.4
-Levels: 23360 - 23380, AVG Lives: 15.4
-Levels: 23380 - 23400, AVG Lives: 15.4
-Levels: 23400 - 23420, AVG Lives: 15.4
-Levels: 23420 - 23440, AVG Lives: 15.4
-Levels: 23440 - 23460, AVG Lives: 15.4
-Levels: 23460 - 23480, AVG Lives: 15.4
-Levels: 23480 - 23500, AVG Lives: 15.4
-Levels: 23500 - 23520, AVG Lives: 15.4
-Levels: 23520 - 23540, AVG Lives: 15.4
-Levels: 23540 - 23560, AVG Lives: 15.4
-Levels: 23560 - 23580, AVG Lives: 15.4
-Levels: 23580 - 23600, AVG Lives: 15.4
-Levels: 23600 - 23620, AVG Lives: 15.4
-Levels: 23620 - 23640, AVG Lives: 15.4
-Levels: 23640 - 23660, AVG Lives: 15.4
-Levels: 23660 - 23680, AVG Lives: 15.1
-Levels: 23680 - 23700, AVG Lives: 14.4
-Levels: 23700 - 23720, AVG Lives: 14.4
-Levels: 23720 - 23740, AVG Lives: 14.4
-Levels: 23740 - 23760, AVG Lives: 14.4
-Levels: 23760 - 23780, AVG Lives: 14.4
-Levels: 23780 - 23800, AVG Lives: 14.4
-Levels: 23800 - 23820, AVG Lives: 14.4
-Levels: 23820 - 23840, AVG Lives: 14.4
-Levels: 23840 - 23860, AVG Lives: 14.4
-Levels: 23860 - 23880, AVG Lives: 14.4
-Levels: 23880 - 23900, AVG Lives: 14.4
-Levels: 23900 - 23920, AVG Lives: 14.4
-Levels: 23920 - 23940, AVG Lives: 14.4
-Levels: 23940 - 23960, AVG Lives: 14.4
-Levels: 23960 - 23980, AVG Lives: 14.4
-Levels: 23980 - 24000, AVG Lives: 14.4
-Levels: 24000 - 24020, AVG Lives: 14.4
-Levels: 24020 - 24040, AVG Lives: 14.4
-Levels: 24040 - 24060, AVG Lives: 14.4
-Levels: 24060 - 24080, AVG Lives: 14.4
-Levels: 24080 - 24100, AVG Lives: 14.4
-Levels: 24100 - 24120, AVG Lives: 14.4
-Levels: 24120 - 24140, AVG Lives: 14.4
-Levels: 24140 - 24160, AVG Lives: 14.4
-Levels: 24160 - 24180, AVG Lives: 13.55
-Levels: 24180 - 24200, AVG Lives: 13.4
-Levels: 24200 - 24220, AVG Lives: 13.4
-Levels: 24220 - 24240, AVG Lives: 13.4
-Levels: 24240 - 24260, AVG Lives: 13.4
-Levels: 24260 - 24280, AVG Lives: 13.4
-Levels: 24280 - 24300, AVG Lives: 13.4
-Levels: 24300 - 24320, AVG Lives: 13.4
-Levels: 24320 - 24340, AVG Lives: 13.4
-Levels: 24340 - 24360, AVG Lives: 13.4
-Levels: 24360 - 24380, AVG Lives: 13.4
-Levels: 24380 - 24400, AVG Lives: 13.4
-Levels: 24400 - 24420, AVG Lives: 13.4
-Levels: 24420 - 24440, AVG Lives: 13.4
-Levels: 24440 - 24460, AVG Lives: 13.4
-Levels: 24460 - 24480, AVG Lives: 13.4
-Levels: 24480 - 24500, AVG Lives: 13.4
-Levels: 24500 - 24520, AVG Lives: 13.4
-Levels: 24520 - 24540, AVG Lives: 13.4
-Levels: 24540 - 24560, AVG Lives: 13.4
-Levels: 24560 - 24580, AVG Lives: 13.4
-Levels: 24580 - 24600, AVG Lives: 13.4
-Levels: 24600 - 24620, AVG Lives: 13.4
-Levels: 24620 - 24640, AVG Lives: 13.4
-Levels: 24640 - 24660, AVG Lives: 13.25
-Levels: 24660 - 24680, AVG Lives: 12.4
-Levels: 24680 - 24700, AVG Lives: 12.4
-Levels: 24700 - 24720, AVG Lives: 12.4
-Levels: 24720 - 24740, AVG Lives: 12.4
-Levels: 24740 - 24760, AVG Lives: 12.4
-Levels: 24760 - 24780, AVG Lives: 12.4
-Levels: 24780 - 24800, AVG Lives: 12.4
-Levels: 24800 - 24820, AVG Lives: 12.4
-Levels: 24820 - 24840, AVG Lives: 12.4
-Levels: 24840 - 24860, AVG Lives: 12.4
-Levels: 24860 - 24880, AVG Lives: 12.4
-Levels: 24880 - 24900, AVG Lives: 12.4
-Levels: 24900 - 24920, AVG Lives: 12.4
-Levels: 24920 - 24940, AVG Lives: 12.4
-Levels: 24940 - 24960, AVG Lives: 12.4
-Levels: 24960 - 24980, AVG Lives: 12.4
-Levels: 24980 - 25000, AVG Lives: 12.4
-Levels: 25000 - 25020, AVG Lives: 12.4
-Levels: 25020 - 25040, AVG Lives: 12.4
-Levels: 25040 - 25060, AVG Lives: 12.4
-Levels: 25060 - 25080, AVG Lives: 12.4
-Levels: 25080 - 25100, AVG Lives: 12.4
-Levels: 25100 - 25120, AVG Lives: 12.4
-Levels: 25120 - 25140, AVG Lives: 12.4
-Levels: 25140 - 25154, AVG Lives: 8.05
---------------------------------
-Children Per Level
-
-Levels: 0 - 20, AVG Children: 14343.05, AVG Insts:5758.8, AVG Children per Inst: 2.490631728832396
-Levels: 20 - 40, AVG Children: 677.7, AVG Insts:599.45, AVG Children per Inst: 1.1305363249645508
-Levels: 40 - 60, AVG Children: 611.9, AVG Insts:543.85, AVG Children per Inst: 1.1251264135331434
-Levels: 60 - 80, AVG Children: 556.95, AVG Insts:489.2, AVG Children per Inst: 1.1384914145543745
-Levels: 80 - 100, AVG Children: 497.05, AVG Insts:434.1, AVG Children per Inst: 1.14501266989173
-Levels: 100 - 120, AVG Children: 430.6, AVG Insts:377.65, AVG Children per Inst: 1.1402091884019594
-Levels: 120 - 140, AVG Children: 377.35, AVG Insts:324.35, AVG Children per Inst: 1.1634037305379992
-Levels: 140 - 160, AVG Children: 317.6, AVG Insts:269.4, AVG Children per Inst: 1.1789161098737937
-Levels: 160 - 180, AVG Children: 250.35, AVG Insts:212.7, AVG Children per Inst: 1.1770098730606489
-Levels: 180 - 200, AVG Children: 197.85, AVG Insts:159.7, AVG Children per Inst: 1.23888541014402
-Levels: 200 - 220, AVG Children: 154.6, AVG Insts:117.8, AVG Children per Inst: 1.3123938879456707
-Levels: 220 - 240, AVG Children: 151.05, AVG Insts:118.1, AVG Children per Inst: 1.2790008467400509
-Levels: 240 - 260, AVG Children: 153.35, AVG Insts:115.9, AVG Children per Inst: 1.3231233822260569
-Levels: 260 - 280, AVG Children: 153.8, AVG Insts:115.8, AVG Children per Inst: 1.3281519861830742
-Levels: 280 - 300, AVG Children: 130.85, AVG Insts:108.45, AVG Children per Inst: 1.206546795758414
-Levels: 300 - 320, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 320 - 340, AVG Children: 21.25, AVG Insts:18.85, AVG Children per Inst: 1.1273209549071619
-Levels: 340 - 360, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 360 - 380, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 380 - 400, AVG Children: 21.7, AVG Insts:18.8, AVG Children per Inst: 1.1542553191489362
-Levels: 400 - 420, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 420 - 440, AVG Children: 18.8, AVG Insts:15.85, AVG Children per Inst: 1.1861198738170347
-Levels: 440 - 460, AVG Children: 21.4, AVG Insts:18.95, AVG Children per Inst: 1.129287598944591
-Levels: 460 - 480, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 480 - 500, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 500 - 520, AVG Children: 21.95, AVG Insts:19.2, AVG Children per Inst: 1.1432291666666667
-Levels: 520 - 540, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 540 - 560, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 560 - 580, AVG Children: 22.1, AVG Insts:19.25, AVG Children per Inst: 1.148051948051948
-Levels: 580 - 600, AVG Children: 18.45, AVG Insts:16.0, AVG Children per Inst: 1.153125
-Levels: 600 - 620, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 620 - 640, AVG Children: 22.05, AVG Insts:19.65, AVG Children per Inst: 1.1221374045801527
-Levels: 640 - 660, AVG Children: 18.6, AVG Insts:15.7, AVG Children per Inst: 1.1847133757961783
-Levels: 660 - 680, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 680 - 700, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 700 - 720, AVG Children: 22.55, AVG Insts:19.65, AVG Children per Inst: 1.147582697201018
-Levels: 720 - 740, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 740 - 760, AVG Children: 18.6, AVG Insts:15.65, AVG Children per Inst: 1.1884984025559104
-Levels: 760 - 780, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 780 - 800, AVG Children: 22.85, AVG Insts:19.95, AVG Children per Inst: 1.1453634085213034
-Levels: 800 - 820, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 820 - 840, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 840 - 860, AVG Children: 18.35, AVG Insts:15.75, AVG Children per Inst: 1.1650793650793652
-Levels: 860 - 880, AVG Children: 22.95, AVG Insts:20.25, AVG Children per Inst: 1.1333333333333333
-Levels: 880 - 900, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 900 - 920, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 920 - 940, AVG Children: 18.7, AVG Insts:15.75, AVG Children per Inst: 1.1873015873015873
-Levels: 940 - 960, AVG Children: 22.85, AVG Insts:20.45, AVG Children per Inst: 1.117359413202934
-Levels: 960 - 980, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 980 - 1000, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 1000 - 1020, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 1020 - 1040, AVG Children: 18.8, AVG Insts:15.85, AVG Children per Inst: 1.1861198738170347
-Levels: 1040 - 1060, AVG Children: 22.95, AVG Insts:20.5, AVG Children per Inst: 1.1195121951219513
-Levels: 1060 - 1080, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1080 - 1100, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 1100 - 1120, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1120 - 1140, AVG Children: 23.65, AVG Insts:20.65, AVG Children per Inst: 1.145278450363196
-Levels: 1140 - 1160, AVG Children: 18.25, AVG Insts:15.9, AVG Children per Inst: 1.1477987421383649
-Levels: 1160 - 1180, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 1180 - 1200, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 1200 - 1220, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1220 - 1240, AVG Children: 23.7, AVG Insts:20.85, AVG Children per Inst: 1.1366906474820144
-Levels: 1240 - 1260, AVG Children: 18.4, AVG Insts:15.95, AVG Children per Inst: 1.1536050156739812
-Levels: 1260 - 1280, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 1280 - 1300, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 1300 - 1320, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1320 - 1340, AVG Children: 23.9, AVG Insts:21.05, AVG Children per Inst: 1.1353919239904988
-Levels: 1340 - 1360, AVG Children: 18.4, AVG Insts:15.9, AVG Children per Inst: 1.1572327044025157
-Levels: 1360 - 1380, AVG Children: 18.5, AVG Insts:15.65, AVG Children per Inst: 1.182108626198083
-Levels: 1380 - 1400, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 1400 - 1420, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 1420 - 1440, AVG Children: 24.0, AVG Insts:21.35, AVG Children per Inst: 1.1241217798594847
-Levels: 1440 - 1460, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1460 - 1480, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 1480 - 1500, AVG Children: 18.35, AVG Insts:15.85, AVG Children per Inst: 1.1577287066246056
-Levels: 1500 - 1520, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1520 - 1540, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 1540 - 1560, AVG Children: 24.35, AVG Insts:21.65, AVG Children per Inst: 1.1247113163972287
-Levels: 1560 - 1580, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 1580 - 1600, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 1600 - 1620, AVG Children: 18.6, AVG Insts:15.9, AVG Children per Inst: 1.169811320754717
-Levels: 1620 - 1640, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 1640 - 1660, AVG Children: 24.5, AVG Insts:21.75, AVG Children per Inst: 1.1264367816091954
-Levels: 1660 - 1680, AVG Children: 18.5, AVG Insts:15.7, AVG Children per Inst: 1.178343949044586
-Levels: 1680 - 1700, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 1700 - 1720, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1720 - 1740, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1740 - 1760, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1760 - 1780, AVG Children: 24.7, AVG Insts:21.85, AVG Children per Inst: 1.1304347826086956
-Levels: 1780 - 1800, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 1800 - 1820, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 1820 - 1840, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 1840 - 1860, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1860 - 1880, AVG Children: 18.55, AVG Insts:15.65, AVG Children per Inst: 1.1853035143769968
-Levels: 1880 - 1900, AVG Children: 24.75, AVG Insts:22.25, AVG Children per Inst: 1.1123595505617978
-Levels: 1900 - 1920, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1920 - 1940, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 1940 - 1960, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 1960 - 1980, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 1980 - 2000, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2000 - 2020, AVG Children: 18.7, AVG Insts:15.95, AVG Children per Inst: 1.1724137931034482
-Levels: 2020 - 2040, AVG Children: 24.95, AVG Insts:22.15, AVG Children per Inst: 1.1264108352144468
-Levels: 2040 - 2060, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 2060 - 2080, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 2080 - 2100, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 2100 - 2120, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2120 - 2140, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2140 - 2160, AVG Children: 25.25, AVG Insts:22.8, AVG Children per Inst: 1.1074561403508771
-Levels: 2160 - 2180, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 2180 - 2200, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 2200 - 2220, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2220 - 2240, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2240 - 2260, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2260 - 2280, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 2280 - 2300, AVG Children: 25.25, AVG Insts:22.85, AVG Children per Inst: 1.1050328227571116
-Levels: 2300 - 2320, AVG Children: 18.6, AVG Insts:15.9, AVG Children per Inst: 1.169811320754717
-Levels: 2320 - 2340, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2340 - 2360, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2360 - 2380, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2380 - 2400, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 2400 - 2420, AVG Children: 18.65, AVG Insts:15.95, AVG Children per Inst: 1.1692789968652038
-Levels: 2420 - 2440, AVG Children: 25.55, AVG Insts:22.7, AVG Children per Inst: 1.1255506607929515
-Levels: 2440 - 2460, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 2460 - 2480, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2480 - 2500, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2500 - 2520, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 2520 - 2540, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2540 - 2560, AVG Children: 18.4, AVG Insts:15.9, AVG Children per Inst: 1.1572327044025157
-Levels: 2560 - 2580, AVG Children: 25.8, AVG Insts:23.15, AVG Children per Inst: 1.1144708423326133
-Levels: 2580 - 2600, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2600 - 2620, AVG Children: 18.3, AVG Insts:15.85, AVG Children per Inst: 1.1545741324921135
-Levels: 2620 - 2640, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 2640 - 2660, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2660 - 2680, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2680 - 2700, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2700 - 2720, AVG Children: 25.85, AVG Insts:23.45, AVG Children per Inst: 1.1023454157782515
-Levels: 2720 - 2740, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2740 - 2760, AVG Children: 18.35, AVG Insts:15.7, AVG Children per Inst: 1.1687898089171975
-Levels: 2760 - 2780, AVG Children: 18.55, AVG Insts:15.85, AVG Children per Inst: 1.1703470031545742
-Levels: 2780 - 2800, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 2800 - 2820, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 2820 - 2840, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2840 - 2860, AVG Children: 26.3, AVG Insts:23.45, AVG Children per Inst: 1.1215351812366738
-Levels: 2860 - 2880, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2880 - 2900, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 2900 - 2920, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 2920 - 2940, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 2940 - 2960, AVG Children: 18.55, AVG Insts:15.65, AVG Children per Inst: 1.1853035143769968
-Levels: 2960 - 2980, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 2980 - 3000, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3000 - 3020, AVG Children: 26.5, AVG Insts:23.65, AVG Children per Inst: 1.120507399577167
-Levels: 3020 - 3040, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 3040 - 3060, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3060 - 3080, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3080 - 3100, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 3100 - 3120, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3120 - 3140, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 3140 - 3160, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 3160 - 3180, AVG Children: 26.5, AVG Insts:24.05, AVG Children per Inst: 1.1018711018711018
-Levels: 3180 - 3200, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 3200 - 3220, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3220 - 3240, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3240 - 3260, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3260 - 3280, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3280 - 3300, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 3300 - 3320, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 3320 - 3340, AVG Children: 26.65, AVG Insts:24.25, AVG Children per Inst: 1.0989690721649485
-Levels: 3340 - 3360, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3360 - 3380, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3380 - 3400, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3400 - 3420, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3420 - 3440, AVG Children: 18.35, AVG Insts:15.7, AVG Children per Inst: 1.1687898089171975
-Levels: 3440 - 3460, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3460 - 3480, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 3480 - 3500, AVG Children: 26.9, AVG Insts:24.5, AVG Children per Inst: 1.0979591836734695
-Levels: 3500 - 3520, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3520 - 3540, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3540 - 3560, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 3560 - 3580, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3580 - 3600, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 3600 - 3620, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3620 - 3640, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3640 - 3660, AVG Children: 18.4, AVG Insts:15.95, AVG Children per Inst: 1.1536050156739812
-Levels: 3660 - 3680, AVG Children: 27.3, AVG Insts:24.55, AVG Children per Inst: 1.1120162932790223
-Levels: 3680 - 3700, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3700 - 3720, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3720 - 3740, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 3740 - 3760, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3760 - 3780, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3780 - 3800, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 3800 - 3820, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3820 - 3840, AVG Children: 27.55, AVG Insts:24.85, AVG Children per Inst: 1.108651911468813
-Levels: 3840 - 3860, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3860 - 3880, AVG Children: 18.3, AVG Insts:15.85, AVG Children per Inst: 1.1545741324921135
-Levels: 3880 - 3900, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 3900 - 3920, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 3920 - 3940, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 3940 - 3960, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 3960 - 3980, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 3980 - 4000, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4000 - 4020, AVG Children: 27.7, AVG Insts:24.85, AVG Children per Inst: 1.1146881287726358
-Levels: 4020 - 4040, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 4040 - 4060, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4060 - 4080, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 4080 - 4100, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4100 - 4120, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4120 - 4140, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4140 - 4160, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4160 - 4180, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 4180 - 4200, AVG Children: 27.75, AVG Insts:25.35, AVG Children per Inst: 1.0946745562130178
-Levels: 4200 - 4220, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4220 - 4240, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4240 - 4260, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4260 - 4280, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 4280 - 4300, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 4300 - 4320, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4320 - 4340, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4340 - 4360, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 4360 - 4380, AVG Children: 28.15, AVG Insts:25.25, AVG Children per Inst: 1.114851485148515
-Levels: 4380 - 4400, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4400 - 4420, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4420 - 4440, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 4440 - 4460, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4460 - 4480, AVG Children: 18.55, AVG Insts:15.85, AVG Children per Inst: 1.1703470031545742
-Levels: 4480 - 4500, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4500 - 4520, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 4520 - 4540, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4540 - 4560, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 4560 - 4580, AVG Children: 28.35, AVG Insts:25.65, AVG Children per Inst: 1.105263157894737
-Levels: 4580 - 4600, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4600 - 4620, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4620 - 4640, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4640 - 4660, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4660 - 4680, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4680 - 4700, AVG Children: 18.7, AVG Insts:15.75, AVG Children per Inst: 1.1873015873015873
-Levels: 4700 - 4720, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4720 - 4740, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4740 - 4760, AVG Children: 28.45, AVG Insts:25.55, AVG Children per Inst: 1.1135029354207437
-Levels: 4760 - 4780, AVG Children: 18.25, AVG Insts:15.9, AVG Children per Inst: 1.1477987421383649
-Levels: 4780 - 4800, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4800 - 4820, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 4820 - 4840, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 4840 - 4860, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 4860 - 4880, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4880 - 4900, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 4900 - 4920, AVG Children: 18.55, AVG Insts:15.65, AVG Children per Inst: 1.1853035143769968
-Levels: 4920 - 4940, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 4940 - 4960, AVG Children: 28.7, AVG Insts:26.05, AVG Children per Inst: 1.1017274472168905
-Levels: 4960 - 4980, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 4980 - 5000, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5000 - 5020, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5020 - 5040, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 5040 - 5060, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5060 - 5080, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5080 - 5100, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5100 - 5120, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 5120 - 5140, AVG Children: 18.6, AVG Insts:15.7, AVG Children per Inst: 1.1847133757961783
-Levels: 5140 - 5160, AVG Children: 28.7, AVG Insts:26.25, AVG Children per Inst: 1.0933333333333333
-Levels: 5160 - 5180, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5180 - 5200, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 5200 - 5220, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5220 - 5240, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5240 - 5260, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 5260 - 5280, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5280 - 5300, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5300 - 5320, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5320 - 5340, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5340 - 5360, AVG Children: 18.6, AVG Insts:15.7, AVG Children per Inst: 1.1847133757961783
-Levels: 5360 - 5380, AVG Children: 28.95, AVG Insts:26.55, AVG Children per Inst: 1.0903954802259888
-Levels: 5380 - 5400, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5400 - 5420, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 5420 - 5440, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5440 - 5460, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5460 - 5480, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5480 - 5500, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5500 - 5520, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5520 - 5540, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5540 - 5560, AVG Children: 18.6, AVG Insts:15.7, AVG Children per Inst: 1.1847133757961783
-Levels: 5560 - 5580, AVG Children: 29.05, AVG Insts:26.65, AVG Children per Inst: 1.0900562851782365
-Levels: 5580 - 5600, AVG Children: 18.55, AVG Insts:15.85, AVG Children per Inst: 1.1703470031545742
-Levels: 5600 - 5620, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5620 - 5640, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5640 - 5660, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5660 - 5680, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5680 - 5700, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5700 - 5720, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 5720 - 5740, AVG Children: 18.4, AVG Insts:15.6, AVG Children per Inst: 1.1794871794871795
-Levels: 5740 - 5760, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 5760 - 5780, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5780 - 5800, AVG Children: 29.25, AVG Insts:26.85, AVG Children per Inst: 1.089385474860335
-Levels: 5800 - 5820, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5820 - 5840, AVG Children: 18.55, AVG Insts:15.65, AVG Children per Inst: 1.1853035143769968
-Levels: 5840 - 5860, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 5860 - 5880, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5880 - 5900, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 5900 - 5920, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5920 - 5940, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 5940 - 5960, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 5960 - 5980, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 5980 - 6000, AVG Children: 18.65, AVG Insts:15.75, AVG Children per Inst: 1.1841269841269841
-Levels: 6000 - 6020, AVG Children: 29.35, AVG Insts:26.9, AVG Children per Inst: 1.0910780669144982
-Levels: 6020 - 6040, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6040 - 6060, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6060 - 6080, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6080 - 6100, AVG Children: 18.55, AVG Insts:15.85, AVG Children per Inst: 1.1703470031545742
-Levels: 6100 - 6120, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 6120 - 6140, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6140 - 6160, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6160 - 6180, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 6180 - 6200, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6200 - 6220, AVG Children: 18.6, AVG Insts:15.7, AVG Children per Inst: 1.1847133757961783
-Levels: 6220 - 6240, AVG Children: 29.55, AVG Insts:27.15, AVG Children per Inst: 1.0883977900552486
-Levels: 6240 - 6260, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6260 - 6280, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6280 - 6300, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6300 - 6320, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 6320 - 6340, AVG Children: 18.4, AVG Insts:15.9, AVG Children per Inst: 1.1572327044025157
-Levels: 6340 - 6360, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6360 - 6380, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6380 - 6400, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6400 - 6420, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6420 - 6440, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6440 - 6460, AVG Children: 29.85, AVG Insts:27.45, AVG Children per Inst: 1.0874316939890711
-Levels: 6460 - 6480, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6480 - 6500, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 6500 - 6520, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 6520 - 6540, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6540 - 6560, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6560 - 6580, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6580 - 6600, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 6600 - 6620, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6620 - 6640, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6640 - 6660, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 6660 - 6680, AVG Children: 30.05, AVG Insts:27.65, AVG Children per Inst: 1.0867992766726944
-Levels: 6680 - 6700, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6700 - 6720, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 6720 - 6740, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6740 - 6760, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6760 - 6780, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6780 - 6800, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6800 - 6820, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 6820 - 6840, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 6840 - 6860, AVG Children: 18.5, AVG Insts:15.85, AVG Children per Inst: 1.167192429022082
-Levels: 6860 - 6880, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 6880 - 6900, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6900 - 6920, AVG Children: 30.65, AVG Insts:27.75, AVG Children per Inst: 1.1045045045045045
-Levels: 6920 - 6940, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 6940 - 6960, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 6960 - 6980, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 6980 - 7000, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7000 - 7020, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7020 - 7040, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7040 - 7060, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7060 - 7080, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7080 - 7100, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7100 - 7120, AVG Children: 18.4, AVG Insts:15.95, AVG Children per Inst: 1.1536050156739812
-Levels: 7120 - 7140, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7140 - 7160, AVG Children: 30.55, AVG Insts:28.05, AVG Children per Inst: 1.089126559714795
-Levels: 7160 - 7180, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7180 - 7200, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7200 - 7220, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7220 - 7240, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7240 - 7260, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7260 - 7280, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7280 - 7300, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7300 - 7320, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7320 - 7340, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 7340 - 7360, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7360 - 7380, AVG Children: 18.3, AVG Insts:15.85, AVG Children per Inst: 1.1545741324921135
-Levels: 7380 - 7400, AVG Children: 30.9, AVG Insts:28.25, AVG Children per Inst: 1.0938053097345133
-Levels: 7400 - 7420, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7420 - 7440, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7440 - 7460, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7460 - 7480, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7480 - 7500, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 7500 - 7520, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7520 - 7540, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 7540 - 7560, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7560 - 7580, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7580 - 7600, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7600 - 7620, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7620 - 7640, AVG Children: 31.1, AVG Insts:28.25, AVG Children per Inst: 1.1008849557522125
-Levels: 7640 - 7660, AVG Children: 18.4, AVG Insts:15.9, AVG Children per Inst: 1.1572327044025157
-Levels: 7660 - 7680, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7680 - 7700, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7700 - 7720, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7720 - 7740, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7740 - 7760, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 7760 - 7780, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7780 - 7800, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7800 - 7820, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 7820 - 7840, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 7840 - 7860, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7860 - 7880, AVG Children: 18.4, AVG Insts:15.95, AVG Children per Inst: 1.1536050156739812
-Levels: 7880 - 7900, AVG Children: 31.15, AVG Insts:28.5, AVG Children per Inst: 1.092982456140351
-Levels: 7900 - 7920, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 7920 - 7940, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 7940 - 7960, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 7960 - 7980, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 7980 - 8000, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8000 - 8020, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 8020 - 8040, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8040 - 8060, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8060 - 8080, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8080 - 8100, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8100 - 8120, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8120 - 8140, AVG Children: 31.55, AVG Insts:28.65, AVG Children per Inst: 1.1012216404886561
-Levels: 8140 - 8160, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8160 - 8180, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8180 - 8200, AVG Children: 18.35, AVG Insts:15.7, AVG Children per Inst: 1.1687898089171975
-Levels: 8200 - 8220, AVG Children: 18.55, AVG Insts:15.85, AVG Children per Inst: 1.1703470031545742
-Levels: 8220 - 8240, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8240 - 8260, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8260 - 8280, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8280 - 8300, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8300 - 8320, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8320 - 8340, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8340 - 8360, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8360 - 8380, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 8380 - 8400, AVG Children: 31.7, AVG Insts:29.05, AVG Children per Inst: 1.0912220309810672
-Levels: 8400 - 8420, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 8420 - 8440, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8440 - 8460, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8460 - 8480, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8480 - 8500, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 8500 - 8520, AVG Children: 18.5, AVG Insts:15.65, AVG Children per Inst: 1.182108626198083
-Levels: 8520 - 8540, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8540 - 8560, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 8560 - 8580, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8580 - 8600, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8600 - 8620, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8620 - 8640, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 8640 - 8660, AVG Children: 31.9, AVG Insts:29.25, AVG Children per Inst: 1.0905982905982905
-Levels: 8660 - 8680, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8680 - 8700, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8700 - 8720, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8720 - 8740, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8740 - 8760, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 8760 - 8780, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8780 - 8800, AVG Children: 18.55, AVG Insts:15.65, AVG Children per Inst: 1.1853035143769968
-Levels: 8800 - 8820, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8820 - 8840, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 8840 - 8860, AVG Children: 18.4, AVG Insts:15.6, AVG Children per Inst: 1.1794871794871795
-Levels: 8860 - 8880, AVG Children: 18.35, AVG Insts:15.9, AVG Children per Inst: 1.1540880503144655
-Levels: 8880 - 8900, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8900 - 8920, AVG Children: 31.9, AVG Insts:29.45, AVG Children per Inst: 1.0831918505942275
-Levels: 8920 - 8940, AVG Children: 18.5, AVG Insts:15.8, AVG Children per Inst: 1.1708860759493671
-Levels: 8940 - 8960, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 8960 - 8980, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 8980 - 9000, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9000 - 9020, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9020 - 9040, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9040 - 9060, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9060 - 9080, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9080 - 9100, AVG Children: 18.45, AVG Insts:16.0, AVG Children per Inst: 1.153125
-Levels: 9100 - 9120, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9120 - 9140, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 9140 - 9160, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9160 - 9180, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9180 - 9200, AVG Children: 32.1, AVG Insts:29.65, AVG Children per Inst: 1.0826306913996628
-Levels: 9200 - 9220, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9220 - 9240, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9240 - 9260, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9260 - 9280, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9280 - 9300, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9300 - 9320, AVG Children: 18.25, AVG Insts:15.8, AVG Children per Inst: 1.1550632911392404
-Levels: 9320 - 9340, AVG Children: 18.55, AVG Insts:15.7, AVG Children per Inst: 1.1815286624203822
-Levels: 9340 - 9360, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9360 - 9380, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9380 - 9400, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 9400 - 9420, AVG Children: 18.25, AVG Insts:15.9, AVG Children per Inst: 1.1477987421383649
-Levels: 9420 - 9440, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9440 - 9460, AVG Children: 32.45, AVG Insts:29.55, AVG Children per Inst: 1.0981387478849407
-Levels: 9460 - 9480, AVG Children: 18.25, AVG Insts:15.9, AVG Children per Inst: 1.1477987421383649
-Levels: 9480 - 9500, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9500 - 9520, AVG Children: 18.5, AVG Insts:15.6, AVG Children per Inst: 1.185897435897436
-Levels: 9520 - 9540, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9540 - 9560, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9560 - 9580, AVG Children: 18.3, AVG Insts:15.7, AVG Children per Inst: 1.1656050955414012
-Levels: 9580 - 9600, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9600 - 9620, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9620 - 9640, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9640 - 9660, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9660 - 9680, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9680 - 9700, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9700 - 9720, AVG Children: 18.6, AVG Insts:15.85, AVG Children per Inst: 1.1735015772870663
-Levels: 9720 - 9740, AVG Children: 32.7, AVG Insts:29.85, AVG Children per Inst: 1.0954773869346734
-Levels: 9740 - 9760, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9760 - 9780, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9780 - 9800, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9800 - 9820, AVG Children: 18.3, AVG Insts:15.9, AVG Children per Inst: 1.150943396226415
-Levels: 9820 - 9840, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9840 - 9860, AVG Children: 18.2, AVG Insts:15.8, AVG Children per Inst: 1.1518987341772151
-Levels: 9860 - 9880, AVG Children: 18.45, AVG Insts:15.8, AVG Children per Inst: 1.1677215189873418
-Levels: 9880 - 9900, AVG Children: 18.45, AVG Insts:15.6, AVG Children per Inst: 1.1826923076923077
-Levels: 9900 - 9920, AVG Children: 15.9, AVG Insts:13.6, AVG Children per Inst: 1.1691176470588236
-Levels: 9920 - 9940, AVG Children: 15.95, AVG Insts:13.3, AVG Children per Inst: 1.199248120300752
-Levels: 9940 - 9960, AVG Children: 15.95, AVG Insts:13.1, AVG Children per Inst: 1.217557251908397
-Levels: 9960 - 9980, AVG Children: 15.7, AVG Insts:13.3, AVG Children per Inst: 1.1804511278195489
-Levels: 9980 - 10000, AVG Children: 15.95, AVG Insts:13.3, AVG Children per Inst: 1.199248120300752
-Levels: 10000 - 10020, AVG Children: 30.5, AVG Insts:27.55, AVG Children per Inst: 1.1070780399274047
-Levels: 10020 - 10040, AVG Children: 15.75, AVG Insts:13.35, AVG Children per Inst: 1.1797752808988764
-Levels: 10040 - 10060, AVG Children: 16.05, AVG Insts:13.2, AVG Children per Inst: 1.2159090909090908
-Levels: 10060 - 10080, AVG Children: 15.7, AVG Insts:13.3, AVG Children per Inst: 1.1804511278195489
-Levels: 10080 - 10100, AVG Children: 15.95, AVG Insts:13.3, AVG Children per Inst: 1.199248120300752
-Levels: 10100 - 10120, AVG Children: 14.45, AVG Insts:11.7, AVG Children per Inst: 1.235042735042735
-Levels: 10120 - 10140, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10140 - 10160, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10160 - 10180, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10180 - 10200, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10200 - 10220, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10220 - 10240, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10240 - 10260, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10260 - 10280, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10280 - 10300, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10300 - 10320, AVG Children: 29.0, AVG Insts:26.35, AVG Children per Inst: 1.1005692599620494
-Levels: 10320 - 10340, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10340 - 10360, AVG Children: 14.3, AVG Insts:11.85, AVG Children per Inst: 1.2067510548523206
-Levels: 10360 - 10380, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10380 - 10400, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10400 - 10420, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10420 - 10440, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10440 - 10460, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10460 - 10480, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10480 - 10500, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10500 - 10520, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10520 - 10540, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10540 - 10560, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 10560 - 10580, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10580 - 10600, AVG Children: 29.3, AVG Insts:26.65, AVG Children per Inst: 1.099437148217636
-Levels: 10600 - 10620, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10620 - 10640, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10640 - 10660, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10660 - 10680, AVG Children: 14.6, AVG Insts:11.7, AVG Children per Inst: 1.2478632478632479
-Levels: 10680 - 10700, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10700 - 10720, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10720 - 10740, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10740 - 10760, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10760 - 10780, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10780 - 10800, AVG Children: 14.4, AVG Insts:11.6, AVG Children per Inst: 1.2413793103448276
-Levels: 10800 - 10820, AVG Children: 14.35, AVG Insts:11.9, AVG Children per Inst: 1.2058823529411764
-Levels: 10820 - 10840, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10840 - 10860, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10860 - 10880, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10880 - 10900, AVG Children: 29.5, AVG Insts:26.65, AVG Children per Inst: 1.1069418386491556
-Levels: 10900 - 10920, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10920 - 10940, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 10940 - 10960, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 10960 - 10980, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 10980 - 11000, AVG Children: 14.55, AVG Insts:11.9, AVG Children per Inst: 1.2226890756302522
-Levels: 11000 - 11020, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11020 - 11040, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11040 - 11060, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 11060 - 11080, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11080 - 11100, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11100 - 11120, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11120 - 11140, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11140 - 11160, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11160 - 11180, AVG Children: 14.65, AVG Insts:11.75, AVG Children per Inst: 1.2468085106382978
-Levels: 11180 - 11200, AVG Children: 29.3, AVG Insts:26.9, AVG Children per Inst: 1.0892193308550187
-Levels: 11200 - 11220, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11220 - 11240, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11240 - 11260, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11260 - 11280, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11280 - 11300, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11300 - 11320, AVG Children: 14.3, AVG Insts:11.9, AVG Children per Inst: 1.2016806722689075
-Levels: 11320 - 11340, AVG Children: 14.55, AVG Insts:11.65, AVG Children per Inst: 1.2489270386266094
-Levels: 11340 - 11360, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11360 - 11380, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11380 - 11400, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11400 - 11420, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11420 - 11440, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11440 - 11460, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11460 - 11480, AVG Children: 14.35, AVG Insts:11.9, AVG Children per Inst: 1.2058823529411764
-Levels: 11480 - 11500, AVG Children: 29.8, AVG Insts:27.15, AVG Children per Inst: 1.0976058931860038
-Levels: 11500 - 11520, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11520 - 11540, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11540 - 11560, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11560 - 11580, AVG Children: 14.3, AVG Insts:11.7, AVG Children per Inst: 1.2222222222222223
-Levels: 11580 - 11600, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11600 - 11620, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11620 - 11640, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11640 - 11660, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11660 - 11680, AVG Children: 14.55, AVG Insts:11.65, AVG Children per Inst: 1.2489270386266094
-Levels: 11680 - 11700, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11700 - 11720, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11720 - 11740, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11740 - 11760, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11760 - 11780, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11780 - 11800, AVG Children: 30.1, AVG Insts:27.25, AVG Children per Inst: 1.1045871559633027
-Levels: 11800 - 11820, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11820 - 11840, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11840 - 11860, AVG Children: 14.3, AVG Insts:11.7, AVG Children per Inst: 1.2222222222222223
-Levels: 11860 - 11880, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11880 - 11900, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11900 - 11920, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11920 - 11940, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 11940 - 11960, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 11960 - 11980, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 11980 - 12000, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12000 - 12020, AVG Children: 14.55, AVG Insts:11.65, AVG Children per Inst: 1.2489270386266094
-Levels: 12020 - 12040, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12040 - 12060, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12060 - 12080, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12080 - 12100, AVG Children: 30.05, AVG Insts:27.65, AVG Children per Inst: 1.0867992766726944
-Levels: 12100 - 12120, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 12120 - 12140, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12140 - 12160, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12160 - 12180, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12180 - 12200, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12200 - 12220, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12220 - 12240, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12240 - 12260, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12260 - 12280, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12280 - 12300, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12300 - 12320, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12320 - 12340, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12340 - 12360, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12360 - 12380, AVG Children: 14.35, AVG Insts:11.9, AVG Children per Inst: 1.2058823529411764
-Levels: 12380 - 12400, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 12400 - 12420, AVG Children: 30.3, AVG Insts:27.85, AVG Children per Inst: 1.0879712746858168
-Levels: 12420 - 12440, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12440 - 12460, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12460 - 12480, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12480 - 12500, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12500 - 12520, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12520 - 12540, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12540 - 12560, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12560 - 12580, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12580 - 12600, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12600 - 12620, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12620 - 12640, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12640 - 12660, AVG Children: 14.3, AVG Insts:11.9, AVG Children per Inst: 1.2016806722689075
-Levels: 12660 - 12680, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12680 - 12700, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12700 - 12720, AVG Children: 14.55, AVG Insts:11.9, AVG Children per Inst: 1.2226890756302522
-Levels: 12720 - 12740, AVG Children: 30.75, AVG Insts:27.85, AVG Children per Inst: 1.104129263913824
-Levels: 12740 - 12760, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12760 - 12780, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12780 - 12800, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12800 - 12820, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12820 - 12840, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12840 - 12860, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12860 - 12880, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12880 - 12900, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 12900 - 12920, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12920 - 12940, AVG Children: 14.3, AVG Insts:11.9, AVG Children per Inst: 1.2016806722689075
-Levels: 12940 - 12960, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 12960 - 12980, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 12980 - 13000, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13000 - 13020, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13020 - 13040, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13040 - 13060, AVG Children: 30.9, AVG Insts:28.25, AVG Children per Inst: 1.0938053097345133
-Levels: 13060 - 13080, AVG Children: 14.55, AVG Insts:11.65, AVG Children per Inst: 1.2489270386266094
-Levels: 13080 - 13100, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13100 - 13120, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13120 - 13140, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13140 - 13160, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13160 - 13180, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13180 - 13200, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13200 - 13220, AVG Children: 14.3, AVG Insts:11.9, AVG Children per Inst: 1.2016806722689075
-Levels: 13220 - 13240, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13240 - 13260, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13260 - 13280, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13280 - 13300, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13300 - 13320, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13320 - 13340, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13340 - 13360, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13360 - 13380, AVG Children: 30.85, AVG Insts:28.45, AVG Children per Inst: 1.0843585237258349
-Levels: 13380 - 13400, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13400 - 13420, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13420 - 13440, AVG Children: 14.3, AVG Insts:11.85, AVG Children per Inst: 1.2067510548523206
-Levels: 13440 - 13460, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13460 - 13480, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13480 - 13500, AVG Children: 14.3, AVG Insts:11.9, AVG Children per Inst: 1.2016806722689075
-Levels: 13500 - 13520, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13520 - 13540, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13540 - 13560, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13560 - 13580, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13580 - 13600, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13600 - 13620, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13620 - 13640, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13640 - 13660, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13660 - 13680, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13680 - 13700, AVG Children: 14.65, AVG Insts:11.75, AVG Children per Inst: 1.2468085106382978
-Levels: 13700 - 13720, AVG Children: 30.9, AVG Insts:28.5, AVG Children per Inst: 1.0842105263157895
-Levels: 13720 - 13740, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13740 - 13760, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13760 - 13780, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13780 - 13800, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 13800 - 13820, AVG Children: 14.3, AVG Insts:11.85, AVG Children per Inst: 1.2067510548523206
-Levels: 13820 - 13840, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13840 - 13860, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13860 - 13880, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13880 - 13900, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13900 - 13920, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13920 - 13940, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 13940 - 13960, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 13960 - 13980, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 13980 - 14000, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14000 - 14020, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14020 - 14040, AVG Children: 31.55, AVG Insts:28.65, AVG Children per Inst: 1.1012216404886561
-Levels: 14040 - 14060, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14060 - 14080, AVG Children: 14.55, AVG Insts:11.7, AVG Children per Inst: 1.2435897435897436
-Levels: 14080 - 14100, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14100 - 14120, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14120 - 14140, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14140 - 14160, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14160 - 14180, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14180 - 14200, AVG Children: 14.6, AVG Insts:11.7, AVG Children per Inst: 1.2478632478632479
-Levels: 14200 - 14220, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14220 - 14240, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14240 - 14260, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14260 - 14280, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14280 - 14300, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14300 - 14320, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14320 - 14340, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14340 - 14360, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14360 - 14380, AVG Children: 31.55, AVG Insts:28.95, AVG Children per Inst: 1.0898100172711571
-Levels: 14380 - 14400, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14400 - 14420, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14420 - 14440, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14440 - 14460, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14460 - 14480, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14480 - 14500, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14500 - 14520, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14520 - 14540, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14540 - 14560, AVG Children: 14.25, AVG Insts:11.8, AVG Children per Inst: 1.2076271186440677
-Levels: 14560 - 14580, AVG Children: 14.5, AVG Insts:11.9, AVG Children per Inst: 1.218487394957983
-Levels: 14580 - 14600, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14600 - 14620, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14620 - 14640, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14640 - 14660, AVG Children: 14.3, AVG Insts:11.7, AVG Children per Inst: 1.2222222222222223
-Levels: 14660 - 14680, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14680 - 14700, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14700 - 14720, AVG Children: 31.65, AVG Insts:29.25, AVG Children per Inst: 1.082051282051282
-Levels: 14720 - 14740, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14740 - 14760, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14760 - 14780, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14780 - 14800, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14800 - 14820, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14820 - 14840, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14840 - 14860, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14860 - 14880, AVG Children: 14.45, AVG Insts:11.6, AVG Children per Inst: 1.2456896551724137
-Levels: 14880 - 14900, AVG Children: 14.2, AVG Insts:11.8, AVG Children per Inst: 1.2033898305084745
-Levels: 14900 - 14920, AVG Children: 14.45, AVG Insts:11.8, AVG Children per Inst: 1.2245762711864407
-Levels: 14920 - 14940, AVG Children: 14.5, AVG Insts:11.6, AVG Children per Inst: 1.25
-Levels: 14940 - 14960, AVG Children: 13.5, AVG Insts:11.3, AVG Children per Inst: 1.1946902654867257
-Levels: 14960 - 14980, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 14980 - 15000, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15000 - 15020, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15020 - 15040, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15040 - 15060, AVG Children: 28.4, AVG Insts:26.05, AVG Children per Inst: 1.09021113243762
-Levels: 15060 - 15080, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15080 - 15100, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15100 - 15120, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15120 - 15140, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15140 - 15160, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15160 - 15180, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15180 - 15200, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15200 - 15220, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15220 - 15240, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15240 - 15260, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15260 - 15280, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15280 - 15300, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15300 - 15320, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15320 - 15340, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 15340 - 15360, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15360 - 15380, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15380 - 15400, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15400 - 15420, AVG Children: 28.6, AVG Insts:26.25, AVG Children per Inst: 1.0895238095238096
-Levels: 15420 - 15440, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15440 - 15460, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15460 - 15480, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15480 - 15500, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15500 - 15520, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15520 - 15540, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15540 - 15560, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15560 - 15580, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15580 - 15600, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15600 - 15620, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15620 - 15640, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15640 - 15660, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15660 - 15680, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15680 - 15700, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15700 - 15720, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15720 - 15740, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 15740 - 15760, AVG Children: 28.7, AVG Insts:26.35, AVG Children per Inst: 1.0891840607210626
-Levels: 15760 - 15780, AVG Children: 10.75, AVG Insts:8.5, AVG Children per Inst: 1.2647058823529411
-Levels: 15780 - 15800, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15800 - 15820, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15820 - 15840, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15840 - 15860, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15860 - 15880, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15880 - 15900, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15900 - 15920, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15920 - 15940, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15940 - 15960, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15960 - 15980, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 15980 - 16000, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16000 - 16020, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16020 - 16040, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16040 - 16060, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16060 - 16080, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16080 - 16100, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16100 - 16120, AVG Children: 28.95, AVG Insts:26.65, AVG Children per Inst: 1.0863039399624765
-Levels: 16120 - 16140, AVG Children: 10.85, AVG Insts:8.5, AVG Children per Inst: 1.276470588235294
-Levels: 16140 - 16160, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16160 - 16180, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16180 - 16200, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16200 - 16220, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16220 - 16240, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16240 - 16260, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16260 - 16280, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16280 - 16300, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16300 - 16320, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16320 - 16340, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16340 - 16360, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16360 - 16380, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16380 - 16400, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16400 - 16420, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16420 - 16440, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16440 - 16460, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16460 - 16480, AVG Children: 29.2, AVG Insts:26.85, AVG Children per Inst: 1.0875232774674115
-Levels: 16480 - 16500, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16500 - 16520, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16520 - 16540, AVG Children: 10.8, AVG Insts:8.5, AVG Children per Inst: 1.2705882352941176
-Levels: 16540 - 16560, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16560 - 16580, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16580 - 16600, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16600 - 16620, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16620 - 16640, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16640 - 16660, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16660 - 16680, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16680 - 16700, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16700 - 16720, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16720 - 16740, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16740 - 16760, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16760 - 16780, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16780 - 16800, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16800 - 16820, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16820 - 16840, AVG Children: 10.85, AVG Insts:8.5, AVG Children per Inst: 1.276470588235294
-Levels: 16840 - 16860, AVG Children: 29.25, AVG Insts:26.95, AVG Children per Inst: 1.085343228200371
-Levels: 16860 - 16880, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16880 - 16900, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16900 - 16920, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16920 - 16940, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 16940 - 16960, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16960 - 16980, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 16980 - 17000, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17000 - 17020, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17020 - 17040, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17040 - 17060, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17060 - 17080, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17080 - 17100, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17100 - 17120, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17120 - 17140, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17140 - 17160, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17160 - 17180, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17180 - 17200, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17200 - 17220, AVG Children: 29.55, AVG Insts:27.25, AVG Children per Inst: 1.0844036697247705
-Levels: 17220 - 17240, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17240 - 17260, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17260 - 17280, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17280 - 17300, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17300 - 17320, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17320 - 17340, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17340 - 17360, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 17360 - 17380, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17380 - 17400, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17400 - 17420, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17420 - 17440, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17440 - 17460, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17460 - 17480, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17480 - 17500, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17500 - 17520, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17520 - 17540, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17540 - 17560, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17560 - 17580, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17580 - 17600, AVG Children: 29.75, AVG Insts:27.45, AVG Children per Inst: 1.0837887067395264
-Levels: 17600 - 17620, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17620 - 17640, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17640 - 17660, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17660 - 17680, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17680 - 17700, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17700 - 17720, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17720 - 17740, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17740 - 17760, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17760 - 17780, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 17780 - 17800, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17800 - 17820, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17820 - 17840, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17840 - 17860, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17860 - 17880, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17880 - 17900, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17900 - 17920, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17920 - 17940, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 17940 - 17960, AVG Children: 10.9, AVG Insts:8.55, AVG Children per Inst: 1.2748538011695907
-Levels: 17960 - 17980, AVG Children: 29.8, AVG Insts:27.5, AVG Children per Inst: 1.0836363636363637
-Levels: 17980 - 18000, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18000 - 18020, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18020 - 18040, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18040 - 18060, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18060 - 18080, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18080 - 18100, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18100 - 18120, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18120 - 18140, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18140 - 18160, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18160 - 18180, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18180 - 18200, AVG Children: 10.85, AVG Insts:8.5, AVG Children per Inst: 1.276470588235294
-Levels: 18200 - 18220, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18220 - 18240, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18240 - 18260, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18260 - 18280, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18280 - 18300, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18300 - 18320, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18320 - 18340, AVG Children: 10.85, AVG Insts:8.5, AVG Children per Inst: 1.276470588235294
-Levels: 18340 - 18360, AVG Children: 30.05, AVG Insts:27.75, AVG Children per Inst: 1.082882882882883
-Levels: 18360 - 18380, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18380 - 18400, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18400 - 18420, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18420 - 18440, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18440 - 18460, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18460 - 18480, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18480 - 18500, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18500 - 18520, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18520 - 18540, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18540 - 18560, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18560 - 18580, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18580 - 18600, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18600 - 18620, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18620 - 18640, AVG Children: 10.8, AVG Insts:8.5, AVG Children per Inst: 1.2705882352941176
-Levels: 18640 - 18660, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18660 - 18680, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18680 - 18700, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18700 - 18720, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18720 - 18740, AVG Children: 30.35, AVG Insts:28.05, AVG Children per Inst: 1.0819964349376114
-Levels: 18740 - 18760, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18760 - 18780, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18780 - 18800, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18800 - 18820, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18820 - 18840, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18840 - 18860, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18860 - 18880, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18880 - 18900, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18900 - 18920, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18920 - 18940, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18940 - 18960, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18960 - 18980, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 18980 - 19000, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19000 - 19020, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19020 - 19040, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19040 - 19060, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 19060 - 19080, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19080 - 19100, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19100 - 19120, AVG Children: 30.55, AVG Insts:28.25, AVG Children per Inst: 1.08141592920354
-Levels: 19120 - 19140, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19140 - 19160, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19160 - 19180, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19180 - 19200, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19200 - 19220, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19220 - 19240, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19240 - 19260, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19260 - 19280, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19280 - 19300, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19300 - 19320, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19320 - 19340, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19340 - 19360, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19360 - 19380, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19380 - 19400, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19400 - 19420, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19420 - 19440, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19440 - 19460, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19460 - 19480, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19480 - 19500, AVG Children: 10.8, AVG Insts:8.45, AVG Children per Inst: 1.2781065088757397
-Levels: 19500 - 19520, AVG Children: 30.8, AVG Insts:28.45, AVG Children per Inst: 1.0826010544815465
-Levels: 19520 - 19540, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19540 - 19560, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19560 - 19580, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19580 - 19600, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19600 - 19620, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19620 - 19640, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19640 - 19660, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19660 - 19680, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19680 - 19700, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19700 - 19720, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19720 - 19740, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19740 - 19760, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19760 - 19780, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19780 - 19800, AVG Children: 10.7, AVG Insts:8.4, AVG Children per Inst: 1.2738095238095237
-Levels: 19800 - 19820, AVG Children: 5.1, AVG Insts:4.0, AVG Children per Inst: 1.275
-Levels: 19820 - 19840, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19840 - 19860, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19860 - 19880, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19880 - 19900, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19900 - 19920, AVG Children: 24.9, AVG Insts:23.6, AVG Children per Inst: 1.055084745762712
-Levels: 19920 - 19940, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19940 - 19960, AVG Children: 4.8, AVG Insts:3.45, AVG Children per Inst: 1.391304347826087
-Levels: 19960 - 19980, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 19980 - 20000, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20000 - 20020, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20020 - 20040, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20040 - 20060, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20060 - 20080, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20080 - 20100, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20100 - 20120, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20120 - 20140, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20140 - 20160, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20160 - 20180, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20180 - 20200, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20200 - 20220, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20220 - 20240, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20240 - 20260, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20260 - 20280, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20280 - 20300, AVG Children: 4.7, AVG Insts:3.4, AVG Children per Inst: 1.3823529411764706
-Levels: 20300 - 20320, AVG Children: 3.45, AVG Insts:2.7, AVG Children per Inst: 1.2777777777777777
-Levels: 20320 - 20340, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20340 - 20360, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20360 - 20380, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20380 - 20400, AVG Children: 3.35, AVG Insts:2.5, AVG Children per Inst: 1.34
-Levels: 20400 - 20420, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20420 - 20440, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20440 - 20460, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20460 - 20480, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20480 - 20500, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20500 - 20520, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20520 - 20540, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20540 - 20560, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20560 - 20580, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20580 - 20600, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20600 - 20620, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20620 - 20640, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20640 - 20660, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20660 - 20680, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20680 - 20700, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20700 - 20720, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20720 - 20740, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20740 - 20760, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20760 - 20780, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20780 - 20800, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20800 - 20820, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20820 - 20840, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20840 - 20860, AVG Children: 3.3, AVG Insts:2.5, AVG Children per Inst: 1.32
-Levels: 20860 - 20880, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20880 - 20900, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20900 - 20920, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20920 - 20940, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20940 - 20960, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20960 - 20980, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 20980 - 21000, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21000 - 21020, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21020 - 21040, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21040 - 21060, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21060 - 21080, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21080 - 21100, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21100 - 21120, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21120 - 21140, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21140 - 21160, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21160 - 21180, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21180 - 21200, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21200 - 21220, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21220 - 21240, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21240 - 21260, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21260 - 21280, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21280 - 21300, AVG Children: 3.25, AVG Insts:2.4, AVG Children per Inst: 1.3541666666666667
-Levels: 21300 - 21320, AVG Children: 3.25, AVG Insts:2.45, AVG Children per Inst: 1.3265306122448979
-Levels: 21320 - 21340, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21340 - 21360, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21360 - 21380, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21380 - 21400, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21400 - 21420, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21420 - 21440, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21440 - 21460, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21460 - 21480, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21480 - 21500, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21500 - 21520, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21520 - 21540, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21540 - 21560, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21560 - 21580, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21580 - 21600, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21600 - 21620, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21620 - 21640, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21640 - 21660, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21660 - 21680, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21680 - 21700, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21700 - 21720, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21720 - 21740, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21740 - 21760, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21760 - 21780, AVG Children: 3.3, AVG Insts:2.45, AVG Children per Inst: 1.346938775510204
-Levels: 21780 - 21800, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21800 - 21820, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21820 - 21840, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21840 - 21860, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21860 - 21880, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21880 - 21900, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21900 - 21920, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21920 - 21940, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21940 - 21960, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21960 - 21980, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 21980 - 22000, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22000 - 22020, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22020 - 22040, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22040 - 22060, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22060 - 22080, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22080 - 22100, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22100 - 22120, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22120 - 22140, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22140 - 22160, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22160 - 22180, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22180 - 22200, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22200 - 22220, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22220 - 22240, AVG Children: 3.3, AVG Insts:2.45, AVG Children per Inst: 1.346938775510204
-Levels: 22240 - 22260, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22260 - 22280, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22280 - 22300, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22300 - 22320, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22320 - 22340, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22340 - 22360, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22360 - 22380, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22380 - 22400, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22400 - 22420, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22420 - 22440, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22440 - 22460, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22460 - 22480, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22480 - 22500, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22500 - 22520, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22520 - 22540, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22540 - 22560, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22560 - 22580, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22580 - 22600, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22600 - 22620, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22620 - 22640, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22640 - 22660, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22660 - 22680, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22680 - 22700, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22700 - 22720, AVG Children: 3.35, AVG Insts:2.5, AVG Children per Inst: 1.34
-Levels: 22720 - 22740, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22740 - 22760, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22760 - 22780, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22780 - 22800, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22800 - 22820, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22820 - 22840, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22840 - 22860, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22860 - 22880, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22880 - 22900, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22900 - 22920, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22920 - 22940, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22940 - 22960, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22960 - 22980, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 22980 - 23000, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23000 - 23020, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23020 - 23040, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23040 - 23060, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23060 - 23080, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23080 - 23100, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23100 - 23120, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23120 - 23140, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23140 - 23160, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23160 - 23180, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23180 - 23200, AVG Children: 3.3, AVG Insts:2.5, AVG Children per Inst: 1.32
-Levels: 23200 - 23220, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23220 - 23240, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23240 - 23260, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23260 - 23280, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23280 - 23300, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23300 - 23320, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23320 - 23340, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23340 - 23360, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23360 - 23380, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23380 - 23400, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23400 - 23420, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23420 - 23440, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23440 - 23460, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23460 - 23480, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23480 - 23500, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23500 - 23520, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23520 - 23540, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23540 - 23560, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23560 - 23580, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23580 - 23600, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23600 - 23620, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23620 - 23640, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23640 - 23660, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23660 - 23680, AVG Children: 3.3, AVG Insts:2.45, AVG Children per Inst: 1.346938775510204
-Levels: 23680 - 23700, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23700 - 23720, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23720 - 23740, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23740 - 23760, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23760 - 23780, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23780 - 23800, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23800 - 23820, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23820 - 23840, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23840 - 23860, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23860 - 23880, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23880 - 23900, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23900 - 23920, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23920 - 23940, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23940 - 23960, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23960 - 23980, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 23980 - 24000, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24000 - 24020, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24020 - 24040, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24040 - 24060, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24060 - 24080, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24080 - 24100, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24100 - 24120, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24120 - 24140, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24140 - 24160, AVG Children: 3.25, AVG Insts:2.4, AVG Children per Inst: 1.3541666666666667
-Levels: 24160 - 24180, AVG Children: 3.25, AVG Insts:2.45, AVG Children per Inst: 1.3265306122448979
-Levels: 24180 - 24200, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24200 - 24220, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24220 - 24240, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24240 - 24260, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24260 - 24280, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24280 - 24300, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24300 - 24320, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24320 - 24340, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24340 - 24360, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24360 - 24380, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24380 - 24400, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24400 - 24420, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24420 - 24440, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24440 - 24460, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24460 - 24480, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24480 - 24500, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24500 - 24520, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24520 - 24540, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24540 - 24560, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24560 - 24580, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24580 - 24600, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24600 - 24620, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24620 - 24640, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24640 - 24660, AVG Children: 3.3, AVG Insts:2.45, AVG Children per Inst: 1.346938775510204
-Levels: 24660 - 24680, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24680 - 24700, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24700 - 24720, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24720 - 24740, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24740 - 24760, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24760 - 24780, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24780 - 24800, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24800 - 24820, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24820 - 24840, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24840 - 24860, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24860 - 24880, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24880 - 24900, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24900 - 24920, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24920 - 24940, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24940 - 24960, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24960 - 24980, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 24980 - 25000, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25000 - 25020, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25020 - 25040, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25040 - 25060, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25060 - 25080, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25080 - 25100, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25100 - 25120, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25120 - 25140, AVG Children: 3.2, AVG Insts:2.4, AVG Children per Inst: 1.3333333333333333
-Levels: 25140 - 25154, AVG Children: 2.0, AVG Insts:1.65, AVG Children per Inst: 1.2121212121212122
---------------------------------
-Value Count Per Cycle Count
-
-Keeping 405199 values for 1 cycles.
-Keeping 34755 values for 3 cycles.
-Keeping 15055 values for 2 cycles.
-Keeping 15050 values for 4 cycles.
-Keeping 103 values for 5 cycles.
-Keeping 100 values for 9 cycles.
-Keeping 99 values for 7 cycles.
-Keeping 97 values for 11 cycles.
-Keeping 97 values for 13 cycles.
-Keeping 95 values for 15 cycles.
+Levels: 0 - 10, AVG Lives: 90.2
+Levels: 10 - 20, AVG Lives: 127.2
+Levels: 20 - 30, AVG Lives: 128.2
+Levels: 30 - 40, AVG Lives: 115.3
+Levels: 40 - 50, AVG Lives: 139.1
+Levels: 50 - 60, AVG Lives: 125.6
+Levels: 60 - 70, AVG Lives: 122.5
+Levels: 70 - 80, AVG Lives: 120.1
+Levels: 80 - 90, AVG Lives: 124.9
+Levels: 90 - 100, AVG Lives: 132.6
+Levels: 100 - 110, AVG Lives: 135.2
+Levels: 110 - 120, AVG Lives: 134.0
+Levels: 120 - 130, AVG Lives: 145.7
+Levels: 130 - 140, AVG Lives: 144.4
+Levels: 140 - 150, AVG Lives: 143.8
+Levels: 150 - 160, AVG Lives: 143.7
+Levels: 160 - 170, AVG Lives: 138.9
+Levels: 170 - 180, AVG Lives: 138.2
+Levels: 180 - 190, AVG Lives: 143.7
+Levels: 190 - 200, AVG Lives: 139.9
+Levels: 200 - 210, AVG Lives: 133.2
+Levels: 210 - 220, AVG Lives: 140.6
+Levels: 220 - 230, AVG Lives: 127.1
+Levels: 230 - 240, AVG Lives: 125.1
+Levels: 240 - 250, AVG Lives: 118.4
+Levels: 250 - 260, AVG Lives: 116.8
+Levels: 260 - 270, AVG Lives: 109.2
+Levels: 270 - 280, AVG Lives: 109.1
+Levels: 280 - 290, AVG Lives: 110.4
+Levels: 290 - 300, AVG Lives: 110.6
+Levels: 300 - 310, AVG Lives: 108.5
+Levels: 310 - 320, AVG Lives: 98.5
+Levels: 320 - 330, AVG Lives: 101.5
+Levels: 330 - 340, AVG Lives: 97.8
+Levels: 340 - 350, AVG Lives: 89.1
+Levels: 350 - 360, AVG Lives: 68.0
+Levels: 360 - 370, AVG Lives: 44.4
+Levels: 370 - 380, AVG Lives: 21.0
+Levels: 380 - 381, AVG Lives: 8.0
+mul.i.i has 3 edges!
+data' has 32 edges!
+len has 158 edges!
+N has 20 edges!
+data' has 33 edges!
+80af3808 has 11 edges!
+80af3800 has 11 edges!
+N has 12 edges!
+data' has 17 edges!
+80af3648 has 7 edges!
+80af3640 has 7 edges!
+11d7e50 has 2 edges!
+11d8fd0 has 3 edges!
+N has 8 edges!
+data' has 9 edges!
+80af3488 has 5 edges!
+80af3480 has 5 edges!
+11d9070 has 2 edges!
+11d9090 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+80af32c8 has 4 edges!
+80af32c0 has 4 edges!
+80af3360 has 2 edges!
+iSign has 2 edges!
+80af3520 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af32a0 has 3 edges!
+80af3298 has 3 edges!
+80af3340 has 2 edges!
+data has 2 edges!
+data' has 2 edges!
+iSign has 3 edges!
+80af36e0 has 2 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3460 has 3 edges!
+80af3458 has 3 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3280 has 2 edges!
+80af3278 has 2 edges!
+80af3340 has 2 edges!
+80af3320 has 2 edges!
+iSign has 2 edges!
+80af3500 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3280 has 3 edges!
+80af3278 has 3 edges!
+80af3320 has 2 edges!
+data has 3 edges!
+data' has 3 edges!
+iSign has 4 edges!
+80af38a0 has 2 edges!
+N has 12 edges!
+data' has 17 edges!
+tapeArg has 8 edges!
+80af3620 has 3 edges!
+80af3618 has 3 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3440 has 2 edges!
+80af3438 has 2 edges!
+80af3500 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3260 has 2 edges!
+80af3258 has 2 edges!
+80af3320 has 2 edges!
+80af3300 has 2 edges!
+iSign has 2 edges!
+80af34e0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3260 has 2 edges!
+80af3258 has 2 edges!
+80af3320 has 2 edges!
+80af3300 has 2 edges!
+data has 2 edges!
+data' has 2 edges!
+iSign has 3 edges!
+80af36c0 has 2 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3440 has 3 edges!
+80af3438 has 3 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3260 has 2 edges!
+80af3258 has 2 edges!
+80af3320 has 2 edges!
+80af3300 has 2 edges!
+iSign has 2 edges!
+80af34e0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3260 has 3 edges!
+80af3258 has 3 edges!
+80af3300 has 2 edges!
+data has 5 edges!
+data' has 29 edges!
+iSign has 4 edges!
+80af3968 has 39 edges!
+11d88bc has 2 edges!
+11d88b8 has 2 edges!
+11d88b4 has 2 edges!
+11d88b0 has 2 edges!
+11d88ac has 3 edges!
+11d88a8 has 2 edges!
+11d88a4 has 2 edges!
+11d88a0 has 2 edges!
+11d889c has 3 edges!
+11d8898 has 2 edges!
+11d8894 has 3 edges!
+11d8890 has 2 edges!
+11d888c has 3 edges!
+11d8888 has 3 edges!
+11d8884 has 3 edges!
+11d8880 has 2 edges!
+N has 20 edges!
+data' has 33 edges!
+tapeArg has 16 edges!
+N has 12 edges!
+data' has 17 edges!
+tapeArg has 8 edges!
+80af3600 has 2 edges!
+80af35f8 has 2 edges!
+80af36c0 has 2 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3420 has 2 edges!
+80af3418 has 2 edges!
+80af34e0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+iSign has 2 edges!
+80af34c0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+data has 2 edges!
+data' has 2 edges!
+iSign has 3 edges!
+80af36a0 has 2 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3420 has 2 edges!
+80af3418 has 2 edges!
+80af34e0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+iSign has 2 edges!
+80af34c0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+data has 3 edges!
+data' has 3 edges!
+iSign has 4 edges!
+N has 12 edges!
+data' has 17 edges!
+tapeArg has 8 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+80af3420 has 2 edges!
+80af3418 has 2 edges!
+80af34e0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+iSign has 2 edges!
+80af34c0 has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+data has 2 edges!
+data' has 2 edges!
+iSign has 3 edges!
+N has 8 edges!
+data' has 9 edges!
+tapeArg has 4 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+80af3240 has 2 edges!
+80af3238 has 2 edges!
+80af3300 has 2 edges!
+80af32e0 has 2 edges!
+iSign has 2 edges!
+N has 6 edges!
+data' has 5 edges!
+tapeArg has 2 edges!
+data has 5 edges!
+data' has 29 edges!
+iSign has 4 edges!
+80af3970 has 39 edges!
+11d7e3c has 2 edges!
+11d7e38 has 2 edges!
+11d7e34 has 2 edges!
+11d7e30 has 2 edges!
+11d7e2c has 3 edges!
+11d7e28 has 2 edges!
+11d7e24 has 2 edges!
+11d7e20 has 2 edges!
+11d7e1c has 3 edges!
+11d7e18 has 2 edges!
+11d7e14 has 3 edges!
+11d7e10 has 2 edges!
+11d7e0c has 3 edges!
+11d7e08 has 3 edges!
+11d7e04 has 3 edges!
+11d7e00 has 2 edges!
+1509
+Spills =  35845

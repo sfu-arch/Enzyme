@@ -195,8 +195,10 @@ public:
     for (auto i: reverse_bb_map)
       setBasicBlockMetadata(i.first->getFirstNonPHI(), i.second, BIN_POP);
     
-    for (auto i: forward_index_map) 
+    for (auto i: forward_index_map) {
+
       setOperationMetadata(i.first, i.second, BIN_WRITE);
+    }
     
     for (auto i: reverse_index_map)
       setOperationMetadata(i.first, i.second, BIN_READ);  
@@ -1049,6 +1051,7 @@ public:
 
     // erase from binned values
     binned_values.erase(I);
+    forward_to_reverse_map.erase(I);
   }
   // TODO consider invariant group and/or valueInvariant group
 

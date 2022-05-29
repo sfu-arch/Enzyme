@@ -3747,12 +3747,8 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // }
   // for (auto val: gutils->GetscopeMap())
   //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
-  // gutils->printActiveValue();
-  // gutils->printForwardToReverseMap();
   gutils->handleBinnedValues();
-  // for (auto &i: gutils->binned_values) {
-  //   errs() << "binned: " << *i << "\n";
-  // }
+ 
   // gutils->performLevelAnalysis();
   // gutils->printLevelAnalysis();
   // gutils->setBins({3, 3, 10, 25, 100, 1000});

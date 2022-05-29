@@ -70,6 +70,11 @@
 #include "llvm/IR/DebugInfoMetadata.h"
 #include "llvm/Support/ErrorHandling.h"
 
+#define BIN_READ "read"
+#define BIN_WRITE "write"
+#define BIN_PUSH "push"
+#define BIN_POP "pop"
+
 using namespace llvm;
 
 #include "llvm-c/Core.h"
@@ -174,9 +179,23 @@ public:
       printBasicBlockDetails(dyn_cast<Instruction>(i.first), dyn_cast<Instruction>(i.second));
   }
 
+  void setOperationMetadata(Instruction* inst, int index, std::string command) {
+    inst->setMetadata(command, MDNode::get(inst->getContext(),
+                                                  MDString::get(inst->getContext(),
+                                                                std::to_string(index))));
+  }
+
+  void setBasicBlockMetadata(Instruction* target_inst, int size, std::string command) {
+    Instruction *alloca = new AllocaInst(Type::getInt32Ty(target_inst->getContext()), 0, "", target_inst);
+    alloca->setMetadata(command, MDNode::get(target_inst->getContext(), MDString::get(target_inst->getContext(), "1")));
+    alloca->setMetadata("size", MDNode::get(target_inst->getContext(), MDString::get(target_inst->getContext(), std::to_string(size))));
+  }
+
   void CountBasicBlockBinnedValues() {
     std::map<BasicBlock*, int> forward_bb_map;
     std::map<BasicBlock*, int> reverse_bb_map;
+    std::map<Instruction*, int> forward_index_map;
+    std::map<Instruction*, int> reverse_index_map;
 
     for (auto i: forward_to_reverse_map) {
       auto forward_inst = dyn_cast<Instruction>(i.first);
@@ -186,21 +205,33 @@ public:
 
       if (forward_bb_map.count(forward_bb) == 0)
         forward_bb_map[forward_bb] = 0;
+      
       if (reverse_bb_map.count(reverse_bb) == 0) 
         forward_bb_map[forward_bb] = 0;
 
+      forward_index_map[forward_inst] = forward_bb_map[forward_bb];
+      reverse_index_map[reverse_inst] = reverse_bb_map[reverse_bb];
       forward_bb_map[forward_bb]++;
       reverse_bb_map[reverse_bb]++;
     }
     
-    // print forward bb map
+    // // print forward bb map
     for (auto i: forward_bb_map) {
       errs() << "forward bb: " << i.first->getName() << " :: " << i.second << "\n";
+      setBasicBlockMetadata(i.first->getTerminator(), i.second, BIN_PUSH);
+
     }
-    // print reverse bb map
+    // // print reverse bb map
     for (auto i: reverse_bb_map) {
       errs() << "reverse bb: " << i.first->getName() << " :: " << i.second << "\n";
+      setBasicBlockMetadata(i.first->getFirstNonPHI(), i.second, BIN_POP);
     }
+    
+    for (auto i: forward_index_map) 
+      setOperationMetadata(i.first, i.second, BIN_WRITE);
+    
+    for (auto i: reverse_index_map)
+      setOperationMetadata(i.first, i.second, BIN_READ);  
   }
   // The original value will be stored in the cache in the forward phase.
   // The load is the operation which reads the value from the cache in the reverse
@@ -219,10 +250,10 @@ public:
     }
     auto load_inst = dyn_cast<Instruction>(load);
     int index = addToRegionMap(si, load_inst->getParent());
-    setWriteMetadata(si, index);
+    // setWriteMetadata(si, index);
     
-    updateForwardBB(si);
-    updateReverseBB(load_inst);
+    // updateForwardBB(si);
+    // updateReverseBB(load_inst);
     // Put values in a list to be handled later
     binned_values[load_inst] = index;
     forward_to_reverse_map[original_value] = load;
@@ -500,6 +531,7 @@ public:
     }
     alloca->setMetadata("size", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), std::to_string(size + 1))));
   }
+
   void updateReverseBB(Instruction *inst) {
     auto parent = inst->getParent();
     auto first_inst = &(*parent->getFirstInsertionPt());

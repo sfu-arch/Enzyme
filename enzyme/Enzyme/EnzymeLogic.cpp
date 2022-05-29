@@ -3749,6 +3749,8 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
   // gutils->printActiveValue();
   gutils->handleBinnedValues();
+  // gutils->printForwardToReverseMap();
+  gutils->CountBasicBlockBinnedValues();
   // for (auto &i: gutils->binned_values) {
   //   errs() << "binned: " << *i << "\n";
   // }
@@ -3766,9 +3768,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
   
-  legacy::FunctionPassManager PM(key.todiff->getParent());
-  PM.add(new instrumem::LoadLoggerPass());
-  PM.run(*nf);
+  // legacy::FunctionPassManager PM(key.todiff->getParent());
+  // PM.add(new instrumem::LoadLoggerPass());
+  // PM.run(*nf);
 
   if (LogMain) {
     legacy::FunctionPassManager PM(key.todiff->getParent());

@@ -3751,11 +3751,12 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
         MDNode* M = MDNode::get(op_C, MDString::get(op_C, "read"));
         op_inst->setMetadata(std::to_string(index), M);
         setWriteMetadata((Value *) prelcssaInst, index);
-        
+
         updateForwardBB(prelcssaInst);
         updateReverseBB(op_inst);
         // Put values in a list to be handled later
         binned_values[op_inst] = index;
+        forward_to_reverse_map[prelcssaInst] = op_inst;
         
       }
       if (op) {

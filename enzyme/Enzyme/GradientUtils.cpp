@@ -3746,16 +3746,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
         auto my_parent = op_inst->getParent();
 
         int index = addToRegionMap((Value *)prelcssaInst, my_parent);
-
-        // LLVMContext& op_C = op_inst->getParent()->getContext();
-        // MDNode* M = MDNode::get(op_C, MDString::get(op_C, "read"));
-        // op_inst->setMetadata(std::to_string(index), M);
-        // setWriteMetadata((Value *) prelcssaInst, index);
-
-        // updateForwardBB(prelcssaInst);
-        // updateReverseBB(op_inst);
         // Put values in a list to be handled later
-        binned_values[op_inst] = index;
         forward_to_reverse_map[prelcssaInst] = op_inst;
         
       }

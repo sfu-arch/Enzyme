@@ -126,17 +126,7 @@ public:
   std::map<BasicBlock *, std::map<Value*, int>> region_map;
   std::map<Value*, int> binned_values; 
   std::map<Value*, Value*> forward_to_reverse_map;
-  // void printActiveValue() {
-  //   errs() << "Last active: " << *ATA.get()->last_active_inst << "\n";
-  //   for (auto i: ATA.get()->ActiveInstructions) {
-  //     for (int j=0; j < i->getNumOperands(); j++) {
-  //       if (isConstantValue(i->getOperand(j))) {
-  //         errs() << "constant: " << *i << " :: " << *i->getOperand(j) << "\n";
-  //       }
-  //     }
-
-  //   }
-  // }
+ 
   StoreInst* getStoreInstUser(Value* v) {
     auto inst = dyn_cast<Instruction>(v);
     for (auto i: inst->users()) {
@@ -163,22 +153,6 @@ public:
     return false;
   }
 
-  // printing original, getOriginialFromNew, and new basic blocks 
-  void printBasicBlockDetails(Instruction* orig_inst, Instruction* new_inst) {
-      auto orig_bb = orig_inst->getParent();
-      auto new_bb = new_inst->getParent();
-      auto get_orig_bb = reverseBlockToPrimal[new_bb];
-      errs() << "original: " << orig_bb->getName() << "\n";
-      errs() << "getOriginialFromNew: " << get_orig_bb->getName() << "\n";
-      errs() << "new: " << new_bb->getName() << "\n";
-  }
-
-  void printForwardToReverseMap() {
-    errs() << "Forward to reverse map: \n";
-    for (auto i: forward_to_reverse_map)
-      printBasicBlockDetails(dyn_cast<Instruction>(i.first), dyn_cast<Instruction>(i.second));
-  }
-
   void setOperationMetadata(Instruction* inst, int index, std::string command) {
     inst->setMetadata(command, MDNode::get(inst->getContext(),
                                                   MDString::get(inst->getContext(),
@@ -191,7 +165,7 @@ public:
     alloca->setMetadata("size", MDNode::get(target_inst->getContext(), MDString::get(target_inst->getContext(), std::to_string(size))));
   }
 
-  void CountBasicBlockBinnedValues() {
+  void handleBinnedValues() {
     std::map<BasicBlock*, int> forward_bb_map;
     std::map<BasicBlock*, int> reverse_bb_map;
     std::map<Instruction*, int> forward_index_map;
@@ -215,17 +189,11 @@ public:
       reverse_bb_map[reverse_bb]++;
     }
     
-    // // print forward bb map
-    for (auto i: forward_bb_map) {
-      errs() << "forward bb: " << i.first->getName() << " :: " << i.second << "\n";
+    for (auto i: forward_bb_map)
       setBasicBlockMetadata(i.first->getTerminator(), i.second, BIN_PUSH);
 
-    }
-    // // print reverse bb map
-    for (auto i: reverse_bb_map) {
-      errs() << "reverse bb: " << i.first->getName() << " :: " << i.second << "\n";
+    for (auto i: reverse_bb_map)
       setBasicBlockMetadata(i.first->getFirstNonPHI(), i.second, BIN_POP);
-    }
     
     for (auto i: forward_index_map) 
       setOperationMetadata(i.first, i.second, BIN_WRITE);
@@ -233,11 +201,10 @@ public:
     for (auto i: reverse_index_map)
       setOperationMetadata(i.first, i.second, BIN_READ);  
   }
+  
   // The original value will be stored in the cache in the forward phase.
   // The load is the operation which reads the value from the cache in the reverse
   void handleCachedValue(Value* original_value, Value* load) {
-    errs() << "handling cache ... " << "\n";
-    errs() << *original_value << " -> " << *load << "\n";
     if (checkUnused(original_value))
       return;
     if (!isa<Instruction>(load))
@@ -248,15 +215,8 @@ public:
       errs() << "Could not find store instruction for " << *original_value << "\n";
       return;
     }
-    auto load_inst = dyn_cast<Instruction>(load);
-    int index = addToRegionMap(si, load_inst->getParent());
-    // setWriteMetadata(si, index);
-    
-    // updateForwardBB(si);
-    // updateReverseBB(load_inst);
     // Put values in a list to be handled later
-    binned_values[load_inst] = index;
-    forward_to_reverse_map[original_value] = load;
+    forward_to_reverse_map[(Instruction*) si] = load;
   }
 
   bool hasReverseUse(Value *inst) {
@@ -479,22 +439,6 @@ public:
     return 0;
   }
 
-  void handleBinnedValues() {
-    errs() << "size of bin_to_region_map: " << binned_values.size() << "\n";
-    for (auto i: binned_values) {
-      if (i.first == nullptr || !isa<Instruction>(i.first))
-        continue;
-      // errs() << "i: " << i << "\n";
-      for (auto use: i.first->users()) {
-        if (!isa<Instruction>(use))
-          continue;
-        uint use_offset = getUseOffset(i.first, use);
-        auto inst = dyn_cast<Instruction>(use);
-        inst->setMetadata("read_from_bin", MDNode::get(inst->getContext(), MDString::get(inst->getContext(), "1")));
-        inst->setMetadata("operand" + std::to_string(use_offset), MDNode::get(inst->getContext(), MDString::get(inst->getContext(), std::to_string(i.second))));
-      }
-    }
-  }
   int addToRegionMap(Value* original_val, BasicBlock* my_parent) {
     auto prelcssaInst = dyn_cast<Instruction>(original_val);
     int index = 0;

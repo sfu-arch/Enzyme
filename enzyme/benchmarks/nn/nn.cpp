@@ -934,7 +934,7 @@ void run(float (*fn)(mnist_dataset_t*, neural_network_t*, float)) {
 
     // Calculate how many batches (so we know when to wrap around)
     batches = train_dataset->size / BATCH_SIZE;
-
+    std::cout << "Size = " << train_dataset->size << " Batches = " << batches << std::endl;
     struct timeval start, end;
     gettimeofday(&start, NULL);
     

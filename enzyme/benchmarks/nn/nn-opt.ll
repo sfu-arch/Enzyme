@@ -26,13 +26,6 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct._IO_marker = type opaque
 %struct._IO_codecvt = type opaque
 %struct._IO_wide_data = type opaque
-%"class.adept::invalid_operation" = type { %"class.adept::array_exception" }
-%"class.adept::array_exception" = type { %"class.adept::exception" }
-%"class.adept::exception" = type { %"class.std::exception", %"class.std::__cxx11::basic_string" }
-%"class.std::exception" = type { i32 (...)** }
-%"struct.adept::Gap" = type { i32, i32 }
-%"struct.std::_List_node" = type { %"struct.std::__detail::_List_node_base", %"struct.__gnu_cxx::__aligned_membuf" }
-%"struct.__gnu_cxx::__aligned_membuf" = type { [8 x i8] }
 %"class.std::basic_ostream" = type { i32 (...)**, %"class.std::basic_ios" }
 %"class.std::basic_ios" = type { %"class.std::ios_base", %"class.std::basic_ostream"*, i8, i8, %"class.std::basic_streambuf"*, %"class.std::ctype"*, %"class.std::num_put"*, %"class.std::num_get"* }
 %"class.std::ios_base" = type { i32 (...)**, i64, i64, i32, i32, i32, %"struct.std::ios_base::_Callback_list"*, %"struct.std::ios_base::_Words", [8 x %"struct.std::ios_base::_Words"], i32, %"struct.std::ios_base::_Words"*, %"class.std::locale" }
@@ -48,6 +41,13 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.__locale_data = type opaque
 %"class.std::num_put" = type { %"class.std::locale::facet.base", [4 x i8] }
 %"class.std::num_get" = type { %"class.std::locale::facet.base", [4 x i8] }
+%"class.adept::invalid_operation" = type { %"class.adept::array_exception" }
+%"class.adept::array_exception" = type { %"class.adept::exception" }
+%"class.adept::exception" = type { %"class.std::exception", %"class.std::__cxx11::basic_string" }
+%"class.std::exception" = type { i32 (...)** }
+%"struct.adept::Gap" = type { i32, i32 }
+%"struct.std::_List_node" = type { %"struct.std::__detail::_List_node_base", %"struct.__gnu_cxx::__aligned_membuf" }
+%"struct.__gnu_cxx::__aligned_membuf" = type { [8 x i8] }
 %"class.adept::Array" = type { float*, %"class.adept::Storage"*, %"class.adept::ExpressionSize", %"class.adept::ExpressionSize" }
 %"class.adept::Storage" = type <{ float*, i32, i32, i32, [4 x i8] }>
 %"class.adept::ExpressionSize" = type { [2 x i32] }
@@ -400,9 +400,12 @@ $_ZTVN5adept21gradient_out_of_rangeE = comdat any
 @test_images_file = dso_local local_unnamed_addr global i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.98, i64 0, i64 0), align 8
 @.str.99 = private unnamed_addr constant [28 x i8] c"data/t10k-labels-idx1-ubyte\00", align 1
 @test_labels_file = dso_local local_unnamed_addr global i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.str.99, i64 0, i64 0), align 8
-@.str.100 = private unnamed_addr constant [45 x i8] c"Step %04d\09Average Loss: %.2f\09Accuracy: %.3f\0A\00", align 1
-@.str.101 = private unnamed_addr constant [7 x i8] c"%0.6f\0A\00", align 1
-@.str.106 = private unnamed_addr constant [28 x i8] c"A misuse of arrays occurred\00", align 1
+@_ZSt4cout = external dso_local global %"class.std::basic_ostream", align 8
+@.str.100 = private unnamed_addr constant [8 x i8] c"Size = \00", align 1
+@.str.101 = private unnamed_addr constant [12 x i8] c" Batches = \00", align 1
+@.str.102 = private unnamed_addr constant [45 x i8] c"Step %04d\09Average Loss: %.2f\09Accuracy: %.3f\0A\00", align 1
+@.str.103 = private unnamed_addr constant [7 x i8] c"%0.6f\0A\00", align 1
+@.str.108 = private unnamed_addr constant [28 x i8] c"A misuse of arrays occurred\00", align 1
 @_ZTVN5adept17invalid_operationE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept17invalid_operationE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::invalid_operation"*)* @_ZN5adept17invalid_operationD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept15array_exceptionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept15array_exceptionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::array_exception"*)* @_ZN5adept15array_exceptionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept9exceptionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept9exceptionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
@@ -410,12 +413,12 @@ $_ZTVN5adept21gradient_out_of_rangeE = comdat any
 @_ZTVN5adept25gradients_not_initializedE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept25gradients_not_initializedE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::gradients_not_initialized"*)* @_ZN5adept25gradients_not_initializedD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept21feature_not_availableE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept21feature_not_availableE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::feature_not_available"*)* @_ZN5adept21feature_not_availableD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
 @_ZTVN5adept41dependents_or_independents_not_identifiedE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept41dependents_or_independents_not_identifiedE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::dependents_or_independents_not_identified"*)* @_ZN5adept41dependents_or_independents_not_identifiedD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
-@.str.115 = private unnamed_addr constant [6 x i8] c" (in \00", align 1
-@.str.116 = private unnamed_addr constant [2 x i8] c")\00", align 1
+@.str.117 = private unnamed_addr constant [6 x i8] c" (in \00", align 1
+@.str.118 = private unnamed_addr constant [2 x i8] c")\00", align 1
 @_ZTSN5adept17invalid_dimensionE = linkonce_odr dso_local constant [28 x i8] c"N5adept17invalid_dimensionE\00", comdat, align 1
 @_ZTIN5adept17invalid_dimensionE = linkonce_odr dso_local constant { i8*, i8*, i8* } { i8* bitcast (i8** getelementptr inbounds (i8*, i8** @_ZTVN10__cxxabiv120__si_class_type_infoE, i64 2) to i8*), i8* getelementptr inbounds ([28 x i8], [28 x i8]* @_ZTSN5adept17invalid_dimensionE, i32 0, i32 0), i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept15array_exceptionE to i8*) }, comdat, align 8
 @_ZTVN5adept17invalid_dimensionE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept17invalid_dimensionE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::invalid_dimension"*)* @_ZN5adept17invalid_dimensionD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
-@.str.120 = private unnamed_addr constant [99 x i8] c"Gradient index out of range: probably aReal objects have been created after a set_gradient(s) call\00", align 1
+@.str.122 = private unnamed_addr constant [99 x i8] c"Gradient index out of range: probably aReal objects have been created after a set_gradient(s) call\00", align 1
 @_ZTSN5adept21gradient_out_of_rangeE = linkonce_odr dso_local constant [32 x i8] c"N5adept21gradient_out_of_rangeE\00", comdat, align 1
 @_ZTIN5adept21gradient_out_of_rangeE = linkonce_odr dso_local constant { i8*, i8*, i8* } { i8* bitcast (i8** getelementptr inbounds (i8*, i8** @_ZTVN10__cxxabiv120__si_class_type_infoE, i64 2) to i8*), i8* getelementptr inbounds ([32 x i8], [32 x i8]* @_ZTSN5adept21gradient_out_of_rangeE, i32 0, i32 0), i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept18autodiff_exceptionE to i8*) }, comdat, align 8
 @_ZTVN5adept21gradient_out_of_rangeE = linkonce_odr dso_local unnamed_addr constant { [5 x i8*] } { [5 x i8*] [i8* null, i8* bitcast ({ i8*, i8*, i8* }* @_ZTIN5adept21gradient_out_of_rangeE to i8*), i8* bitcast (void (%"class.adept::exception"*)* @_ZN5adept9exceptionD2Ev to i8*), i8* bitcast (void (%"class.adept::gradient_out_of_range"*)* @_ZN5adept21gradient_out_of_rangeD0Ev to i8*), i8* bitcast (i8* (%"class.adept::exception"*)* @_ZNK5adept9exception4whatEv to i8*)] }, comdat, align 8
@@ -424,16 +427,16 @@ $_ZTVN5adept21gradient_out_of_rangeE = comdat any
 @_ZTVSt15basic_streambufIcSt11char_traitsIcEE = external dso_local unnamed_addr constant { [16 x i8*] }, align 8
 @_ZTISt9bad_alloc = external dso_local constant i8*
 @_ZTVSt9bad_alloc = external dso_local unnamed_addr constant { [5 x i8*] }, align 8
-@.str.122 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
-@.str.123 = private unnamed_addr constant [35 x i8] c"Negative array dimension requested\00", align 1
-@.str.124 = private unnamed_addr constant [89 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Array.h\00", align 1
-@.str.125 = private unnamed_addr constant [58 x i8] c"Attempt to remove more links to a storage object than set\00", align 1
-@.str.126 = private unnamed_addr constant [91 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Storage.h\00", align 1
+@.str.124 = private unnamed_addr constant [49 x i8] c"cannot create std::vector larger than max_size()\00", align 1
+@.str.125 = private unnamed_addr constant [35 x i8] c"Negative array dimension requested\00", align 1
+@.str.126 = private unnamed_addr constant [89 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Array.h\00", align 1
+@.str.127 = private unnamed_addr constant [58 x i8] c"Attempt to remove more links to a storage object than set\00", align 1
+@.str.128 = private unnamed_addr constant [91 x i8] c"/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2/include/adept/Storage.h\00", align 1
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_nn.cpp, i8* null }]
 @str = private unnamed_addr constant [8 x i8] c"Regular\00", align 1
-@str.131 = private unnamed_addr constant [7 x i8] c"Enzyme\00", align 1
-@str.132 = private unnamed_addr constant [6 x i8] c"Adept\00", align 1
-@str.133 = private unnamed_addr constant [9 x i8] c"Tapenade\00", align 1
+@str.133 = private unnamed_addr constant [7 x i8] c"Enzyme\00", align 1
+@str.134 = private unnamed_addr constant [6 x i8] c"Adept\00", align 1
+@str.135 = private unnamed_addr constant [9 x i8] c"Tapenade\00", align 1
 
 @_ZN5adept5StackD1Ev = dso_local unnamed_addr alias void (%"class.adept::Stack"*), void (%"class.adept::Stack"*)* @_ZN5adept5StackD2Ev
 @_ZN5adept8internal16StackStorageOrigD1Ev = dso_local unnamed_addr alias void (%"class.adept::internal::StackStorageOrig"*), void (%"class.adept::internal::StackStorageOrig"*)* @_ZN5adept8internal16StackStorageOrigD2Ev
@@ -673,7 +676,7 @@ call5.i.i.i9.i.noexc:                             ; preds = %entry
   %5 = load i64, i64* %__dnew.i.i.i.i, align 8, !tbaa !10
   %_M_allocated_capacity.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
   store i64 %5, i64* %_M_allocated_capacity.i.i.i.i.i, align 8, !tbaa !12
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i9.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.106, i64 0, i64 0), i64 27, i1 false) #37
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i9.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.108, i64 0, i64 0), i64 27, i1 false) #37
   %_M_string_length.i.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
   store i64 %5, i64* %_M_string_length.i.i.i.i.i.i, align 8, !tbaa !2
   %6 = load i8*, i8** %_M_p.i13.i.i.i.i, align 8, !tbaa !11
@@ -5247,7 +5250,7 @@ entry:
   br i1 %cmp.i.i, label %if.then.i.i, label %_ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i
 
 if.then.i.i:                                      ; preds = %entry
-  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.122, i64 0, i64 0)) #38
+  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.124, i64 0, i64 0)) #38
   unreachable
 
 _ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i: ; preds = %entry
@@ -5618,7 +5621,7 @@ if.end:                                           ; preds = %lor.lhs.false
   br i1 %cmp.i.i511, label %if.then.i.i, label %_ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i
 
 if.then.i.i:                                      ; preds = %if.end
-  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.122, i64 0, i64 0)) #38
+  tail call void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([49 x i8], [49 x i8]* @.str.124, i64 0, i64 0)) #38
   unreachable
 
 _ZNSt6vectorIN5adept5BlockILi2EdEESaIS2_EE17_S_check_init_lenEmRKS3_.exit.i: ; preds = %if.end
@@ -11837,77 +11840,124 @@ for.inc11.i:                                      ; preds = %for.body3.i
   br i1 %exitcond26.not.i, label %_Z29neural_network_random_weightsP17neural_network_t_.exit, label %for.body.i, !llvm.loop !158
 
 _Z29neural_network_random_weightsP17neural_network_t_.exit: ; preds = %for.inc11.i
-  %6 = bitcast %struct.timeval* %start to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #37
-  %7 = bitcast %struct.timeval* %end to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %7) #37
-  %call2 = call i32 @gettimeofday(%struct.timeval* nonnull %start, i8* null) #37
-  %size1.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 2
-  %8 = load i32, i32* %size1.i, align 8, !tbaa !154
-  %cmp.not.i.not = icmp eq i32 %8, 0
+  %size = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 2
+  %6 = load i32, i32* %size, align 8, !tbaa !154
+  %div = udiv i32 %6, 100
+  %call1.i = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* nonnull getelementptr inbounds ([8 x i8], [8 x i8]* @.str.100, i64 0, i64 0), i64 7)
+  %conv.i35 = zext i32 %6 to i64
+  %call.i36 = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSo9_M_insertImEERSoT_(%"class.std::basic_ostream"* nonnull dereferenceable(8) @_ZSt4cout, i64 %conv.i35)
+  %call1.i38 = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %call.i36, i8* nonnull getelementptr inbounds ([12 x i8], [12 x i8]* @.str.101, i64 0, i64 0), i64 11)
+  %call6 = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull dereferenceable(8) %call.i36, i32 %div)
+  %7 = bitcast %"class.std::basic_ostream"* %call6 to i8**
+  %vtable.i = load i8*, i8** %7, align 8, !tbaa !17
+  %vbase.offset.ptr.i = getelementptr i8, i8* %vtable.i, i64 -24
+  %8 = bitcast i8* %vbase.offset.ptr.i to i64*
+  %vbase.offset.i = load i64, i64* %8, align 8
+  %9 = bitcast %"class.std::basic_ostream"* %call6 to i8*
+  %add.ptr.i = getelementptr inbounds i8, i8* %9, i64 %vbase.offset.i
+  %_M_ctype.i = getelementptr inbounds i8, i8* %add.ptr.i, i64 240
+  %10 = bitcast i8* %_M_ctype.i to %"class.std::ctype"**
+  %11 = load %"class.std::ctype"*, %"class.std::ctype"** %10, align 8, !tbaa !305
+  %tobool.not.i53 = icmp eq %"class.std::ctype"* %11, null
+  br i1 %tobool.not.i53, label %if.then.i54, label %_ZSt13__check_facetISt5ctypeIcEERKT_PS3_.exit
+
+if.then.i54:                                      ; preds = %_Z29neural_network_random_weightsP17neural_network_t_.exit
+  tail call void @_ZSt16__throw_bad_castv() #38
+  unreachable
+
+_ZSt13__check_facetISt5ctypeIcEERKT_PS3_.exit:    ; preds = %_Z29neural_network_random_weightsP17neural_network_t_.exit
+  %_M_widen_ok.i = getelementptr inbounds %"class.std::ctype", %"class.std::ctype"* %11, i64 0, i32 8
+  %12 = load i8, i8* %_M_widen_ok.i, align 8, !tbaa !307
+  %tobool.not.i = icmp eq i8 %12, 0
+  br i1 %tobool.not.i, label %if.end.i49, label %if.then.i
+
+if.then.i:                                        ; preds = %_ZSt13__check_facetISt5ctypeIcEERKT_PS3_.exit
+  %arrayidx.i46 = getelementptr inbounds %"class.std::ctype", %"class.std::ctype"* %11, i64 0, i32 9, i64 10
+  %13 = load i8, i8* %arrayidx.i46, align 1, !tbaa !12
+  br label %_ZNKSt5ctypeIcE5widenEc.exit
+
+if.end.i49:                                       ; preds = %_ZSt13__check_facetISt5ctypeIcEERKT_PS3_.exit
+  tail call void @_ZNKSt5ctypeIcE13_M_widen_initEv(%"class.std::ctype"* nonnull dereferenceable(570) %11)
+  %14 = bitcast %"class.std::ctype"* %11 to i8 (%"class.std::ctype"*, i8)***
+  %vtable.i47 = load i8 (%"class.std::ctype"*, i8)**, i8 (%"class.std::ctype"*, i8)*** %14, align 8, !tbaa !17
+  %vfn.i = getelementptr inbounds i8 (%"class.std::ctype"*, i8)*, i8 (%"class.std::ctype"*, i8)** %vtable.i47, i64 6
+  %15 = load i8 (%"class.std::ctype"*, i8)*, i8 (%"class.std::ctype"*, i8)** %vfn.i, align 8
+  %call.i48 = tail call signext i8 %15(%"class.std::ctype"* nonnull dereferenceable(570) %11, i8 signext 10)
+  br label %_ZNKSt5ctypeIcE5widenEc.exit
+
+_ZNKSt5ctypeIcE5widenEc.exit:                     ; preds = %if.end.i49, %if.then.i
+  %retval.0.i50 = phi i8 [ %13, %if.then.i ], [ %call.i48, %if.end.i49 ]
+  %call1.i41 = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSo3putEc(%"class.std::basic_ostream"* nonnull dereferenceable(8) %call6, i8 signext %retval.0.i50)
+  %call.i42 = tail call nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSo5flushEv(%"class.std::basic_ostream"* nonnull dereferenceable(8) %call1.i41)
+  %16 = bitcast %struct.timeval* %start to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %16) #37
+  %17 = bitcast %struct.timeval* %end to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %17) #37
+  %call8 = call i32 @gettimeofday(%struct.timeval* nonnull %start, i8* null) #37
+  %cmp.not.i.not = icmp eq i32 %6, 0
   br i1 %cmp.not.i.not, label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit, label %if.end.i
 
-if.end.i:                                         ; preds = %_Z29neural_network_random_weightsP17neural_network_t_.exit
+if.end.i:                                         ; preds = %_ZNKSt5ctypeIcE5widenEc.exit
   %images.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 0
-  %9 = load %struct.mnist_image_t_*, %struct.mnist_image_t_** %images.i, align 8, !tbaa !151
+  %18 = load %struct.mnist_image_t_*, %struct.mnist_image_t_** %images.i, align 8, !tbaa !151
   %images2.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 0
-  store %struct.mnist_image_t_* %9, %struct.mnist_image_t_** %images2.i, align 8, !tbaa !151
+  store %struct.mnist_image_t_* %18, %struct.mnist_image_t_** %images2.i, align 8, !tbaa !151
   %labels.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
-  %10 = load i8*, i8** %labels.i, align 8, !tbaa !153
+  %19 = load i8*, i8** %labels.i, align 8, !tbaa !153
   %labels5.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 1
-  store i8* %10, i8** %labels5.i, align 8, !tbaa !153
+  store i8* %19, i8** %labels5.i, align 8, !tbaa !153
   %size6.i = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
-  %cmp9.i = icmp ult i32 %8, 100
-  %spec.store.select = select i1 %cmp9.i, i32 %8, i32 100
+  %cmp9.i = icmp ult i32 %6, 100
+  %spec.store.select = select i1 %cmp9.i, i32 %6, i32 100
   store i32 %spec.store.select, i32* %size6.i, align 8
   br label %_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit
 
-_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit:     ; preds = %if.end.i, %_Z29neural_network_random_weightsP17neural_network_t_.exit
-  %call4 = call fast float %fn(%struct.mnist_dataset_t_* nonnull %batch, %struct.neural_network_t_* nonnull %network, float 5.000000e-01)
-  %call5 = call fast float @_Z18calculate_accuracyP16mnist_dataset_t_P17neural_network_t_(%struct.mnist_dataset_t_* %call1, %struct.neural_network_t_* nonnull %network)
-  %size6 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
-  %11 = load i32, i32* %size6, align 8, !tbaa !154
-  %conv = uitofp i32 %11 to float
-  %div7 = fdiv fast float %call4, %conv
-  %conv8 = fpext float %div7 to double
-  %conv9 = fpext float %call5 to double
-  %call10 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([45 x i8], [45 x i8]* @.str.100, i64 0, i64 0), i32 0, double %conv8, double %conv9)
-  %call11 = call i32 @gettimeofday(%struct.timeval* nonnull %end, i8* null) #37
+_Z11mnist_batchP16mnist_dataset_t_S0_ii.exit:     ; preds = %if.end.i, %_ZNKSt5ctypeIcE5widenEc.exit
+  %call10 = call fast float %fn(%struct.mnist_dataset_t_* nonnull %batch, %struct.neural_network_t_* nonnull %network, float 5.000000e-01)
+  %call11 = call fast float @_Z18calculate_accuracyP16mnist_dataset_t_P17neural_network_t_(%struct.mnist_dataset_t_* %call1, %struct.neural_network_t_* nonnull %network)
+  %size12 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %batch, i64 0, i32 2
+  %20 = load i32, i32* %size12, align 8, !tbaa !154
+  %conv = uitofp i32 %20 to float
+  %div13 = fdiv fast float %call10, %conv
+  %conv14 = fpext float %div13 to double
+  %conv15 = fpext float %call11 to double
+  %call16 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([45 x i8], [45 x i8]* @.str.102, i64 0, i64 0), i32 0, double %conv14, double %conv15)
+  %call17 = call i32 @gettimeofday(%struct.timeval* nonnull %end, i8* null) #37
   %tv_sec.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end, i64 0, i32 0
-  %12 = load i64, i64* %tv_sec.i, align 8, !tbaa !302
+  %21 = load i64, i64* %tv_sec.i, align 8, !tbaa !302
   %tv_sec1.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start, i64 0, i32 0
-  %13 = load i64, i64* %tv_sec1.i, align 8, !tbaa !302
-  %sub.i = sub nsw i64 %12, %13
-  %conv.i27 = sitofp i64 %sub.i to double
+  %22 = load i64, i64* %tv_sec1.i, align 8, !tbaa !302
+  %sub.i = sub nsw i64 %21, %22
+  %conv.i43 = sitofp i64 %sub.i to double
   %tv_usec.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end, i64 0, i32 1
-  %14 = load i64, i64* %tv_usec.i, align 8, !tbaa !304
+  %23 = load i64, i64* %tv_usec.i, align 8, !tbaa !304
   %tv_usec2.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start, i64 0, i32 1
-  %15 = load i64, i64* %tv_usec2.i, align 8, !tbaa !304
-  %sub3.i = sub nsw i64 %14, %15
+  %24 = load i64, i64* %tv_usec2.i, align 8, !tbaa !304
+  %sub3.i = sub nsw i64 %23, %24
   %conv4.i = sitofp i64 %sub3.i to double
   %mul.i = fmul fast double %conv4.i, 0x3EB0C6F7A0B5ED8D
-  %add.i = fadd fast double %mul.i, %conv.i27
-  %conv5.i28 = fptrunc double %add.i to float
-  %conv13 = fpext float %conv5.i28 to double
-  %call14 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([7 x i8], [7 x i8]* @.str.101, i64 0, i64 0), double %conv13)
-  %16 = bitcast %struct.mnist_dataset_t_* %call to i8**
-  %17 = load i8*, i8** %16, align 8, !tbaa !151
-  call void @free(i8* %17) #37
-  %labels.i30 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
-  %18 = load i8*, i8** %labels.i30, align 8, !tbaa !153
-  call void @free(i8* %18) #37
-  %19 = bitcast %struct.mnist_dataset_t_* %call to i8*
-  call void @free(i8* %19) #37
-  %20 = bitcast %struct.mnist_dataset_t_* %call1 to i8**
-  %21 = load i8*, i8** %20, align 8, !tbaa !151
-  call void @free(i8* %21) #37
-  %labels.i29 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call1, i64 0, i32 1
-  %22 = load i8*, i8** %labels.i29, align 8, !tbaa !153
-  call void @free(i8* %22) #37
-  %23 = bitcast %struct.mnist_dataset_t_* %call1 to i8*
-  call void @free(i8* %23) #37
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %7) #37
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #37
+  %add.i = fadd fast double %mul.i, %conv.i43
+  %conv5.i44 = fptrunc double %add.i to float
+  %conv19 = fpext float %conv5.i44 to double
+  %call20 = call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([7 x i8], [7 x i8]* @.str.103, i64 0, i64 0), double %conv19)
+  %25 = bitcast %struct.mnist_dataset_t_* %call to i8**
+  %26 = load i8*, i8** %25, align 8, !tbaa !151
+  call void @free(i8* %26) #37
+  %labels.i51 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call, i64 0, i32 1
+  %27 = load i8*, i8** %labels.i51, align 8, !tbaa !153
+  call void @free(i8* %27) #37
+  %28 = bitcast %struct.mnist_dataset_t_* %call to i8*
+  call void @free(i8* %28) #37
+  %29 = bitcast %struct.mnist_dataset_t_* %call1 to i8**
+  %30 = load i8*, i8** %29, align 8, !tbaa !151
+  call void @free(i8* %30) #37
+  %labels.i52 = getelementptr inbounds %struct.mnist_dataset_t_, %struct.mnist_dataset_t_* %call1, i64 0, i32 1
+  %31 = load i8*, i8** %labels.i52, align 8, !tbaa !153
+  call void @free(i8* %31) #37
+  %32 = bitcast %struct.mnist_dataset_t_* %call1 to i8*
+  call void @free(i8* %32) #37
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %17) #37
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %16) #37
   call void @llvm.lifetime.end.p0i8(i64 4040, i8* nonnull %1) #37
   call void @llvm.lifetime.end.p0i8(i64 24, i8* nonnull %0) #37
   ret void
@@ -11924,11 +11974,11 @@ define dso_local i32 @main(i32 %argc, i8** nocapture readnone %argv) local_unnam
 entry:
   %puts = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([8 x i8], [8 x i8]* @str, i64 0, i64 0))
   tail call void @_Z3runPFfP16mnist_dataset_t_P17neural_network_t_fE(float (%struct.mnist_dataset_t_*, %struct.neural_network_t_*, float)* nonnull @_Z28neural_network_training_stepP16mnist_dataset_t_P17neural_network_t_f)
-  %puts4 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([7 x i8], [7 x i8]* @str.131, i64 0, i64 0))
+  %puts4 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([7 x i8], [7 x i8]* @str.133, i64 0, i64 0))
   tail call void @_Z3runPFfP16mnist_dataset_t_P17neural_network_t_fE(float (%struct.mnist_dataset_t_*, %struct.neural_network_t_*, float)* nonnull @_Z35neural_network_training_step_enzymeP16mnist_dataset_t_P17neural_network_t_f)
-  %puts5 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([6 x i8], [6 x i8]* @str.132, i64 0, i64 0))
+  %puts5 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([6 x i8], [6 x i8]* @str.134, i64 0, i64 0))
   tail call void @_Z3runPFfP16mnist_dataset_t_P17neural_network_t_fE(float (%struct.mnist_dataset_t_*, %struct.neural_network_t_*, float)* nonnull @_Z34neural_network_training_step_adeptP16mnist_dataset_t_P17neural_network_t_f)
-  %puts6 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([9 x i8], [9 x i8]* @str.133, i64 0, i64 0))
+  %puts6 = tail call i32 @puts(i8* nonnull dereferenceable(1) getelementptr inbounds ([9 x i8], [9 x i8]* @str.135, i64 0, i64 0))
   tail call void @_Z3runPFfP16mnist_dataset_t_P17neural_network_t_fE(float (%struct.mnist_dataset_t_*, %struct.neural_network_t_*, float)* nonnull @_Z37neural_network_training_step_tapenadeP16mnist_dataset_t_P17neural_network_t_f)
   ret i32 0
 }
@@ -12315,7 +12365,7 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi1EEEvv.exit: ; preds 
   %20 = phi %"class.adept::internal::StackStorageOrig"* [ %16, %_ZN5adept5Stack17register_gradientEv.exit ], [ %19, %if.then.i.i ]
   %21 = phi %"class.adept::Stack"* [ %15, %_ZN5adept5Stack17register_gradientEv.exit ], [ %.pre7, %if.then.i.i ]
   %arg.i.i5.i = bitcast %"struct.adept::Expression.47"* %rhs to %"class.adept::ActiveReference"**
-  %22 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %arg.i.i5.i, align 8, !tbaa !305
+  %22 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %arg.i.i5.i, align 8, !tbaa !309
   %val_.i.i.i6.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %22, i64 0, i32 0
   %23 = load float*, float** %val_.i.i.i6.i, align 8, !tbaa !198
   %24 = load float, float* %23, align 4, !tbaa !155
@@ -12406,7 +12456,7 @@ entry:
   call void @_ZNSt7__cxx1118basic_stringstreamIcSt11char_traitsIcESaIcEEC1Ev(%"class.std::__cxx11::basic_stringstream"* nonnull dereferenceable(128) %s)
   %add.ptr = getelementptr inbounds %"class.std::__cxx11::basic_stringstream", %"class.std::__cxx11::basic_stringstream"* %s, i64 0, i32 0, i32 1
   %1 = bitcast %"class.std::basic_ostream.base"* %add.ptr to %"class.std::basic_ostream"*
-  %call1.i11 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %1, i8* nonnull getelementptr inbounds ([6 x i8], [6 x i8]* @.str.115, i64 0, i64 0), i64 5)
+  %call1.i11 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %1, i8* nonnull getelementptr inbounds ([6 x i8], [6 x i8]* @.str.117, i64 0, i64 0), i64 5)
           to label %invoke.cont unwind label %lpad
 
 invoke.cont:                                      ; preds = %entry
@@ -12424,7 +12474,7 @@ if.then.i:                                        ; preds = %invoke.cont
   %5 = bitcast i8* %add.ptr.i to %"class.std::basic_ios"*
   %_M_streambuf_state.i.i.i = getelementptr inbounds i8, i8* %add.ptr.i, i64 32
   %6 = bitcast i8* %_M_streambuf_state.i.i.i to i32*
-  %7 = load i32, i32* %6, align 8, !tbaa !307
+  %7 = load i32, i32* %6, align 8, !tbaa !311
   %or.i.i.i = or i32 %7, 1
   invoke void @_ZNSt9basic_iosIcSt11char_traitsIcEE5clearESt12_Ios_Iostate(%"class.std::basic_ios"* nonnull dereferenceable(264) %5, i32 %or.i.i.i)
           to label %invoke.cont1 unwind label %lpad
@@ -12443,7 +12493,7 @@ invoke.cont3:                                     ; preds = %invoke.cont1
           to label %invoke.cont5 unwind label %lpad
 
 invoke.cont5:                                     ; preds = %invoke.cont3
-  %call1.i23 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %call6, i8* nonnull getelementptr inbounds ([2 x i8], [2 x i8]* @.str.116, i64 0, i64 0), i64 1)
+  %call1.i23 = invoke nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull align 8 dereferenceable(8) %call6, i8* nonnull getelementptr inbounds ([2 x i8], [2 x i8]* @.str.118, i64 0, i64 0), i64 1)
           to label %invoke.cont7 unwind label %lpad
 
 invoke.cont7:                                     ; preds = %invoke.cont5
@@ -12670,7 +12720,7 @@ _ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit: ; preds = %_ZN5adept8int
   %end_plus_one.i = getelementptr inbounds %"struct.adept::internal::Statement", %"struct.adept::internal::Statement"* %22, i64 %idxprom.i, i32 1
   store i32 %23, i32* %end_plus_one.i, align 4, !tbaa !45
   %exitcond.not = icmp eq i64 %indvars.iv.next, 10
-  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !313
+  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !317
 
 do.end:                                           ; preds = %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit
   ret void
@@ -12709,7 +12759,7 @@ call5.i.i.i9.i.noexc:                             ; preds = %entry
   %5 = load i64, i64* %__dnew.i.i.i.i, align 8, !tbaa !10
   %_M_allocated_capacity.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
   store i64 %5, i64* %_M_allocated_capacity.i.i.i.i.i, align 8, !tbaa !12
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i9.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.106, i64 0, i64 0), i64 27, i1 false) #37
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(27) %call5.i.i.i9.i15, i8* nonnull align 1 dereferenceable(27) getelementptr inbounds ([28 x i8], [28 x i8]* @.str.108, i64 0, i64 0), i64 27, i1 false) #37
   %_M_string_length.i.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
   store i64 %5, i64* %_M_string_length.i.i.i.i.i.i, align 8, !tbaa !2
   %6 = load i8*, i8** %_M_p.i13.i.i.i.i, align 8, !tbaa !11
@@ -12851,17 +12901,17 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.51"* %rhs to %"class.adept::ActiveReference"**
-  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !314
+  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !318
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %7, i64 0, i32 0
   %8 = load float*, float** %val_.i.i.i.i, align 8, !tbaa !198
   %9 = load float, float* %8, align 4, !tbaa !155
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.51", %"struct.adept::Expression.51"* %rhs, i64 8
   %10 = bitcast %"struct.adept::Expression.51"* %right.i.i.i to %"struct.adept::internal::BinaryOpScalarRight"**
-  %11 = load %"struct.adept::internal::BinaryOpScalarRight"*, %"struct.adept::internal::BinaryOpScalarRight"** %10, align 8, !tbaa !316
+  %11 = load %"struct.adept::internal::BinaryOpScalarRight"*, %"struct.adept::internal::BinaryOpScalarRight"** %10, align 8, !tbaa !320
   %left.i.i.i.i5.i = getelementptr inbounds %"struct.adept::internal::BinaryOpScalarRight", %"struct.adept::internal::BinaryOpScalarRight"* %11, i64 0, i32 0
-  %12 = load %"class.adept::ActiveConstReference"*, %"class.adept::ActiveConstReference"** %left.i.i.i.i5.i, align 16, !tbaa !317
+  %12 = load %"class.adept::ActiveConstReference"*, %"class.adept::ActiveConstReference"** %left.i.i.i.i5.i, align 16, !tbaa !321
   %val_.i.i.i.i.i.i = getelementptr inbounds %"class.adept::ActiveConstReference", %"class.adept::ActiveConstReference"* %12, i64 0, i32 0
-  %13 = load float*, float** %val_.i.i.i.i.i.i, align 8, !tbaa !320
+  %13 = load float*, float** %val_.i.i.i.i.i.i, align 8, !tbaa !324
   %14 = load float, float* %13, align 4, !tbaa !155
   %value_.i.i.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOpScalarRight", %"struct.adept::internal::BinaryOpScalarRight"* %11, i64 0, i32 1, i32 0, i32 0, i64 0
   %15 = load float, float* %value_.i.i.i.i.i.i, align 16, !tbaa !12
@@ -13061,19 +13111,19 @@ vector.body:                                      ; preds = %vector.body, %vecto
   %offset.idx = add i64 %index, %17
   %20 = getelementptr inbounds double, double* %gradient, i64 %index
   %21 = bitcast double* %20 to <2 x double>*
-  %wide.load = load <2 x double>, <2 x double>* %21, align 8, !tbaa !43, !alias.scope !321
+  %wide.load = load <2 x double>, <2 x double>* %21, align 8, !tbaa !43, !alias.scope !325
   %22 = getelementptr inbounds double, double* %20, i64 2
   %23 = bitcast double* %22 to <2 x double>*
-  %wide.load14 = load <2 x double>, <2 x double>* %23, align 8, !tbaa !43, !alias.scope !321
+  %wide.load14 = load <2 x double>, <2 x double>* %23, align 8, !tbaa !43, !alias.scope !325
   %24 = getelementptr inbounds double, double* %16, i64 %offset.idx
   %25 = bitcast double* %24 to <2 x double>*
-  store <2 x double> %wide.load, <2 x double>* %25, align 8, !tbaa !43, !alias.scope !324, !noalias !321
+  store <2 x double> %wide.load, <2 x double>* %25, align 8, !tbaa !43, !alias.scope !328, !noalias !325
   %26 = getelementptr inbounds double, double* %24, i64 2
   %27 = bitcast double* %26 to <2 x double>*
-  store <2 x double> %wide.load14, <2 x double>* %27, align 8, !tbaa !43, !alias.scope !324, !noalias !321
+  store <2 x double> %wide.load14, <2 x double>* %27, align 8, !tbaa !43, !alias.scope !328, !noalias !325
   %index.next = add i64 %index, 4
   %28 = icmp eq i64 %index.next, %n.vec
-  br i1 %28, label %middle.block, label %vector.body, !llvm.loop !326
+  br i1 %28, label %middle.block, label %vector.body, !llvm.loop !330
 
 middle.block:                                     ; preds = %vector.body
   %cmp.n = icmp eq i64 %n.vec, %wide.trip.count
@@ -13104,7 +13154,7 @@ call5.i.i.i9.i.noexc:                             ; preds = %if.then2
   %34 = load i64, i64* %__dnew.i.i.i.i, align 8, !tbaa !10
   %_M_allocated_capacity.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
   store i64 %34, i64* %_M_allocated_capacity.i.i.i.i.i, align 8, !tbaa !12
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(98) %call5.i.i.i9.i23, i8* nonnull align 1 dereferenceable(98) getelementptr inbounds ([99 x i8], [99 x i8]* @.str.120, i64 0, i64 0), i64 98, i1 false) #37
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(98) %call5.i.i.i9.i23, i8* nonnull align 1 dereferenceable(98) getelementptr inbounds ([99 x i8], [99 x i8]* @.str.122, i64 0, i64 0), i64 98, i1 false) #37
   %_M_string_length.i.i.i.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
   store i64 %34, i64* %_M_string_length.i.i.i.i.i.i, align 8, !tbaa !2
   %arrayidx.i.i.i.i.i = getelementptr inbounds i8, i8* %call5.i.i.i9.i23, i64 %34
@@ -13196,7 +13246,7 @@ for.body:                                         ; preds = %for.body.preheader,
   %indvars.iv.next34 = add nsw i64 %indvars.iv33, 1
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !327
+  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !331
 
 eh.resume:                                        ; preds = %cleanup.action, %if.then.i.i, %ehcleanup.thread42
   %.pn27 = phi { i8*, i32 } [ %.pn28, %cleanup.action ], [ %45, %if.then.i.i ], [ %45, %ehcleanup.thread42 ]
@@ -13384,7 +13434,7 @@ vector.body:                                      ; preds = %vector.body, %vecto
   store <2 x float> %28, <2 x float>* %32, align 4, !tbaa !155
   %index.next = add i64 %index, 4
   %33 = icmp eq i64 %index.next, %n.vec
-  br i1 %33, label %middle.block, label %vector.body, !llvm.loop !328
+  br i1 %33, label %middle.block, label %vector.body, !llvm.loop !332
 
 middle.block:                                     ; preds = %vector.body
   %cmp.n = icmp eq i64 %n.vec, %wide.trip.count
@@ -13415,7 +13465,7 @@ call5.i.i.i9.i.noexc69:                           ; preds = %if.then8
   %39 = load i64, i64* %__dnew.i.i.i.i57, align 8, !tbaa !10
   %_M_allocated_capacity.i.i.i.i.i61 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp10, i64 0, i32 2, i32 0
   store i64 %39, i64* %_M_allocated_capacity.i.i.i.i.i61, align 8, !tbaa !12
-  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(98) %call5.i.i.i9.i70, i8* nonnull align 1 dereferenceable(98) getelementptr inbounds ([99 x i8], [99 x i8]* @.str.120, i64 0, i64 0), i64 98, i1 false) #37
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 1 dereferenceable(98) %call5.i.i.i9.i70, i8* nonnull align 1 dereferenceable(98) getelementptr inbounds ([99 x i8], [99 x i8]* @.str.122, i64 0, i64 0), i64 98, i1 false) #37
   %_M_string_length.i.i.i.i.i.i67 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp10, i64 0, i32 1
   store i64 %39, i64* %_M_string_length.i.i.i.i.i.i67, align 8, !tbaa !2
   %arrayidx.i.i.i.i.i68 = getelementptr inbounds i8, i8* %call5.i.i.i9.i70, i64 %39
@@ -13508,7 +13558,7 @@ for.body:                                         ; preds = %for.body.preheader,
   %indvars.iv.next82 = add nsw i64 %indvars.iv81, 1
   %indvars.iv.next = add nuw nsw i64 %indvars.iv, 1
   %exitcond.not = icmp eq i64 %indvars.iv.next, %wide.trip.count
-  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !329
+  br i1 %exitcond.not, label %for.cond.cleanup, label %for.body, !llvm.loop !333
 
 eh.resume:                                        ; preds = %cleanup.action23, %if.then.i.i, %ehcleanup18.thread100, %cleanup.action, %if.then.i.i55, %ehcleanup.thread90
   %.pn38.pn = phi { i8*, i32 } [ %.pn3877, %cleanup.action23 ], [ %.pn74, %cleanup.action ], [ %17, %if.then.i.i55 ], [ %50, %if.then.i.i ], [ %17, %ehcleanup.thread90 ], [ %50, %ehcleanup18.thread100 ]
@@ -13583,17 +13633,17 @@ if.then5:                                         ; preds = %for.body.critedge
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %3) #37
   %4 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp6 to i8*
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %4) #37
-  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp6, i8* getelementptr inbounds ([89 x i8], [89 x i8]* @.str.124, i64 0, i64 0), i32 1969)
+  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp6, i8* getelementptr inbounds ([89 x i8], [89 x i8]* @.str.126, i64 0, i64 0), i32 1969)
           to label %invoke.cont unwind label %ehcleanup11.thread
 
 invoke.cont:                                      ; preds = %if.then5
-  %call3.i.i.i57 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp6, i64 0, i64 0, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.123, i64 0, i64 0), i64 34)
+  %call3.i.i.i57 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp6, i64 0, i64 0, i8* getelementptr inbounds ([35 x i8], [35 x i8]* @.str.125, i64 0, i64 0), i64 34)
           to label %call3.i.i.i.noexc unwind label %lpad7
 
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %5 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %6 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !9, !alias.scope !330
+  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !9, !alias.scope !334
   %_M_p.i.i30.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 0, i32 0
   %7 = load i8*, i8** %_M_p.i.i30.i.i, align 8, !tbaa !11
   %8 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2
@@ -13608,18 +13658,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i28.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %7, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !330
+  store i8* %7, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !334
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 2, i32 0
   %9 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !12
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !330
+  store i64 %9, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !334
   br label %invoke.cont8
 
 invoke.cont8:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i27.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i57, i64 0, i32 1
   %10 = load i64, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !330
+  store i64 %10, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !334
   %11 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i57 to %union.anon**
   store %union.anon* %8, %union.anon** %11, align 8, !tbaa !11
   store i64 0, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
@@ -13685,7 +13735,7 @@ cleanup.action:                                   ; preds = %ehcleanup11, %if.th
 
 if.else:                                          ; preds = %for.body.critedge
   %cmp16 = icmp eq i32 %1, 0
-  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !333
+  br i1 %cmp16, label %_ZN5adept5ArrayILi1EdLb0EE5clearEv.exit, label %for.end, !llvm.loop !337
 
 _ZN5adept5ArrayILi1EdLb0EE5clearEv.exit:          ; preds = %if.else
   %data_.i = getelementptr inbounds %"class.adept::Array.28", %"class.adept::Array.28"* %this, i64 0, i32 0
@@ -13704,13 +13754,13 @@ for.end:                                          ; preds = %if.else
   %call32 = tail call noalias nonnull dereferenceable(24) i8* @_Znwm(i64 24) #41
   %n_.i = getelementptr inbounds i8, i8* %call32, i64 8
   %19 = bitcast i8* %n_.i to i32*
-  store i32 %1, i32* %19, align 8, !tbaa !334
+  store i32 %1, i32* %19, align 8, !tbaa !338
   %n_links_.i = getelementptr inbounds i8, i8* %call32, i64 12
   %20 = bitcast i8* %n_links_.i to i32*
-  store i32 1, i32* %20, align 4, !tbaa !336
+  store i32 1, i32* %20, align 4, !tbaa !340
   %gradient_index_.i = getelementptr inbounds i8, i8* %call32, i64 16
   %21 = bitcast i8* %gradient_index_.i to i32*
-  store i32 -1, i32* %21, align 8, !tbaa !337
+  store i32 -1, i32* %21, align 8, !tbaa !341
   %22 = bitcast double** %result.i.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %22) #37
   %23 = bitcast double** %result.i.i to i8**
@@ -13734,7 +13784,7 @@ invoke.cont34:                                    ; preds = %for.end
   %25 = load double*, double** %result.i.i, align 8, !tbaa !26
   call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %22) #37
   %data_.i67 = bitcast i8* %call32 to double**
-  store double* %25, double** %data_.i67, align 8, !tbaa !338
+  store double* %25, double** %data_.i67, align 8, !tbaa !342
   %26 = load i32, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !46
   %inc.i = add nsw i32 %26, 1
   store i32 %inc.i, i32* @_ZN5adept8internal26n_storage_objects_created_E, align 4, !tbaa !46
@@ -13767,7 +13817,7 @@ entry:
   %ref.tmp = alloca %"class.std::__cxx11::basic_string", align 8
   %ref.tmp2 = alloca %"class.std::__cxx11::basic_string", align 8
   %n_links_ = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 2
-  %0 = load i32, i32* %n_links_, align 4, !tbaa !336
+  %0 = load i32, i32* %n_links_, align 4, !tbaa !340
   %cmp = icmp eq i32 %0, 0
   br i1 %cmp, label %if.then, label %if.else
 
@@ -13778,17 +13828,17 @@ if.then:                                          ; preds = %entry
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %2) #37
   %3 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp2 to i8*
   call void @llvm.lifetime.start.p0i8(i64 32, i8* nonnull %3) #37
-  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp2, i8* getelementptr inbounds ([91 x i8], [91 x i8]* @.str.126, i64 0, i64 0), i32 112)
+  invoke void @_ZN5adept8internal18exception_locationB5cxx11EPKci(%"class.std::__cxx11::basic_string"* nonnull sret(%"class.std::__cxx11::basic_string") align 8 %ref.tmp2, i8* getelementptr inbounds ([91 x i8], [91 x i8]* @.str.128, i64 0, i64 0), i32 112)
           to label %invoke.cont unwind label %ehcleanup7.thread
 
 invoke.cont:                                      ; preds = %if.then
-  %call3.i.i.i17 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp2, i64 0, i64 0, i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.125, i64 0, i64 0), i64 57)
+  %call3.i.i.i17 = invoke nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE10_M_replaceEmmPKcm(%"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) %ref.tmp2, i64 0, i64 0, i8* getelementptr inbounds ([58 x i8], [58 x i8]* @.str.127, i64 0, i64 0), i64 57)
           to label %call3.i.i.i.noexc unwind label %lpad3
 
 call3.i.i.i.noexc:                                ; preds = %invoke.cont
   %4 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2
   %5 = bitcast %"class.std::__cxx11::basic_string"* %ref.tmp to %union.anon**
-  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !9, !alias.scope !339
+  store %union.anon* %4, %union.anon** %5, align 8, !tbaa !9, !alias.scope !343
   %_M_p.i.i30.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 0, i32 0
   %6 = load i8*, i8** %_M_p.i.i30.i.i, align 8, !tbaa !11
   %7 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2
@@ -13803,18 +13853,18 @@ if.then.i.i:                                      ; preds = %call3.i.i.i.noexc
 
 if.else.i.i:                                      ; preds = %call3.i.i.i.noexc
   %_M_p.i28.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 0, i32 0
-  store i8* %6, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !339
+  store i8* %6, i8** %_M_p.i28.i.i, align 8, !tbaa !11, !alias.scope !343
   %_M_allocated_capacity.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 2, i32 0
   %8 = load i64, i64* %_M_allocated_capacity.i.i, align 8, !tbaa !12
   %_M_allocated_capacity.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 2, i32 0
-  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !339
+  store i64 %8, i64* %_M_allocated_capacity.i.i.i, align 8, !tbaa !12, !alias.scope !343
   br label %invoke.cont4
 
 invoke.cont4:                                     ; preds = %if.else.i.i, %if.then.i.i
   %_M_string_length.i27.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %call3.i.i.i17, i64 0, i32 1
   %9 = load i64, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
   %_M_string_length.i.i.i = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %ref.tmp, i64 0, i32 1
-  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !339
+  store i64 %9, i64* %_M_string_length.i.i.i, align 8, !tbaa !2, !alias.scope !343
   %10 = bitcast %"class.std::__cxx11::basic_string"* %call3.i.i.i17 to %union.anon**
   store %union.anon* %7, %union.anon** %10, align 8, !tbaa !11
   store i64 0, i64* %_M_string_length.i27.i.i, align 8, !tbaa !2
@@ -13880,16 +13930,16 @@ cleanup.action:                                   ; preds = %ehcleanup7, %if.the
 
 if.else:                                          ; preds = %entry
   %dec = add nsw i32 %0, -1
-  store i32 %dec, i32* %n_links_, align 4, !tbaa !336
+  store i32 %dec, i32* %n_links_, align 4, !tbaa !340
   %cmp11.not = icmp eq i32 %dec, 0
   br i1 %cmp11.not, label %delete.notnull, label %if.end13
 
 delete.notnull:                                   ; preds = %if.else
   %17 = bitcast %"class.adept::Storage.14"* %this to i8**
-  %18 = load i8*, i8** %17, align 8, !tbaa !338
+  %18 = load i8*, i8** %17, align 8, !tbaa !342
   tail call void @free(i8* %18) #37
   %gradient_index_.i = getelementptr inbounds %"class.adept::Storage.14", %"class.adept::Storage.14"* %this, i64 0, i32 3
-  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !337
+  %19 = load i32, i32* %gradient_index_.i, align 8, !tbaa !341
   %cmp.i = icmp sgt i32 %19, -1
   br i1 %cmp.i, label %if.then.i, label %_ZN5adept7StorageIdED2Ev.exit
 
@@ -13951,12 +14001,12 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.59"* %rhs to %"class.adept::Active"**
-  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %left.i.i.i, align 8, !tbaa !342
+  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %left.i.i.i, align 8, !tbaa !346
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %7, i64 0, i32 0
   %8 = load double, double* %val_.i.i.i.i, align 8, !tbaa !167
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.59", %"struct.adept::Expression.59"* %rhs, i64 8
   %9 = bitcast %"struct.adept::Expression.59"* %right.i.i.i to %"class.adept::ActiveReference"**
-  %10 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %9, align 8, !tbaa !344
+  %10 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %9, align 8, !tbaa !348
   %val_.i7.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %10, i64 0, i32 0
   %11 = load float*, float** %val_.i7.i.i.i, align 8, !tbaa !198
   %12 = load float, float* %11, align 4, !tbaa !155
@@ -14070,13 +14120,13 @@ do.body:                                          ; preds = %if.then.i14, %entry
 for.body:                                         ; preds = %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit, %do.body
   %indvars.iv = phi i64 [ 0, %do.body ], [ %indvars.iv.next, %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit ]
   %3 = load %"class.adept::Stack"*, %"class.adept::Stack"** @_ZN5adept21_stack_current_threadE, align 8, !tbaa !26
-  %4 = load %"struct.adept::internal::BinaryOperation.61"*, %"struct.adept::internal::BinaryOperation.61"** %arg.i8.i, align 8, !tbaa !345
+  %4 = load %"struct.adept::internal::BinaryOperation.61"*, %"struct.adept::internal::BinaryOperation.61"** %arg.i8.i, align 8, !tbaa !349
   %left.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOperation.61", %"struct.adept::internal::BinaryOperation.61"* %4, i64 0, i32 0
-  %5 = load %"class.adept::FixedArray"*, %"class.adept::FixedArray"** %left.i.i.i.i, align 8, !tbaa !347
+  %5 = load %"class.adept::FixedArray"*, %"class.adept::FixedArray"** %left.i.i.i.i, align 8, !tbaa !351
   %arrayidx.i.i.i.i10.i = getelementptr inbounds %"class.adept::FixedArray", %"class.adept::FixedArray"* %5, i64 0, i32 1, i64 %indvars.iv
   %6 = load float, float* %arrayidx.i.i.i.i10.i, align 4, !tbaa !155
   %right.i.i.i.i = getelementptr inbounds %"struct.adept::internal::BinaryOperation.61", %"struct.adept::internal::BinaryOperation.61"* %4, i64 0, i32 1
-  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %right.i.i.i.i, align 8, !tbaa !349
+  %7 = load %"class.adept::Active"*, %"class.adept::Active"** %right.i.i.i.i, align 8, !tbaa !353
   %val_.i.i.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %7, i64 0, i32 0
   %8 = load double, double* %val_.i.i.i.i.i, align 8, !tbaa !167
   %div.i.i.i.i.i = fdiv fast double 1.000000e+00, %8
@@ -14169,7 +14219,7 @@ _ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit: ; preds = %_ZN5adept8int
   %end_plus_one.i = getelementptr inbounds %"struct.adept::internal::Statement", %"struct.adept::internal::Statement"* %27, i64 %idxprom.i, i32 1
   store i32 %28, i32* %end_plus_one.i, align 4, !tbaa !45
   %exitcond.not = icmp eq i64 %indvars.iv.next, 10
-  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !350
+  br i1 %exitcond.not, label %do.end, label %for.body, !llvm.loop !354
 
 do.end:                                           ; preds = %_ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit
   ret void
@@ -14198,13 +14248,13 @@ _ZN5adept8internal16StackStorageOrig18check_space_staticILi2EEEvv.exit: ; preds 
   %5 = phi %"class.adept::internal::StackStorageOrig"* [ %0, %entry ], [ %4, %if.then.i.i ]
   %6 = phi %"class.adept::Stack"* [ %3, %entry ], [ %.pre, %if.then.i.i ]
   %left.i.i.i = bitcast %"struct.adept::Expression.64"* %rhs to %"class.adept::ActiveReference"**
-  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !351
+  %7 = load %"class.adept::ActiveReference"*, %"class.adept::ActiveReference"** %left.i.i.i, align 8, !tbaa !355
   %val_.i.i.i.i = getelementptr inbounds %"class.adept::ActiveReference", %"class.adept::ActiveReference"* %7, i64 0, i32 0
   %8 = load float*, float** %val_.i.i.i.i, align 8, !tbaa !198
   %9 = load float, float* %8, align 4, !tbaa !155
   %right.i.i.i = getelementptr inbounds %"struct.adept::Expression.64", %"struct.adept::Expression.64"* %rhs, i64 8
   %10 = bitcast %"struct.adept::Expression.64"* %right.i.i.i to %"class.adept::Active"**
-  %11 = load %"class.adept::Active"*, %"class.adept::Active"** %10, align 8, !tbaa !353
+  %11 = load %"class.adept::Active"*, %"class.adept::Active"** %10, align 8, !tbaa !357
   %val_.i12.i.i.i = getelementptr inbounds %"class.adept::Active", %"class.adept::Active"* %11, i64 0, i32 0
   %12 = load double, double* %val_.i12.i.i.i, align 8, !tbaa !167
   %div.i.i.i.i = fdiv fast double 1.000000e+00, %12
@@ -14297,6 +14347,15 @@ _ZN5adept8internal16StackStorageOrig8push_lhsERKi.exit: ; preds = %_ZN5adept8int
   store i32 %32, i32* %end_plus_one.i, align 4, !tbaa !45
   ret %"class.adept::ActiveReference"* %this
 }
+
+declare dso_local nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSo3putEc(%"class.std::basic_ostream"* nonnull dereferenceable(8), i8 signext) local_unnamed_addr #0
+
+declare dso_local nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSo5flushEv(%"class.std::basic_ostream"* nonnull dereferenceable(8)) local_unnamed_addr #0
+
+; Function Attrs: noreturn
+declare dso_local void @_ZSt16__throw_bad_castv() local_unnamed_addr #32
+
+declare dso_local void @_ZNKSt5ctypeIcE13_M_widen_initEv(%"class.std::ctype"* nonnull dereferenceable(570)) local_unnamed_addr #0
 
 ; Function Attrs: uwtable
 define internal void @_GLOBAL__sub_I_nn.cpp() #5 section ".text.startup" personality i32 (...)* @__gxx_personality_v0 {
@@ -21378,52 +21437,56 @@ attributes #43 = { cold }
 !302 = !{!303, !8, i64 0}
 !303 = !{!"_ZTS7timeval", !8, i64 0, !8, i64 8}
 !304 = !{!303, !8, i64 8}
-!305 = !{!306, !5, i64 0}
-!306 = !{!"_ZTSN5adept8internal14UnaryOperationIfNS0_3LogENS_15ActiveReferenceIfEEEE", !5, i64 0}
-!307 = !{!308, !310, i64 32}
-!308 = !{!"_ZTSSt8ios_base", !8, i64 8, !8, i64 16, !309, i64 24, !310, i64 28, !310, i64 32, !5, i64 40, !311, i64 48, !6, i64 64, !24, i64 192, !5, i64 200, !312, i64 208}
-!309 = !{!"_ZTSSt13_Ios_Fmtflags", !6, i64 0}
-!310 = !{!"_ZTSSt12_Ios_Iostate", !6, i64 0}
-!311 = !{!"_ZTSNSt8ios_base6_WordsE", !5, i64 0, !8, i64 8}
-!312 = !{!"_ZTSSt6locale", !5, i64 0}
-!313 = distinct !{!313, !31, !32}
-!314 = !{!315, !5, i64 0}
-!315 = !{!"_ZTSN5adept8internal15BinaryOperationIfNS_15ActiveReferenceIfEENS0_3AddENS0_19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEEEE", !5, i64 0, !5, i64 8}
-!316 = !{!315, !5, i64 8}
-!317 = !{!318, !5, i64 0}
-!318 = !{!"_ZTSN5adept8internal19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEE", !5, i64 0, !319, i64 16}
-!319 = !{!"_ZTSN5adept8internal6PacketIfEE", !6, i64 0}
-!320 = !{!257, !5, i64 0}
-!321 = !{!322}
-!322 = distinct !{!322, !323}
-!323 = distinct !{!323, !"LVerDomain"}
-!324 = !{!325}
-!325 = distinct !{!325, !323}
-!326 = distinct !{!326, !31, !32, !85}
-!327 = distinct !{!327, !31, !32, !85}
-!328 = distinct !{!328, !31, !32, !85}
-!329 = distinct !{!329, !31, !32, !85}
-!330 = !{!331}
-!331 = distinct !{!331, !332, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!332 = distinct !{!332, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!333 = distinct !{!333, !31, !32}
-!334 = !{!335, !24, i64 8}
-!335 = !{!"_ZTSN5adept7StorageIdEE", !5, i64 0, !24, i64 8, !24, i64 12, !24, i64 16}
-!336 = !{!335, !24, i64 12}
-!337 = !{!335, !24, i64 16}
-!338 = !{!335, !5, i64 0}
-!339 = !{!340}
-!340 = distinct !{!340, !341, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
-!341 = distinct !{!341, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
-!342 = !{!343, !5, i64 0}
-!343 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_6ActiveIdEENS0_3AddENS_15ActiveReferenceIfEEEE", !5, i64 0, !5, i64 8}
-!344 = !{!343, !5, i64 8}
-!345 = !{!346, !5, i64 0}
-!346 = !{!"_ZTSN5adept8internal7NoAliasIdNS0_15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEEEE", !5, i64 0}
-!347 = !{!348, !5, i64 0}
-!348 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
-!349 = !{!348, !5, i64 8}
-!350 = distinct !{!350, !31, !32}
+!305 = !{!306, !5, i64 240}
+!306 = !{!"_ZTSSt9basic_iosIcSt11char_traitsIcEE", !5, i64 216, !6, i64 224, !14, i64 225, !5, i64 232, !5, i64 240, !5, i64 248, !5, i64 256}
+!307 = !{!308, !6, i64 56}
+!308 = !{!"_ZTSSt5ctypeIcE", !5, i64 16, !14, i64 24, !5, i64 32, !5, i64 40, !5, i64 48, !6, i64 56, !6, i64 57, !6, i64 313, !6, i64 569}
+!309 = !{!310, !5, i64 0}
+!310 = !{!"_ZTSN5adept8internal14UnaryOperationIfNS0_3LogENS_15ActiveReferenceIfEEEE", !5, i64 0}
+!311 = !{!312, !314, i64 32}
+!312 = !{!"_ZTSSt8ios_base", !8, i64 8, !8, i64 16, !313, i64 24, !314, i64 28, !314, i64 32, !5, i64 40, !315, i64 48, !6, i64 64, !24, i64 192, !5, i64 200, !316, i64 208}
+!313 = !{!"_ZTSSt13_Ios_Fmtflags", !6, i64 0}
+!314 = !{!"_ZTSSt12_Ios_Iostate", !6, i64 0}
+!315 = !{!"_ZTSNSt8ios_base6_WordsE", !5, i64 0, !8, i64 8}
+!316 = !{!"_ZTSSt6locale", !5, i64 0}
+!317 = distinct !{!317, !31, !32}
+!318 = !{!319, !5, i64 0}
+!319 = !{!"_ZTSN5adept8internal15BinaryOperationIfNS_15ActiveReferenceIfEENS0_3AddENS0_19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEEEE", !5, i64 0, !5, i64 8}
+!320 = !{!319, !5, i64 8}
+!321 = !{!322, !5, i64 0}
+!322 = !{!"_ZTSN5adept8internal19BinaryOpScalarRightIfNS_20ActiveConstReferenceIfEENS0_8MultiplyEfEE", !5, i64 0, !323, i64 16}
+!323 = !{!"_ZTSN5adept8internal6PacketIfEE", !6, i64 0}
+!324 = !{!257, !5, i64 0}
+!325 = !{!326}
+!326 = distinct !{!326, !327}
+!327 = distinct !{!327, !"LVerDomain"}
+!328 = !{!329}
+!329 = distinct !{!329, !327}
+!330 = distinct !{!330, !31, !32, !85}
+!331 = distinct !{!331, !31, !32, !85}
+!332 = distinct !{!332, !31, !32, !85}
+!333 = distinct !{!333, !31, !32, !85}
+!334 = !{!335}
+!335 = distinct !{!335, !336, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!336 = distinct !{!336, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!337 = distinct !{!337, !31, !32}
+!338 = !{!339, !24, i64 8}
+!339 = !{!"_ZTSN5adept7StorageIdEE", !5, i64 0, !24, i64 8, !24, i64 12, !24, i64 16}
+!340 = !{!339, !24, i64 12}
+!341 = !{!339, !24, i64 16}
+!342 = !{!339, !5, i64 0}
+!343 = !{!344}
+!344 = distinct !{!344, !345, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_: %agg.result"}
+!345 = distinct !{!345, !"_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EEPKS5_OS8_"}
+!346 = !{!347, !5, i64 0}
+!347 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_6ActiveIdEENS0_3AddENS_15ActiveReferenceIfEEEE", !5, i64 0, !5, i64 8}
+!348 = !{!347, !5, i64 8}
+!349 = !{!350, !5, i64 0}
+!350 = !{!"_ZTSN5adept8internal7NoAliasIdNS0_15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEEEE", !5, i64 0}
 !351 = !{!352, !5, i64 0}
-!352 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_15ActiveReferenceIfEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
+!352 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_10FixedArrayIfLb1ELi10ELi0ELi0ELi0ELi0ELi0ELi0EEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
 !353 = !{!352, !5, i64 8}
+!354 = distinct !{!354, !31, !32}
+!355 = !{!356, !5, i64 0}
+!356 = !{!"_ZTSN5adept8internal15BinaryOperationIdNS_15ActiveReferenceIfEENS0_6DivideENS_6ActiveIdEEEE", !5, i64 0, !5, i64 8}
+!357 = !{!356, !5, i64 8}

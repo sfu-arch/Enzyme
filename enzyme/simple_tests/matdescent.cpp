@@ -6,18 +6,19 @@
 #include <inttypes.h>
 #include <string.h>
 
-#define N 100
-#define M 10
+#define N 30
+#define M 30
 
 extern int enzyme_const;
 template<typename Return, typename... T>
 Return __enzyme_autodiff(T...);
+
 inline double matvec_real(double* mat, double* vec) {
   double *out = (double*)malloc(sizeof(double)*N);
-  out[0] = 1;
 // #pragma clang loop unroll(full)
-  for(int i=0; i<N/2; i++) {
-#pragma clang loop unroll(full)
+  for(int i=0; i<N; i++) {
+    out[i] = 0;
+// #pragma clang loop unroll(full)
     for(int j=0; j<M; j++) {
         out[i] += mat[i*M+j] * vec[j];
     }
@@ -26,10 +27,11 @@ inline double matvec_real(double* mat, double* vec) {
   for(int i=0; i<N; i++) {
     sum += out[i] + out[i];
   }
+  free(out);
   return sum;
-  // free(out);
-  // return out[0];
 }
+
+
 static void enzyme_sincos(double *Min, double *Mout, double *Vin, double *Vout) {
   __enzyme_autodiff<double>(matvec_real, Min, Mout, Vin, Vout);
 }

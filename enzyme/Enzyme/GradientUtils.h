@@ -138,6 +138,8 @@ public:
   }
 
   bool isvalidInst(Value* val) {
+    if (!isa<Instruction>(val)) 
+      return false;
     return val->getNameOrAsOperand().find("_cache") == std::string::npos;
   }
   // This function detects the values that are defined in forward and used
@@ -148,7 +150,7 @@ public:
       for (auto &I : B) {
         if (originalToNewFn.count(&I) && isvalidInst(&I) && hasReverseUse((Value*) &I)) {
           // errs() << "Found edge: " << I << "\n";
-          edges.insert((Value*) &I);
+          edges.insert(getNewFromOriginal(&I));
         }
       }
     }
@@ -157,6 +159,18 @@ public:
   void printEdges() {
     for (auto &edge : edges) {
       errs() << "Edge: " << *edge << "\n";
+    }
+  }
+
+  // This function calls the printf after the edges
+  // HOW TO USE:
+  //     std::vector<Value*> args = {arg0, arg1, arg2, ...};
+  //     CallPrintf(call_before, format, args);
+  // 
+  void instrumentEdges() {
+    for (auto &edge : edges) {
+      errs() << "Edge: " << *edge << "\n";
+      CallPrintf(dyn_cast<Instruction>(edge)->getNextNode(), "Edge\n", {});
     }
   }
   StoreInst* getStoreInstUser(Value* v) {
@@ -250,8 +264,10 @@ public:
       return;
     }
     // orig value is an edge
-    edges.insert(original_value);
-
+    if (isvalidInst(original_value))
+      edges.insert(original_value);
+    else 
+      errs() << "original value is not an edge " << *original_value << "\n";
     // Put values in a list to be handled later
     forward_to_reverse_map[(Instruction*) si] = load;
   }

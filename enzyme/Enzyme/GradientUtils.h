@@ -129,12 +129,16 @@ public:
   std::set<Value*> edges;
   
   bool is_root = true;
-  void detect_edges(Value *const val) {
+  void detect_edges(Value *val) {
     if (is_root) {
-      if (val->getNameOrAsOperand().find("'") == std::string::npos) 
-        edges.insert(const_cast<Value*>(val));
+      if (val->getNameOrAsOperand().find("'") == std::string::npos && isvalidInst(val)) 
+        edges.insert(val);
       is_root = false;
     }
+  }
+
+  bool isvalidInst(Value* val) {
+    return val->getNameOrAsOperand().find("_cache") == std::string::npos;
   }
   // This function detects the values that are defined in forward and used
   // in the reverse without being unwrapped (recomputed)
@@ -142,7 +146,7 @@ public:
     errs() << "Detecting normal edges\n";
     for (auto &B : *oldFunc) {
       for (auto &I : B) {
-        if (originalToNewFn.count(&I) && hasReverseUse((Value*) &I)) {
+        if (originalToNewFn.count(&I) && isvalidInst(&I) && hasReverseUse((Value*) &I)) {
           // errs() << "Found edge: " << I << "\n";
           edges.insert((Value*) &I);
         }
@@ -245,6 +249,9 @@ public:
       errs() << "Could not find store instruction for " << *original_value << "\n";
       return;
     }
+    // orig value is an edge
+    edges.insert(original_value);
+
     // Put values in a list to be handled later
     forward_to_reverse_map[(Instruction*) si] = load;
   }

@@ -116,7 +116,7 @@ Value *GradientUtils::unwrapM(Value *const val, IRBuilder<> &BuilderM,
   // Here I detect the edges. The first instruction that is unwrapped is
   // an edge. The subsequent unwraps are not edges.
   bool prev_root = is_root;
-  detect_edges(val);                              
+  detect_edges(const_cast<Value*>(val));                              
   if (actives.empty()) {
     actives = createActiveSet();
   }

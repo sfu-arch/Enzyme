@@ -167,10 +167,12 @@ static void enzyme_sincos(double inp) {
 int main(int argc, char** argv) {
 
   double inp = atof(argv[1]) ;
-  printf("adept\n");
-  adept_sincos(inp);
-  printf("tapenade\n");
-  tapenade_sincos(inp);
-  printf("enzyme\n");
+  inp = 0.00000001;
+  std::cout << "INP: " << inp << std::endl;
+  // printf("adept\n");
+  // adept_sincos(inp);
+  // printf("tapenade\n");
+  // tapenade_sincos(inp);
+  // printf("enzyme\n");
   enzyme_sincos(inp);
 }

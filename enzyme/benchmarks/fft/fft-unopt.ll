@@ -8182,140 +8182,143 @@ for.body:                                         ; preds = %if.end8
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %5) #4
   %6 = bitcast %struct.timeval* %end.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %6) #4
-  %call.i22 = call i32 @gettimeofday(%struct.timeval* nonnull %start.i, i8* null) #4
-  %call1.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
-  %7 = bitcast i8* %call1.i to double*
+  %call.i23 = call i32 @gettimeofday(%struct.timeval* nonnull %start.i, i8* null) #4
+  %mul.i = shl nuw nsw i32 %retval.0.i, 1
+  %conv.i24 = zext i32 %mul.i to i64
+  %7 = shl nuw nsw i64 %conv.i24, 3
+  %call1.i = tail call noalias nonnull i8* @_Znam(i64 %7) #34
+  %8 = bitcast i8* %call1.i to double*
   br label %for.body.i
 
 for.cond.cleanup.i:                               ; preds = %for.body.i
-  tail call void @_Z6foobarPdj(double* nonnull %7, i32 16)
-  %8 = load double, double* %7, align 8, !tbaa !46
+  tail call void @_Z6foobarPdj(double* nonnull %8, i32 %retval.0.i)
+  %9 = load double, double* %8, align 8, !tbaa !46
   %call4.i = call i32 @gettimeofday(%struct.timeval* nonnull %end.i, i8* null) #4
   %tv_sec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 0
-  %9 = load i64, i64* %tv_sec.i.i, align 8, !tbaa !2
+  %10 = load i64, i64* %tv_sec.i.i, align 8, !tbaa !2
   %tv_sec1.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 0
-  %10 = load i64, i64* %tv_sec1.i.i, align 8, !tbaa !2
-  %sub.i.i = sub nsw i64 %9, %10
+  %11 = load i64, i64* %tv_sec1.i.i, align 8, !tbaa !2
+  %sub.i.i = sub nsw i64 %10, %11
   %conv.i.i = sitofp i64 %sub.i.i to double
   %tv_usec.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end.i, i64 0, i32 1
-  %11 = load i64, i64* %tv_usec.i.i, align 8, !tbaa !7
+  %12 = load i64, i64* %tv_usec.i.i, align 8, !tbaa !7
   %tv_usec2.i.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start.i, i64 0, i32 1
-  %12 = load i64, i64* %tv_usec2.i.i, align 8, !tbaa !7
-  %sub3.i.i = sub nsw i64 %11, %12
+  %13 = load i64, i64* %tv_usec2.i.i, align 8, !tbaa !7
+  %sub3.i.i = sub nsw i64 %12, %13
   %conv4.i.i = sitofp i64 %sub3.i.i to double
   %mul.i.i = fmul fast double %conv4.i.i, 0x3EB0C6F7A0B5ED8D
   %add.i.i = fadd fast double %mul.i.i, %conv.i.i
   %conv5.i.i = fptrunc double %add.i.i to float
   %conv6.i = fpext float %conv5.i.i to double
-  %call7.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([26 x i8], [26 x i8]* @.str.87, i64 0, i64 0), double %conv6.i, double %8)
+  %call7.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([26 x i8], [26 x i8]* @.str.87, i64 0, i64 0), double %conv6.i, double %9)
   tail call void @_ZdaPv(i8* nonnull %call1.i) #32
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %6) #4
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %5) #4
-  %13 = bitcast %struct.timeval* %start8.i to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %13) #4
-  %14 = bitcast %struct.timeval* %end9.i to i8*
+  %14 = bitcast %struct.timeval* %start8.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %14) #4
+  %15 = bitcast %struct.timeval* %end9.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %15) #4
   %call10.i = call i32 @gettimeofday(%struct.timeval* nonnull %start8.i, i8* null) #4
-  %call14.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
-  %15 = bitcast i8* %call14.i to double*
+  %call14.i = tail call noalias nonnull i8* @_Znam(i64 %7) #34
+  %16 = bitcast i8* %call14.i to double*
   br label %for.body20.i
 
-for.body.i:                                       ; preds = %for.body.i, %for.body
-  %indvars.iv25.i = phi i64 [ 0, %for.body ], [ %indvars.iv.next26.i, %for.body.i ]
-  %arrayidx.i = getelementptr inbounds double, double* %7, i64 %indvars.iv25.i
+for.body.i:                                       ; preds = %for.body, %for.body.i
+  %indvars.iv29.i = phi i64 [ %indvars.iv.next30.i, %for.body.i ], [ 0, %for.body ]
+  %arrayidx.i = getelementptr inbounds double, double* %8, i64 %indvars.iv29.i
   store double 2.000000e+00, double* %arrayidx.i, align 8, !tbaa !46
-  %indvars.iv.next26.i = add nuw nsw i64 %indvars.iv25.i, 1
-  %exitcond27.not.i = icmp eq i64 %indvars.iv.next26.i, 32
-  br i1 %exitcond27.not.i, label %for.cond.cleanup.i, label %for.body.i, !llvm.loop !149
+  %indvars.iv.next30.i = add nuw nsw i64 %indvars.iv29.i, 1
+  %exitcond32.not.i = icmp eq i64 %indvars.iv.next30.i, %conv.i24
+  br i1 %exitcond32.not.i, label %for.cond.cleanup.i, label %for.body.i, !llvm.loop !149
 
 for.cond.cleanup19.i:                             ; preds = %for.body20.i
-  tail call void @_Z6foobarPdj(double* nonnull %15, i32 16)
-  %16 = load double, double* %15, align 8, !tbaa !46
+  tail call void @_Z6foobarPdj(double* nonnull %16, i32 %retval.0.i)
+  %17 = load double, double* %16, align 8, !tbaa !46
   %call28.i = call i32 @gettimeofday(%struct.timeval* nonnull %end9.i, i8* null) #4
-  %tv_sec.i12.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 0
-  %17 = load i64, i64* %tv_sec.i12.i, align 8, !tbaa !2
-  %tv_sec1.i13.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 0
-  %18 = load i64, i64* %tv_sec1.i13.i, align 8, !tbaa !2
-  %sub.i14.i = sub nsw i64 %17, %18
-  %conv.i15.i = sitofp i64 %sub.i14.i to double
-  %tv_usec.i16.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 1
-  %19 = load i64, i64* %tv_usec.i16.i, align 8, !tbaa !7
-  %tv_usec2.i17.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 1
-  %20 = load i64, i64* %tv_usec2.i17.i, align 8, !tbaa !7
-  %sub3.i18.i = sub nsw i64 %19, %20
-  %conv4.i19.i = sitofp i64 %sub3.i18.i to double
-  %mul.i20.i = fmul fast double %conv4.i19.i, 0x3EB0C6F7A0B5ED8D
-  %add.i21.i = fadd fast double %mul.i20.i, %conv.i15.i
-  %conv5.i22.i = fptrunc double %add.i21.i to float
-  %conv30.i = fpext float %conv5.i22.i to double
-  %call31.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([29 x i8], [29 x i8]* @.str.88, i64 0, i64 0), double %conv30.i, double %16)
+  %tv_sec.i14.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 0
+  %18 = load i64, i64* %tv_sec.i14.i, align 8, !tbaa !2
+  %tv_sec1.i15.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 0
+  %19 = load i64, i64* %tv_sec1.i15.i, align 8, !tbaa !2
+  %sub.i16.i = sub nsw i64 %18, %19
+  %conv.i17.i = sitofp i64 %sub.i16.i to double
+  %tv_usec.i18.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end9.i, i64 0, i32 1
+  %20 = load i64, i64* %tv_usec.i18.i, align 8, !tbaa !7
+  %tv_usec2.i19.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start8.i, i64 0, i32 1
+  %21 = load i64, i64* %tv_usec2.i19.i, align 8, !tbaa !7
+  %sub3.i20.i = sub nsw i64 %20, %21
+  %conv4.i21.i = sitofp i64 %sub3.i20.i to double
+  %mul.i22.i = fmul fast double %conv4.i21.i, 0x3EB0C6F7A0B5ED8D
+  %add.i23.i = fadd fast double %mul.i22.i, %conv.i17.i
+  %conv5.i24.i = fptrunc double %add.i23.i to float
+  %conv30.i = fpext float %conv5.i24.i to double
+  %call31.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([29 x i8], [29 x i8]* @.str.88, i64 0, i64 0), double %conv30.i, double %17)
   tail call void @_ZdaPv(i8* nonnull %call14.i) #32
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %15) #4
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %14) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %13) #4
-  %21 = bitcast %struct.timeval* %start35.i to i8*
-  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %21) #4
-  %22 = bitcast %struct.timeval* %end36.i to i8*
+  %22 = bitcast %struct.timeval* %start35.i to i8*
   call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %22) #4
+  %23 = bitcast %struct.timeval* %end36.i to i8*
+  call void @llvm.lifetime.start.p0i8(i64 16, i8* nonnull %23) #4
   %call37.i = call i32 @gettimeofday(%struct.timeval* nonnull %start35.i, i8* null) #4
-  %call.i.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
-  %23 = bitcast i8* %call.i.i to double*
+  %call.i.i = tail call noalias nonnull i8* @_Znam(i64 %7) #34
+  %24 = bitcast i8* %call.i.i to double*
   br label %for.body.i.i
 
-for.cond.cleanup.i.i:                             ; preds = %for.body.i.i
-  %call4.i.i = tail call noalias nonnull dereferenceable(256) i8* @_Znam(i64 256) #34
-  %24 = bitcast i8* %call4.i.i to double*
+for.body10.i.preheader.i:                         ; preds = %for.body.i.i
+  %call4.i.i = tail call noalias nonnull i8* @_Znam(i64 %7) #34
+  %25 = bitcast i8* %call4.i.i to double*
   br label %for.body10.i.i
 
-for.body.i.i:                                     ; preds = %for.body.i.i, %for.cond.cleanup19.i
-  %indvars.iv3.i.i = phi i64 [ 0, %for.cond.cleanup19.i ], [ %indvars.iv.next4.i.i, %for.body.i.i ]
-  %arrayidx.i.i = getelementptr inbounds double, double* %23, i64 %indvars.iv3.i.i
+for.body.i.i:                                     ; preds = %for.cond.cleanup19.i, %for.body.i.i
+  %indvars.iv42.i.i = phi i64 [ %indvars.iv.next43.i.i, %for.body.i.i ], [ 0, %for.cond.cleanup19.i ]
+  %arrayidx.i.i = getelementptr inbounds double, double* %24, i64 %indvars.iv42.i.i
   store double 2.000000e+00, double* %arrayidx.i.i, align 8, !tbaa !46
-  %indvars.iv.next4.i.i = add nuw nsw i64 %indvars.iv3.i.i, 1
-  %exitcond5.not.i.i = icmp eq i64 %indvars.iv.next4.i.i, 32
-  br i1 %exitcond5.not.i.i, label %for.cond.cleanup.i.i, label %for.body.i.i, !llvm.loop !150
+  %indvars.iv.next43.i.i = add nuw nsw i64 %indvars.iv42.i.i, 1
+  %exitcond45.not.i.i = icmp eq i64 %indvars.iv.next43.i.i, %conv.i24
+  br i1 %exitcond45.not.i.i, label %for.body10.i.preheader.i, label %for.body.i.i, !llvm.loop !150
 
-for.body10.i.i:                                   ; preds = %for.body10.i.i, %for.cond.cleanup.i.i
-  %indvars.iv.i.i = phi i64 [ 0, %for.cond.cleanup.i.i ], [ %indvars.iv.next.i.i, %for.body10.i.i ]
-  %arrayidx12.i.i = getelementptr inbounds double, double* %24, i64 %indvars.iv.i.i
+for.body10.i.i:                                   ; preds = %for.body10.i.i, %for.body10.i.preheader.i
+  %indvars.iv.i.i = phi i64 [ %indvars.iv.next.i.i, %for.body10.i.i ], [ 0, %for.body10.i.preheader.i ]
+  %arrayidx12.i.i = getelementptr inbounds double, double* %25, i64 %indvars.iv.i.i
   store double 1.000000e+00, double* %arrayidx12.i.i, align 8, !tbaa !46
   %indvars.iv.next.i.i = add nuw nsw i64 %indvars.iv.i.i, 1
-  %exitcond.not.i.i = icmp eq i64 %indvars.iv.next.i.i, 32
+  %exitcond.not.i.i = icmp eq i64 %indvars.iv.next.i.i, %conv.i24
   br i1 %exitcond.not.i.i, label %_ZL13enzyme_sincosdj.exit, label %for.body10.i.i, !llvm.loop !151
 
-for.body20.i:                                     ; preds = %for.body20.i, %for.cond.cleanup.i
-  %indvars.iv.i = phi i64 [ 0, %for.cond.cleanup.i ], [ %indvars.iv.next.i, %for.body20.i ]
-  %arrayidx22.i = getelementptr inbounds double, double* %15, i64 %indvars.iv.i
+for.body20.i:                                     ; preds = %for.cond.cleanup.i, %for.body20.i
+  %indvars.iv.i = phi i64 [ %indvars.iv.next.i, %for.body20.i ], [ 0, %for.cond.cleanup.i ]
+  %arrayidx22.i = getelementptr inbounds double, double* %16, i64 %indvars.iv.i
   store double 2.000000e+00, double* %arrayidx22.i, align 8, !tbaa !46
   %indvars.iv.next.i = add nuw nsw i64 %indvars.iv.i, 1
-  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, 32
+  %exitcond.not.i = icmp eq i64 %indvars.iv.next.i, %conv.i24
   br i1 %exitcond.not.i, label %for.cond.cleanup19.i, label %for.body20.i, !llvm.loop !152
 
 _ZL13enzyme_sincosdj.exit:                        ; preds = %for.body10.i.i
-  %25 = load i32, i32* @enzyme_dupnoneed, align 4, !tbaa !49
-  tail call void @_Z17__enzyme_autodiffIvJPFvPdjEiS0_S0_jEET_DpT0_(void (double*, i32)* nonnull @_Z6foobarPdj, i32 %25, double* nonnull %23, double* nonnull %24, i32 16)
-  %26 = load double, double* %24, align 8, !tbaa !46
+  %26 = load i32, i32* @enzyme_dupnoneed, align 4, !tbaa !49
+  tail call void @_Z17__enzyme_autodiffIvJPFvPdjEiS0_S0_jEET_DpT0_(void (double*, i32)* nonnull @_Z6foobarPdj, i32 %26, double* nonnull %24, double* nonnull %25, i32 %retval.0.i)
+  %27 = load double, double* %25, align 8, !tbaa !46
   tail call void @_ZdaPv(i8* nonnull %call4.i.i) #32
   tail call void @_ZdaPv(i8* nonnull %call.i.i) #32
   %call39.i = call i32 @gettimeofday(%struct.timeval* nonnull %end36.i, i8* null) #4
   %tv_sec.i1.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 0
-  %27 = load i64, i64* %tv_sec.i1.i, align 8, !tbaa !2
+  %28 = load i64, i64* %tv_sec.i1.i, align 8, !tbaa !2
   %tv_sec1.i2.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 0
-  %28 = load i64, i64* %tv_sec1.i2.i, align 8, !tbaa !2
-  %sub.i3.i = sub nsw i64 %27, %28
+  %29 = load i64, i64* %tv_sec1.i2.i, align 8, !tbaa !2
+  %sub.i3.i = sub nsw i64 %28, %29
   %conv.i4.i = sitofp i64 %sub.i3.i to double
   %tv_usec.i5.i = getelementptr inbounds %struct.timeval, %struct.timeval* %end36.i, i64 0, i32 1
-  %29 = load i64, i64* %tv_usec.i5.i, align 8, !tbaa !7
+  %30 = load i64, i64* %tv_usec.i5.i, align 8, !tbaa !7
   %tv_usec2.i6.i = getelementptr inbounds %struct.timeval, %struct.timeval* %start35.i, i64 0, i32 1
-  %30 = load i64, i64* %tv_usec2.i6.i, align 8, !tbaa !7
-  %sub3.i7.i = sub nsw i64 %29, %30
+  %31 = load i64, i64* %tv_usec2.i6.i, align 8, !tbaa !7
+  %sub3.i7.i = sub nsw i64 %30, %31
   %conv4.i8.i = sitofp i64 %sub3.i7.i to double
   %mul.i9.i = fmul fast double %conv4.i8.i, 0x3EB0C6F7A0B5ED8D
   %add.i10.i = fadd fast double %mul.i9.i, %conv.i4.i
   %conv5.i11.i = fptrunc double %add.i10.i to float
   %conv41.i = fpext float %conv5.i11.i to double
-  %call42.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([31 x i8], [31 x i8]* @.str.89, i64 0, i64 0), double %conv41.i, double %26)
+  %call42.i = tail call i32 (i8*, ...) @printf(i8* nonnull dereferenceable(1) getelementptr inbounds ([31 x i8], [31 x i8]* @.str.89, i64 0, i64 0), double %conv41.i, double %27)
+  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %23) #4
   call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %22) #4
-  call void @llvm.lifetime.end.p0i8(i64 16, i8* nonnull %21) #4
   br label %cleanup.cont
 
 cleanup.cont:                                     ; preds = %if.then5, %if.end8, %_ZL13enzyme_sincosdj.exit, %if.then

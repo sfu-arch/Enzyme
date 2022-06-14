@@ -233,7 +233,7 @@ int main(int argc, char** argv) {
     printf("iters=%d\n", iters);
     // adept_sincos(inp, iters);
     // tapenade_sincos(inp, iters);
-    enzyme_sincos(inp, 16);
+    enzyme_sincos(inp, iters);
     break;
   }
 }

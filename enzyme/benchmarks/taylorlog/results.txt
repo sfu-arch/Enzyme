@@ -1,12 +1,4 @@
-adept
+INP: 1e+07
 0.000005 res=inf
-0.000024 res=inf
-0.000018 res'=0.000000
-tapenade
-tapenade 0.000004 res=inf
-tapenade 0.000004 res=inf
-tapendade 0.000004 res'=inf
-enzyme
 0.000004 res=inf
-0.000003 res=inf
-0.000004 res'=inf
+0.000003 res'=inf

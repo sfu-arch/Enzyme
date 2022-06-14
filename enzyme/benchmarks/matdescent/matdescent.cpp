@@ -23,9 +23,9 @@ using adept::aVector;
 
 using adept::Vector;
 
-#define N 30
-#define M 30
-#define ITERS 1
+#define N 2000
+#define M 2000
+#define ITERS 1000
 #define RATE 0.00000001
 
 inline double matvec_real(double* mat, double* vec) {

@@ -169,8 +169,12 @@ public:
   // 
   void instrumentEdges() {
     for (auto &edge : edges) {
-      errs() << "Edge: " << *edge << "\n";
-      CallPrintf(dyn_cast<Instruction>(edge)->getNextNode(), "Edge\n", {});
+      // errs() << "Edge: " << *edge << "\n";
+      auto next_valid_node = dyn_cast<Instruction>(edge)->getNextNode();
+      while (isa<PHINode>(next_valid_node)) {
+        next_valid_node = next_valid_node->getNextNode();
+      }
+      CallPrintf(next_valid_node, "Edge\n", {});
     }
   }
   StoreInst* getStoreInstUser(Value* v) {
@@ -1092,6 +1096,7 @@ public:
     // erase from binned values
     binned_values.erase(I);
     forward_to_reverse_map.erase(I);
+    edges.erase(I);
   }
   // TODO consider invariant group and/or valueInvariant group
 

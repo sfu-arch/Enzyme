@@ -108,11 +108,15 @@ bool isPotentialLastLoopValue(Value *val, const BasicBlock *loc,
   return false;
 }
 std::set<Value*> actives;
+
 Value *GradientUtils::unwrapM(Value *const val, IRBuilder<> &BuilderM,
                               const ValueToValueMapTy &available,
                               UnwrapMode unwrapMode, BasicBlock *scope,
                               bool permitCache) {
-
+  // Here I detect the edges. The first instruction that is unwrapped is
+  // an edge. The subsequent unwraps are not edges.
+  bool prev_root = is_root;
+  detect_edges(val);                              
   if (actives.empty()) {
     actives = createActiveSet();
   }
@@ -125,6 +129,7 @@ Value *GradientUtils::unwrapM(Value *const val, IRBuilder<> &BuilderM,
   //   }
   // }
   recomputed_vals[val] = unwrap_res;
+  is_root = prev_root;
   return unwrap_res;
 }
 Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
@@ -386,7 +391,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-7: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-7: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
 #endif
@@ -405,7 +410,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-6: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-6: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<ExtractValueInst>(val)) {
@@ -442,7 +447,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         newi->setDebugLoc(nullptr);
     }
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-5: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-5: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<ExtractElementInst>(val)) {
@@ -463,7 +468,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         newi->setDebugLoc(nullptr);
     }
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-4: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-4: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<InsertElementInst>(val)) {
@@ -511,7 +516,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         newi->setDebugLoc(nullptr);
     }
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-3: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-3: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<BinaryOperator>(val)) {
@@ -559,7 +564,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return-1: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return-1: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<FCmpInst>(val)) {
@@ -580,7 +585,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return0: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return0: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
 #if LLVM_VERSION_MAJOR >= 9
@@ -601,7 +606,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return1: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return1: " << toreturn->getNameOrAsOperand() << "\n";
     return toreturn;
 #endif
   } else if (auto op = dyn_cast<SelectInst>(val)) {
@@ -625,7 +630,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return2: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return2: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto inst = dyn_cast<GetElementPtrInst>(val)) {
@@ -738,7 +743,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       // errs() << "Unwrap cache: " << *idx.first << ": " << *toreturn << "\n";
     }
     assert(val->getType() == toreturn->getType());
-    //errs() << "To Return4: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return4: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto op = dyn_cast<CallInst>(val)) {
@@ -784,7 +789,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     if (permitCache)
       unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] = toreturn;
     unwrappedLoads[toreturn] = val;
-    //errs() << "To Return5: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return5: " << toreturn->getNameOrAsOperand() << "\n";
 
     return toreturn;
   } else if (auto phi = dyn_cast<PHINode>(val)) {
@@ -860,7 +865,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
           unwrap_cache[BuilderM.GetInsertBlock()][idx.first][idx.second] =
               toreturn;
         assert(val->getType() == toreturn->getType());
-    //errs() << "To Return6: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return6: " << toreturn->getNameOrAsOperand() << "\n";
 
         return toreturn;
       }
@@ -954,7 +959,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         goto endCheck;
       }
       assert(val->getType() == toreturn->getType());
-    //errs() << "To Return7: " << toreturn->getNameOrAsOperand() << "\n";
+    errs() << "To Return7: " << toreturn->getNameOrAsOperand() << "\n";
 
       return toreturn;
     }
@@ -1403,7 +1408,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         }
         if (auto instRet = dyn_cast<Instruction>(toret))
           unwrappedLoads[instRet] = val;
-    //errs() << "To Return8: " << toret->getNameOrAsOperand() << "\n";
+    errs() << "To Return8: " << toret->getNameOrAsOperand() << "\n";
 
         return toret;
       }

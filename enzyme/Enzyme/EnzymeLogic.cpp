@@ -3747,6 +3747,8 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // }
   // for (auto val: gutils->GetscopeMap())
   //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
+  gutils->detectNormalEdges();
+  gutils->printEdges();
   gutils->handleBinnedValues();
  
   // gutils->performLevelAnalysis();

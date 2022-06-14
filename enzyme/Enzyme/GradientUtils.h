@@ -126,7 +126,35 @@ public:
   std::map<BasicBlock *, std::map<Value*, int>> region_map;
   std::map<Value*, int> binned_values; 
   std::map<Value*, Value*> forward_to_reverse_map;
- 
+  std::set<Value*> edges;
+  
+  bool is_root = true;
+  void detect_edges(Value *const val) {
+    if (is_root) {
+      if (val->getNameOrAsOperand().find("'") == std::string::npos) 
+        edges.insert(const_cast<Value*>(val));
+      is_root = false;
+    }
+  }
+  // This function detects the values that are defined in forward and used
+  // in the reverse without being unwrapped (recomputed)
+  void detectNormalEdges() {
+    errs() << "Detecting normal edges\n";
+    for (auto &B : *oldFunc) {
+      for (auto &I : B) {
+        if (originalToNewFn.count(&I) && hasReverseUse((Value*) &I)) {
+          // errs() << "Found edge: " << I << "\n";
+          edges.insert((Value*) &I);
+        }
+      }
+    }
+  }
+  
+  void printEdges() {
+    for (auto &edge : edges) {
+      errs() << "Edge: " << *edge << "\n";
+    }
+  }
   StoreInst* getStoreInstUser(Value* v) {
     auto inst = dyn_cast<Instruction>(v);
     for (auto i: inst->users()) {
@@ -234,17 +262,6 @@ public:
     for (auto i: ATA.get()->ActiveValues) 
       active_set.insert(i);
     return active_set;
-  }
-  bool allUsesInReverse(Value *inst) {
-    if (!originalToNewFn.count(inst))
-      return false;
-    auto new_inst = originalToNewFn[inst];
-    // auto new_inst = getNewFromOriginal(inst);
-    for (auto use: new_inst->users()) {
-      if (isa<Instruction>(use) && !dyn_cast<Instruction>(use)->getParent()->getName().contains("inv")) 
-        return false;
-    }
-    return new_inst->getNumUses() > 0;
   }
 
   std::map<int, std::vector<Value*> > levels;

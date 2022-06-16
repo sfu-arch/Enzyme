@@ -21,4 +21,4 @@ for line in file:
     if 'Node' in line:
         graph.add_node(line)
 graph.print_log()
-graph.allocate_registers(ARITHMETIC_ONLY, consider_edges=True)
+# graph.allocate_registers(ARITHMETIC_ONLY, consider_edges=True)

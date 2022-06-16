@@ -126,6 +126,12 @@ class Graph:
         self.cost = 0
         self.curr_id = 0
 
+        self.f_edge_count = 0
+        self.r_edge_count = 0
+        self.i_edge_count = 0
+
+        self.node_count = 0
+
     def handle_arithmetic(self, node):
         if node.is_forward():
             self.forward_arithmetic_count += 1
@@ -260,6 +266,7 @@ class Graph:
             self.insts_per_level[new_node.level] = 1
         else:
             self.insts_per_level[new_node.level] += 1
+        self.node_count += 1
        
     def update_lives_per_level(self, node):
         if not node.is_mem_op():
@@ -440,6 +447,26 @@ class Graph:
         # self.plot_reg_liveness_per_window_scatter_plot()
         # self.plot_liveness_histogram()
         # self.print_nodes_with_max_children()
+        self.print_edge_combination()
+        self.print_node_count()
+    
+    def print_node_count(self):
+        print("--------------------------------\nNode Count")
+        print("Nodes: {}".format(self.node_count))
+
+    def print_edge_combination(self):
+        for n in self.nodes:
+            node_list = self.nodes[n]
+            for node in node_list:
+                for p in node.parents:
+                    if node.is_forward() and p.is_forward():
+                        self.f_edge_count += 1
+                    elif node.is_reverse() and p.is_reverse():
+                        self.r_edge_count += 1
+                    elif node.is_reverse() and p.is_forward():
+                        self.i_edge_count += 1
+        print("--------------------------------\nEdge Combination")
+        print("Forward: {}, Reverse: {}, Intermediate: {}".format(self.f_edge_count, self.r_edge_count, self.i_edge_count))
 
     def print_level(self, start_range, end_range, restrix_mode_to=None):
         print("--------------------------------\nLevel info")

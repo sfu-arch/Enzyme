@@ -3734,12 +3734,12 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //     errs() << "set " << *U.first << "\n";
   //   }
   // }
-  // std::ofstream myfile;
-  // myfile.open("live_vars.txt");
-  // for (auto i: gutils->alias_map) {
-  //   // errs() << *i.first << " -> " << *i.second << "\n";
-  //   myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
-  // }
+  std::ofstream myfile;
+  myfile.open("live_vars.txt");
+  for (auto i: gutils->alias_map) {
+    // errs() << *i.first << " -> " << *i.second << "\n";
+    myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+  }
   // for (auto i: gutils->recomputed_vals) {
   //   // errs() << i.first->getNameOrAsOperand() << " -> " << i.second->getNameOrAsOperand() << "\n";
   //   // myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";

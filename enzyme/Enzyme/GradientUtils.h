@@ -174,7 +174,8 @@ public:
       while (isa<PHINode>(next_valid_node)) {
         next_valid_node = next_valid_node->getNextNode();
       }
-      CallPrintf(next_valid_node, "Edge\n", {});
+      std::string s = "Edge, " + edge->getNameOrAsOperand() + "\n";
+      CallPrintf(next_valid_node, &s[0], {});
     }
   }
   StoreInst* getStoreInstUser(Value* v) {

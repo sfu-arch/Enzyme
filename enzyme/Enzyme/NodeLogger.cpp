@@ -66,13 +66,19 @@ std::string ModePrefix(Instruction *i) {
 }
 
 void NodeLogger::visitLoadInst(LoadInst &inst) {
+    if (inst.getPointerOperand()->getNameOrAsOperand().find("de") != std::string::npos) {
+        return;
+    }
     std::string write_format = ModePrefix(&inst) + "Node: " + inst.getNameOrAsOperand() + ", Parent: %x, load\n";
     CallPrintf(&inst, &write_format[0], {inst.getPointerOperand()}, write_format);
 }
 
 
 void NodeLogger::visitStoreInst(StoreInst &inst) {
+
     if (isa<Constant>(inst.getValueOperand()))
+        return;
+    if (inst.getPointerOperand()->getNameOrAsOperand().find("de") != std::string::npos)
         return;
     std::string write_format = ModePrefix(&inst) + "Node: %x, Parent: " + inst.getValueOperand()->getNameOrAsOperand()+ ", store\n";
     // auto *value_id = ConstantInt::get(Type::getInt32Ty(inst.getContext()), node_ids[inst.getValueOperand()]);

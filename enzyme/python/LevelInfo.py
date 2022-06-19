@@ -2,11 +2,16 @@ class LevelInfo:
     spill_count = 0
     total_regs = 0
     total_edges = 0
+
+    @property
+    def forward_node_count(self):
+        return sum(1 if i.is_forward() else 0 for i in self.new_nodes)
+        
     def __init__(self):
         self.new_nodes = []
         self.dead_nodes = []
         self.spills = []
-
+    
     def add_new_node(self, node):
         if node not in self.new_nodes:
             self.new_nodes.append(node)

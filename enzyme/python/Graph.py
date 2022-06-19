@@ -29,7 +29,8 @@ class Node:
         self.type = type
         self.cost = sum(i.cost for i in parents) + 1
         self.level =  max(i.level for i in parents) + 1 if parents else 0
-        self.actual_level = self.level
+        self.actual_level = max(i.actual_level for i in parents) + 1 if parents else 0
+        self.end_level = 0
         self.mode = mode
         self.liveness = ()
         self.contains_edge = False
@@ -54,7 +55,10 @@ class Node:
         self.children.append(node)
         if  'root' not in self.type and self.is_forward() and node.is_reverse() and not self.contains_edge:
             self.contains_edge = True
-            
+    
+    def has_children(self):
+        return len(self.children) > 0
+
     def is_address(self):
         return self.type == 'address'
 
@@ -63,6 +67,9 @@ class Node:
 
     def is_reverse(self):
         return self.mode == 'R'
+    
+    def is_root(self):
+        return 'root' in self.type
 
     def is_load(self):
         return self.type == 'load'
@@ -86,6 +93,15 @@ class Node:
             return self.id
         return None
 
+    def update_parent_actual_liveness(self):
+        for parent in self.parents:
+            if parent.actual_level > self.actual_level:
+                print(parent, self)
+            if parent.actual_level > self.actual_level:
+                print("Parent: {}, level: {}, node: {}, level: {}".format(parent, parent.actual_level, self, self.actual_level))
+            if parent.end_level < self.actual_level:
+                parent.end_level = self.actual_level
+
     def __str__(self) -> str:
         return "id: {}, type: {}, mode: {}, child_count: {}, parents: {}".format(self.instruction_id, self.type, self.mode, len(self.children), [node.id for node in self.parents])
 
@@ -102,6 +118,7 @@ class Graph:
         self.reverse_important_arithmetic_count = {'mul': 0, 'div': 0, 'or': 0}
         
         self.max_forward_level = 0
+        self.max_forward_actual_level = 0
         self.max_reverse_level = 0
 
         self.forward_loads = 0
@@ -130,7 +147,12 @@ class Graph:
         self.r_edge_count = 0
         self.i_edge_count = 0
 
-        self.node_count = 0
+        self.forward_node_count = 0
+        self.reverse_node_count = 0
+
+    @property
+    def node_count(self):
+        return self.forward_node_count + self.reverse_node_count
 
     def handle_arithmetic(self, node):
         if node.is_forward():
@@ -217,19 +239,21 @@ class Graph:
         self.addr_file.write(new_node.mode + '_' + new_node.get_address() + visited + '\n')
     
     def get_next_free_level(self, level):
+        current_level = level
         while(True):
-            if level not in self.remaining_alues_in_level:
-                self.remaining_alues_in_level[level] = self.alu_limit
-            if self.remaining_alues_in_level[level] > 0:
-                return level
-            level += 1
+            if current_level not in self.remaining_alues_in_level:
+                self.remaining_alues_in_level[current_level] = self.alu_limit
+            if self.remaining_alues_in_level[current_level] > 0:
+                return current_level
+            current_level += 1
             
     def calc_actual_level(self, node):
         if node.is_arithmetic():
-            actual_level = self.get_next_free_level(node.level)
+            actual_level = self.get_next_free_level(node.actual_level)
             self.remaining_alues_in_level[actual_level] -= 1
-            return actual_level
-        return node.actual_level
+            node.actual_level = actual_level
+
+        node.update_parent_actual_liveness()     
 
     def add_node(self, line):  # line format: "Mode_Node: id, Parent: , Parent: ..., Type"
         node_id = self.get_id(line)
@@ -250,7 +274,7 @@ class Graph:
                     self.edges[i] = []
                 self.edges[i].append(new_node)
 
-            
+        
         if new_node.is_arithmetic():
             self.handle_arithmetic(new_node)
 
@@ -260,21 +284,29 @@ class Graph:
                 self.handle_write_to_file(new_node)
 
         self.update_max_level(new_node)
-        new_node.actual_level = self.calc_actual_level(new_node)
+        self.calc_actual_level(new_node)
         
+        if new_node.is_forward() and new_node.actual_level > self.max_forward_actual_level:
+                self.max_forward_actual_level = new_node.actual_level
         if new_node.level not in self.insts_per_level:
             self.insts_per_level[new_node.level] = 1
         else:
             self.insts_per_level[new_node.level] += 1
-        self.node_count += 1
-       
+        if new_node.is_forward():
+            self.forward_node_count += 1
+        else:
+            self.reverse_node_count += 1
     def update_lives_per_level(self, node):
-        if not node.is_mem_op():
-            return
+        # if not node.is_mem_op():
+        #     return
         for i in range(node.liveness[0], node.liveness[1] + 1):
             if i not in self.lives_per_level:
                 self.lives_per_level[i] = set()
-            self.lives_per_level[i].add(node.id)
+            # self.lives_per_level[i].add(node.id)
+            # if node.contains_edge:
+                # print("Has edge: " + node.id)
+            if node.is_forward():
+                self.lives_per_level[i].add(node.id)
 
     def calc_max_liveness(self, restrict_mode_to=None):
         for node_id in self.nodes:         
@@ -316,13 +348,13 @@ class Graph:
             if level in self.level_info:
                 self.level_info[level].release_registers(self.regfile)
                 self.level_info[level].assign_registers(self.regfile, level, consider_edges)
-        print("Spills = ", LevelInfo.spill_count)
         count = 0
         for i in self.edges:
             if i.is_arithmetic():
                 count += 1
-        print("Number of edges = ", count)
-        print("Total registers = ", RegisterFile.total_registers)
+        # print("Spills = ", LevelInfo.spill_count)
+        # print("Number of edges = ", count)
+        # print("Total registers = ", RegisterFile.total_registers)
 
     def calc_values_produced_per_level(self, restrict_mode_to=None):
         for node_id in self.nodes:
@@ -338,7 +370,6 @@ class Graph:
                         
     def print_lives_per_level(self, restrict_mode_to=None):
         print("--------------------------------\nLives Level\n")
-        self.calc_max_liveness(restrict_mode_to)
         start = 0
         end_level = max(self.max_reverse_level, self.max_forward_level)
         while(True):
@@ -430,14 +461,32 @@ class Graph:
                         self.forward_arithmetic_count, forward_muls, forward_divs, forward_ors,\
                         self.reverse_arithmetic_count, reverse_muls, reverse_divs, reverse_ors,  
                         self.max_forward_level, self.max_reverse_level))
+    
+    def print_min_register_count(self):
+        # The number of lives at the end of the forward determines the minimum number of registers
+        edges_nodes_count = 0
+        for i in self.lives_per_level[self.max_forward_level]:
+            edges_nodes_count += 1
+        print("Min Registers AD: {}".format(len(self.lives_per_level[self.max_forward_level])))
+        print("Min Registers AD: {}".format(edges_nodes_count))
+    
+    def print_actual_min_register_count(self):
+        m = max([self.level_info[i].forward_node_count for i in self.level_info])
+        print("Actual Min Required Registers: {}".format(m))
 
     def print_log(self, restrict_mode_to=None):
         self.print_arithmetic_log()
         self.print_mem_ops_log()
+
+        # calculates the liveness for registers
+        self.calc_max_liveness(restrict_mode_to)
+
         # self.print_lives_per_level(restrict_mode_to)
+        self.print_min_register_count()
         # self.print_children_per_level(restrict_mode_to)
         # self.log_value_count_per_cycle_count(restrict_mode_to)
-        # self.print_liveness_per_node()
+        self.print_liveness_per_node()
+        self.print_max_lives_in_a_level()
         # # self.plot_liveness_scatter_plot()
         # self.plot_reg_liveness_per_level_scatter_plot()
         # self.plot_mem_liveness_per_level_scatter_plot()
@@ -450,9 +499,38 @@ class Graph:
         self.print_edge_combination()
         self.print_node_count()
     
+    def print_avg_lifetime(self):
+        print("--------------------------------\nAvg Lifetime")
+        node_count = 0
+        liveness = 0
+        for i in self.nodes:
+            node_vector = self.nodes[i]
+            for node in node_vector:
+                if node.is_forward():
+                    liveness += node.liveness[1] - node.liveness[0]
+                    node_count += 1
+        print("Avg Lifetime: {}".format(liveness/(node_count+1)))
+
+    def print_actual_avg_lifetime(self):
+        print("--------------------------------\nActual Avg Lifetime")
+        node_count = 0
+        liveness = 0
+        for i in self.nodes:
+            node_vector = self.nodes[i]
+            for node in node_vector:
+                if node.is_forward() and node.has_children():
+                    liveness += node.end_level - node.actual_level
+                    node_count += 1
+        print("Avg Lifetime: {}".format(liveness/(node_count+1)))
+
+    def print_max_lives_in_a_level(self):
+        # print("--------------------------------\nMax Lives")
+        m = max([len(self.lives_per_level[i]) for i in self.lives_per_level])
+        print("Max Lives: {}".format(m))
+
     def print_node_count(self):
         print("--------------------------------\nNode Count")
-        print("Nodes: {}".format(self.node_count))
+        print("Nodes: {}, Forward Nodes: {}, Reverse Nodes: {}".format(self.node_count, self.forward_node_count, self.reverse_node_count))
 
     def print_edge_combination(self):
         for n in self.nodes:
@@ -463,7 +541,7 @@ class Graph:
                         self.f_edge_count += 1
                     elif node.is_reverse() and p.is_reverse():
                         self.r_edge_count += 1
-                    elif node.is_reverse() and p.is_forward():
+                    elif node.is_reverse() and p.is_forward() and not p.is_root():
                         self.i_edge_count += 1
         print("--------------------------------\nEdge Combination")
         print("Forward: {}, Reverse: {}, Intermediate: {}".format(self.f_edge_count, self.r_edge_count, self.i_edge_count))
@@ -478,12 +556,24 @@ class Graph:
 
     def print_liveness_per_node(self):
         print("--------------------------------\nLive Nodes")
+        non_edge_count = 0
+        edges_count = 0
+        non_edges_liveness = 0
+        edges_liveness = 0
         for node_id in self.nodes:
             vec = self.nodes[node_id]
             for node in vec:
                 if node.contains_edge:
-                    print("{} {} {} {} {}".format(node.type, node.id, node.level, node.uid, node.liveness[1] - node.liveness[0]))
-    
+                    edges_count += 1
+                    edges_liveness += node.liveness[1] - node.liveness[0]
+                    # print("{} {} {} {} {}".format(node.type, node.id, node.level, node.uid, node.liveness[1] - node.liveness[0]))
+
+                elif node.is_forward() and not node.is_root():
+                    non_edge_count += 1
+                    non_edges_liveness += node.liveness[1] - node.liveness[0]
+
+        # print("Non-Edged Nodes: {}, Edged nodes: {}, Non-Edged Liveness: {}, Edged Liveness: {}".format(non_edge_count, edges_count, non_edges_liveness, edges_liveness))
+        print("Average Normal Liveness: {}, Average Edged-Nodes Liveness: {}".format(non_edges_liveness/(non_edge_count+1), edges_liveness/(edges_count+1)))
     def plot_liveness_scatter_plot(self):
         x = []
         y = []

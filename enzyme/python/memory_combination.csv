@@ -1,0 +1,15 @@
+benchmark,ld_ld,st_ld,rev_to_fw
+nn_normal,0.93,0.07,0.5
+nn_unrolled,0,0,0
+matdescent_normal,0.97,0.03,0.97
+matdescent_unrolled,0,0,0
+gravity_normal,1.0,0.0,1.82
+gravity_unrolled,0,0,0
+fft_normal,0.28,0.72,0.74
+fft_unrolled,0.28,0.72,0.74
+taylorlog_normal,0,0,0
+taylorlog_unrolled,0,0,0
+logsumexp_normal,0.5,0.5,1.0
+logsumexp_unrolled,0.57,0.43,1.17
+ode_normal,1.0,0.0,1.0
+ode_unrolled,1.0,0.0,0.68

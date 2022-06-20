@@ -36,6 +36,8 @@ class Node:
         self.contains_edge = False
         self.instruction_id = Node.instruction_id + 1
         Node.instruction_id += 1
+
+        self.is_allocated = False
         # if mode == 'F' and 'root' not in self.type:
         #     self.uid = Node.unique_id +1
         #     Node.unique_id += 1
@@ -97,19 +99,25 @@ class Node:
         for parent in self.parents:
             if parent.actual_level > self.actual_level:
                 print(parent, self)
-            if parent.actual_level > self.actual_level:
+            if parent.is_forward() and parent.actual_level > self.actual_level:
                 print("Parent: {}, level: {}, node: {}, level: {}".format(parent, parent.actual_level, self, self.actual_level))
             if parent.end_level < self.actual_level:
                 parent.end_level = self.actual_level
 
+    def update_children_actual_liveness(self, amount):
+        for child in self.children:
+            child.actual_level += amount
+            child.end_level += amount
+            child.update_parent_actual_liveness()
     def __str__(self) -> str:
         return "id: {}, type: {}, mode: {}, child_count: {}, parents: {}".format(self.instruction_id, self.type, self.mode, len(self.children), [node.id for node in self.parents])
 
 class Graph:
-    def __init__(self, window_size, log_address, address_dir, live_var_dir, regfile_size, alu_limit=8):
+    def __init__(self, window_size, log_address, address_dir, live_var_dir, regfile_size, alu_limit=8, avg_load_delay=0):
         self.log_address = log_address
         self.addr_file = open(address_dir, 'w') if log_address else None
         self.window_size = window_size
+        self.avg_load_delay = avg_load_delay
         self.edges = {}
 
         self.forward_arithmetic_count = 0
@@ -150,6 +158,13 @@ class Graph:
         self.forward_node_count = 0
         self.reverse_node_count = 0
 
+        self.fw_ld_set = set()
+        self.fw_st_set = set()
+        self.rev_ld_ld_dict = {}
+        self.rev_st_ld_dict = {}
+        self.rev_ld_count = 0
+        self.fw_mem_op_count = 0
+
     @property
     def node_count(self):
         return self.forward_node_count + self.reverse_node_count
@@ -167,9 +182,31 @@ class Graph:
                 if i in node.type:
                     self.reverse_important_arithmetic_count[i] += 1
                     break    
+    def handle_memory_combination(self, node):
+        # handling memory combination
+        if node.is_forward() and node.is_load() and node.get_address() not in self.fw_st_set:
+            self.fw_ld_set.add(node.get_address())
+        if node.is_forward() and node.is_store():
+            if node.get_address() in self.fw_ld_set:
+                self.fw_ld_set.remove(node.get_address())
+            self.fw_st_set.add(node.get_address())
             
+        if node.is_reverse() and node.is_load():
+            self.rev_ld_count += 1
+            if node.get_address() in self.fw_st_set:
+                if node.get_address() not in self.rev_st_ld_dict:
+                    self.rev_st_ld_dict[node.get_address()] = 1
+                else:
+                    self.rev_st_ld_dict[node.get_address()] += 1
+            if node.get_address() in self.fw_ld_set:
+                if node.get_address() not in self.rev_ld_ld_dict:
+                    self.rev_ld_ld_dict[node.get_address()] = 1
+                else:
+                    self.rev_ld_ld_dict[node.get_address()] += 1
+    
     def handle_mem_op(self, node):
         if node.is_forward():
+            self.fw_mem_op_count += 1
             if node.get_address() not in self.forward_unique_address:
                 self.forward_unique_address[node.get_address()] = 1
             else:
@@ -189,7 +226,10 @@ class Graph:
             if node.is_load():
                 self.reverse_loads += 1
             else:
-                self.reverse_stores += 1     
+                self.reverse_stores += 1    
+
+        self.handle_memory_combination(node)
+        
 
     def update_max_level(self, node):
         if node.is_forward():
@@ -252,6 +292,8 @@ class Graph:
             actual_level = self.get_next_free_level(node.actual_level)
             self.remaining_alues_in_level[actual_level] -= 1
             node.actual_level = actual_level
+        if node.is_load():
+            node.actual_level += self.avg_load_delay
 
         node.update_parent_actual_liveness()     
 
@@ -327,10 +369,10 @@ class Graph:
         for node_id in self.nodes:
             node_vector = self.nodes[node_id]
             for node in node_vector:
-                if node.is_mem_op():
-                    break
-                if not node.is_forward():
-                    break
+                # if node.is_mem_op():
+                #     break
+                # if not node.is_forward():
+                #     break
                 # add the first live point
                 if node.actual_level not in self.level_info:
                     self.level_info[node.actual_level] = LevelInfo()
@@ -347,7 +389,7 @@ class Graph:
         for level in sorted_levels:
             if level in self.level_info:
                 self.level_info[level].release_registers(self.regfile)
-                self.level_info[level].assign_registers(self.regfile, level, consider_edges)
+                self.level_info[level].assign_registers(self.regfile, level, consider_edges, self.avg_load_delay)
         count = 0
         for i in self.edges:
             if i.is_arithmetic():
@@ -501,6 +543,9 @@ class Graph:
     
     def print_avg_lifetime(self):
         print("--------------------------------\nAvg Lifetime")
+        print("Avg Lifetime: {}".format(self.get_avg_lifetime()))
+    
+    def get_avg_lifetime(self):
         node_count = 0
         liveness = 0
         for i in self.nodes:
@@ -509,19 +554,22 @@ class Graph:
                 if node.is_forward():
                     liveness += node.liveness[1] - node.liveness[0]
                     node_count += 1
-        print("Avg Lifetime: {}".format(liveness/(node_count+1)))
+        return liveness/(node_count+1)
 
     def print_actual_avg_lifetime(self):
         print("--------------------------------\nActual Avg Lifetime")
+        print("Avg Lifetime: {}".format(self.get_actual_avg_lifetime()))
+
+    def get_actual_avg_lifetime(self):
         node_count = 0
         liveness = 0
         for i in self.nodes:
             node_vector = self.nodes[i]
             for node in node_vector:
-                if node.is_forward() and node.has_children():
+                if node.has_children():
                     liveness += node.end_level - node.actual_level
                     node_count += 1
-        print("Avg Lifetime: {}".format(liveness/(node_count+1)))
+        return liveness/(node_count+1)
 
     def print_max_lives_in_a_level(self):
         # print("--------------------------------\nMax Lives")
@@ -546,12 +594,12 @@ class Graph:
         print("--------------------------------\nEdge Combination")
         print("Forward: {}, Reverse: {}, Intermediate: {}".format(self.f_edge_count, self.r_edge_count, self.i_edge_count))
 
-    def print_level(self, start_range, end_range, restrix_mode_to=None):
+    def print_level(self, start_range, end_range, restrict_mode_to=None):
         print("--------------------------------\nLevel info")
         for i in range(start_range, end_range):
             print("--------\nLevel {}".format(i))
             for node in self.levels[i]:
-                if not restrix_mode_to or node.mode == restrix_mode_to:
+                if not restrict_mode_to or node.mode == restrict_mode_to:
                     print(node)
 
     def print_liveness_per_node(self):
@@ -726,3 +774,10 @@ class Graph:
                 if node.parents and node.children:
                     instructions[node.instruction_id] = node.to_inst()
         return instructions
+
+    def get_mem_op_combination(self):
+        if self.rev_ld_count == 0:
+            return 0, 0, 0
+        ld_ld = sum(i for i in self.rev_ld_ld_dict.values())/self.rev_ld_count
+        st_ld = sum(i for i in self.rev_st_ld_dict.values())/self.rev_ld_count
+        return ld_ld, st_ld, self.rev_ld_count/self.fw_mem_op_count 

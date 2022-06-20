@@ -1,0 +1,15 @@
+benchmark,ad,original
+nn_normal,63.95,22.3
+nn_unrolled,142.73,21.31
+matdescent_normal,31.88,9.82
+matdescent_unrolled,82.42,6.59
+gravity_normal,15.74,7.18
+gravity_unrolled,97.27,19.58
+fft_normal,61.96,27.8
+fft_unrolled,61.15,27.86
+taylorlog_normal,3.93,1.28
+taylorlog_unrolled,2.64,-1
+logsumexp_normal,232.32,15.11
+logsumexp_unrolled,232.32,15.11
+ode_normal,45.52,15.71
+ode_unrolled,158.58,18.2

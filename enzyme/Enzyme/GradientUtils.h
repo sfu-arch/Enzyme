@@ -131,13 +131,13 @@ public:
   bool is_root = true;
   void detect_edges(Value *val) {
     if (is_root) {
-      if (val->getNameOrAsOperand().find("'") == std::string::npos && isvalidInst(val)) 
+      if (val->getNameOrAsOperand().find("'") == std::string::npos && isValidInst(val)) 
         edges.insert(val);
       is_root = false;
     }
   }
 
-  bool isvalidInst(Value* val) {
+  bool isValidInst(Value* val) {
     if (!isa<Instruction>(val)) 
       return false;
     return val->getNameOrAsOperand().find("_cache") == std::string::npos;
@@ -148,7 +148,7 @@ public:
     errs() << "Detecting normal edges\n";
     for (auto &B : *oldFunc) {
       for (auto &I : B) {
-        if (originalToNewFn.count(&I) && isvalidInst(&I) && hasReverseUse((Value*) &I)) {
+        if (originalToNewFn.count(&I) && isValidInst(&I) && hasReverseUse((Value*) &I)) {
           // errs() << "Found edge: " << I << "\n";
           edges.insert(getNewFromOriginal(&I));
         }
@@ -188,14 +188,7 @@ public:
     }
     return nullptr;
   }
-  void setWriteMetadata(Value* v, int index) {
-    auto inst = dyn_cast<Instruction>(v);
-    if (inst) {
-      inst->setMetadata("write", MDNode::get(inst->getContext(),
-                                                   MDString::get(inst->getContext(),
-                                                                 std::to_string(index))));
-    }
-  }
+
   bool checkUnused(Value* original_value) {
     if (isa<LoadInst>(original_value)) {
       auto inst = dyn_cast<LoadInst>(original_value);
@@ -269,12 +262,32 @@ public:
       return;
     }
     // orig value is an edge
-    if (isvalidInst(original_value))
+    if (isValidInst(original_value))
       edges.insert(original_value);
     else 
       errs() << "original value is not an edge " << *original_value << "\n";
     // Put values in a list to be handled later
     forward_to_reverse_map[(Instruction*) si] = load;
+  }
+
+  void handleMemCpyValue(Value* original_value, Value* load) {
+    if (checkUnused(original_value))
+      return;
+    if (!isa<Instruction>(load))
+      return;
+    // // Finding the store instruction
+    // auto si = getStoreInstUser(original_value);
+    // if (si == nullptr) {
+    //   errs() << "Could not find store instruction for " << *original_value << "\n";
+    //   return;
+    // }
+    // orig value is an edge
+    if (isValidInst(original_value))
+      edges.insert(original_value);
+    else 
+      errs() << "original value is not an edge " << *original_value << "\n";
+    // Put values in a list to be handled later
+    forward_to_reverse_map[original_value] = load;
   }
 
   bool hasReverseUse(Value *inst) {

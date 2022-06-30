@@ -36,14 +36,16 @@ for benchmark in BENCHMARKS:
                 if 'Node' in line:
                     graph.add_node(line)
             # graph.calc_max_liveness()
+            graph.print_log()
+
             # graph.allocate_registers(ARITHMETIC_ONLY, consider_edges=True)
             # update_dict(register_constrained_dict, benchmark, mode, unroll, graph.get_actual_avg_lifetime())
-            if mode == 'ad':
-                update_ld_dict(memory_combination_dict, benchmark, unroll, graph.get_mem_op_combination())
+            # if mode == 'ad':
+            #     update_ld_dict(memory_combination_dict, benchmark, unroll, graph.get_mem_op_combination())
             print("------------- ------------- ----------")
 
 # write_to_csv(register_constrained_dict, 'register_constrained.csv')
-write_mem_combination_to_csv(memory_combination_dict, 'memory_combination.csv')
+# write_mem_combination_to_csv(memory_combination_dict, 'memory_combination.csv')
 
 # LIVE_VAR_DIR = '../build/live_vars.txt'
 # dir = '../build/exec_results/gravity/gravity_ad_normal.txt'

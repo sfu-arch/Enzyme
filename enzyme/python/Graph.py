@@ -28,7 +28,7 @@ class Node:
         self.parents = parents
         self.type = type
         self.cost = sum(i.cost for i in parents) + 1
-        self.level =  max(i.level for i in parents) + 1 if parents else 0
+        self.level =  max(i.level for i in parents) + 1 if parents else 1
         self.actual_level = max(i.actual_level for i in parents) + 1 if parents else 0
         self.end_level = 0
         self.mode = mode
@@ -55,7 +55,7 @@ class Node:
 
     def add_child(self, node):
         self.children.append(node)
-        if  'root' not in self.type and self.is_forward() and node.is_reverse() and not self.contains_edge:
+        if  self.is_forward() and node.is_reverse() and not self.contains_edge:
             self.contains_edge = True
     
     def has_children(self):
@@ -190,7 +190,7 @@ class Graph:
             if node.get_address() in self.fw_ld_set:
                 self.fw_ld_set.remove(node.get_address())
             self.fw_st_set.add(node.get_address())
-            
+
         if node.is_reverse() and node.is_load():
             self.rev_ld_count += 1
             if node.get_address() in self.fw_st_set:
@@ -517,18 +517,18 @@ class Graph:
         print("Actual Min Required Registers: {}".format(m))
 
     def print_log(self, restrict_mode_to=None):
-        self.print_arithmetic_log()
-        self.print_mem_ops_log()
+        # self.print_arithmetic_log()
+        # self.print_mem_ops_log()
 
         # calculates the liveness for registers
         self.calc_max_liveness(restrict_mode_to)
 
         # self.print_lives_per_level(restrict_mode_to)
-        self.print_min_register_count()
+        # self.print_min_register_count()
         # self.print_children_per_level(restrict_mode_to)
         # self.log_value_count_per_cycle_count(restrict_mode_to)
         self.print_liveness_per_node()
-        self.print_max_lives_in_a_level()
+        # self.print_max_lives_in_a_level()
         # # self.plot_liveness_scatter_plot()
         # self.plot_reg_liveness_per_level_scatter_plot()
         # self.plot_mem_liveness_per_level_scatter_plot()
@@ -538,8 +538,8 @@ class Graph:
         # self.plot_reg_liveness_per_window_scatter_plot()
         # self.plot_liveness_histogram()
         # self.print_nodes_with_max_children()
-        self.print_edge_combination()
-        self.print_node_count()
+        # self.print_edge_combination()
+        # self.print_node_count()
     
     def print_avg_lifetime(self):
         print("--------------------------------\nAvg Lifetime")
@@ -604,24 +604,24 @@ class Graph:
 
     def print_liveness_per_node(self):
         print("--------------------------------\nLive Nodes")
-        non_edge_count = 0
-        edges_count = 0
-        non_edges_liveness = 0
-        edges_liveness = 0
+        normal_count = 0
+        i_edge_count = 0
+        normal_liveness = 0
+        i_edge_liveness = 0
         for node_id in self.nodes:
             vec = self.nodes[node_id]
             for node in vec:
                 if node.contains_edge:
-                    edges_count += 1
-                    edges_liveness += node.liveness[1] - node.liveness[0]
-                    # print("{} {} {} {} {}".format(node.type, node.id, node.level, node.uid, node.liveness[1] - node.liveness[0]))
+                    i_edge_count += 1
+                    i_edge_liveness += node.liveness[1] - node.liveness[0]
 
-                elif node.is_forward() and not node.is_root():
-                    non_edge_count += 1
-                    non_edges_liveness += node.liveness[1] - node.liveness[0]
-
-        # print("Non-Edged Nodes: {}, Edged nodes: {}, Non-Edged Liveness: {}, Edged Liveness: {}".format(non_edge_count, edges_count, non_edges_liveness, edges_liveness))
-        print("Average Normal Liveness: {}, Average Edged-Nodes Liveness: {}".format(non_edges_liveness/(non_edge_count+1), edges_liveness/(edges_count+1)))
+                # elif node.is_forward() and not node.is_root():
+                normal_count += 1
+                normal_liveness += node.liveness[1] - node.liveness[0]
+        normal_count = normal_count if normal_count > 0 else 1
+        i_edge_count = i_edge_count if i_edge_count > 0 else 1
+        # print("Non-Edged Nodes: {}, Edged nodes: {}, Non-Edged Liveness: {}, Edged Liveness: {}".format(normal_count, i_edge_count, normal_liveness, i_edge_liveness))
+        print("Average Normal Liveness: {}, Average Edged-Nodes Liveness: {}".format(normal_liveness/(normal_count), i_edge_liveness/(i_edge_count)))
     def plot_liveness_scatter_plot(self):
         x = []
         y = []

@@ -4493,8 +4493,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                 /*isForwardPass*/ false, BuilderM, lctx, cache, isi1,
                 /*extraSize*/ lim, offset);
             errs() << "Lookup-1 : " << *inst << " : " << *result << " cache: " << *cache << "\n";
-            handleCachedValue(inst, result);
-
+            // handleCachedValue(inst, result);
+            handleMemCpyValue(inst, result);
             assert(result->getType() == inst->getType());
             lookup_cache[BuilderM.GetInsertBlock()][val] = result;
 

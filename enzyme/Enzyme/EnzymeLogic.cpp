@@ -115,6 +115,10 @@ cl::opt<bool>
 cl::opt<bool>
     LogMain("log-main", cl::init(false), cl::Hidden,
                          cl::desc("Instruments the main function as well."));
+
+cl::opt<bool>
+    EnableBins("enable-bins", cl::init(false), cl::Hidden,
+                         cl::desc("Instrument the reverse for the binning policy."));
 }
 
 struct CacheAnalysis {
@@ -3748,9 +3752,11 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // for (auto val: gutils->GetscopeMap())
   //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
   gutils->detectNormalEdges();
-  gutils->printEdges();
-  gutils->instrumentEdges();
-  gutils->handleBinnedValues();
+  // gutils->printEdges();
+  // gutils->instrumentEdges();
+
+  if (EnableBins)
+    gutils->handleBinnedValues();
  
   // gutils->performLevelAnalysis();
   // gutils->printLevelAnalysis();

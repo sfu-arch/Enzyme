@@ -74,6 +74,7 @@
 #define BIN_WRITE "write"
 #define BIN_PUSH "push"
 #define BIN_POP "pop"
+#define BIN_SIZE 1
 
 using namespace llvm;
 
@@ -233,16 +234,44 @@ public:
       reverse_bb_map[reverse_bb]++;
     }
     
-    for (auto i: forward_bb_map)
-      setBasicBlockMetadata(i.first->getTerminator(), i.second, BIN_PUSH);
+    for (auto i: forward_bb_map) {
+      int remaining_bin_size = BIN_SIZE;
+      for (auto &inst: i.first->getInstList()) {
+        if (isa<PHINode>(inst))
+          continue;
 
-    for (auto i: reverse_bb_map)
-      setBasicBlockMetadata(i.first->getFirstNonPHI(), i.second, BIN_POP);
-    
-    for (auto i: forward_index_map) {
-
-      setOperationMetadata(i.first, i.second, BIN_WRITE);
+        if (forward_index_map.count(&inst)) {
+          if (remaining_bin_size > 1) {
+            remaining_bin_size--;
+          } else {
+            setBasicBlockMetadata(inst.getNextNode(), BIN_SIZE, BIN_PUSH);
+            remaining_bin_size = BIN_SIZE;
+          }
+        }
+      }
+      if (remaining_bin_size != BIN_SIZE) 
+        setBasicBlockMetadata(i.first->getTerminator(), BIN_SIZE-remaining_bin_size, BIN_PUSH);
     }
+    for (auto i: reverse_bb_map) {
+      int remaining_bin_size = BIN_SIZE;
+      std::for_each( i.first->getInstList().rbegin(), i.first->getInstList().rend(), [&](auto & inst){
+        if (isa<PHINode>(inst))
+          return;
+
+        if (reverse_index_map.count(&inst)) {
+          if (remaining_bin_size > 1) {
+            remaining_bin_size--;
+          } else {
+            setBasicBlockMetadata(&inst, BIN_SIZE, BIN_POP);
+            remaining_bin_size = BIN_SIZE;
+          }
+        }
+      });
+      if (remaining_bin_size != BIN_SIZE) 
+        setBasicBlockMetadata(i.first->getFirstNonPHI(), BIN_SIZE-remaining_bin_size, BIN_POP);
+    }
+    for (auto i: forward_index_map)
+      setOperationMetadata(i.first, i.second, BIN_WRITE);
     
     for (auto i: reverse_index_map)
       setOperationMetadata(i.first, i.second, BIN_READ);  

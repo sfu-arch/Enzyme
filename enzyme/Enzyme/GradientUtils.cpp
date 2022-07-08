@@ -60,6 +60,9 @@ std::map<
     customCallHandlers;
 
 extern "C" {
+llvm::cl::opt<int>
+  BIN_SIZE("bin-size", llvm::cl::init(1), llvm::cl::Hidden,
+                    llvm::cl::desc("Size of the Bin"));
 llvm::cl::opt<bool>
     EnzymeNewCache("enzyme-new-cache", cl::init(true), cl::Hidden,
                    cl::desc("Use new cache decision algorithm"));
@@ -1526,7 +1529,73 @@ endCheck:
   return nullptr;
 }
 
+void GradientUtils::handleBinnedValues() {
+    std::map<BasicBlock*, int> forward_bb_map;
+    std::map<BasicBlock*, int> reverse_bb_map;
+    std::map<Instruction*, int> forward_index_map;
+    std::map<Instruction*, int> reverse_index_map;
 
+    for (auto i: forward_to_reverse_map) {
+      auto forward_inst = dyn_cast<Instruction>(i.first);
+      auto reverse_inst = dyn_cast<Instruction>(i.second);
+      auto reverse_bb = reverse_inst->getParent();
+      auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+      if (forward_bb_map.count(forward_bb) == 0)
+        forward_bb_map[forward_bb] = 0;
+      
+      if (reverse_bb_map.count(reverse_bb) == 0) 
+        forward_bb_map[forward_bb] = 0;
+
+      forward_index_map[forward_inst] = forward_bb_map[forward_bb];
+      reverse_index_map[reverse_inst] = reverse_bb_map[reverse_bb];
+      forward_bb_map[forward_bb]++;
+      reverse_bb_map[reverse_bb]++;
+    }
+
+    for (auto i: forward_bb_map) {
+      
+      int remaining_bin_size = BIN_SIZE;
+      for (auto &inst: i.first->getInstList()) {
+        if (isa<PHINode>(inst))
+          continue;
+
+        if (forward_index_map.count(&inst)) {
+          if (remaining_bin_size > 1) {
+            remaining_bin_size--;
+          } else {
+            setBasicBlockMetadata(inst.getNextNode(), BIN_SIZE, BIN_PUSH);
+            remaining_bin_size = BIN_SIZE;
+          }
+        }
+      }
+      if (remaining_bin_size != BIN_SIZE) 
+        setBasicBlockMetadata(i.first->getTerminator(), BIN_SIZE-remaining_bin_size, BIN_PUSH);
+    }
+    for (auto i: reverse_bb_map) {
+      int remaining_bin_size = BIN_SIZE;
+      std::for_each( i.first->getInstList().rbegin(), i.first->getInstList().rend(), [&](auto & inst){
+        if (isa<PHINode>(inst))
+          return;
+
+        if (reverse_index_map.count(&inst)) {
+          if (remaining_bin_size > 1) {
+            remaining_bin_size--;
+          } else {
+            setBasicBlockMetadata(&inst, BIN_SIZE, BIN_POP);
+            remaining_bin_size = BIN_SIZE;
+          }
+        }
+      });
+      if (remaining_bin_size != BIN_SIZE) 
+        setBasicBlockMetadata(i.first->getFirstNonPHI(), BIN_SIZE-remaining_bin_size, BIN_POP);
+    }
+    for (auto i: forward_index_map)
+      setOperationMetadata(i.first, i.second, BIN_WRITE);
+    
+    for (auto i: reverse_index_map)
+      setOperationMetadata(i.first, i.second, BIN_READ);  
+  }
 
 Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
                                       int idx, bool ignoreType, bool replace) {

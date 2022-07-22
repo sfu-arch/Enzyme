@@ -1,0 +1,780 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						11
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-dc19b38699a9c28ecc1d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						3,
+						34,
+						35
+					]
+				},
+				{
+					"build" : "Enzyme",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-Enzyme-Debug-e3a05f4f7d6e361b0904.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Enzyme",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						30,
+						31,
+						32,
+						33
+					]
+				},
+				{
+					"build" : "BCLoad",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-BCLoad-Debug-05f4b6b2afe5d37673e8.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "BCLoad",
+					"targetIndexes" : 
+					[
+						0,
+						28,
+						29
+					]
+				},
+				{
+					"build" : "test",
+					"childIndexes" : 
+					[
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10
+					],
+					"jsonFile" : "directory-test-Debug-451c0598f41488bb20b9.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "test",
+					"targetIndexes" : 
+					[
+						21,
+						23
+					]
+				},
+				{
+					"build" : "test/ActivityAnalysis",
+					"jsonFile" : "directory-test.ActivityAnalysis-Debug-405e83fd9de8b38cc15b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/ActivityAnalysis",
+					"targetIndexes" : 
+					[
+						19
+					]
+				},
+				{
+					"build" : "test/TypeAnalysis",
+					"jsonFile" : "directory-test.TypeAnalysis-Debug-009e2d02305e6b682b09.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/TypeAnalysis",
+					"targetIndexes" : 
+					[
+						27
+					]
+				},
+				{
+					"build" : "test/Enzyme/ReverseMode",
+					"jsonFile" : "directory-test.Enzyme.ReverseMode-Debug-a4f1bca39fe645d2dc94.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/Enzyme/ReverseMode",
+					"targetIndexes" : 
+					[
+						26
+					]
+				},
+				{
+					"build" : "test/Enzyme/ForwardMode",
+					"jsonFile" : "directory-test.Enzyme.ForwardMode-Debug-69e6871b7137f9f70d45.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/Enzyme/ForwardMode",
+					"targetIndexes" : 
+					[
+						22
+					]
+				},
+				{
+					"build" : "test/Integration/ReverseMode",
+					"jsonFile" : "directory-test.Integration.ReverseMode-Debug-12a679cc73e0ffe6af48.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/Integration/ReverseMode",
+					"targetIndexes" : 
+					[
+						25
+					]
+				},
+				{
+					"build" : "test/Integration/ForwardMode",
+					"jsonFile" : "directory-test.Integration.ForwardMode-Debug-23e0b43935e9e037570c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/Integration/ForwardMode",
+					"targetIndexes" : 
+					[
+						24
+					]
+				},
+				{
+					"build" : "test/BCLoader",
+					"jsonFile" : "directory-test.BCLoader-Debug-ef99cab66202f5be379f.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 3,
+					"projectIndex" : 0,
+					"source" : "test/BCLoader",
+					"targetIndexes" : 
+					[
+						20
+					]
+				},
+				{
+					"build" : "benchmarks",
+					"childIndexes" : 
+					[
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24
+					],
+					"jsonFile" : "directory-benchmarks-Debug-f9c487a9ea6598b2a7ae.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "benchmarks",
+					"targetIndexes" : 
+					[
+						4,
+						6,
+						36
+					]
+				},
+				{
+					"build" : "benchmarks/nn",
+					"jsonFile" : "directory-benchmarks.nn-Debug-317a567e9749d1396b64.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/nn",
+					"targetIndexes" : 
+					[
+						14
+					]
+				},
+				{
+					"build" : "benchmarks/taylorlog",
+					"jsonFile" : "directory-benchmarks.taylorlog-Debug-527fab99d84f2c63ff2e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/taylorlog",
+					"targetIndexes" : 
+					[
+						18
+					]
+				},
+				{
+					"build" : "benchmarks/logsumexp",
+					"jsonFile" : "directory-benchmarks.logsumexp-Debug-05d584f8f976fcc9f34a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/logsumexp",
+					"targetIndexes" : 
+					[
+						11
+					]
+				},
+				{
+					"build" : "benchmarks/matdescent",
+					"jsonFile" : "directory-benchmarks.matdescent-Debug-66ee74b694785dea426b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/matdescent",
+					"targetIndexes" : 
+					[
+						13
+					]
+				},
+				{
+					"build" : "benchmarks/ode",
+					"jsonFile" : "directory-benchmarks.ode-Debug-058c069a3c1115108668.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/ode",
+					"targetIndexes" : 
+					[
+						15
+					]
+				},
+				{
+					"build" : "benchmarks/ode-const",
+					"jsonFile" : "directory-benchmarks.ode-const-Debug-974b5ca8b2dc11ed8b22.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/ode-const",
+					"targetIndexes" : 
+					[
+						16
+					]
+				},
+				{
+					"build" : "benchmarks/ode-real",
+					"jsonFile" : "directory-benchmarks.ode-real-Debug-08bf657e3b429801c448.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/ode-real",
+					"targetIndexes" : 
+					[
+						17
+					]
+				},
+				{
+					"build" : "benchmarks/fft",
+					"jsonFile" : "directory-benchmarks.fft-Debug-55f1b510e27da1300208.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/fft",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "benchmarks/gmm",
+					"jsonFile" : "directory-benchmarks.gmm-Debug-78476d3407ce6c71784b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/gmm",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "benchmarks/ba",
+					"jsonFile" : "directory-benchmarks.ba-Debug-e4fe16494546ceb037ec.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/ba",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "benchmarks/hand",
+					"jsonFile" : "directory-benchmarks.hand-Debug-e99ff4a180d3a3464de2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/hand",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "benchmarks/lstm",
+					"jsonFile" : "directory-benchmarks.lstm-Debug-10aa6e0d381dad08ae25.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/lstm",
+					"targetIndexes" : 
+					[
+						12
+					]
+				},
+				{
+					"build" : "benchmarks/library",
+					"jsonFile" : "directory-benchmarks.library-Debug-10f78034a9c030b228a2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.9"
+					},
+					"parentIndex" : 11,
+					"projectIndex" : 0,
+					"source" : "benchmarks/library",
+					"targetIndexes" : 
+					[
+						10
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24
+					],
+					"name" : "Enzyme",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18,
+						19,
+						20,
+						21,
+						22,
+						23,
+						24,
+						25,
+						26,
+						27,
+						28,
+						29,
+						30,
+						31,
+						32,
+						33,
+						34,
+						35,
+						36
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "BCPass-12::@d1da90cf61b1c721b6ca",
+					"jsonFile" : "target-BCPass-12-Debug-6f08a7f349f9a27700ec.json",
+					"name" : "BCPass-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "ClangEnzyme-12::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-ClangEnzyme-12-Debug-8a9d58f82ad2fecda184.json",
+					"name" : "ClangEnzyme-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "LLVMEnzyme-12::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-LLVMEnzyme-12-Debug-94fa052b3788584248ef.json",
+					"name" : "LLVMEnzyme-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "acc_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-acc_gen-Debug-51a8bb96ce48b9c9f396.json",
+					"name" : "acc_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "adept2::@099d4941661e36fe2606",
+					"jsonFile" : "target-adept2-Debug-1b23d17633418619a6b1.json",
+					"name" : "adept2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 21,
+					"id" : "bench-ba::@a56aab75f34052069961",
+					"jsonFile" : "target-bench-ba-Debug-59bf12e8c3a8516b09cb.json",
+					"name" : "bench-ba",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "bench-enzyme::@099d4941661e36fe2606",
+					"jsonFile" : "target-bench-enzyme-Debug-885e879ae384e7bd39d2.json",
+					"name" : "bench-enzyme",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 19,
+					"id" : "bench-fft::@f32d069372a2d6c85c1c",
+					"jsonFile" : "target-bench-fft-Debug-07cefd8fa63051bea8c1.json",
+					"name" : "bench-fft",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 20,
+					"id" : "bench-gmm::@cfbe14bea647f7681bf7",
+					"jsonFile" : "target-bench-gmm-Debug-408983985a95efa6529d.json",
+					"name" : "bench-gmm",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 22,
+					"id" : "bench-hand::@0e82b533709d07fef7e1",
+					"jsonFile" : "target-bench-hand-Debug-eaec02994d661773cdae.json",
+					"name" : "bench-hand",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 24,
+					"id" : "bench-library::@8c781984033925d84ee5",
+					"jsonFile" : "target-bench-library-Debug-c2d83dc642dba375d2fe.json",
+					"name" : "bench-library",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 14,
+					"id" : "bench-logsumexp::@58931c87aa5ce8b3e8f8",
+					"jsonFile" : "target-bench-logsumexp-Debug-ac844faf694ff464d7d6.json",
+					"name" : "bench-logsumexp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 23,
+					"id" : "bench-lstm::@baf3c6d7c9bcf83cadf6",
+					"jsonFile" : "target-bench-lstm-Debug-73914f85302d6a8f7620.json",
+					"name" : "bench-lstm",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 15,
+					"id" : "bench-matdescent::@a30c01e63feff071ae8a",
+					"jsonFile" : "target-bench-matdescent-Debug-41878a33bdeaffce11b4.json",
+					"name" : "bench-matdescent",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 12,
+					"id" : "bench-nn::@81dc5b25fe16b4b017cd",
+					"jsonFile" : "target-bench-nn-Debug-ae99dbe7ace89a026449.json",
+					"name" : "bench-nn",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 16,
+					"id" : "bench-ode::@30043766f0c3f54c468b",
+					"jsonFile" : "target-bench-ode-Debug-42566722c6a69a6e591f.json",
+					"name" : "bench-ode",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 17,
+					"id" : "bench-odeconst::@529c90f101ba0ab7fe68",
+					"jsonFile" : "target-bench-odeconst-Debug-807a8b638b10638a36a5.json",
+					"name" : "bench-odeconst",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 18,
+					"id" : "bench-odereal::@85d4d43423bf173ca81b",
+					"jsonFile" : "target-bench-odereal-Debug-a32ec70ac60472abd30d.json",
+					"name" : "bench-odereal",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 13,
+					"id" : "bench-taylorlog::@5b2942c5e14f1c4ceda5",
+					"jsonFile" : "target-bench-taylorlog-Debug-4686f1da9e2d3e72cce7.json",
+					"name" : "bench-taylorlog",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "check-activityanalysis::@fe3430acc6e232b99f32",
+					"jsonFile" : "target-check-activityanalysis-Debug-debfc77e86f7d319a477.json",
+					"name" : "check-activityanalysis",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "check-bcpass::@84cac09047626f0445d5",
+					"jsonFile" : "target-check-bcpass-Debug-a60025dc0463a5ea8c2b.json",
+					"name" : "check-bcpass",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "check-enzyme::@36f028580bb02cc8272a",
+					"jsonFile" : "target-check-enzyme-Debug-28133ae2ee980ddd1bbc.json",
+					"name" : "check-enzyme",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "check-enzyme-forward::@de18174210c7866fbc06",
+					"jsonFile" : "target-check-enzyme-forward-Debug-04e76cb6e7452cd66021.json",
+					"name" : "check-enzyme-forward",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "check-enzyme-integration::@36f028580bb02cc8272a",
+					"jsonFile" : "target-check-enzyme-integration-Debug-4098c285da04a9a9e378.json",
+					"name" : "check-enzyme-integration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "check-enzyme-integration-forward::@f6130366c77e0d1e12cf",
+					"jsonFile" : "target-check-enzyme-integration-forward-Debug-23c9cdc31d618706bb82.json",
+					"name" : "check-enzyme-integration-forward",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 8,
+					"id" : "check-enzyme-integration-reverse::@090c0c6cd65cf8cb3893",
+					"jsonFile" : "target-check-enzyme-integration-reverse-Debug-b865adb474b2be0468c3.json",
+					"name" : "check-enzyme-integration-reverse",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 6,
+					"id" : "check-enzyme-reverse::@20229bb5cd6d7cbd5303",
+					"jsonFile" : "target-check-enzyme-reverse-Debug-2fd53b550d62f5fe5792.json",
+					"name" : "check-enzyme-reverse",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "check-typeanalysis::@c15ac8e37fc684fd9931",
+					"jsonFile" : "target-check-typeanalysis-Debug-328bc3062ac17cda8f43.json",
+					"name" : "check-typeanalysis",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "install-BCPass-12::@d1da90cf61b1c721b6ca",
+					"jsonFile" : "target-install-BCPass-12-Debug-840a8414425cf8b09ad6.json",
+					"name" : "install-BCPass-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "install-BCPass-12-stripped::@d1da90cf61b1c721b6ca",
+					"jsonFile" : "target-install-BCPass-12-stripped-Debug-7f7c0d38f38b2a1220d1.json",
+					"name" : "install-BCPass-12-stripped",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "install-ClangEnzyme-12::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-install-ClangEnzyme-12-Debug-720d8c11e41e2cc60fbf.json",
+					"name" : "install-ClangEnzyme-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "install-ClangEnzyme-12-stripped::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-install-ClangEnzyme-12-stripped-Debug-c65a61cc2a3ea36b4245.json",
+					"name" : "install-ClangEnzyme-12-stripped",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "install-LLVMEnzyme-12::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-install-LLVMEnzyme-12-Debug-b9c0dd9b791d2fa528dd.json",
+					"name" : "install-LLVMEnzyme-12",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "install-LLVMEnzyme-12-stripped::@36f13468d308ebcebdf2",
+					"jsonFile" : "target-install-LLVMEnzyme-12-stripped-Debug-ca8e109da41b535cfc2d.json",
+					"name" : "install-LLVMEnzyme-12-stripped",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "intrinsics_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-intrinsics_gen-Debug-1260516295a9ffa2cbc0.json",
+					"name" : "intrinsics_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "omp_gen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-omp_gen-Debug-d59215565643ac75674a.json",
+					"name" : "omp_gen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "tapenade::@099d4941661e36fe2606",
+					"jsonFile" : "target-tapenade-Debug-2ff6e41a3fe198d54b53.json",
+					"name" : "tapenade",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/localhome/mha157/Enzyme/enzyme/build",
+		"source" : "/localhome/mha157/Enzyme/enzyme"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

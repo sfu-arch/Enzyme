@@ -1,0 +1,53 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install",
+			"add_llvm_library"
+		],
+		"files" : 
+		[
+			"/localhome/mha157/llvm-project/llvm/cmake/modules/AddLLVM.cmake",
+			"BCLoad/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 805,
+				"parent" : 1
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 2,
+			"component" : "BCPass-12",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"BCLoad/BCPass-12.so"
+			],
+			"targetId" : "BCPass-12::@d1da90cf61b1c721b6ca",
+			"targetIndex" : 0,
+			"type" : "target"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "BCLoad",
+		"source" : "BCLoad"
+	}
+}

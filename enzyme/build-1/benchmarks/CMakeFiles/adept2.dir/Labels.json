@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/adept2"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/adept2.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/adept2-complete.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-build.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-configure.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-download.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-install.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-mkdir.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-patch.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-test.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/src/adept2-stamp/adept2-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"adept2"
+		],
+		"name" : "adept2"
+	}
+}

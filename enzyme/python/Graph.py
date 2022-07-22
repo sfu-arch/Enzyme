@@ -394,9 +394,6 @@ class Graph:
         for i in self.edges:
             if i.is_arithmetic():
                 count += 1
-        # print("Spills = ", LevelInfo.spill_count)
-        # print("Number of edges = ", count)
-        # print("Total registers = ", RegisterFile.total_registers)
 
     def calc_values_produced_per_level(self, restrict_mode_to=None):
         for node_id in self.nodes:
@@ -504,13 +501,18 @@ class Graph:
                         self.reverse_arithmetic_count, reverse_muls, reverse_divs, reverse_ors,  
                         self.max_forward_level, self.max_reverse_level))
     
-    def print_min_register_count(self):
-        # The number of lives at the end of the forward determines the minimum number of registers
+    def get_min_register_count(self):
         edges_nodes_count = 0
-        for i in self.lives_per_level[self.max_forward_level]:
-            edges_nodes_count += 1
-        print("Min Registers AD: {}".format(len(self.lives_per_level[self.max_forward_level])))
-        print("Min Registers AD: {}".format(edges_nodes_count))
+        if self.max_forward_level in self.lives_per_level:
+            for _ in self.lives_per_level[self.max_forward_level]:
+                edges_nodes_count += 1
+        else:
+            print("max fwd level: ", self.max_forward_level)
+            print(self.lives_per_level)
+        return edges_nodes_count
+    
+    def get_actual_min_register_count(self):
+        return max([self.level_info[i].forward_node_count for i in self.level_info])
     
     def print_actual_min_register_count(self):
         m = max([self.level_info[i].forward_node_count for i in self.level_info])

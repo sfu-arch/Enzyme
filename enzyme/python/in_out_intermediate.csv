@@ -1,0 +1,12 @@
+benchmark,input,output,intermediate
+gravity_normal,209,9,1640
+nn_normal,1031,56,2582
+matdescent_normal,465,39,1412
+logsumexp_normal,1999,17,9004
+ode_normal,1285,197,3976
+pathfinder_normal,17280,10449,32150
+somier_normal,18432,9291,70440
+lenet_normal,99926,42944,561560
+mttkrp_normal,405000,253131,1837875
+sddmm_normal,22056,8890,17753
+spmv_normal,2029,1021,3040

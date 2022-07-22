@@ -1,0 +1,287 @@
+[
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/ActivityAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/ActivityAnalysisPrinter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysisPrinter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysisPrinter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/BFSPass.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/BFSPass.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/BFSPass.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/CApi.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CApi.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CApi.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/CacheUtility.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CacheUtility.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CacheUtility.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/CostAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CostAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CostAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/DerivScheduler.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/DerivScheduler.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/DerivScheduler.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/Enzyme.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Enzyme.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Enzyme.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/EnzymeLogic.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/EnzymeLogic.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/EnzymeLogic.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/ForwardNodeInstrument.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ForwardNodeInstrument.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ForwardNodeInstrument.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/FunctionUtils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/FunctionUtils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/FunctionUtils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/GradientUtils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/GradientUtils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/GradientUtils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/LifetimeAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/LifetimeAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/LifetimeAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/LoadLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/LoadLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/LoadLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/MemOpRatioLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/MemOpRatioLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/MemOpRatioLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/MustExitScalarEvolution.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/MustExitScalarEvolution.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/MustExitScalarEvolution.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/NodeDetector.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/NodeDetector.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/NodeDetector.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/NodeLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/NodeLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/NodeLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/OperationCounter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/OperationCounter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/OperationCounter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/PreserveNVVM.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/PreserveNVVM.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/PreserveNVVM.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/Scheduler.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Scheduler.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Scheduler.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/Utils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Utils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Utils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/SCEV/ScalarEvolutionExpander.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/SCEV/ScalarEvolutionExpander.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/SCEV/ScalarEvolutionExpander.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/TypeAnalysis/TypeTree.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeTree.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeTree.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/TypeAnalysis/TypeAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/TypeAnalysis/TypeAnalysisPrinter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysisPrinter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysisPrinter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/LLVMEnzyme-12.dir/TypeAnalysis/RustDebugInfo.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/RustDebugInfo.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/RustDebugInfo.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/ActivityAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/ActivityAnalysisPrinter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysisPrinter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ActivityAnalysisPrinter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/BFSPass.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/BFSPass.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/BFSPass.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/CApi.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CApi.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CApi.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/CacheUtility.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CacheUtility.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CacheUtility.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/CostAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/CostAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/CostAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/DerivScheduler.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/DerivScheduler.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/DerivScheduler.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/Enzyme.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Enzyme.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Enzyme.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/EnzymeLogic.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/EnzymeLogic.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/EnzymeLogic.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/ForwardNodeInstrument.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/ForwardNodeInstrument.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/ForwardNodeInstrument.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/FunctionUtils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/FunctionUtils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/FunctionUtils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/GradientUtils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/GradientUtils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/GradientUtils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/LifetimeAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/LifetimeAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/LifetimeAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/LoadLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/LoadLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/LoadLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/MemOpRatioLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/MemOpRatioLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/MemOpRatioLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/MustExitScalarEvolution.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/MustExitScalarEvolution.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/MustExitScalarEvolution.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/NodeDetector.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/NodeDetector.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/NodeDetector.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/NodeLogger.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/NodeLogger.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/NodeLogger.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/OperationCounter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/OperationCounter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/OperationCounter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/PreserveNVVM.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/PreserveNVVM.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/PreserveNVVM.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/Scheduler.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Scheduler.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Scheduler.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/Utils.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Utils.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Utils.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/SCEV/ScalarEvolutionExpander.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/SCEV/ScalarEvolutionExpander.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/SCEV/ScalarEvolutionExpander.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/TypeAnalysis/TypeTree.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeTree.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeTree.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/TypeAnalysis/TypeAnalysis.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysis.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysis.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/TypeAnalysis/TypeAnalysisPrinter.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysisPrinter.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/TypeAnalysisPrinter.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/TypeAnalysis/RustDebugInfo.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/RustDebugInfo.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/TypeAnalysis/RustDebugInfo.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o Enzyme/CMakeFiles/ClangEnzyme-12.dir/Clang/EnzymeClang.cpp.o -c /localhome/mha157/Enzyme/enzyme/Enzyme/Clang/EnzymeClang.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/Enzyme/Clang/EnzymeClang.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o BCLoad/CMakeFiles/BCPass-12.dir/BCLoader.cpp.o -c /localhome/mha157/Enzyme/enzyme/BCLoad/BCLoader.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/BCLoad/BCLoader.cpp"
+},
+{
+  "directory": "/localhome/mha157/Enzyme/enzyme/build",
+  "command": "/usr/bin/clang++-10 -DGTEST_HAS_RTTI=0 -I/local-scratch/localhome/mha157/llvm-project/llvm/include -I/local-scratch/localhome/mha157/llvm-project/build/include -I/localhome/mha157/Enzyme/enzyme/build/include -Wall -fPIC -fno-rtti  -W -Wno-undef -O0 -g -ggdb -fno-omit-frame-pointer -fPIC -W -Wno-undef -fPIC   -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -fno-rtti -std=gnu++17 -o BCLoad/CMakeFiles/BCPass-12.dir/ClangBCLoader.cpp.o -c /localhome/mha157/Enzyme/enzyme/BCLoad/ClangBCLoader.cpp",
+  "file": "/localhome/mha157/Enzyme/enzyme/BCLoad/ClangBCLoader.cpp"
+}
+]

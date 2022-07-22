@@ -1,0 +1,103 @@
+{
+	"backtrace" : 3,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"add_lit_target",
+			"add_lit_testsuite",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"/localhome/mha157/llvm-project/llvm/cmake/modules/AddLLVM.cmake",
+			"benchmarks/gmm/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 2,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 1797,
+				"parent" : 1
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1764,
+				"parent" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 1776,
+				"parent" : 2
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 4,
+			"id" : "LLVMEnzyme-12::@36f13468d308ebcebdf2"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "adept2::@099d4941661e36fe2606"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "tapenade::@099d4941661e36fe2606"
+		}
+	],
+	"id" : "bench-gmm::@cfbe14bea647f7681bf7",
+	"name" : "bench-gmm",
+	"paths" : 
+	{
+		"build" : "benchmarks/gmm",
+		"source" : "benchmarks/gmm"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 3,
+			"isGenerated" : true,
+			"path" : "build/benchmarks/gmm/CMakeFiles/bench-gmm",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/benchmarks/gmm/CMakeFiles/bench-gmm.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

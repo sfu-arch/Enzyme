@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/tapenade"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/tapenade.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/CMakeFiles/tapenade-complete.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-build.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-configure.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-download.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-install.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-mkdir.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-patch.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-test.rule"
+		},
+		{
+			"file" : "/localhome/mha157/Enzyme/enzyme/build/benchmarks/tapenade/src/tapenade-stamp/tapenade-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"tapenade"
+		],
+		"name" : "tapenade"
+	}
+}

@@ -1,0 +1,1 @@
+cmd='autoreconf;-i;&&;./configure;--prefix=/localhome/mha157/Enzyme/enzyme/build/benchmarks/adept2/install'

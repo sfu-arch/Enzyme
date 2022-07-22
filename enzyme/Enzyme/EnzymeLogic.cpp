@@ -70,6 +70,7 @@
 #include "NodeLogger.h"
 #include "ForwardNodeInstrument.h"
 #include "LoadLogger.h"
+#include "MemOpRatioLogger.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
@@ -119,6 +120,10 @@ cl::opt<bool>
 cl::opt<bool>
     EnableBins("enable-bins", cl::init(false), cl::Hidden,
                          cl::desc("Instrument the reverse for the binning policy."));
+cl::opt<bool>
+  MemOpRatioLog("memop-ratio", cl::init(false), cl::Hidden,
+                        cl::desc("Log MemOps Ratio"));
+
 }
 
 struct CacheAnalysis {
@@ -3751,9 +3756,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // }
   // for (auto val: gutils->GetscopeMap())
   //   errs() << "cached: " << val.first->getNameOrAsOperand() << "\n";
-  // gutils->detectNormalEdges();
+  gutils->detectNormalEdges();
   // gutils->printEdges();
-  // gutils->instrumentEdges();
+  gutils->instrumentEdges();
 
   if (EnableBins)
     gutils->handleBinnedValues();
@@ -3781,13 +3786,16 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
     PM.add(new instrumem::NodeLogger());
     PM.run(*key.todiff);
   }
-  if (CreateDDDG) {
+  else if (CreateDDDG) {
     legacy::FunctionPassManager PM(nf->getParent());
-    // PM.add(new instrumem::BFSPass());
     PM.add(new instrumem::NodeLogger());
     PM.run(*nf);
   }
-
+  if (MemOpRatioLog) {
+    legacy::FunctionPassManager PM(nf->getParent());
+    PM.add(new instrumem::MemOpRatioLogger());
+    PM.run(*nf);
+  }
   if (PostOpt)
     PPC.optimizeIntermediate(nf);
   if (EnzymePrint) {

@@ -66,9 +66,9 @@ std::string ModePrefix(Instruction *i) {
 }
 
 void NodeLogger::visitLoadInst(LoadInst &inst) {
-    if (inst.getPointerOperand()->getNameOrAsOperand().find("'") != std::string::npos) {
-        return;
-    }
+    // if (inst.getPointerOperand()->getNameOrAsOperand().find("'") != std::string::npos) {
+    //     return;
+    // }
     std::string write_format = ModePrefix(&inst) + "Node: " + inst.getNameOrAsOperand() + ", Parent: %x, load\n";
     CallPrintf(&inst, &write_format[0], {inst.getPointerOperand()}, write_format);
 }

@@ -518,6 +518,18 @@ class Graph:
         m = max([self.level_info[i].forward_node_count for i in self.level_info])
         print("Actual Min Required Registers: {}".format(m))
 
+    def get_memory_size(self):
+        mem_size = 0
+        for node_id in self.nodes:
+            node_vector = self.nodes[node_id]
+            if len(node_vector) == 0:
+                continue
+            node = node_vector[0]
+            if node.is_mem_op():
+                mem_size += 1
+
+        return mem_size
+        
     def print_log(self, restrict_mode_to=None):
         # self.print_arithmetic_log()
         # self.print_mem_ops_log()

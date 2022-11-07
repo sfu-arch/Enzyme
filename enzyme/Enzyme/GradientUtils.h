@@ -1074,6 +1074,8 @@ public:
 
     // erase from binned values
     binned_values.erase(I);
+    if (forward_to_reverse_map.count(I))
+      llvm::errs() << "forward_to_reverse_map.count(I) " << I << "\n";
     forward_to_reverse_map.erase(I);
     edges.erase(I);
   }

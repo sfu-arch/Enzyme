@@ -66,16 +66,18 @@ std::string ModePrefix(Instruction *i) {
 }
 
 void NodeLogger::visitLoadInst(LoadInst &inst) {
-    // if (inst.getPointerOperand()->getNameOrAsOperand().find("'") != std::string::npos) {
-    //     return;
-    // }
+    // Don't log the loads that aren't tagged as read (not Tloads)
+    if (!(inst.hasMetadata("read") || inst.hasMetadata("write")))
+        return;
     std::string write_format = ModePrefix(&inst) + "Node: " + inst.getNameOrAsOperand() + ", Parent: %x, load\n";
     CallPrintf(&inst, &write_format[0], {inst.getPointerOperand()}, write_format);
 }
 
 
 void NodeLogger::visitStoreInst(StoreInst &inst) {
-
+    // Don't log the loads that aren't tagged as write (not Tstores)
+    if (!inst.hasMetadata("write"))
+        return;
     if (isa<Constant>(inst.getValueOperand()))
         return;
     if (inst.getPointerOperand()->getNameOrAsOperand().find("'") != std::string::npos)
@@ -107,6 +109,12 @@ std::string GenerateWriteFormat(Instruction &inst, std::map<Value*, unsigned> &n
     return write_format;
 }
 
+void NodeLogger::visitAllocaInst(AllocaInst &inst) {
+    if (inst.hasMetadata("push")) {
+        std::string write_format = "Push!\n";
+        CallPrintf(&inst, &write_format[0], {}, write_format);
+    }
+}
 
 void NodeLogger::visitInstruction(Instruction &inst) {
     if (inst.getOpcode() == 57)

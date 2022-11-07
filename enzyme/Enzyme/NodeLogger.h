@@ -29,6 +29,7 @@ struct NodeLogger : public FunctionPass,
         void visitLoadInst(LoadInst &inst);
         void visitStoreInst(StoreInst &inst);
         void visitInstruction(Instruction &inst);
+        void visitAllocaInst(AllocaInst &inst);
 
     private:
         std::map<Value*, unsigned> node_ids;

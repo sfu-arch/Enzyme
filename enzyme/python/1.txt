@@ -1,0 +1,21 @@
+------- nn ad normal ----------
+--------------------------------
+Live Nodes
+Average Normal Liveness: 1.0, Average Edged-Nodes Liveness: 1.0
+level: {'lifetime': 18067342, 'edge_count': 7840}, avg_lifetime: 2304.2140033159035.
+level: {'lifetime': 0, 'edge_count': 0}, avg_lifetime: 0.0.
+level: {'lifetime': 0, 'edge_count': 0}, avg_lifetime: 0.0.
+level: {'lifetime': 0, 'edge_count': 0}, avg_lifetime: 0.0.
+level: {'lifetime': 329, 'edge_count': 45}, avg_lifetime: 7.1521739130434785.
+------------- ------------- ----------
+------- matdescent ad normal ----------
+--------------------------------
+Live Nodes
+Average Normal Liveness: 1.0, Average Edged-Nodes Liveness: 1.0
+level: {'lifetime': 12821534249, 'edge_count': 192022}, avg_lifetime: 66770.82562505534.
+level: {'lifetime': 1992723199, 'edge_count': 32045}, avg_lifetime: 62183.21160207202.
+level: {'lifetime': 1423558039, 'edge_count': 32044}, avg_lifetime: 44423.71786550164.
+level: {'lifetime': 854463942, 'edge_count': 32044}, avg_lifetime: 26664.501232641596.
+level: {'lifetime': 285380926, 'edge_count': 32245}, avg_lifetime: 8850.11865037524.
+------------- ------------- ----------
+------- gravity ad normal ----------

@@ -3431,6 +3431,8 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
             ++cnt;
          }
          auto result = BuilderM.CreateSelect(which, invertPointerM(vals[1], BuilderM), invertPointerM(vals[0], BuilderM));
+          errs() << "Lookup-0 : " << *inst << " : " << *result  << "\n";
+
          return result;
      }
 #endif
@@ -3663,6 +3665,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
       assert(result->getType());
       result = BuilderM.CreateBitCast(result, val->getType());
       assert(result->getType() == inst->getType());
+        errs() << "Lookup-10 : " << *inst << " : " << *result << "\n";
+
       return result;
     }
   }
@@ -3787,6 +3791,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
       assert(result->getType());
       result = BuilderM.CreateBitCast(result, val->getType());
       assert(result->getType() == inst->getType());
+        errs() << "Lookup-11 : " << *inst << " : " << *result << "\n";
+
       return result;
     }
   }
@@ -4152,6 +4158,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
           if (resultValue) {
             if (resultValue->getType() != val->getType())
               resultValue = BuilderM.CreateBitCast(resultValue, val->getType());
+          errs() << "Lookup-12 : " << *inst << " : " << *resultValue  << "\n";
+
             return resultValue;
           }
         }
@@ -4312,6 +4320,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
 
                   assert(result->getType() == inst->getType());
                   lookup_cache[BuilderM.GetInsertBlock()][val] = result;
+                  errs() << "Lookup-13 : " << *inst << " : " << *result  << "\n";
+                  
                   return result;
                 }
               }
@@ -4572,6 +4582,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                           inst->getParent(), "Caching instruction ", *inst,
                           " legalRecompute: ", lrc, " shouldRecompute: ", src,
                           " tryLegalRecomputeCheck: ", tryLegalRecomputeCheck);
+          errs() << "Lookup-14 : " << *inst << " : " << *result  << "\n";
+            
             return result;
           }
         }

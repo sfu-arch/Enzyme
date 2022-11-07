@@ -1,0 +1,10 @@
+benchmark,ad,original
+nn_normal,1154.63,5.93
+matdescent_normal,27328.93,624.35
+gravity_normal,32535.72,511.64
+logsumexp_normal,1860.81,39.61
+mttkrp_normal,1547.71,47.92
+pathfinder_normal,14329.41,191.71
+somier_normal,461.26,8.85
+lenet_normal,2092.99,28.52
+mSpring_normal,3033.849,164.32

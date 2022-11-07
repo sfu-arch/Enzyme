@@ -1,5 +1,6 @@
 from cmath import inf
 from dis import Instruction
+from platform import node
 import matplotlib.pyplot as plt
 from LevelInfo import LevelInfo
 from RegFile import RegisterFile
@@ -20,7 +21,7 @@ def get_dict_from_file(filename):
 class Node:
     unique_id = 0
     instruction_id = 0
-    def __init__(self, id, occurance, parents, type, mode='F'):
+    def __init__(self, id, occurance, parents, type, mode='F', actual_level=0):
         self.id = id
         self.uid = None
         self.occurance = occurance
@@ -28,8 +29,8 @@ class Node:
         self.parents = parents
         self.type = type
         self.cost = sum(i.cost for i in parents) + 1
-        self.level =  max(i.level for i in parents) + 1 if parents else 1
-        self.actual_level = max(i.actual_level for i in parents) + 1 if parents else 0
+        self.level =  0
+        self.actual_level = actual_level
         self.end_level = 0
         self.mode = mode
         self.liveness = ()
@@ -109,7 +110,7 @@ class Node:
             child.actual_level += amount
             child.end_level += amount
             child.update_parent_actual_liveness()
-    def __str__(self) -> str:
+    def __str__(self):
         return "id: {}, type: {}, mode: {}, child_count: {}, parents: {}".format(self.instruction_id, self.type, self.mode, len(self.children), [node.id for node in self.parents])
 
 class Graph:
@@ -119,7 +120,7 @@ class Graph:
         self.window_size = window_size
         self.avg_load_delay = avg_load_delay
         self.edges = {}
-
+        self.edge_pairs = []
         self.forward_arithmetic_count = 0
         self.reverse_arithmetic_count = 0
         self.forward_important_arithmetic_count = {'mul': 0, 'div': 0, 'or': 0}
@@ -127,6 +128,7 @@ class Graph:
         
         self.max_forward_level = 0
         self.max_forward_actual_level = 0
+        self.max_reverse_actual_level = 0
         self.max_reverse_level = 0
 
         self.forward_loads = 0
@@ -145,7 +147,7 @@ class Graph:
         self.regfile = RegisterFile(regfile_size)
         self.visited_addresses = {}
         self.alu_limit = alu_limit
-        self.remaining_alues_in_level = {}
+        self.remaining_alues_in_level = [alu_limit]
 
         self.propagated_vars = get_dict_from_file(live_var_dir)
         self.cost = 0
@@ -250,11 +252,15 @@ class Graph:
                     if self.propagated_vars[parent_id] in self.nodes:
                         parents.append(self.nodes[self.propagated_vars[parent_id]][-1])
                     else:
-                        parent_node = Node(parent_id, 0, [], "root")
+                        parent_node = Node(parent_id, 0, [], "root", actual_level=self.get_next_free_level())
+                        if parent_node.actual_level > self.max_forward_actual_level:
+                            self.max_forward_actual_level = parent_node.actual_level
                         self.nodes[parent_id] = [parent_node]
                         parents.append(parent_node)
                 else:
-                    parent_node = Node(parent_id, 0, [], "root")
+                    parent_node = Node(parent_id, 0, [], "root", actual_level=self.get_next_free_level())
+                    if parent_node.actual_level > self.max_forward_actual_level:
+                            self.max_forward_actual_level = parent_node.actual_level
                     self.nodes[parent_id] = [parent_node]
                     parents.append(parent_node)
         if node_type == 'store':
@@ -278,25 +284,13 @@ class Graph:
         self.visited_addresses[new_node.get_address()] = True
         self.addr_file.write(new_node.mode + '_' + new_node.get_address() + visited + '\n')
     
-    def get_next_free_level(self, level):
-        current_level = level
-        while(True):
-            if current_level not in self.remaining_alues_in_level:
-                self.remaining_alues_in_level[current_level] = self.alu_limit
-            if self.remaining_alues_in_level[current_level] > 0:
-                return current_level
-            current_level += 1
-            
-    def calc_actual_level(self, node):
-        if node.is_arithmetic():
-            actual_level = self.get_next_free_level(node.actual_level)
-            self.remaining_alues_in_level[actual_level] -= 1
-            node.actual_level = actual_level
-        if node.is_load():
-            node.actual_level += self.avg_load_delay
-
-        node.update_parent_actual_liveness()     
-
+    def get_next_free_level(self):
+        if self.remaining_alues_in_level[-1] > 0:
+            self.remaining_alues_in_level[-1] -= 1
+        else:
+            self.remaining_alues_in_level.append(self.alu_limit)
+        return len(self.remaining_alues_in_level) - 1  
+        
     def add_node(self, line):  # line format: "Mode_Node: id, Parent: , Parent: ..., Type"
         node_id = self.get_id(line)
         
@@ -304,9 +298,10 @@ class Graph:
         mode = line.split("_")[0]
 
         parents = self.get_parents(line, node_type, node_id)
+        
         if not node_id in self.nodes:
             self.nodes[node_id] = []
-        new_node = Node(node_id, len(self.nodes[node_id]), parents, node_type, mode)
+        new_node = Node(node_id, len(self.nodes[node_id]), parents, node_type, mode, self.get_next_free_level())
         self.nodes[node_id].append(new_node)
         self.add_level(new_node)
         for i in parents:
@@ -314,22 +309,26 @@ class Graph:
             if i.contains_edge:
                 if not i in self.edges:
                     self.edges[i] = []
-                self.edges[i].append(new_node)
+                if i.is_forward() and new_node.is_reverse():
+                    self.edges[i].append(new_node)
+                    if new_node.is_load():
+                        self.edge_pairs.append((i, new_node))
 
         
         if new_node.is_arithmetic():
             self.handle_arithmetic(new_node)
-
         if new_node.is_mem_op():
             self.handle_mem_op(new_node)
             if self.log_address:
                 self.handle_write_to_file(new_node)
 
         self.update_max_level(new_node)
-        self.calc_actual_level(new_node)
-        
+        new_node.update_parent_actual_liveness()     
+
         if new_node.is_forward() and new_node.actual_level > self.max_forward_actual_level:
                 self.max_forward_actual_level = new_node.actual_level
+        if new_node.is_reverse() and new_node.actual_level > self.max_reverse_actual_level:
+                self.max_reverse_actual_level = new_node.actual_level
         if new_node.level not in self.insts_per_level:
             self.insts_per_level[new_node.level] = 1
         else:
@@ -338,15 +337,12 @@ class Graph:
             self.forward_node_count += 1
         else:
             self.reverse_node_count += 1
+        return new_node
+
     def update_lives_per_level(self, node):
-        # if not node.is_mem_op():
-        #     return
         for i in range(node.liveness[0], node.liveness[1] + 1):
             if i not in self.lives_per_level:
                 self.lives_per_level[i] = set()
-            # self.lives_per_level[i].add(node.id)
-            # if node.contains_edge:
-                # print("Has edge: " + node.id)
             if node.is_forward():
                 self.lives_per_level[i].add(node.id)
 
@@ -554,7 +550,9 @@ class Graph:
         # self.print_nodes_with_max_children()
         # self.print_edge_combination()
         # self.print_node_count()
-    
+    def accept(self, visitor):
+        return visitor.visit(self)
+
     def print_avg_lifetime(self):
         print("--------------------------------\nAvg Lifetime")
         print("Avg Lifetime: {}".format(self.get_avg_lifetime()))
@@ -582,8 +580,44 @@ class Graph:
             for node in node_vector:
                 if node.has_children():
                     liveness += node.end_level - node.actual_level
-                    node_count += 1
+                node_count += 1
         return liveness/(node_count+1)
+
+    def get_actual_avg_edge_lifetime(self):
+        node_count = 0
+        liveness = 0
+        for i in self.edges:
+            node_vector = self.edges[i]
+            if node_vector[0].is_load():
+                for node in node_vector:
+                    if node.has_children():
+                        liveness += node.children[0].actual_level - node.parents[0].actual_level
+                        node_count += 1
+        return liveness/(node_count+1)
+
+    def get_working_set(self):
+        address_set = set()
+        for i in self.edges:
+            node_vector = self.edges[i]
+            if node_vector[0].is_load():
+                for node in node_vector:
+                    address_set.add(node.parents[0].id)
+        return len(address_set)
+    
+    def print_live_edges_per_level(self):
+        print("--------------------------------\nLive Edges Per Level")
+
+        for i in self.edges:
+            node_vector = self.edges[i]
+            if node_vector[0].is_load():
+                for n in node_vector:
+                    if n.has_children():
+                        for l in n.parents:
+                            print(l)
+                        p = n.parents[0]
+                        print(p, p.actual_level, n.children[0].actual_level)
+                # for node in node_vector:
+                    
 
     def print_max_lives_in_a_level(self):
         # print("--------------------------------\nMax Lives")

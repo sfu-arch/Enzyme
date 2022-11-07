@@ -1,0 +1,9 @@
+benchmark,layers
+nn,490
+matdescent,10400
+gravity,15616
+logsumexp,1251
+mttkrp,512
+pathfinder,5842
+somier,216
+lenet,11895

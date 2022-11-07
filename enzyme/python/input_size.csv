@@ -1,0 +1,9 @@
+benchmark,ad,original
+nn_normal,10594,8634
+matdescent_normal,320800,0
+gravity_normal,1024,0
+logsumexp_normal,19998,0
+mttkrp_normal,4738,0
+pathfinder_normal,19800,0
+somier_normal,6336,4224
+lenet_normal,1295,1164

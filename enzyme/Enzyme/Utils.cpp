@@ -125,6 +125,7 @@ Function *getOrInsertDifferentialFloatMemcpy(Module &M, Type *elementType,
     B.setFastMathFlags(getFast());
     PHINode *idx = B.CreatePHI(num->getType(), 2, "idx");
     idx->addIncoming(ConstantInt::get(num->getType(), 0), entry);
+    errs() << "\n\nidx: " << *idx << "\n";
 
     Value *dsti = B.CreateGEP(dst, idx, "dst.i");
     LoadInst *dstl = B.CreateLoad(dsti, "dst.i.l");
@@ -154,6 +155,7 @@ Function *getOrInsertDifferentialFloatMemcpy(Module &M, Type *elementType,
 
     Value *next =
         B.CreateNUWAdd(idx, ConstantInt::get(num->getType(), 1), "idx.next");
+    errs() << "Next: " << *next << "\n";
     idx->addIncoming(next, body);
     B.CreateCondBr(B.CreateICmpEQ(num, next), end, body);
   }
@@ -247,6 +249,8 @@ Function *getOrInsertMemcpyStrided(Module &M, PointerType *T, unsigned dstalign,
         B.CreateNUWAdd(idx, ConstantInt::get(num->getType(), 1), "idx.next");
     Value *snext = B.CreateNUWAdd(sidx, stride, "sidx.next");
     idx->addIncoming(next, body);
+    errs() << "\n\nIDX2: " << *idx << "\n";
+
     sidx->addIncoming(snext, body);
     B.CreateCondBr(B.CreateICmpEQ(num, next), end, body);
   }
@@ -617,32 +621,31 @@ Function *getOrInsertExponentialAllocator(Module &M, bool ZeroInit) {
   auto phi = B.CreatePHI(ptr->getType(), 2);
   phi->addIncoming(gVal, grow);
   phi->addIncoming(ptr, entry);
+  errs() << "\n\nPHI: " << *phi << "\n";
+
   B.CreateRet(phi);
   return F;
 }
 
 uint32_t countForwardPassRegisters(llvm::Function *f) {
   uint32_t count = 0;
-  for (auto &b: *f) {
-    for (auto &i: b) {
-      if (llvm::isa <llvm::BinaryOperator> (i))
-        count ++;
+  for (auto &b : *f) {
+    for (auto &i : b) {
+      if (llvm::isa<llvm::BinaryOperator>(i))
+        count++;
     }
   }
   return count;
 }
 
-void addDynamicRegisterCounter(llvm::Function *f) {
-  
-}
+void addDynamicRegisterCounter(llvm::Function *f) {}
 
 void addInstCost(llvm::Function *f) {
 
-
   // propagate the cost
-  for (auto &bb: *f) {
-    for (auto &I: bb) {
-      if (llvm::isa <llvm::BinaryOperator> (I)) {
+  for (auto &bb : *f) {
+    for (auto &I : bb) {
+      if (llvm::isa<llvm::BinaryOperator>(I)) {
         auto op1 = I.getOperand(0);
         auto op2 = I.getOperand(1);
         // auto *N = I.getOperand(0)->getMetadata("cost");
@@ -664,26 +667,30 @@ void addInstCost(llvm::Function *f) {
 // HOW TO USE:
 //     std::vector<Value*> args = {arg0, arg1, arg2, ...};
 //     CallPrintf(call_before, format, args);
-// 
-void CallPrintf(llvm::Instruction *I, char *format, std::vector<llvm::Value *> args, std::string unique_id) {
-    auto &m = *I->getModule();
-    auto &context = m.getContext();
+//
+void CallPrintf(llvm::Instruction *I, char *format,
+                std::vector<llvm::Value *> args, std::string unique_id) {
+  auto &m = *I->getModule();
+  auto &context = m.getContext();
 
-    PointerType *PrintfArgTy = PointerType::getUnqual(Type::getInt8Ty(context));
-    FunctionType *PrintfTy = FunctionType::get(IntegerType::getInt32Ty(context), PrintfArgTy, /*IsVarArgs=*/true);
-    FunctionCallee Printf = m.getOrInsertFunction("printf", PrintfTy);
+  PointerType *PrintfArgTy = PointerType::getUnqual(Type::getInt8Ty(context));
+  FunctionType *PrintfTy = FunctionType::get(IntegerType::getInt32Ty(context),
+                                             PrintfArgTy, /*IsVarArgs=*/true);
+  FunctionCallee Printf = m.getOrInsertFunction("printf", PrintfTy);
 
-    llvm::Constant *ResultFormatStr = llvm::ConstantDataArray::getString(context, format);
-    Constant *ResultFormatStrVar =
-        m.getOrInsertGlobal(unique_id, ResultFormatStr->getType());
-    dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
+  llvm::Constant *ResultFormatStr =
+      llvm::ConstantDataArray::getString(context, format);
+  Constant *ResultFormatStrVar =
+      m.getOrInsertGlobal(unique_id, ResultFormatStr->getType());
+  dyn_cast<GlobalVariable>(ResultFormatStrVar)->setInitializer(ResultFormatStr);
 
-    auto next_node = I->getNextNode()? I->getNextNode(): I;
-    Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(ResultFormatStrVar, PrintfArgTy, "", next_node);
-    // ResultHeaderStrPtr->insertAfter(I);
-    std::vector<Value *> print_args = {ResultHeaderStrPtr};
-    print_args.insert(print_args.end(), args.begin(), args.end());
-    CallInst::Create(Printf, print_args, "", ResultHeaderStrPtr->getNextNode());
+  auto next_node = I->getNextNode() ? I->getNextNode() : I;
+  Instruction *ResultHeaderStrPtr = CastInst::CreatePointerCast(
+      ResultFormatStrVar, PrintfArgTy, "", next_node);
+  // ResultHeaderStrPtr->insertAfter(I);
+  std::vector<Value *> print_args = {ResultHeaderStrPtr};
+  print_args.insert(print_args.end(), args.begin(), args.end());
+  CallInst::Create(Printf, print_args, "", ResultHeaderStrPtr->getNextNode());
 }
 
 bool IsReverseOp(llvm::Value *I) {

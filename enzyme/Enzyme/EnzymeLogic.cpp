@@ -57,20 +57,21 @@
 
 #include "llvm/Support/AMDGPUMetadata.h"
 
+#include "BFSPass.h"
+#include "CostAnalysis.h"
+#include "ForwardNodeInstrument.h"
 #include "FunctionUtils.h"
 #include "GradientUtils.h"
+#include "LayerGenerator.h"
 #include "LibraryFuncs.h"
-#include "Utils.h"
-#include "CostAnalysis.h"
 #include "LifetimeAnalysis.h"
-#include "OperationCounter.h"
-#include "Scheduler.h"
-#include "NodeDetector.h"
-#include "BFSPass.h"
-#include "NodeLogger.h"
-#include "ForwardNodeInstrument.h"
 #include "LoadLogger.h"
 #include "MemOpRatioLogger.h"
+#include "NodeDetector.h"
+#include "NodeLogger.h"
+#include "OperationCounter.h"
+#include "Scheduler.h"
+#include "Utils.h"
 
 #include "llvm/Transforms/Utils/Mem2Reg.h"
 
@@ -111,19 +112,16 @@ cl::opt<bool> EnzymeJuliaAddrLoad(
 
 cl::opt<bool>
     CreateDDDG("enable-dddg", cl::init(false), cl::Hidden,
-                         cl::desc("Enables creating a dynamic data dependence graph"));
+               cl::desc("Enables creating a dynamic data dependence graph"));
 
-cl::opt<bool>
-    LogMain("log-main", cl::init(false), cl::Hidden,
-                         cl::desc("Instruments the main function as well."));
+cl::opt<bool> LogMain("log-main", cl::init(false), cl::Hidden,
+                      cl::desc("Instruments the main function as well."));
 
 cl::opt<bool>
     EnableBins("enable-bins", cl::init(false), cl::Hidden,
-                         cl::desc("Instrument the reverse for the binning policy."));
-cl::opt<bool>
-  MemOpRatioLog("memop-ratio", cl::init(false), cl::Hidden,
-                        cl::desc("Log MemOps Ratio"));
-
+               cl::desc("Instrument the reverse for the binning policy."));
+cl::opt<bool> MemOpRatioLog("memop-ratio", cl::init(false), cl::Hidden,
+                            cl::desc("Log MemOps Ratio"));
 }
 
 struct CacheAnalysis {
@@ -2876,7 +2874,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
       break;
     }
   }
-    
+
   if (hasMetadata(key.todiff, "enzyme_gradient")) {
 
     DIFFE_TYPE subretType = key.todiff->getReturnType()->isFPOrFPVectorTy()
@@ -2992,7 +2990,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
     assert(md2->getNumOperands() == 1);
     auto gvemd = cast<ConstantAsMetadata>(md2->getOperand(0));
     auto foundcalled = cast<Function>(gvemd->getValue());
-  
+
     if (hasconstant) {
       EmitWarning("NoCustom",
                   key.todiff->getEntryBlock().begin()->getDebugLoc(),
@@ -3282,7 +3280,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   auto getIndex = [&](Instruction *I, CacheType u) -> unsigned {
     return gutils->getIndex(std::make_pair(I, u), mapping);
   };
-    
+
   gutils->computeMinCache(TR, guaranteedUnreachable);
 
   SmallPtrSet<const Value *, 4> unnecessaryValues;
@@ -3535,8 +3533,8 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
         // the wrong order may result in first replacing the later unwrapped
         // value, caching it, then attempting to reuse it for an earlier
         // replacement.
-        errs() << "nexti " << *nexti << "\n"; 
-        
+        errs() << "nexti " << *nexti << "\n";
+
         Value *nval = gutils->unwrapM(nexti, lb, empty,
                                       UnwrapMode::LegalFullUnwrapNoTapeReplace,
                                       /*scope*/ nullptr, /*permitCache*/ false);
@@ -3726,16 +3724,25 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   //   IRBuilder<> Builder2(&bb);
   //   gutils->getReverseBuilder(Builder2);
   //   for (auto &i: bb) {
-  //     if (isa<BinaryOperator>(i) && isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&i), Builder2)))
-  //       errs() << gutils->lookupM(gutils->getNewFromOriginal(&i), Builder2)->getNameOrAsOperand() << "\n";
+  //     if (isa<BinaryOperator>(i) &&
+  //     isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&i),
+  //     Builder2)))
+  //       errs() << gutils->lookupM(gutils->getNewFromOriginal(&i),
+  //       Builder2)->getNameOrAsOperand() << "\n";
   //   }
   // }
   // for (auto &block: gutils->reverseBlockToPrimal) {
   //   IRBuilder<> Builder2(block.second);
   //   gutils->getReverseBuilder(Builder2);
-  //   for (auto &inst: *gutils->reverseBlocks[cast<BasicBlock>(gutils->getNewFromOriginal(orig->getParent()))].back()) 
-  //     if (isa<BinaryOperator>(inst) && gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2) && isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2)))
-  //       errs() << "LOGGING: " << inst << " -> " << gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2)->getNameOrAsOperand() << "\n";
+  //   for (auto &inst:
+  //   *gutils->reverseBlocks[cast<BasicBlock>(gutils->getNewFromOriginal(orig->getParent()))].back())
+  //     if (isa<BinaryOperator>(inst) &&
+  //     gutils->lookupM(gutils->getNewFromOriginal(&inst), Builder2) &&
+  //     isa<BinaryOperator>(gutils->lookupM(gutils->getNewFromOriginal(&inst),
+  //     Builder2)))
+  //       errs() << "LOGGING: " << inst << " -> " <<
+  //       gutils->lookupM(gutils->getNewFromOriginal(&inst),
+  //       Builder2)->getNameOrAsOperand() << "\n";
 
   // }
   // for (auto &entry: i) {
@@ -3745,13 +3752,16 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // }
   std::ofstream myfile;
   myfile.open("live_vars.txt");
-  for (auto i: gutils->alias_map) {
+  for (auto i : gutils->alias_map) {
     // errs() << *i.first << " -> " << *i.second << "\n";
-    myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+    myfile << i.second->getNameOrAsOperand() << ", "
+           << i.first->getNameOrAsOperand() << "\n";
   }
   // for (auto i: gutils->recomputed_vals) {
-  //   // errs() << i.first->getNameOrAsOperand() << " -> " << i.second->getNameOrAsOperand() << "\n";
-  //   // myfile << i.second->getNameOrAsOperand() << ", " << i.first->getNameOrAsOperand() << "\n";
+  //   // errs() << i.first->getNameOrAsOperand() << " -> " <<
+  //   i.second->getNameOrAsOperand() << "\n";
+  //   // myfile << i.second->getNameOrAsOperand() << ", " <<
+  //   i.first->getNameOrAsOperand() << "\n";
   //   // errs() << "\tConstant: " << gutils->isConstantValue(i.second) << "\n";
   // }
   // for (auto val: gutils->GetscopeMap())
@@ -3762,11 +3772,17 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
 
   if (EnableBins)
     gutils->handleBinnedValues();
- 
+
   // gutils->performLevelAnalysis();
   // gutils->printLevelAnalysis();
   // gutils->setBins({3, 3, 10, 25, 100, 1000});
   // gutils->simpleMapForPerformance();
+
+  // LayerGenerator
+  legacy::FunctionPassManager PM(nf->getParent());
+  PM.add(new diffman::LayerGenerator(gutils));
+  PM.run(*nf);
+
   delete gutils;
 
   {
@@ -3776,17 +3792,15 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   PPC.AlwaysInline(nf);
   if (Arch == Triple::nvptx || Arch == Triple::nvptx64)
     PPC.ReplaceReallocs(nf, /*mem2reg*/ true);
-  
+
   // legacy::FunctionPassManager PM(key.todiff->getParent());
   // PM.add(new instrumem::LoadLoggerPass());
   // PM.run(*nf);
-
   if (LogMain) {
     legacy::FunctionPassManager PM(key.todiff->getParent());
     PM.add(new instrumem::NodeLogger());
     PM.run(*key.todiff);
-  }
-  else if (CreateDDDG) {
+  } else if (CreateDDDG) {
     legacy::FunctionPassManager PM(nf->getParent());
     PM.add(new instrumem::NodeLogger());
     PM.run(*nf);
@@ -3796,6 +3810,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
     PM.add(new instrumem::MemOpRatioLogger());
     PM.run(*nf);
   }
+
   if (PostOpt)
     PPC.optimizeIntermediate(nf);
   if (EnzymePrint) {

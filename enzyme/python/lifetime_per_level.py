@@ -12,7 +12,9 @@ ALU_SIZE = 64
 ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 1
 
-BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+# BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet', 'mass_spring']
+BENCHMARKS = ['mass_spring']
+
 MODES = ['ad']
 UNROLL = ['normal']
 LOG_ADDRESS = False
@@ -73,4 +75,5 @@ def write_to_csv(dict, filename):
                 row[0]['edge_count_{}'.format(i)] = dict[benchmark][i]['edge_count']
             writer.writerows(row)
 
-write_to_csv(level_dict, 'lifetime_per_level.csv')
+print(level_dict)
+# write_to_csv(level_dict, 'lifetime_per_level.csv')

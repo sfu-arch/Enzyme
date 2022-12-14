@@ -630,7 +630,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
 
   AllocaInst *alloc =
       entryBuilder.CreateAlloca(types.back(), nullptr, name + "_cache");
-      errs() << "Allocated " << name << " cache: " << *alloc << "\n";
+  errs() << "Allocated " << name << " cache: " << *alloc << "\n";
   {
     ConstantInt *byteSizeOfType = ConstantInt::get(
         Type::getInt64Ty(T->getContext()),
@@ -689,7 +689,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
               available[cl.first.var] = cl.first.var;
           }
         }
-          errs() << "es " << *extraSize << "\n";
+        errs() << "es " << *extraSize << "\n";
 
         Value *es = unwrapM(extraSize, allocationBuilder, available,
                             UnwrapMode::AttemptFullUnwrapWithLookup);
@@ -905,6 +905,7 @@ Value *CacheUtility::computeIndexOfChunk(
     }
 
     indices.push_back(var);
+    errs() << "vvvaaaarrr = " << *var << "\n";
     Value *lim = pair.second;
     assert(lim);
     if (limits.size() == 0) {
@@ -1056,7 +1057,7 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
       } else if (i == 0 && extraSize &&
                  unwrapM(extraSize, allocationBuilder, prevMap,
                          UnwrapMode::AttemptFullUnwrap) == nullptr) {
-      errs() << "extraSize \n";
+        errs() << "extraSize \n";
 
         EmitWarning(
             "NoOuterLimit", cast<Instruction>(extraSize)->getDebugLoc(),
@@ -1081,7 +1082,7 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
           if (!inForwardPass) {
             reverseMap[contexts[j].var] =
                 RB->CreateLoad(contexts[j].antivaralloc);
-                errs() << "Load-3 " << *reverseMap[contexts[j].var] << "\n";
+            errs() << "Load-3 " << *reverseMap[contexts[j].var] << "\n";
           }
         } else {
           break;
@@ -1104,7 +1105,7 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
                   limitMinus1, ConstantInt::get(limitMinus1->getType(), 1));
         }
       } else {
-      errs() << "lim \n";
+        errs() << "lim \n";
 
         Value *lim = unwrapM(contexts[i].maxLimit, *RB, reverseMap,
                              UnwrapMode::AttemptFullUnwrapWithLookup);

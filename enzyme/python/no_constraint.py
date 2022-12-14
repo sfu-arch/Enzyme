@@ -8,7 +8,9 @@ ALU_SIZE = 10000
 ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 0
 
-BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+# BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+BENCHMARKS = ['mass_spring']
+
 MODES = ['original', 'ad']
 # MODES = ['ad']
 
@@ -39,5 +41,5 @@ for benchmark in BENCHMARKS:
             graph.allocate_registers(ARITHMETIC_ONLY, consider_edges=True)
             update_dict(no_constraint_dict, benchmark, mode, unroll, graph.get_actual_avg_lifetime())
             print("------------- ------------- ----------")
-
-write_to_csv(no_constraint_dict, 'not_constrained.csv')
+print(no_constraint_dict)
+# write_to_csv(no_constraint_dict, 'not_constrained.csv')

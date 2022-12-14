@@ -85,21 +85,18 @@ private:
   /// do not propagate adjoints themselves
   llvm::SmallPtrSet<llvm::Instruction *, 4> ConstantInstructions;
 
-
   /// Values that do not contain derivative information, either
   /// directly or as a pointer to
   llvm::SmallPtrSet<llvm::Value *, 4> ConstantValues;
 
-
-
 public:
-  std::vector<llvm::Instruction*> active_inst_vec;
+  std::vector<llvm::Instruction *> active_inst_vec;
   /// Instructions that could propagate adjoints
   llvm::SmallPtrSet<llvm::Instruction *, 20> ActiveInstructions;
-  
+
   /// Values that may contain derivative information
   llvm::SmallPtrSet<llvm::Value *, 2> ActiveValues;
-  
+
   /// Construct the analyzer from the a previous set of constant and active
   /// values and whether returns are active. The all arguments of the functions
   /// being analyzed must be in the set of constant and active values, lest an

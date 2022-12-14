@@ -3,12 +3,13 @@ from RegisterBin import RegisterBin
 from csv_functions import update_dict, write_to_csv, update_ld_dict, write_mem_combination_to_csv
 
 WINDOW_SIZE = 50
-REGFILE_SIZE = 128
+REGFILE_SIZE = 5000
 ALU_SIZE = 64
 ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 15
 
-BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+# BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+BENCHMARKS = ['mass_spring']
 MODES = ['original', 'ad']
 # MODES = ['ad']
 
@@ -35,5 +36,5 @@ for benchmark in BENCHMARKS:
             graph.allocate_registers(ARITHMETIC_ONLY, consider_edges=True)
             update_dict(alu_constrained_dict, benchmark, mode, unroll, graph.get_actual_avg_lifetime())
             print("------------- ------------- ----------")
-
-write_to_csv(alu_constrained_dict, 'alu_constrained.csv')
+print(alu_constrained_dict)
+# write_to_csv(alu_constrained_dict, 'alu_constrained.csv')

@@ -41,8 +41,7 @@
 using namespace llvm;
 
 extern "C" {
-  extern int num_live_values;
-
+extern int num_live_values;
 }
 // Helper instruction visitor that generates adjoints
 template <class AugmentedReturnType = AugmentedReturn *>
@@ -132,7 +131,7 @@ public:
       gutils->fictiousPHIs[pn] = &I;
       gutils->replaceAWithB(iload, pn);
     }
-    
+
     erased.insert(&I);
     if (erase) {
       if (auto inst = dyn_cast<Instruction>(iload)) {
@@ -1637,12 +1636,14 @@ public:
       return;
     }
   }
-  void LogAndIncreaseLives(Value *new_val, Value *orig_op1, GradientUtils *gutils) {
+  void LogAndIncreaseLives(Value *new_val, Value *orig_op1,
+                           GradientUtils *gutils) {
     if (isa<Constant>(new_val))
       return;
     num_live_values++;
     gutils->alias_map[orig_op1] = new_val;
-    errs() << new_val->getNameOrAsOperand() << " -> " << orig_op1->getNameOrAsOperand()<< "\n";
+    errs() << new_val->getNameOrAsOperand() << " -> "
+           << orig_op1->getNameOrAsOperand() << "\n";
   }
 
   void createBinaryOperatorAdjoint(llvm::BinaryOperator &BO) {
@@ -1666,15 +1667,19 @@ public:
         dif0 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "m0diffe" + orig_op0->getName());
-            // ADDED BY ME
-            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1, gutils);
+        // ADDED BY ME
+        LogAndIncreaseLives(
+            lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1,
+            gutils);
       }
       if (!constantval1) {
         dif1 = Builder2.CreateFMul(
             idiff, lookup(gutils->getNewFromOriginal(orig_op0), Builder2),
             "m1diffe" + orig_op1->getName());
-            // ADDED BY ME
-            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op0), Builder2), orig_op0, gutils);
+        // ADDED BY ME
+        LogAndIncreaseLives(
+            lookup(gutils->getNewFromOriginal(orig_op0), Builder2), orig_op0,
+            gutils);
       }
       break;
     }
@@ -1746,7 +1751,8 @@ public:
                 Value *s = lookup(gutils->getNewFromOriginal(Pstart), Builder2);
                 // ADDED BY ME
                 errs() << "Pstart: " << Pstart << " -> " << s << "\n";
-                errs() << "Producut: " << *product << " -> " << *orig_op1 << "\n";
+                errs() << "Producut: " << *product << " -> " << *orig_op1
+                       << "\n";
                 Value *lop0 = lookup(product, EB);
                 Value *lop1 =
                     lookup(gutils->getNewFromOriginal(orig_op1), Builder2);
@@ -1769,17 +1775,19 @@ public:
         dif0 = Builder2.CreateFDiv(
             idiff, lookup(gutils->getNewFromOriginal(orig_op1), Builder2),
             "d0diffe" + orig_op0->getName());
-            // ADDED BY ME
-            LogAndIncreaseLives(lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1, gutils);
+        // ADDED BY ME
+        LogAndIncreaseLives(
+            lookup(gutils->getNewFromOriginal(orig_op1), Builder2), orig_op1,
+            gutils);
       }
       if (!constantval1) {
         Value *lop1 = lookup(gutils->getNewFromOriginal(orig_op1), Builder2);
         Value *lastdiv = lookup(gutils->getNewFromOriginal(&BO), Builder2);
         dif1 = Builder2.CreateFNeg(
             Builder2.CreateFMul(lastdiv, Builder2.CreateFDiv(idiff, lop1)));
-            // ADDED BY ME
-            LogAndIncreaseLives(lop1, orig_op1, gutils);
-            LogAndIncreaseLives(lastdiv, &BO, gutils);
+        // ADDED BY ME
+        LogAndIncreaseLives(lop1, orig_op1, gutils);
+        LogAndIncreaseLives(lastdiv, &BO, gutils);
       }
       break;
     }
@@ -1988,7 +1996,8 @@ public:
                   gutils->getNewFromOriginal(BO.getOperand(1 - i)), Builder2);
               // ADDED BY ME
               LogAndIncreaseLives(arg, BO.getOperand(1 - i), gutils);
-              errs() << "OR: " << BO << ": orig: " << *BO.getOperand(1 - i) << " -> " << arg<< "\n";
+              errs() << "OR: " << BO << ": orig: " << *BO.getOperand(1 - i)
+                     << " -> " << arg << "\n";
 
               auto prev = Builder2.CreateOr(arg, BO.getOperand(i));
               prev = Builder2.CreateSub(prev, arg, "", /*NUW*/ true,
@@ -2091,7 +2100,7 @@ public:
             Builder2.CreateFMul(dif0, gutils->getNewFromOriginal(orig_op1));
         setDiffe(&BO, idiff0, Builder2);
       } else if (!constantval1) {
-        errs() << BO << " -> "  << *dif1 << "\n";
+        errs() << BO << " -> " << *dif1 << "\n";
 
         Value *idiff1 =
             Builder2.CreateFMul(dif1, gutils->getNewFromOriginal(orig_op0));
@@ -3677,7 +3686,7 @@ public:
           for (auto pair : geps) {
             Value *op = pair.second;
             Value *alloc = op;
-              errs() << "replacement " << *op  << "\n"; \
+            errs() << "replacement " << *op << "\n";
 
             Value *replacement = gutils->unwrapM(op, BuilderZ, available,
                                                  UnwrapMode::LegalFullUnwrap);
@@ -4405,6 +4414,7 @@ public:
                   gutils->cacheForReverse(BuilderZ, firstallocation,
                                           getIndex(&call, CacheType::Tape)),
                   Builder2);
+              errs() << "First Alloc " << *firstallocation << "\n";
             }
 
             DifferentiableMemCopyFloats(call, call.getOperand(0),
@@ -4557,6 +4567,7 @@ public:
         Value *inc = Builder2.CreateAdd(
             idx, ConstantInt::get(count->getType(), 1, false), "", true, true);
         idx->addIncoming(inc, eloopBlock);
+        errs() << "\n\nidx: " << *idx << "\n\n";
 
         Value *idxs[] = {idx};
         Value *d_req = Builder2.CreateGEP(d_req_orig, idxs);
@@ -5577,6 +5588,7 @@ public:
           sendlen_phi->addIncoming(sendlen_arg, rootBlock);
           sendlen_phi->addIncoming(UndefValue::get(sendlen_arg->getType()),
                                    currentBlock);
+          errs() << "\n\nsendlenphi: " << *sendlen_phi << "\n\n";
         }
 
         // 2. Gather diff(recvbuffer) to intermediate buffer
@@ -5922,8 +5934,7 @@ public:
               TR, gutils, orig, Mode, oldUnreachable)) {
         subretType = DIFFE_TYPE::DUP_ARG;
         errs() << "value needed in the reverse" << *orig << "\n";
-        }
-      else {
+      } else {
         subretType = DIFFE_TYPE::CONSTANT;
         errs() << "value not needed in the reverse" << *orig << "\n";
       }
@@ -7695,6 +7706,7 @@ public:
               cast<PointerType>(call.getArgOperand(0)->getType())
                   ->getElementType(),
               1, orig->getName() + "_psxtmp");
+          errs() << "To Replace: " << *toReplace << "\n";
           val = gutils->cacheForReverse(BuilderZ, toReplace,
                                         getIndex(orig, CacheType::Shadow));
         }
@@ -8679,7 +8691,7 @@ public:
         for (auto &pair : *replacedReturns) {
           if (pair.second == a) {
             for (unsigned i = 0; i < a->getNumOperands(); ++i) {
-              errs() << "a->setOperand2 " << *a->getOperand(i)  << "\n"; \
+              errs() << "a->setOperand2 " << *a->getOperand(i) << "\n";
 
               a->setOperand(i, gutils->unwrapM(a->getOperand(i), Builder2, mapp,
                                                UnwrapMode::LegalFullUnwrap));
@@ -8696,7 +8708,9 @@ public:
         auto orig_a = gutils->isOriginal(a);
         if (orig_a) {
           for (unsigned i = 0; i < a->getNumOperands(); ++i) {
-          errs() << "a->setOperand " << *gutils->getNewFromOriginal(orig_a->getOperand(i)) << "\n"; \
+            errs() << "a->setOperand "
+                   << *gutils->getNewFromOriginal(orig_a->getOperand(i))
+                   << "\n";
 
             a->setOperand(i,
                           gutils->unwrapM(

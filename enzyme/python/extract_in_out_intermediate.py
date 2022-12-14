@@ -6,7 +6,7 @@ ALU_SIZE = 1024
 ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 15
 
-BENCHMARKS = ['gravity', 'nn', 'matdescent', 'logsumexp', 'ode', "pathfinder", "somier", "lenet", "mttkrp", "sddmm", "spmv"]
+BENCHMARKS = ['mass_spring']
 MODES = ['ad']
 UNROLL = ['normal']
 

@@ -7,6 +7,7 @@ ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 0
 
 BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+BENCHMARKS = ['mass_spring']
 MODES = ['original', 'ad']
 # MODES = ['ad']
 
@@ -52,5 +53,5 @@ for benchmark in BENCHMARKS:
             update_dict(memory_size, benchmark, mode, unroll, dup_addresses/(len(rev_address)+1))
 
             print("------------- ------------- ----------")
-
-write_to_csv(memory_size, 'duplicate_loads.csv')
+print(memory_size)
+# write_to_csv(memory_size, 'duplicate_loads.csv')

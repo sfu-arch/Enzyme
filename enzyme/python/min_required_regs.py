@@ -8,7 +8,9 @@ ALU_SIZE = 10000000
 ARITHMETIC_ONLY = False
 AVG_LOAD_DELAY = 0
 
-BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet']
+# BENCHMARKS = ['nn', 'matdescent', 'gravity', 'logsumexp', 'mttkrp', 'pathfinder', 'somier', 'lenet', 'mass_spring']
+BENCHMARKS = ['mass_spring']
+
 MODES = ['original', 'ad']
 # MODES = ['ad']
 
@@ -39,5 +41,5 @@ for benchmark in BENCHMARKS:
             update_dict(min_reg_count, benchmark, mode, unroll, graph.get_actual_min_register_count())
             print(graph.get_actual_min_register_count())
             print("------------- ------------- ----------")
-
-write_to_csv(min_reg_count, 'min_register_count.csv')
+print(min_reg_count)
+# write_to_csv(min_reg_count, 'min_register_count.csv')

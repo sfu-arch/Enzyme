@@ -1517,6 +1517,7 @@ Function *PreProcessCache::preprocessForClone(Function *F,
           IRBuilder<> Builder(Ins);
           for (auto &phi : B->phis()) {
             auto nphi = Builder.CreatePHI(phi.getType(), 2);
+            errs() << "nphi " << *nphi << "\n";
             SmallVector<BasicBlock *, 4> Blocks;
 
             for (auto blk : UnionSet) {
@@ -1558,7 +1559,6 @@ Function *PreProcessCache::CloneFunctionWithReturns(
     SmallPtrSetImpl<Value *> &constants, SmallPtrSetImpl<Value *> &nonconstant,
     SmallPtrSetImpl<Value *> &returnvals, ReturnType returnValue, Twine name,
     ValueToValueMapTy *VMapO, bool diffeReturnArg, llvm::Type *additionalArg) {
-  
 
   assert(!F->empty());
   F = preprocessForClone(F, mode);

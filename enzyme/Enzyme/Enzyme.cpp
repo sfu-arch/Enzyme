@@ -363,8 +363,8 @@ public:
     if (!counted) {
       counted = true;
       auto func = cast<Function>(fn);
-      // errs() << "Number of required nodes inside the tape: " << countForwardPassRegisters(func) << "\n"; 
-      // addDynamicRegisterCounter();
+      // errs() << "Number of required nodes inside the tape: " <<
+      // countForwardPassRegisters(func) << "\n"; addDynamicRegisterCounter();
     }
     assert(fn);
 
@@ -721,7 +721,8 @@ public:
       bool forceAnonymousTape = !sizeOnly && allocatedTapeSize == -1;
       bool returnUsed = !cast<Function>(fn)->getReturnType()->isVoidTy() &&
                         !cast<Function>(fn)->getReturnType()->isEmptyTy();
-      // errs() << "creating primal function\n" << cast<Function>(fn)->getName() << "\n";
+      // errs() << "creating primal function\n" << cast<Function>(fn)->getName()
+      // << "\n";
 
       aug = &Logic.CreateAugmentedPrimal(
           cast<Function>(fn), retType, constants, TLI, TA,
@@ -1347,6 +1348,8 @@ public:
               auto merge = P.CreatePHI(CI->getType(), 2);
               merge->addIncoming(cloned, sel1);
               merge->addIncoming(CI, sel2);
+              errs() << "\n\nmerged " << *merge << "\n";
+
               CI->replaceAllUsesWith(merge);
             }
             goto retry;
@@ -1636,5 +1639,4 @@ ModulePass *createEnzymePass(bool PostOpt) { return new Enzyme(PostOpt); }
 
 extern "C" void AddEnzymePass(LLVMPassManagerRef PM) {
   unwrap(PM)->add(createEnzymePass(/*PostOpt*/ false));
-  
 }

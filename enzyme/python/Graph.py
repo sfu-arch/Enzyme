@@ -581,6 +581,7 @@ class Graph:
                 if node.has_children():
                     liveness += node.end_level - node.actual_level
                 node_count += 1
+        print(liveness, node_count)
         return liveness/(node_count+1)
 
     def get_actual_avg_edge_lifetime(self):

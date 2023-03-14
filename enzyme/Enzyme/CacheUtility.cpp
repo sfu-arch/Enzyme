@@ -674,6 +674,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
           &containedloops.back().first.preheader->back());
 
       Value *size = sublimits[i].first;
+      errs() << "size " << *size << "\n";
       if (EfficientBoolCache && isi1 && i == 0) {
         size = allocationBuilder.CreateLShr(
             allocationBuilder.CreateAdd(
@@ -704,6 +705,16 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
         auto firstallocation = CallInst::CreateMalloc(
             &allocationBuilder.GetInsertBlock()->back(), size->getType(),
             myType, byteSizeOfType, size, nullptr, name + "_malloccache");
+            llvm::BasicBlock *header = containedloops.back().first.header;
+            errs() << "Allocated cache1: " << *firstallocation << "\n";
+            
+        // Accumulate the size of the mallocs in the loop to generate a single large malloc
+        if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(size)) {
+          if (loopMallocSizes.find(header) == loopMallocSizes.end())
+                loopMallocSizes[header] = 0;
+          loopMallocSizes[header] += CI->getSExtValue();
+        }
+
         CallInst *malloccall = dyn_cast<CallInst>(firstallocation);
         if (malloccall == nullptr) {
           malloccall =
@@ -893,7 +904,6 @@ Value *CacheUtility::computeIndexOfChunk(
       var = ConstantInt::get(Type::getInt64Ty(newFunc->getContext()), 0);
     else if (!inForwardPass) {
       var = v.CreateLoad(idx.antivaralloc);
-      errs() << "Load-2: " << *var << "\n";
       available[idx.var] = var;
     } else {
       var = idx.var;
@@ -905,7 +915,6 @@ Value *CacheUtility::computeIndexOfChunk(
     }
 
     indices.push_back(var);
-    errs() << "vvvaaaarrr = " << *var << "\n";
     Value *lim = pair.second;
     assert(lim);
     if (limits.size() == 0) {

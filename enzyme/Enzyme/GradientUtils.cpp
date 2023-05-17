@@ -1541,7 +1541,7 @@ endCheck:
   return nullptr;
 }
 
-void GradientUtils::handleBinnedValues() {
+void GradientUtils::handleTapeValues() {
   std::map<Instruction *, int> forward_index_map;
   std::map<Instruction *, int> reverse_index_map;
   
@@ -1566,10 +1566,6 @@ void GradientUtils::handleBinnedValues() {
 
   // Define the boundries of the layers and break the blocks if needed.
   for (auto bb : forward_bb_writes_) {
-    errs() << "bb: " << bb.first->getName() << "\n";
-
-    if (bb.second <= BIN_SIZE)
-      continue;
     int remaining_bin_size = BIN_SIZE;
     for (auto &inst : bb.first->getInstList()) {
       if (isa<PHINode>(inst))
@@ -1590,8 +1586,6 @@ void GradientUtils::handleBinnedValues() {
   }
   
   for (auto bb : reverse_bb_reads_) {
-    if (bb.second <= BIN_SIZE)
-      continue;
     int remaining_bin_size = BIN_SIZE;
     std::for_each(bb.first->getInstList().rbegin(),
                   bb.first->getInstList().rend(), [&](auto &inst) {

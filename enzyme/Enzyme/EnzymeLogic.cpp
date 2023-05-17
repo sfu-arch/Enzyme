@@ -3773,7 +3773,7 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // gutils->instrumentEdges();
 
   if (EnableBins)
-    gutils->handleBinnedValues();
+    gutils->handleTapeValues();
 
   // gutils->performLevelAnalysis();
   // gutils->printLevelAnalysis();
@@ -3781,9 +3781,9 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // gutils->simpleMapForPerformance();
 
   // LayerGenerator
-  legacy::FunctionPassManager PM(nf->getParent());
-  PM.add(new tapeman::LayerGenerator(gutils));
-  PM.run(*nf);
+  // legacy::FunctionPassManager PM(nf->getParent());
+  // PM.add(new tapeman::LayerGenerator(gutils));
+  // PM.run(*nf);
 
   delete gutils;
 
@@ -3798,20 +3798,20 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   // legacy::FunctionPassManager PM(key.todiff->getParent());
   // PM.add(new instrumem::LoadLoggerPass());
   // PM.run(*nf);
-  if (LogMain) {
-    legacy::FunctionPassManager PM(key.todiff->getParent());
-    PM.add(new instrumem::NodeLogger());
-    PM.run(*key.todiff);
-  } else if (CreateDDDG) {
-    legacy::FunctionPassManager PM(nf->getParent());
-    PM.add(new instrumem::NodeLogger());
-    PM.run(*nf);
-  }
-  if (MemOpRatioLog) {
-    legacy::FunctionPassManager PM(nf->getParent());
-    PM.add(new instrumem::MemOpRatioLogger());
-    PM.run(*nf);
-  }
+  // if (LogMain) {
+  //   legacy::FunctionPassManager PM(key.todiff->getParent());
+  //   PM.add(new instrumem::NodeLogger());
+  //   PM.run(*key.todiff);
+  // } else if (CreateDDDG) {
+  //   legacy::FunctionPassManager PM(nf->getParent());
+  //   PM.add(new instrumem::NodeLogger());
+  //   PM.run(*nf);
+  // }
+  // if (MemOpRatioLog) {
+  //   legacy::FunctionPassManager PM(nf->getParent());
+  //   PM.add(new instrumem::MemOpRatioLogger());
+  //   PM.run(*nf);
+  // }
 
   if (PostOpt)
     PPC.optimizeIntermediate(nf);

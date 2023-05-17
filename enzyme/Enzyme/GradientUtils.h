@@ -216,7 +216,8 @@ public:
                     MDString::get(inst->getContext(), std::to_string(index))));
   }
 
-  void handleBinnedValues();
+  // Iterates over the marked tape values, creates layers, and assigns indexes.
+  void handleTapeValues();
 
   // This function records the original value in the FWD and the corresponding load in the REV.
   void handleCachedValue(Value *original_value, Value *load) {

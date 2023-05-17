@@ -1541,16 +1541,17 @@ endCheck:
   return nullptr;
 }
 
-void GradientUtils::handleBinnedValues() {
+void GradientUtils::handleTapeValues() {
   std::map<Instruction *, int> forward_index_map;
   std::map<Instruction *, int> reverse_index_map;
-
+  
+  // We need to keep track of the number of reads and writes to each block.
   for (auto i : forward_to_reverse_map) {
     auto forward_inst = dyn_cast<Instruction>(i.first);
     auto reverse_inst = dyn_cast<Instruction>(i.second);
     auto reverse_bb = reverse_inst->getParent();
     auto forward_bb = reverseBlockToPrimal[reverse_bb];
-
+    
     if (forward_bb_writes_.count(forward_bb) == 0)
       forward_bb_writes_[forward_bb] = 0;
 
@@ -1563,9 +1564,8 @@ void GradientUtils::handleBinnedValues() {
     reverse_bb_reads_[reverse_bb]++;
   }
 
+  // Define the boundries of the layers and break the blocks if needed.
   for (auto bb : forward_bb_writes_) {
-    if (bb.second <= BIN_SIZE)
-      continue;
     int remaining_bin_size = BIN_SIZE;
     for (auto &inst : bb.first->getInstList()) {
       if (isa<PHINode>(inst))
@@ -1584,9 +1584,8 @@ void GradientUtils::handleBinnedValues() {
       setBasicBlockMetadata(bb.first->getTerminator(),
                             BIN_SIZE - remaining_bin_size, BIN_PUSH);
   }
+  
   for (auto bb : reverse_bb_reads_) {
-    if (bb.second <= BIN_SIZE)
-      continue;
     int remaining_bin_size = BIN_SIZE;
     std::for_each(bb.first->getInstList().rbegin(),
                   bb.first->getInstList().rend(), [&](auto &inst) {
@@ -2021,6 +2020,8 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
             inversionAllocs, numThreads->getType(), malloc->getType(),
             byteSizeOfType, numThreads, nullptr,
             malloc->getName() + "_malloccache"));
+            errs() << "Allocated cache: " << *firstallocation << "\n";
+
         if (firstallocation->getParent() == nullptr) {
           inversionAllocs->getInstList().push_back(firstallocation);
         }
@@ -3682,8 +3683,6 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
       assert(result->getType());
       result = BuilderM.CreateBitCast(result, val->getType());
       assert(result->getType() == inst->getType());
-      errs() << "Lookup-10 : " << *inst << " : " << *result << "\n";
-
       return result;
     }
   }
@@ -4287,6 +4286,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                                                 /*shouldFree*/ true,
                                                 /*allocate*/ true);
                     assert(cache);
+                    llvm::errs() << "AI: " << *AI << ", Cache: " << *cache << "\n";
                     scopeMap.insert(
                         std::make_pair(AI, std::make_pair(cache, lctx)));
 
@@ -4515,7 +4515,6 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
               assert(cache);
               scopeMap.insert(
                   std::make_pair(inst, std::make_pair(cache, lctx)));
-
               v.setFastMathFlags(getFast());
               assert(isOriginalBlock(*v.GetInsertBlock()));
               Value *outer =

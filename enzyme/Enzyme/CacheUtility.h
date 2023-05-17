@@ -132,6 +132,9 @@ public:
   llvm::TargetLibraryInfo &TLI;
   llvm::DominatorTree DT;
 
+  // Loop to malloc size map
+  std::map<llvm::BasicBlock *, int> loopMallocSizes;
+  
 protected:
   llvm::LoopInfo LI;
   llvm::AssumptionCache AC;

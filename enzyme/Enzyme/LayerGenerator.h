@@ -10,7 +10,7 @@
 #include "llvm/Pass.h"
 #include <llvm/Analysis/LoopInfo.h>
 
-namespace diffman {
+namespace tapeman {
 // A pass to generate layers by detecting loops and write pushs/pops based on
 // the writes in each loop.
 class LayerGenerator : public llvm::FunctionPass,
@@ -31,6 +31,6 @@ private:
   GradientUtils *gutils_ = nullptr;
 };
 
-} // namespace diffman
+} // namespace tapeman
 
 #endif // LAYER_GENERATOR_H

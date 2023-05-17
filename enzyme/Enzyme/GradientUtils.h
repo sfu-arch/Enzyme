@@ -187,6 +187,7 @@ public:
       CallPrintf(next_valid_node, &s[0], {});
     }
   }
+
   StoreInst *getStoreInstUser(Value *v) {
     auto inst = dyn_cast<Instruction>(v);
     for (auto i : inst->users()) {
@@ -206,6 +207,8 @@ public:
     return false;
   }
 
+  // Sets metadata for an instruction. `command` can be either "read" or "write" and `index` is the
+  // index of the value in the tape.
   void setOperationMetadata(Instruction *inst, int index, std::string command) {
     inst->setMetadata(
         command,
@@ -213,11 +216,10 @@ public:
                     MDString::get(inst->getContext(), std::to_string(index))));
   }
 
-  void handleBinnedValues();
+  // Iterates over the marked tape values, creates layers, and assigns indexes.
+  void handleTapeValues();
 
-  // The original value will be stored in the cache in the forward phase.
-  // The load is the operation which reads the value from the cache in the
-  // reverse
+  // This function records the original value in the FWD and the corresponding load in the REV.
   void handleCachedValue(Value *original_value, Value *load) {
     if (checkUnused(original_value))
       return;
@@ -1726,6 +1728,8 @@ public:
         createCacheForScope(lctx, inst->getType(), inst->getName(), shouldFree);
     assert(cache);
     Value *Val = inst;
+    llvm::errs() << "inst: " << *inst << ", Cache: " << *cache << "\n";
+
     insert_or_assign(
         scopeMap, Val,
         std::pair<AssertingVH<AllocaInst>, LimitContext>(cache, lctx));

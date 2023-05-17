@@ -25,21 +25,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <algorithm>
+#include "GradientUtils.h"
 
 #include <llvm/Config/llvm-config.h>
+
+#include <algorithm>
 
 #include "DifferentialUseAnalysis.h"
 #include "EnzymeLogic.h"
 #include "FunctionUtils.h"
-#include "GradientUtils.h"
 #include "LibraryFuncs.h"
-
-#include "llvm/IR/GlobalValue.h"
-
-#include "llvm/IR/Constants.h"
-
 #include "llvm/Analysis/ValueTracking.h"
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/GlobalValue.h"
 #include "llvm/IR/InstrTypes.h"
 #include "llvm/Support/AMDGPUMetadata.h"
 #include "llvm/Transforms/Utils/SimplifyIndVar.h"
@@ -62,9 +60,9 @@ std::map<
 extern "C" {
 llvm::cl::opt<int> BIN_SIZE("bin-size", llvm::cl::init(1), llvm::cl::Hidden,
                             llvm::cl::desc("Size of the Bin"));
-llvm::cl::opt<bool>
-    EnzymeNewCache("enzyme-new-cache", cl::init(true), cl::Hidden,
-                   cl::desc("Use new cache decision algorithm"));
+llvm::cl::opt<bool> EnzymeNewCache(
+    "enzyme-new-cache", cl::init(true), cl::Hidden,
+    cl::desc("Use new cache decision algorithm"));
 
 llvm::cl::opt<bool> EnzymeMinCutCache("enzyme-mincut-cache", cl::init(true),
                                       cl::Hidden,
@@ -78,24 +76,34 @@ llvm::cl::opt<bool> EnzymeInactiveDynamic(
     "enzyme-inactive-dynamic", cl::init(true), cl::Hidden,
     cl::desc("Force wholy inactive dynamic loops to have 0 iter reverse pass"));
 
-llvm::cl::opt<bool>
-    EnzymeSharedForward("enzyme-shared-forward", cl::init(false), cl::Hidden,
-                        cl::desc("Forward Shared Memory from definitions"));
+llvm::cl::opt<bool> EnzymeSharedForward(
+    "enzyme-shared-forward", cl::init(false), cl::Hidden,
+    cl::desc("Forward Shared Memory from definitions"));
 
-llvm::cl::opt<bool>
-    EnzymeRegisterReduce("enzyme-register-reduce", cl::init(false), cl::Hidden,
-                         cl::desc("Reduce the amount of register reduce"));
-llvm::cl::opt<bool>
-    EnzymeSpeculatePHIs("enzyme-speculate-phis", cl::init(false), cl::Hidden,
-                        cl::desc("Speculatively execute phi computations"));
+llvm::cl::opt<bool> EnzymeRegisterReduce(
+    "enzyme-register-reduce", cl::init(false), cl::Hidden,
+    cl::desc("Reduce the amount of register reduce"));
+llvm::cl::opt<bool> EnzymeSpeculatePHIs(
+    "enzyme-speculate-phis", cl::init(false), cl::Hidden,
+    cl::desc("Speculatively execute phi computations"));
 llvm::cl::opt<bool> EnzymeFreeInternalAllocations(
     "enzyme-free-internal-allocations", cl::init(true), cl::Hidden,
     cl::desc("Always free internal allocations (disable if allocation needs "
              "access outside)"));
 }
 
-void setBasicBlockMetadata(Instruction *target_inst, int size,
-                           std::string command) {
+void setLayerBoundary(Instruction *target_inst, int size,
+                      tapeman::BoundaryType bounary) {
+  std::string command;
+  switch (bounary) {
+    case tapeman::BoundaryType::kAllocation:
+      command = "SpadAlloc";
+      break;
+    case tapeman::BoundaryType::kBarrier:
+      command = "Barrier";
+      break;
+  }
+
   Instruction *alloca = new AllocaInst(
       Type::getInt32Ty(target_inst->getContext()), 0, "", target_inst);
   alloca->setMetadata(
@@ -214,7 +222,6 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       if (found1 != found0->second.end()) {
         auto found2 = found1->second.find(idx.second);
         if (found2 != found1->second.end()) {
-
           auto cachedValue = found2->second;
           if (cachedValue == nullptr) {
             found1->second.erase(idx.second);
@@ -311,8 +318,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         if (orig && knownRecomputeHeuristic.find(orig) !=
                         knownRecomputeHeuristic.end()) {
           if (!knownRecomputeHeuristic[orig]) {
-            if (!legalRecompute(orig, available, &BuilderM))
-              return nullptr;
+            if (!legalRecompute(orig, available, &BuilderM)) return nullptr;
 
             assert(isa<LoadInst>(orig) == isa<LoadInst>(val));
           }
@@ -320,71 +326,69 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       }
     }
 
-#define getOpFullest(Builder, vtmp, frominst, check)                           \
-  ({                                                                           \
-    Value *v = vtmp;                                                           \
-    BasicBlock *origParent = frominst;                                         \
-    Value *___res;                                                             \
-    if (unwrapMode == UnwrapMode::LegalFullUnwrap ||                           \
-        unwrapMode == UnwrapMode::LegalFullUnwrapNoTapeReplace ||              \
-        unwrapMode == UnwrapMode::AttemptFullUnwrap ||                         \
-        unwrapMode == UnwrapMode::AttemptFullUnwrapWithLookup) {               \
-      if (v == val)                                                            \
-        ___res = nullptr;                                                      \
-      else {                                                                   \
-        errs() << "getOpFullest: " << *v << "\n";                              \
-        ___res = unwrapM(v, Builder, available, unwrapMode, origParent,        \
-                         permitCache);                                         \
-      }                                                                        \
-      if (!___res && unwrapMode == UnwrapMode::AttemptFullUnwrapWithLookup) {  \
-        bool noLookup = false;                                                 \
-        if (auto opinst = dyn_cast<Instruction>(v))                            \
-          if (isOriginalBlock(*Builder.GetInsertBlock())) {                    \
-            if (!DT.dominates(opinst, &*Builder.GetInsertPoint()))             \
-              noLookup = true;                                                 \
-          }                                                                    \
-        if (origParent)                                                        \
-          if (auto opinst = dyn_cast<Instruction>(v)) {                        \
-            v = fixLCSSA(opinst, origParent, /*mergeIfTrue*/ false,            \
-                         /*guaranteedVisible*/ false);                         \
-          }                                                                    \
-        if (!noLookup) {                                                       \
-          ___res = lookupM(v, Builder, available, v != val);                   \
-        }                                                                      \
-      }                                                                        \
-      if (___res)                                                              \
-        assert(___res->getType() == v->getType() && "uw");                     \
-    } else {                                                                   \
-      if (origParent)                                                          \
-        if (auto opinst = dyn_cast<Instruction>(v)) {                          \
-          v = fixLCSSA(opinst, origParent, /*mergeIfTrue*/ false,              \
-                       /*guaranteedVisible*/ false);                           \
-        }                                                                      \
-      assert(unwrapMode == UnwrapMode::AttemptSingleUnwrap);                   \
-      ___res = lookupM(v, Builder, available, v != val);                       \
-      if (___res && ___res->getType() != v->getType()) {                       \
-        llvm::errs() << *newFunc << "\n";                                      \
-        llvm::errs() << " v = " << *v << " res = " << *___res << "\n";         \
-      }                                                                        \
-      if (___res)                                                              \
-        assert(___res->getType() == v->getType() && "lu");                     \
-    }                                                                          \
-    ___res;                                                                    \
+#define getOpFullest(Builder, vtmp, frominst, check)                          \
+  ({                                                                          \
+    Value *v = vtmp;                                                          \
+    BasicBlock *origParent = frominst;                                        \
+    Value *___res;                                                            \
+    if (unwrapMode == UnwrapMode::LegalFullUnwrap ||                          \
+        unwrapMode == UnwrapMode::LegalFullUnwrapNoTapeReplace ||             \
+        unwrapMode == UnwrapMode::AttemptFullUnwrap ||                        \
+        unwrapMode == UnwrapMode::AttemptFullUnwrapWithLookup) {              \
+      if (v == val)                                                           \
+        ___res = nullptr;                                                     \
+      else {                                                                  \
+        errs() << "getOpFullest: " << *v << "\n";                             \
+        ___res = unwrapM(v, Builder, available, unwrapMode, origParent,       \
+                         permitCache);                                        \
+      }                                                                       \
+      if (!___res && unwrapMode == UnwrapMode::AttemptFullUnwrapWithLookup) { \
+        bool noLookup = false;                                                \
+        if (auto opinst = dyn_cast<Instruction>(v))                           \
+          if (isOriginalBlock(*Builder.GetInsertBlock())) {                   \
+            if (!DT.dominates(opinst, &*Builder.GetInsertPoint()))            \
+              noLookup = true;                                                \
+          }                                                                   \
+        if (origParent)                                                       \
+          if (auto opinst = dyn_cast<Instruction>(v)) {                       \
+            v = fixLCSSA(opinst, origParent, /*mergeIfTrue*/ false,           \
+                         /*guaranteedVisible*/ false);                        \
+          }                                                                   \
+        if (!noLookup) {                                                      \
+          ___res = lookupM(v, Builder, available, v != val);                  \
+        }                                                                     \
+      }                                                                       \
+      if (___res) assert(___res->getType() == v->getType() && "uw");          \
+    } else {                                                                  \
+      if (origParent)                                                         \
+        if (auto opinst = dyn_cast<Instruction>(v)) {                         \
+          v = fixLCSSA(opinst, origParent, /*mergeIfTrue*/ false,             \
+                       /*guaranteedVisible*/ false);                          \
+        }                                                                     \
+      assert(unwrapMode == UnwrapMode::AttemptSingleUnwrap);                  \
+      ___res = lookupM(v, Builder, available, v != val);                      \
+      if (___res && ___res->getType() != v->getType()) {                      \
+        llvm::errs() << *newFunc << "\n";                                     \
+        llvm::errs() << " v = " << *v << " res = " << *___res << "\n";        \
+      }                                                                       \
+      if (___res) assert(___res->getType() == v->getType() && "lu");          \
+    }                                                                         \
+    ___res;                                                                   \
   })
-#define getOpFull(Builder, vtmp, frominst)                                     \
+#define getOpFull(Builder, vtmp, frominst) \
   getOpFullest(Builder, vtmp, frominst, true)
-#define getOpUnchecked(vtmp)                                                   \
-  ({                                                                           \
-    BasicBlock *parent = scope;                                                \
-    getOpFullest(BuilderM, vtmp, parent, false);                               \
+#define getOpUnchecked(vtmp)                     \
+  ({                                             \
+    BasicBlock *parent = scope;                  \
+    getOpFullest(BuilderM, vtmp, parent, false); \
   })
-#define getOp(vtmp)                                                            \
-  ({                                                                           \
-    BasicBlock *parent = scope;                                                \
-    if (parent == nullptr)                                                     \
-      if (auto originst = dyn_cast<Instruction>(val))                          \
-        parent = originst->getParent();                                        \
-    getOpFullest(BuilderM, vtmp, parent, true);                                \
+#define getOp(vtmp)                                   \
+  ({                                                  \
+    BasicBlock *parent = scope;                       \
+    if (parent == nullptr)                            \
+      if (auto originst = dyn_cast<Instruction>(val)) \
+        parent = originst->getParent();               \
+    getOpFullest(BuilderM, vtmp, parent, true);       \
   })
 
   if (isa<Argument>(val) || isa<Constant>(val)) {
@@ -396,8 +400,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 #if LLVM_VERSION_MAJOR >= 10
   } else if (auto op = dyn_cast<FreezeInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateFreeze(op0, op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
       newi->copyIRFlags(op);
@@ -412,8 +415,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 #endif
   } else if (auto op = dyn_cast<CastInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateCast(op->getOpcode(), op0, op->getDestTy(),
                                         op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
@@ -430,8 +432,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<ExtractValueInst>(val)) {
     auto op0 = getOp(op->getAggregateOperand());
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateExtractValue(op0, op->getIndices(),
                                                 op->getName() + "_unwrap");
     if (permitCache)
@@ -446,11 +447,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<InsertValueInst>(val)) {
     auto op0 = getOp(op->getAggregateOperand());
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getInsertedValueOperand());
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateInsertValue(op0, op1, op->getIndices(),
                                                op->getName() + "_unwrap");
     if (permitCache)
@@ -467,11 +466,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<ExtractElementInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto toreturn =
         BuilderM.CreateExtractElement(op0, op1, op->getName() + "_unwrap");
     if (permitCache)
@@ -488,14 +485,11 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<InsertElementInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto op2 = getOp(op->getOperand(2));
-    if (op2 == nullptr)
-      goto endCheck;
+    if (op2 == nullptr) goto endCheck;
     auto toreturn =
         BuilderM.CreateInsertElement(op0, op1, op2, op->getName() + "_unwrap");
     if (permitCache)
@@ -510,11 +504,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<ShuffleVectorInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
 #if LLVM_VERSION_MAJOR >= 11
     auto toreturn = BuilderM.CreateShuffleVector(
         op0, op1, op->getShuffleMaskForBitcode(), op->getName() + "'_unwrap");
@@ -536,11 +528,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<BinaryOperator>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     if (op0->getType() != op1->getType()) {
       llvm::errs() << " op: " << *op << " op0: " << *op0 << " op1: " << *op1
                    << " p0: " << *op->getOperand(0)
@@ -563,11 +553,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<ICmpInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateICmp(op->getPredicate(), op0, op1,
                                         op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
@@ -584,11 +572,9 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto op = dyn_cast<FCmpInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateFCmp(op->getPredicate(), op0, op1,
                                         op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
@@ -608,8 +594,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
              cast<FPMathOperator>(val)->getOpcode() == Instruction::FNeg) {
     auto op = cast<FPMathOperator>(val);
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto toreturn = BuilderM.CreateFNeg(op0, op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
       newi->copyIRFlags(op);
@@ -626,14 +611,11 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 #endif
   } else if (auto op = dyn_cast<SelectInst>(val)) {
     auto op0 = getOp(op->getOperand(0));
-    if (op0 == nullptr)
-      goto endCheck;
+    if (op0 == nullptr) goto endCheck;
     auto op1 = getOp(op->getOperand(1));
-    if (op1 == nullptr)
-      goto endCheck;
+    if (op1 == nullptr) goto endCheck;
     auto op2 = getOp(op->getOperand(2));
-    if (op2 == nullptr)
-      goto endCheck;
+    if (op2 == nullptr) goto endCheck;
     auto toreturn =
         BuilderM.CreateSelect(op0, op1, op2, op->getName() + "_unwrap");
     if (auto newi = dyn_cast<Instruction>(toreturn)) {
@@ -650,15 +632,13 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     return toreturn;
   } else if (auto inst = dyn_cast<GetElementPtrInst>(val)) {
     auto ptr = getOp(inst->getPointerOperand());
-    if (ptr == nullptr)
-      goto endCheck;
+    if (ptr == nullptr) goto endCheck;
     SmallVector<Value *, 4> ind;
     // llvm::errs() << "inst: " << *inst << "\n";
     for (unsigned i = 0; i < inst->getNumIndices(); ++i) {
       Value *a = inst->getOperand(1 + i);
       auto op = getOp(a);
-      if (op == nullptr)
-        goto endCheck;
+      if (op == nullptr) goto endCheck;
       ind.push_back(op);
     }
     auto toreturn = BuilderM.CreateGEP(ptr, ind, inst->getName() + "_unwrap");
@@ -682,8 +662,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       if (isa<GetElementPtrInst>(use))
         errs() << "Use: " << *use.getUser() << "\n";
     }
-    if (load->getMetadata("enzyme_noneedunwrap"))
-      return load;
+    if (load->getMetadata("enzyme_noneedunwrap")) return load;
 
     bool legalMove = unwrapMode == UnwrapMode::LegalFullUnwrap ||
                      unwrapMode == UnwrapMode::LegalFullUnwrapNoTapeReplace;
@@ -762,14 +741,12 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 
     return toreturn;
   } else if (auto op = dyn_cast<CallInst>(val)) {
-
     bool legalMove = unwrapMode == UnwrapMode::LegalFullUnwrap ||
                      unwrapMode == UnwrapMode::LegalFullUnwrapNoTapeReplace;
     if (!legalMove) {
       legalMove = legalRecompute(op, available, &BuilderM);
     }
-    if (!legalMove)
-      goto endCheck;
+    if (!legalMove) goto endCheck;
 
     std::vector<Value *> args;
 #if LLVM_VERSION_MAJOR >= 14
@@ -779,8 +756,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 #endif
     {
       args.emplace_back(getOp(op->getArgOperand(i)));
-      if (args[i] == nullptr)
-        goto endCheck;
+      if (args[i] == nullptr) goto endCheck;
     }
 
 #if LLVM_VERSION_MAJOR >= 11
@@ -788,8 +764,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
 #else
     Value *fn = getOp(op->getCalledValue());
 #endif
-    if (fn == nullptr)
-      goto endCheck;
+    if (fn == nullptr) goto endCheck;
 
     auto toreturn =
         cast<CallInst>(BuilderM.CreateCall(op->getFunctionType(), fn, args));
@@ -815,8 +790,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       if (auto dli = dyn_cast_or_null<LoadInst>(hasUninverted(phi))) {
         // Almost identical code to unwrap load (replacing use of shadow
         // where appropriate)
-        if (dli->getMetadata("enzyme_noneedunwrap"))
-          return dli;
+        if (dli->getMetadata("enzyme_noneedunwrap")) return dli;
 
         bool legalMove = unwrapMode == UnwrapMode::LegalFullUnwrap ||
                          unwrapMode == UnwrapMode::LegalFullUnwrapNoTapeReplace;
@@ -847,8 +821,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
               lookupM(invertPointerM(dli->getOperand(0), BuilderM), BuilderM);
         }
 
-        if (pidx == nullptr)
-          goto endCheck;
+        if (pidx == nullptr) goto endCheck;
 
         if (pidx->getType() != dli->getOperand(0)->getType()) {
           llvm::errs() << "dli: " << *dli << "\n";
@@ -892,8 +865,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
     // Rather than generating a new lcssa variable, use the existing loop exact
     // bound var
     BasicBlock *ivctx = scope;
-    if (!ivctx)
-      ivctx = BuilderM.GetInsertBlock();
+    if (!ivctx) ivctx = BuilderM.GetInsertBlock();
     if (newFunc == ivctx->getParent() && !isOriginalBlock(*ivctx)) {
       ivctx = originalForReverseBlock(*ivctx);
     }
@@ -908,8 +880,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         Value *V = nullptr;
         bool legal = true;
         for (auto &val : phi->incoming_values()) {
-          if (isa<UndefValue>(val))
-            continue;
+          if (isa<UndefValue>(val)) continue;
           if (V == nullptr)
             V = val;
           else if (V != val) {
@@ -988,7 +959,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
       std::deque<std::tuple<
           std::pair</*pred*/ BasicBlock *, /*successor*/ BasicBlock *>,
           BasicBlock *>>
-          Q; // newblock, target
+          Q;  // newblock, target
 
       for (unsigned i = 0; i < phi->getNumIncomingValues(); ++i) {
         Q.push_back(
@@ -1008,8 +979,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
         auto block = edge.first;
         auto target = std::get<1>(trace);
 
-        if (done[edge].count(target))
-          continue;
+        if (done[edge].count(target)) continue;
         done[edge].insert(target);
 
         Loop *blockLoop = LI.getLoopFor(block);
@@ -1045,14 +1015,11 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
               goto rnextpair;
             }
             foundtargets.insert(target);
-            if (done[edge].size() == 1)
-              uniqueTargets.insert(target);
+            if (done[edge].size() == 1) uniqueTargets.insert(target);
           }
         }
-        if (foundtargets.size() != 3)
-          goto rnextpair;
-        if (uniqueTargets.size() != 1)
-          goto rnextpair;
+        if (foundtargets.size() != 3) goto rnextpair;
+        if (uniqueTargets.size() != 1) goto rnextpair;
 
         {
           BasicBlock *subblock = nullptr;
@@ -1089,8 +1056,7 @@ Value *GradientUtils::unwrapMOrig(Value *const val, IRBuilder<> &BuilderM,
           nextblock:;
           }
 
-          if (subblock == nullptr)
-            goto rnextpair;
+          if (subblock == nullptr) goto rnextpair;
 
           {
             auto bi1 = cast<BranchInst>(block->getTerminator());
@@ -1544,14 +1510,14 @@ endCheck:
 void GradientUtils::handleTapeValues() {
   std::map<Instruction *, int> forward_index_map;
   std::map<Instruction *, int> reverse_index_map;
-  
-  // We need to keep track of the number of reads and writes to each block.
+
+  // Iterate over the blocks to count their tape reads and writes.
   for (auto i : forward_to_reverse_map) {
     auto forward_inst = dyn_cast<Instruction>(i.first);
     auto reverse_inst = dyn_cast<Instruction>(i.second);
     auto reverse_bb = reverse_inst->getParent();
     auto forward_bb = reverseBlockToPrimal[reverse_bb];
-    
+
     if (forward_bb_writes_.count(forward_bb) == 0)
       forward_bb_writes_[forward_bb] = 0;
 
@@ -1566,44 +1532,57 @@ void GradientUtils::handleTapeValues() {
 
   // Define the boundries of the layers and break the blocks if needed.
   for (auto bb : forward_bb_writes_) {
-    int remaining_bin_size = BIN_SIZE;
+    int remaining_capacity = BIN_SIZE;
+    llvm::Instruction *first_inst = bb.first->getFirstNonPHI();
     for (auto &inst : bb.first->getInstList()) {
-      if (isa<PHINode>(inst))
-        continue;
+      if (isa<PHINode>(inst)) continue;
 
       if (forward_index_map.count(&inst)) {
-        if (remaining_bin_size > 1) {
-          remaining_bin_size--;
+        if (remaining_capacity > 1) {
+          remaining_capacity--;
         } else {
-          setBasicBlockMetadata(inst.getNextNode(), BIN_SIZE, BIN_PUSH);
-          remaining_bin_size = BIN_SIZE;
+          setLayerBoundary(first_inst, BIN_SIZE,
+                           tapeman::BoundaryType::kAllocation);
+          setLayerBoundary(inst.getNextNode(), BIN_SIZE,
+                           tapeman::BoundaryType::kBarrier);
+          first_inst = inst.getNextNode();
+          remaining_capacity = BIN_SIZE;
         }
       }
     }
-    if (remaining_bin_size != BIN_SIZE)
-      setBasicBlockMetadata(bb.first->getTerminator(),
-                            BIN_SIZE - remaining_bin_size, BIN_PUSH);
+    // Handle the remaining tape values in the layer.
+    if (remaining_capacity != BIN_SIZE) {
+      setLayerBoundary(first_inst, BIN_SIZE - remaining_capacity,
+                       tapeman::BoundaryType::kAllocation);
+
+      setLayerBoundary(bb.first->getTerminator(), BIN_SIZE - remaining_capacity,
+                       tapeman::BoundaryType::kBarrier);
+    }
   }
-  
+
   for (auto bb : reverse_bb_reads_) {
-    int remaining_bin_size = BIN_SIZE;
+    llvm::Instruction *last_inst = &(*(bb.first->getInstList().rbegin()));
+    int remaining_capacity = BIN_SIZE;
     std::for_each(bb.first->getInstList().rbegin(),
                   bb.first->getInstList().rend(), [&](auto &inst) {
-                    if (isa<PHINode>(inst))
-                      return;
+                    if (isa<PHINode>(inst)) return;
 
                     if (reverse_index_map.count(&inst)) {
-                      if (remaining_bin_size > 1) {
-                        remaining_bin_size--;
+                      if (remaining_capacity > 1) {
+                        remaining_capacity--;
                       } else {
-                        setBasicBlockMetadata(&inst, BIN_SIZE, BIN_POP);
-                        remaining_bin_size = BIN_SIZE;
+                        setLayerBoundary(&inst, BIN_SIZE, tapeman::BoundaryType::kAllocation);
+                        setLayerBoundary(last_inst, BIN_SIZE, tapeman::BoundaryType::kBarrier);
+                        last_inst = inst.getPrevNode();
+                        remaining_capacity = BIN_SIZE;
                       }
                     }
                   });
-    if (remaining_bin_size != BIN_SIZE)
-      setBasicBlockMetadata(bb.first->getFirstNonPHI(),
-                            BIN_SIZE - remaining_bin_size, BIN_POP);
+    if (remaining_capacity != BIN_SIZE) {
+      setLayerBoundary(last_inst, BIN_SIZE - remaining_capacity, tapeman::BoundaryType::kBarrier);
+      setLayerBoundary(bb.first->getFirstNonPHI(),
+                       BIN_SIZE - remaining_capacity, tapeman::BoundaryType::kAllocation);
+    }
   }
   for (auto i : forward_index_map)
     setOperationMetadata(i.first, i.second, BIN_WRITE);
@@ -1646,8 +1625,7 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
         (unsigned)idx >= cast<StructType>(tape->getType())->getNumElements()) {
       llvm::errs() << "oldFunc: " << *oldFunc << "\n";
       llvm::errs() << "newFunc: " << *newFunc << "\n";
-      if (malloc)
-        llvm::errs() << "malloc: " << *malloc << "\n";
+      if (malloc) llvm::errs() << "malloc: " << *malloc << "\n";
       llvm::errs() << "tape: " << *tape << "\n";
       llvm::errs() << "idx: " << idx << "\n";
     }
@@ -1669,13 +1647,11 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
           if (replace)
             inst->replaceAllUsesWith(UndefValue::get(ret->getType()));
         }
-        if (replace)
-          erase(inst);
+        if (replace) erase(inst);
       }
       Type *retType = ret->getType();
       if (replace)
-        if (auto ri = dyn_cast<Instruction>(ret))
-          erase(ri);
+        if (auto ri = dyn_cast<Instruction>(ret)) erase(ri);
       return UndefValue::get(retType);
     }
 
@@ -1699,16 +1675,14 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
     }
 
     if (!inLoop) {
-      if (malloc)
-        ret->setName(malloc->getName() + "_fromtape");
+      if (malloc) ret->setName(malloc->getName() + "_fromtape");
       if (omp) {
         Value *tid = ompThreadId();
         ret = BuilderQ.CreateLoad(
             BuilderQ.CreateInBoundsGEP(ret, ArrayRef<Value *>(tid)));
       }
     } else {
-      if (idx >= 0)
-        erase(cast<Instruction>(ret));
+      if (idx >= 0) erase(cast<Instruction>(ret));
       IRBuilder<> entryBuilder(inversionAllocs);
       entryBuilder.setFastMathFlags(getFast());
       ret = (idx < 0) ? tape
@@ -1809,7 +1783,6 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
         // There already exists an alloaction for this, we should fully remove
         // it
         if (!inLoop) {
-
           // Remove stores into
           SmallVector<Instruction *, 3> stores(
               scopeInstructions[found->first].begin(),
@@ -1897,12 +1870,10 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
             Instruction *storedinto =
                 cast ? (Instruction *)cast : (Instruction *)allocinst;
             for (auto use : storedinto->users()) {
-              if (auto si = dyn_cast<StoreInst>(use))
-                erase(si);
+              if (auto si = dyn_cast<StoreInst>(use)) erase(si);
             }
 
-            if (cast)
-              erase(cast);
+            if (cast) erase(cast);
             erase(allocinst);
           }
 
@@ -1960,15 +1931,13 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
 
           AllocaInst *preerase = found->first;
           scopeMap.erase(malloc);
-          if (replace)
-            erase(preerase);
+          if (replace) erase(preerase);
         }
       }
       if (!ignoreType && replace)
         cast<Instruction>(malloc)->replaceAllUsesWith(ret);
       ret->takeName(malloc);
-      if (replace)
-        erase(cast<Instruction>(malloc));
+      if (replace) erase(cast<Instruction>(malloc));
     }
     return ret;
   } else {
@@ -2020,7 +1989,7 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
             inversionAllocs, numThreads->getType(), malloc->getType(),
             byteSizeOfType, numThreads, nullptr,
             malloc->getName() + "_malloccache"));
-            errs() << "Allocated cache: " << *firstallocation << "\n";
+        errs() << "Allocated cache: " << *firstallocation << "\n";
 
         if (firstallocation->getParent() == nullptr) {
           inversionAllocs->getInstList().push_back(firstallocation);
@@ -2117,8 +2086,7 @@ BasicBlock *GradientUtils::getReverseOrLatchMerge(BasicBlock *BB,
   LoopContext branchingContext;
   bool inLoopContext = getContext(branchingBlock, branchingContext);
 
-  if (!inLoop)
-    return reverseBlocks[BB].front();
+  if (!inLoop) return reverseBlocks[BB].front();
 
   auto tup = std::make_tuple(BB, branchingBlock);
   if (newBlocksForLoop_cache.find(tup) != newBlocksForLoop_cache.end())
@@ -2205,8 +2173,8 @@ bool GradientUtils::legalRecompute(const Value *val,
       if (auto dli = dyn_cast_or_null<LoadInst>(uiv)) {
         return legalRecompute(
             dli, available, BuilderM,
-            reverse); // TODO ADD && !TR.intType(getOriginal(dli),
-                      // /*mustfind*/false).isPossibleFloat();
+            reverse);  // TODO ADD && !TR.intType(getOriginal(dli),
+                       // /*mustfind*/false).isPossibleFloat();
       }
       if (phi->getNumIncomingValues() == 0) {
         return false;
@@ -2225,8 +2193,7 @@ bool GradientUtils::legalRecompute(const Value *val,
         return false;
       }
       for (auto &val : phi->incoming_values()) {
-        if (isPotentialLastLoopValue(val, parent, LI))
-          return false;
+        if (isPotentialLastLoopValue(val, parent, LI)) return false;
       }
       return true;
     } else if (parent->getParent() == oldFunc) {
@@ -2234,8 +2201,7 @@ bool GradientUtils::legalRecompute(const Value *val,
         return false;
       }
       for (auto &val : phi->incoming_values()) {
-        if (isPotentialLastLoopValue(val, parent, OrigLI))
-          return false;
+        if (isPotentialLastLoopValue(val, parent, OrigLI)) return false;
       }
       return true;
     } else {
@@ -2264,7 +2230,6 @@ bool GradientUtils::legalRecompute(const Value *val,
   // TODO consider callinst here
 
   if (auto li = dyn_cast<Instruction>(val)) {
-
     const IntrinsicInst *II;
     if (isa<LoadInst>(li) ||
         ((II = dyn_cast<IntrinsicInst>(li)) &&
@@ -2315,8 +2280,7 @@ bool GradientUtils::legalRecompute(const Value *val,
                        << orig->getParent()->getParent()->getName();
         }
         assert(found != can_modref_map->end());
-        if (!found->second)
-          return true;
+        if (!found->second) return true;
         // if insertion block of this function:
         BasicBlock *fwdBlockIfReverse = nullptr;
         if (BuilderM) {
@@ -2352,8 +2316,7 @@ bool GradientUtils::legalRecompute(const Value *val,
                   }
                   return /*earlyBreak*/ false;
                 });
-            if (!failed)
-              return true;
+            if (!failed) return true;
           } else {
             Instruction *origStart = &*BuilderM->GetInsertPoint();
             do {
@@ -2384,8 +2347,7 @@ bool GradientUtils::legalRecompute(const Value *val,
                     }
                     return /*earlyBreak*/ false;
                   });
-              if (!failed)
-                return true;
+              if (!failed) return true;
             }
           }
         }
@@ -2444,9 +2406,7 @@ bool GradientUtils::shouldRecompute(const Value *val,
 bool GradientUtils::shouldRecomputeOrig(const Value *val,
                                         const ValueToValueMapTy &available,
                                         IRBuilder<> *BuilderM) {
-
-  if (available.count(val))
-    return true;
+  if (available.count(val)) return true;
   // TODO: remake such that this returns whether a load to a cache is more
   // expensive than redoing the computation.
 
@@ -2455,8 +2415,7 @@ bool GradientUtils::shouldRecomputeOrig(const Value *val,
       cast<LoadInst>(val)->getMetadata("enzyme_fromcache"))
     return true;
 
-  if (!isa<Instruction>(val))
-    return true;
+  if (!isa<Instruction>(val)) return true;
 
   const Instruction *inst = cast<Instruction>(val);
 
@@ -2475,8 +2434,7 @@ bool GradientUtils::shouldRecomputeOrig(const Value *val,
     }
   }
 
-  if (isa<CastInst>(val) || isa<GetElementPtrInst>(val))
-    return true;
+  if (isa<CastInst>(val) || isa<GetElementPtrInst>(val)) return true;
 
   if (EnzymeNewCache && !EnzymeMinCutCache) {
     // if this has operands that need to be loaded and haven't already been
@@ -2484,15 +2442,13 @@ bool GradientUtils::shouldRecomputeOrig(const Value *val,
     // TODO, just cache this
     for (auto &op : inst->operands()) {
       if (!legalRecompute(op, available, BuilderM)) {
-
         // If this is a load from cache already, dont force a cache of this
         if (isa<LoadInst>(op) && CacheLookups.count(cast<LoadInst>(op)))
           continue;
 
         // If a previously cached this operand, don't let it trigger the
         // heuristic for caching this value instead.
-        if (scopeMap.find(op) != scopeMap.end())
-          continue;
+        if (scopeMap.find(op) != scopeMap.end()) continue;
 
         // If the actually uncacheable operand is in a different loop scope
         // don't cache this value instead as it may require more memory
@@ -2530,8 +2486,7 @@ bool GradientUtils::shouldRecomputeOrig(const Value *val,
                 if (isa<ReturnInst>(BB.getTerminator())) {
                   BasicBlock *returningBlock =
                       cast<BasicBlock>(getNewFromOriginal(&BB));
-                  if (i2->getParent() == returningBlock)
-                    continue;
+                  if (i2->getParent() == returningBlock) continue;
                   if (!DT.dominates(i2, returningBlock)) {
                     legal = false;
                     break;
@@ -2554,22 +2509,21 @@ bool GradientUtils::shouldRecomputeOrig(const Value *val,
   }
 
   if (auto op = dyn_cast<IntrinsicInst>(val)) {
-    if (!op->mayReadOrWriteMemory())
-      return true;
+    if (!op->mayReadOrWriteMemory()) return true;
     switch (op->getIntrinsicID()) {
-    case Intrinsic::sin:
-    case Intrinsic::cos:
-    case Intrinsic::exp:
-    case Intrinsic::log:
-    case Intrinsic::nvvm_ldu_global_i:
-    case Intrinsic::nvvm_ldu_global_p:
-    case Intrinsic::nvvm_ldu_global_f:
-    case Intrinsic::nvvm_ldg_global_i:
-    case Intrinsic::nvvm_ldg_global_p:
-    case Intrinsic::nvvm_ldg_global_f:
-      return true;
-    default:
-      return false;
+      case Intrinsic::sin:
+      case Intrinsic::cos:
+      case Intrinsic::exp:
+      case Intrinsic::log:
+      case Intrinsic::nvvm_ldu_global_i:
+      case Intrinsic::nvvm_ldu_global_p:
+      case Intrinsic::nvvm_ldu_global_f:
+      case Intrinsic::nvvm_ldg_global_i:
+      case Intrinsic::nvvm_ldg_global_p:
+      case Intrinsic::nvvm_ldg_global_f:
+        return true;
+      default:
+        return false;
     }
   }
 
@@ -2682,17 +2636,17 @@ DiffeGradientUtils *DiffeGradientUtils::CreateFromClone(
   StringRef prefix;
 
   switch (mode) {
-  case DerivativeMode::ForwardMode:
-  case DerivativeMode::ForwardModeSplit:
-  case DerivativeMode::ForwardModeVector:
-    prefix = "fwddiffe";
-    break;
-  case DerivativeMode::ReverseModeCombined:
-  case DerivativeMode::ReverseModeGradient:
-    prefix = "diffe";
-    break;
-  case DerivativeMode::ReverseModePrimal:
-    llvm_unreachable("invalid DerivativeMode: ReverseModePrimal\n");
+    case DerivativeMode::ForwardMode:
+    case DerivativeMode::ForwardModeSplit:
+    case DerivativeMode::ForwardModeVector:
+      prefix = "fwddiffe";
+      break;
+    case DerivativeMode::ReverseModeCombined:
+    case DerivativeMode::ReverseModeGradient:
+      prefix = "diffe";
+      break;
+    case DerivativeMode::ReverseModePrimal:
+      llvm_unreachable("invalid DerivativeMode: ReverseModePrimal\n");
   }
 
   auto newFunc = Logic.PPC.CloneFunctionWithReturns(
@@ -2764,8 +2718,9 @@ Constant *GradientUtils::GetOrCreateShadowConstant(
       if (!isa<MDTuple>(md)) {
         llvm::errs() << *arg << "\n";
         llvm::errs() << *md << "\n";
-        assert(0 && "cannot compute with global variable that doesn't have "
-                    "marked shadow global");
+        assert(0 &&
+               "cannot compute with global variable that doesn't have "
+               "marked shadow global");
         report_fatal_error(
             "cannot compute with global variable that doesn't "
             "have marked shadow global (metadata incorrect type)");
@@ -2885,8 +2840,7 @@ Constant *GradientUtils::GetOrCreateShadowFunction(EnzymeLogic &Logic,
                         .typeInfo = type_args},
       TLI, TA,
       /*map*/ &augdata);
-  if (!newf)
-    newf = UndefValue::get(fn->getType());
+  if (!newf) newf = UndefValue::get(fn->getType());
   auto cdata = ConstantStruct::get(
       StructType::get(newf->getContext(),
                       {augdata.fn->getType(), newf->getType()}),
@@ -2998,7 +2952,6 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
     return antialloca;
   } else if (auto arg = dyn_cast<GlobalVariable>(oval)) {
     if (!hasMetadata(arg, "enzyme_shadow")) {
-
       if ((mode == DerivativeMode::ReverseModeCombined ||
            mode == DerivativeMode::ForwardMode) &&
           arg->getType()->getPointerAddressSpace() == 0) {
@@ -3019,8 +2972,7 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
               Loc = MemoryLocation(oval, MemoryLocation::UnknownSize);
 #endif
           for (CallInst *CI : originalCalls) {
-            if (isa<IntrinsicInst>(CI))
-              continue;
+            if (isa<IntrinsicInst>(CI)) continue;
             if (!isConstantInstruction(CI)) {
               Function *F = getFunctionFromCall(CI);
               if (F && (isMemFreeLibMFunction(F->getName()) ||
@@ -3160,19 +3112,23 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
       llvm::errs() << *oldFunc << "\n";
       llvm::errs() << *newFunc << "\n";
       llvm::errs() << *arg << "\n";
-      assert(0 && "cannot compute with global variable that doesn't have "
-                  "marked shadow global");
-      report_fatal_error("cannot compute with global variable that doesn't "
-                         "have marked shadow global");
+      assert(0 &&
+             "cannot compute with global variable that doesn't have "
+             "marked shadow global");
+      report_fatal_error(
+          "cannot compute with global variable that doesn't "
+          "have marked shadow global");
     }
     auto md = arg->getMetadata("enzyme_shadow");
     if (!isa<MDTuple>(md)) {
       llvm::errs() << *arg << "\n";
       llvm::errs() << *md << "\n";
-      assert(0 && "cannot compute with global variable that doesn't have "
-                  "marked shadow global");
-      report_fatal_error("cannot compute with global variable that doesn't "
-                         "have marked shadow global (metadata incorrect type)");
+      assert(0 &&
+             "cannot compute with global variable that doesn't have "
+             "marked shadow global");
+      report_fatal_error(
+          "cannot compute with global variable that doesn't "
+          "have marked shadow global (metadata incorrect type)");
     }
     auto md2 = cast<MDTuple>(md);
     assert(md2->getNumOperands() == 1);
@@ -3314,8 +3270,7 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
         std::make_pair((const Value *)oval, InvertedPointerVH(this, li)));
     return li;
   } else if (auto arg = dyn_cast<BinaryOperator>(oval)) {
-    if (arg->getOpcode() == Instruction::FAdd)
-      return getNewFromOriginal(arg);
+    if (arg->getOpcode() == Instruction::FAdd) return getNewFromOriginal(arg);
 
     if (!arg->getType()->isIntOrIntVectorTy()) {
       llvm::errs() << *oval << "\n";
@@ -3329,8 +3284,7 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
     val1 = invertPointerM(arg->getOperand(1), bb);
     assert(val0->getType() == val1->getType());
     auto li = bb.CreateBinOp(arg->getOpcode(), val0, val1, arg->getName());
-    if (auto BI = dyn_cast<BinaryOperator>(li))
-      BI->copyIRFlags(arg);
+    if (auto BI = dyn_cast<BinaryOperator>(li)) BI->copyIRFlags(arg);
     invertedPointers.insert(
         std::make_pair((const Value *)oval, InvertedPointerVH(this, li)));
     return li;
@@ -3418,7 +3372,6 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
     memset->addParamAttr(0, Attribute::NonNull);
     return antialloca;
   } else if (auto phi = dyn_cast<PHINode>(oval)) {
-
     if (phi->getNumIncomingValues() == 0) {
       dumpMap(invertedPointers);
       assert(0 && "illegal iv of phi");
@@ -3475,8 +3428,9 @@ Value *GradientUtils::invertPointerM(Value *const oval, IRBuilder<> &BuilderM,
             cast<BasicBlock>(getNewFromOriginal(phi->getIncomingBlock(i)))
                 ->getTerminator());
         Value *val = invertPointerM(phi->getIncomingValue(i), pre);
-        which->addIncoming(val, cast<BasicBlock>(getNewFromOriginal(
-                                    phi->getIncomingBlock(i))));
+        which->addIncoming(
+            val,
+            cast<BasicBlock>(getNewFromOriginal(phi->getIncomingBlock(i))));
       }
       return which;
     }
@@ -3548,16 +3502,16 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
   if (EnzymeRegisterReduce) {
     if (auto II = dyn_cast<IntrinsicInst>(inst)) {
       switch (II->getIntrinsicID()) {
-      case Intrinsic::nvvm_ldu_global_i:
-      case Intrinsic::nvvm_ldu_global_p:
-      case Intrinsic::nvvm_ldu_global_f:
-      case Intrinsic::nvvm_ldg_global_i:
-      case Intrinsic::nvvm_ldg_global_p:
-      case Intrinsic::nvvm_ldg_global_f:
-        reduceRegister = true;
-        break;
-      default:
-        break;
+        case Intrinsic::nvvm_ldu_global_i:
+        case Intrinsic::nvvm_ldu_global_p:
+        case Intrinsic::nvvm_ldu_global_f:
+        case Intrinsic::nvvm_ldg_global_i:
+        case Intrinsic::nvvm_ldg_global_p:
+        case Intrinsic::nvvm_ldg_global_f:
+          reduceRegister = true;
+          break;
+        default:
+          break;
       }
     }
     if (auto LI = dyn_cast<LoadInst>(inst)) {
@@ -3584,13 +3538,11 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
   }
 
   if (!reduceRegister) {
-
     if (isOriginalBlock(*BuilderM.GetInsertBlock())) {
       if (BuilderM.GetInsertBlock()->size() &&
           BuilderM.GetInsertPoint() != BuilderM.GetInsertBlock()->end()) {
         Instruction *use = &*BuilderM.GetInsertPoint();
-        while (isa<PHINode>(use))
-          use = use->getNextNode();
+        while (isa<PHINode>(use)) use = use->getNextNode();
         if (DT.dominates(inst, use)) {
           errs() << "value1 = " << *val << "\n";
           // errs() << "reducing " << *val << "\n";
@@ -3654,8 +3606,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
           if (isa<ReturnInst>(BB.getTerminator())) {
             BasicBlock *returningBlock =
                 cast<BasicBlock>(getNewFromOriginal(&BB));
-            if (inst->getParent() == returningBlock)
-              continue;
+            if (inst->getParent() == returningBlock) continue;
             if (!DT.dominates(inst, returningBlock)) {
               legal = false;
               break;
@@ -3718,8 +3669,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
         if (first) {
           first = false;
         }
-        if (idx.parent == nullptr)
-          break;
+        if (idx.parent == nullptr) break;
       }
     }
   }
@@ -3743,8 +3693,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
       Value *V = nullptr;
       bool legal = true;
       for (auto &val : phi->incoming_values()) {
-        if (isa<UndefValue>(val))
-          continue;
+        if (isa<UndefValue>(val)) continue;
         if (V == nullptr)
           V = val;
         else if (V != val) {
@@ -3862,8 +3811,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
           }
         }
         assert(op->getType() == inst->getType());
-        if (!reduceRegister)
-          lookup_cache[BuilderM.GetInsertBlock()][val] = op;
+        if (!reduceRegister) lookup_cache[BuilderM.GetInsertBlock()][val] = op;
         return op;
       }
     } else {
@@ -3892,7 +3840,6 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
       if (scopeMap.find(inst) == scopeMap.end()) {
         for (auto pair : scopeMap) {
           if (auto li2 = dyn_cast<LoadInst>(const_cast<Value *>(pair.first))) {
-
 #if LLVM_VERSION_MAJOR >= 12
             auto li2obj = getUnderlyingObject(li2->getPointerOperand(), 100);
 #else
@@ -3903,8 +3850,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
 
             if (liobj == li2obj && DT.dominates(li2, li)) {
               auto orig2 = isOriginal(li2);
-              if (!orig2)
-                continue;
+              if (!orig2) continue;
 
               bool failed = false;
 
@@ -3927,8 +3873,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                     }
                     return /*earlyBreak*/ false;
                   });
-              if (failed)
-                continue;
+              if (failed) continue;
 
               if (auto ar1 = dyn_cast<SCEVAddRecExpr>(scev1)) {
                 if (auto ar2 = dyn_cast<SCEVAddRecExpr>(scev2)) {
@@ -3937,13 +3882,11 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                       ar1->getStepRecurrence(SE) != SE.getCouldNotCompute() &&
                       ar1->getStepRecurrence(SE) ==
                           ar2->getStepRecurrence(SE)) {
-
                     LoopContext l1;
                     getContext(ar1->getLoop()->getHeader(), l1);
                     LoopContext l2;
                     getContext(ar2->getLoop()->getHeader(), l2);
-                    if (l1.dynamic || l2.dynamic)
-                      continue;
+                    if (l1.dynamic || l2.dynamic) continue;
 
                     // TODO IF len(ar2) >= len(ar1) then we can replace li with
                     // li2
@@ -3992,15 +3935,13 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                                     oldFunc->getParent()->getDataLayout(), 100);
 #endif
 
-              if (si2obj != orig_liobj)
-                return false;
+              if (si2obj != orig_liobj) return false;
 
               bool lastStore = true;
               bool interveningSync = false;
               allInstructionsBetween(
                   OrigLI, SI, origInst, [&](Instruction *potentialAlias) {
-                    if (!potentialAlias->mayWriteToMemory())
-                      return false;
+                    if (!potentialAlias->mayWriteToMemory()) return false;
                     if (!writesToMemoryReadBy(OrigAA, origInst, potentialAlias))
                       return false;
 
@@ -4012,11 +3953,9 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                         allUnsyncdPredecessorsOf(
                             II,
                             [&](Instruction *mid) {
-                              if (!mid->mayWriteToMemory())
-                                return false;
+                              if (!mid->mayWriteToMemory()) return false;
 
-                              if (mid == SI)
-                                return false;
+                              if (mid == SI) return false;
 
                               if (!writesToMemoryReadBy(OrigAA, origInst,
                                                         mid)) {
@@ -4042,8 +3981,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                     return true;
                   });
 
-              if (!lastStore)
-                return false;
+              if (!lastStore) return false;
 
               auto scev2 = OrigSE.getSCEV(SI->getPointerOperand());
               bool legal = scev1 == scev2;
@@ -4055,7 +3993,6 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                           OrigSE.getCouldNotCompute() &&
                       ar1->getStepRecurrence(OrigSE) ==
                           ar2->getStepRecurrence(OrigSE)) {
-
                     LoopContext l1;
                     getContext(getNewFromOriginal(ar1->getLoop()->getHeader()),
                                l1);
@@ -4068,8 +4005,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                       if (l1.trueLimit == l2.trueLimit) {
                         const Loop *L1 = ar1->getLoop();
                         while (L1) {
-                          if (L1 == ar2->getLoop())
-                            return false;
+                          if (L1 == ar2->getLoop()) return false;
                           L1 = L1->getParentLoop();
                         }
                         newavail[l2.var] = available[l1.var];
@@ -4120,21 +4056,21 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                         if (ls != ss) {
                           if (auto II = dyn_cast<IntrinsicInst>(svals[i])) {
                             switch (II->getIntrinsicID()) {
-                            case Intrinsic::nvvm_read_ptx_sreg_tid_x:
-                            case Intrinsic::nvvm_read_ptx_sreg_tid_y:
-                            case Intrinsic::nvvm_read_ptx_sreg_tid_z:
-                            case Intrinsic::amdgcn_workitem_id_x:
-                            case Intrinsic::amdgcn_workitem_id_y:
-                            case Intrinsic::amdgcn_workitem_id_z:
-                              ThreadLookup[getNewFromOriginal(II)] =
-                                  BuilderM.CreateZExtOrTrunc(
-                                      lookupM(getNewFromOriginal(lvals[i]),
-                                              BuilderM, available),
-                                      II->getType());
-                              break;
-                            default:
-                              legal = false;
-                              break;
+                              case Intrinsic::nvvm_read_ptx_sreg_tid_x:
+                              case Intrinsic::nvvm_read_ptx_sreg_tid_y:
+                              case Intrinsic::nvvm_read_ptx_sreg_tid_z:
+                              case Intrinsic::amdgcn_workitem_id_x:
+                              case Intrinsic::amdgcn_workitem_id_y:
+                              case Intrinsic::amdgcn_workitem_id_z:
+                                ThreadLookup[getNewFromOriginal(II)] =
+                                    BuilderM.CreateZExtOrTrunc(
+                                        lookupM(getNewFromOriginal(lvals[i]),
+                                                BuilderM, available),
+                                        II->getType());
+                                break;
+                              default:
+                                legal = false;
+                                break;
                             }
                           } else {
                             legal = false;
@@ -4165,8 +4101,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                   }
                 }
               }
-              if (!legal)
-                return false;
+              if (!legal) return false;
               return true;
             }
             return false;
@@ -4200,8 +4135,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                       dyn_cast<GetElementPtrInst>(li->getPointerOperand())) {
                 if (GEP->getPointerOperand() == AI) {
                   LoopContext l1;
-                  if (!getContext(li->getParent(), l1))
-                    goto noSpeedCache;
+                  if (!getContext(li->getParent(), l1)) goto noSpeedCache;
 
                   BasicBlock *ctx = l1.preheader;
 
@@ -4212,8 +4146,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                   }
 
                   Instruction *origTerm = origPH->getTerminator();
-                  if (!origTerm)
-                    llvm::errs() << *origTerm << "\n";
+                  if (!origTerm) llvm::errs() << *origTerm << "\n";
                   assert(origTerm);
                   IRBuilder<> OB(origTerm);
                   LoadInst *tmpload = OB.CreateLoad(AT, orig_liobj, "'tmpload");
@@ -4257,8 +4190,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                           }
                           return /*earlyBreak*/ false;
                         });
-                    if (failed)
-                      break;
+                    if (failed) break;
                     ctx = nctx;
                   }
 
@@ -4286,7 +4218,8 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                                                 /*shouldFree*/ true,
                                                 /*allocate*/ true);
                     assert(cache);
-                    llvm::errs() << "AI: " << *AI << ", Cache: " << *cache << "\n";
+                    llvm::errs()
+                        << "AI: " << *AI << ", Cache: " << *cache << "\n";
                     scopeMap.insert(
                         std::make_pair(AI, std::make_pair(cache, lctx)));
 
@@ -4354,14 +4287,12 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
           if (auto ar1 = dyn_cast<SCEVAddRecExpr>(scev1)) {
             if (auto step =
                     dyn_cast<SCEVConstant>(ar1->getStepRecurrence(SE))) {
-              if (step->getAPInt() != loadSize)
-                goto noSpeedCache;
+              if (step->getAPInt() != loadSize) goto noSpeedCache;
 
               LoopContext l1;
               getContext(ar1->getLoop()->getHeader(), l1);
 
-              if (l1.dynamic)
-                goto noSpeedCache;
+              if (l1.dynamic) goto noSpeedCache;
 
               offset = available[l1.var];
               ctx = l1.preheader;
@@ -4418,11 +4349,9 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                   }
                 }
               }
-              for (auto a : toErase)
-                erase(a);
+              for (auto a : toErase) erase(a);
 
-              if (!start)
-                goto noSpeedCache;
+              if (!start) goto noSpeedCache;
 
               Instruction *origTerm = origPH->getTerminator();
 
@@ -4437,8 +4366,7 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                     }
                     return /*earlyBreak*/ false;
                   });
-              if (failed)
-                goto noSpeedCache;
+              if (failed) goto noSpeedCache;
             }
           }
 
@@ -4465,22 +4393,19 @@ Value *GradientUtils::lookupM(Value *val, IRBuilder<> &BuilderM,
                     }
                     return /*earlyBreak*/ false;
                   });
-              if (failed)
-                break;
+              if (failed) break;
               IRBuilder<> nv(nctx->getTerminator());
               // errs() << " nctx: " << *nctx << "\n";
               Value *nlim = unwrapM(firstLim, nv,
                                     /*available*/ ValueToValueMapTy(),
                                     UnwrapMode::AttemptFullUnwrapWithLookup);
-              if (!nlim)
-                break;
+              if (!nlim) break;
               // errs() << " nctx: " << *firstStart << "\n";
 
               Value *nstart = unwrapM(firstStart, nv,
                                       /*available*/ ValueToValueMapTy(),
                                       UnwrapMode::AttemptFullUnwrapWithLookup);
-              if (!nstart)
-                break;
+              if (!nstart) break;
               lim = nlim;
               start = nstart;
               ctx = nctx;
@@ -4661,8 +4586,7 @@ void GradientUtils::branchToCorrespondingTarget(
     const std::map<BasicBlock *, PHINode *> *replacePHIs) {
   assert(targetToPreds.size() > 0);
   if (replacePHIs) {
-    if (replacePHIs->size() == 0)
-      return;
+    if (replacePHIs->size() == 0) return;
 
     for (auto x : *replacePHIs) {
       assert(targetToPreds.find(x.first) != targetToPreds.end());
@@ -4698,7 +4622,7 @@ void GradientUtils::branchToCorrespondingTarget(
     std::deque<
         std::tuple<std::pair</*pred*/ BasicBlock *, /*successor*/ BasicBlock *>,
                    BasicBlock *>>
-        Q; // newblock, target
+        Q;  // newblock, target
 
     for (auto pair : targetToPreds) {
       for (auto pred_edge : pair.second) {
@@ -4717,8 +4641,7 @@ void GradientUtils::branchToCorrespondingTarget(
       auto block = edge.first;
       auto target = std::get<1>(trace);
 
-      if (done[edge].count(target))
-        continue;
+      if (done[edge].count(target)) continue;
       done[edge].insert(target);
 
       Loop *blockLoop = LI.getLoopFor(block);
@@ -4760,14 +4683,11 @@ void GradientUtils::branchToCorrespondingTarget(
             goto rnextpair;
           }
           foundtargets.insert(target);
-          if (done[edge].size() == 1)
-            uniqueTargets.insert(target);
+          if (done[edge].size() == 1) uniqueTargets.insert(target);
         }
       }
-      if (foundtargets.size() != 3)
-        goto rnextpair;
-      if (uniqueTargets.size() != 1)
-        goto rnextpair;
+      if (foundtargets.size() != 3) goto rnextpair;
+      if (uniqueTargets.size() != 1) goto rnextpair;
 
       {
         BasicBlock *subblock = nullptr;
@@ -4804,14 +4724,11 @@ void GradientUtils::branchToCorrespondingTarget(
         nextblock:;
         }
 
-        if (subblock == nullptr)
-          goto rnextpair;
+        if (subblock == nullptr) goto rnextpair;
 
-        if (!isa<BranchInst>(block->getTerminator()))
-          goto rnextpair;
+        if (!isa<BranchInst>(block->getTerminator())) goto rnextpair;
 
-        if (!isa<BranchInst>(subblock->getTerminator()))
-          goto rnextpair;
+        if (!isa<BranchInst>(subblock->getTerminator())) goto rnextpair;
 
         {
           if (!isa<BranchInst>(block->getTerminator())) {
@@ -4845,13 +4762,11 @@ void GradientUtils::branchToCorrespondingTarget(
             Value *otherBranch = nullptr;
             for (unsigned i = 0; i < 2; ++i) {
               Value *val = cond1;
-              if (i == 1)
-                val = BuilderM.CreateNot(val, "anot1_");
+              if (i == 1) val = BuilderM.CreateNot(val, "anot1_");
               auto edge = std::make_pair(block, bi1->getSuccessor(i));
               if (done[edge].size() == 1) {
                 auto found = replacePHIs->find(*done[edge].begin());
-                if (found == replacePHIs->end())
-                  continue;
+                if (found == replacePHIs->end()) continue;
                 if (&*BuilderM.GetInsertPoint() == found->second) {
                   if (found->second->getNextNode())
                     BuilderM.SetInsertPoint(found->second->getNextNode());
@@ -4868,12 +4783,10 @@ void GradientUtils::branchToCorrespondingTarget(
             for (unsigned i = 0; i < 2; ++i) {
               auto edge = std::make_pair(subblock, bi2->getSuccessor(i));
               auto found = replacePHIs->find(*done[edge].begin());
-              if (found == replacePHIs->end())
-                continue;
+              if (found == replacePHIs->end()) continue;
 
               Value *val = cond2;
-              if (i == 1)
-                val = BuilderM.CreateNot(val, "bnot1_");
+              if (i == 1) val = BuilderM.CreateNot(val, "bnot1_");
               val = BuilderM.CreateAnd(val, otherBranch,
                                        "andVal" + std::to_string(i));
               if (&*BuilderM.GetInsertPoint() == found->second) {
@@ -5086,8 +4999,7 @@ nofast:;
   } else {
     for (unsigned i = 0; i < targets.size(); ++i) {
       auto found = replacePHIs->find(targets[i]);
-      if (found == replacePHIs->end())
-        continue;
+      if (found == replacePHIs->end()) continue;
 
       Value *val = nullptr;
       if (targets.size() == 2 && i == 0) {
@@ -5124,25 +5036,20 @@ void GradientUtils::computeMinCache(
     std::map<Loop *, std::set<Instruction *>> LoopAvail;
 
     for (BasicBlock &BB : *oldFunc) {
-      if (guaranteedUnreachable.count(&BB))
-        continue;
+      if (guaranteedUnreachable.count(&BB)) continue;
       auto L = OrigLI.getLoopFor(&BB);
 
       auto invariant = [&](Value *V) {
-        if (isa<Constant>(V))
-          return true;
-        if (isa<Argument>(V))
-          return true;
+        if (isa<Constant>(V)) return true;
+        if (isa<Argument>(V)) return true;
         if (auto I = dyn_cast<Instruction>(V)) {
-          if (!L->contains(OrigLI.getLoopFor(I->getParent())))
-            return true;
+          if (!L->contains(OrigLI.getLoopFor(I->getParent()))) return true;
         }
         return false;
       };
       for (Instruction &I : BB) {
         if (auto PN = dyn_cast<PHINode>(&I)) {
-          if (!OrigLI.isLoopHeader(&BB))
-            continue;
+          if (!OrigLI.isLoopHeader(&BB)) continue;
           if (PN->getType()->isIntegerTy()) {
             bool legal = true;
             SmallPtrSet<Instruction *, 4> Increment;
@@ -5176,14 +5083,12 @@ void GradientUtils::computeMinCache(
             }
             if (legal) {
               LoopAvail[L].insert(PN);
-              for (auto I : Increment)
-                LoopAvail[L].insert(I);
+              for (auto I : Increment) LoopAvail[L].insert(I);
             }
           }
         } else if (auto CI = dyn_cast<CallInst>(&I)) {
           Function *F = getFunctionFromCall(CI);
-          if (F && isAllocationFunction(*F, TLI))
-            Available[CI] = CI;
+          if (F && isAllocationFunction(*F, TLI)) Available[CI] = CI;
         }
       }
     }
@@ -5204,10 +5109,8 @@ void GradientUtils::computeMinCache(
       while (LoopBoundRequirements.size()) {
         Instruction *val = LoopBoundRequirements.front();
         LoopBoundRequirements.pop_front();
-        if (NewLoopBoundReq.count(val))
-          continue;
-        if (Seen.count(val))
-          continue;
+        if (NewLoopBoundReq.count(val)) continue;
+        if (Seen.count(val)) continue;
         Seen.insert(val);
         if (auto orig = isOriginal(val)) {
           NewLoopBoundReq.insert(orig);
@@ -5230,11 +5133,9 @@ void GradientUtils::computeMinCache(
                           : mode;
 
     for (BasicBlock &BB : *oldFunc) {
-      if (guaranteedUnreachable.count(&BB))
-        continue;
+      if (guaranteedUnreachable.count(&BB)) continue;
       ValueToValueMapTy Available2;
-      for (auto a : Available)
-        Available2[a.first] = a.second;
+      for (auto a : Available) Available2[a.first] = a.second;
       for (Loop *L = OrigLI.getLoopFor(&BB); L != nullptr;
            L = L->getParentLoop()) {
         for (auto v : LoopAvail[L]) {
@@ -5242,7 +5143,6 @@ void GradientUtils::computeMinCache(
         }
       }
       for (Instruction &I : BB) {
-
         if (!legalRecompute(&I, Available2, nullptr)) {
           if (is_value_needed_in_reverse<ValueType::Primal>(
                   TR, this, &I, minCutMode, FullSeen, guaranteedUnreachable)) {
@@ -5268,16 +5168,14 @@ void GradientUtils::computeMinCache(
     while (todo.size()) {
       Value *V = todo.front();
       todo.pop_front();
-      if (Intermediates.count(V))
-        continue;
+      if (Intermediates.count(V)) continue;
       if (!is_value_needed_in_reverse<ValueType::Primal>(
               TR, this, V, minCutMode, FullSeen, guaranteedUnreachable)) {
         continue;
       }
       if (!Recomputes.count(V)) {
         ValueToValueMapTy Available2;
-        for (auto a : Available)
-          Available2[a.first] = a.second;
+        for (auto a : Available) Available2[a.first] = a.second;
         for (Loop *L = OrigLI.getLoopFor(cast<Instruction>(V)->getParent());
              L != nullptr; L = L->getParentLoop()) {
           for (auto v : LoopAvail[L]) {
@@ -5305,20 +5203,16 @@ void GradientUtils::computeMinCache(
     minCut(oldFunc->getParent()->getDataLayout(), OrigLI, Recomputes,
            Intermediates, Required, MinReq);
     SmallPtrSet<Value *, 5> NeedGraph;
-    for (Value *V : MinReq)
-      NeedGraph.insert(V);
-    for (Value *V : Required)
-      todo.push_back(V);
+    for (Value *V : MinReq) NeedGraph.insert(V);
+    for (Value *V : Required) todo.push_back(V);
     while (todo.size()) {
       Value *V = todo.front();
       todo.pop_front();
-      if (NeedGraph.count(V))
-        continue;
+      if (NeedGraph.count(V)) continue;
       NeedGraph.insert(V);
       if (auto I = dyn_cast<Instruction>(V))
         for (auto &V2 : I->operands()) {
-          if (Intermediates.count(V2))
-            todo.push_back(V2);
+          if (Intermediates.count(V2)) todo.push_back(V2);
         }
     }
 
@@ -5426,12 +5320,10 @@ void SubTransferHelper(GradientUtils *gutils, DerivativeMode mode,
       }
     }
   } else {
-
     // if represents pointer or integer type then only need to modify forward
     // pass with the copy
     if (allowForward && (mode == DerivativeMode::ReverseModePrimal ||
                          mode == DerivativeMode::ReverseModeCombined)) {
-
       // It is questionable how the following case would even occur, but if
       // the dst is constant, we shouldn't do anything extra
       if (dstConstant) {
@@ -5454,15 +5346,13 @@ void SubTransferHelper(GradientUtils *gutils, DerivativeMode mode,
       if (dsto->getType()->isIntegerTy())
         dsto = BuilderZ.CreateIntToPtr(dsto,
                                        Type::getInt8PtrTy(MTI->getContext()));
-      if (offset != 0)
-        dsto = BuilderZ.CreateConstInBoundsGEP1_64(dsto, offset);
+      if (offset != 0) dsto = BuilderZ.CreateConstInBoundsGEP1_64(dsto, offset);
       args.push_back(dsto);
       auto srco = shadow_src;
       if (srco->getType()->isIntegerTy())
         srco = BuilderZ.CreateIntToPtr(srco,
                                        Type::getInt8PtrTy(MTI->getContext()));
-      if (offset != 0)
-        srco = BuilderZ.CreateConstInBoundsGEP1_64(srco, offset);
+      if (offset != 0) srco = BuilderZ.CreateConstInBoundsGEP1_64(srco, offset);
       args.push_back(srco);
 
       args.push_back(length);

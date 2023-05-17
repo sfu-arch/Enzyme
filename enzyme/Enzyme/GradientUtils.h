@@ -75,6 +75,12 @@
 #define BIN_PUSH "push"
 #define BIN_POP "pop"
 
+namespace tapeman {
+
+enum BoundaryType { kAllocation, kBarrier };
+
+} // namespace tapeman
+
 using namespace llvm;
 
 #include "llvm-c/Core.h"
@@ -99,9 +105,10 @@ extern llvm::cl::opt<bool> EnzymeInactiveDynamic;
 extern llvm::cl::opt<bool> EnzymeFreeInternalAllocations;
 }
 
-// Creates push/pop for a basic block at the given instruction. `command` can
-// be either "push" or "pop"
-void setBasicBlockMetadata(Instruction *target_inst, int size,
+// Creates a layer boundary operator before the given instruction.
+// The `size` indicates the values inside the layer. The command indicates
+// whether the operator is allocation or barrier.
+void setLayerBoundary(Instruction *target_inst, int size,
                            std::string command);
 
 struct InvertedPointerConfig : ValueMapConfig<const llvm::Value *> {

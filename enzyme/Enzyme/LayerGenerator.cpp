@@ -36,57 +36,57 @@ void CreateConditionalStreamCommand(Instruction *start_inst,
 
   auto new_inst = SplitBlockAndInsertIfThen(icmp_inst, start_inst, false);
 
-  setBasicBlockMetadata(new_inst, tape_ops * interval, command);
+  // setLayerBoundary(new_inst, tape_ops * interval, command);
 }
 
 // Reorders the tape operations in the loop to store them to the consecutive elements in the memory.
 void ReorderTapeOps(SmallVector<Loop*, 4> loops, GradientUtils *gutils) {
   // A map from loop header to the tape write instruction.
-  std::unordered_map<BasicBlock *, std::vector<Instruction*>> header_to_inst_map;
-  std::unordered_map<Instruction *, BasicBlock *> inst_to_header_map;
+  // std::unordered_map<BasicBlock *, std::vector<Instruction*>> header_to_inst_map;
+  // std::unordered_map<Instruction *, BasicBlock *> inst_to_header_map;
 
-  for (auto [key, value] : gutils->forward_to_reverse_map) {
-    BasicBlock *fwd_bb = cast<Instruction>(key)->getParent();
-    bool found = false;
-    for (auto it = loops.rbegin(); it != loops.rend(), !found; ++it) {
-      for (auto bb: (*it)->blocks()) {
-        if (bb == fwd_bb) {
-          if (header_to_inst_map.find(bb) == header_to_inst_map.end())
-            header_to_inst_map[bb] = std::vector<Instruction*>();
-          header_to_inst_map[bb].push_back(cast<Instruction>(key));
-          inst_to_header_map[key] = bb;
-          found = true;
-          break;
-        }
-      }
-    }
-  }
+  // for (auto [key, value] : gutils->forward_to_reverse_map) {
+  //   BasicBlock *fwd_bb = cast<Instruction>(key)->getParent();
+  //   bool found = false;
+  //   for (auto it = loops.rbegin(); it != loops.rend(), !found; ++it) {
+  //     for (auto bb: (*it)->blocks()) {
+  //       if (bb == fwd_bb) {
+  //         if (header_to_inst_map.find(bb) == header_to_inst_map.end())
+  //           header_to_inst_map[bb] = std::vector<Instruction*>();
+  //         header_to_inst_map[bb].push_back(cast<Instruction>(key));
+  //         inst_to_header_map[key] = bb;
+  //         found = true;
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
 
-  for (auto [bb, inst_vector]: header_to_inst_map) {
-    LLVMContext &context = bb->getContext();
-    auto size = ConstantInt::get(Type::getInt64Ty(context), inst_vector.size());
-    auto malloc = CallInst::CreateMalloc(
-            bb->getFirstNonPHI(), Type::getInt64Ty(context),
-            Type::getDoubleTy(context), size, nullptr, nullptr, "tapeman_malloc");
-    for (int i = 0; i < inst_vector.size(); i++) {
-      auto gep = GetElementPtrInst::CreateInBounds(
-              Type::getDoubleTy(context), malloc,
-              {ConstantInt::get(Type::getInt64Ty(context), i)},
-              "tapeman_gep", inst_vector[i]);
-      errs() << *gep << "\n";
-      if (auto store_inst = dyn_cast<StoreInst>(inst_vector[i])) {
-        auto bitcast = new BitCastInst(store_inst->getValueOperand(), Type::getDoubleTy(context), "tapeman_bitcast", store_inst);
-        StoreInst* reordered_store = new StoreInst(bitcast, gep, false, store_inst);
-        reordered_store->setMetadata("tapeman_reorder", MDNode::get(context, {}));
-      } else {
-        // TODO(@Milad): Handle Load instructions.
-      }
-    }
-    // TODO(@Milad): handle the loads in the reverse.
-  }
-  for (auto [header, size]: gutils->loopMallocSizes) {
-    llvm::errs() << "Header: " << header->getName() << "size = " << size << "\n";
-  }
+  // for (auto [bb, inst_vector]: header_to_inst_map) {
+  //   LLVMContext &context = bb->getContext();
+  //   auto size = ConstantInt::get(Type::getInt64Ty(context), inst_vector.size());
+  //   auto malloc = CallInst::CreateMalloc(
+  //           bb->getFirstNonPHI(), Type::getInt64Ty(context),
+  //           Type::getDoubleTy(context), size, nullptr, nullptr, "tapeman_malloc");
+  //   for (int i = 0; i < inst_vector.size(); i++) {
+  //     auto gep = GetElementPtrInst::CreateInBounds(
+  //             Type::getDoubleTy(context), malloc,
+  //             {ConstantInt::get(Type::getInt64Ty(context), i)},
+  //             "tapeman_gep", inst_vector[i]);
+  //     errs() << *gep << "\n";
+  //     if (auto store_inst = dyn_cast<StoreInst>(inst_vector[i])) {
+  //       auto bitcast = new BitCastInst(store_inst->getValueOperand(), Type::getDoubleTy(context), "tapeman_bitcast", store_inst);
+  //       StoreInst* reordered_store = new StoreInst(bitcast, gep, false, store_inst);
+  //       reordered_store->setMetadata("tapeman_reorder", MDNode::get(context, {}));
+  //     } else {
+  //       // TODO(@Milad): Handle Load instructions.
+  //     }
+  //   }
+  //   // TODO(@Milad): handle the loads in the reverse.
+  // }
+  // for (auto [header, size]: gutils->loopMallocSizes) {
+  //   llvm::errs() << "Header: " << header->getName() << "size = " << size << "\n";
+  // }
 }
 
 } // namespace

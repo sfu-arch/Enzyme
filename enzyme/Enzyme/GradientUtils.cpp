@@ -1508,19 +1508,83 @@ endCheck:
 }
 
 void GradientUtils::handleTapeValues() {
+  DominatorTree DT(*newFunc);
   std::map<Instruction *, int> forward_index_map;
   std::map<Instruction *, int> reverse_index_map;
-
-  // Iterate over the blocks to count their tape reads and writes.
+  std::unordered_map<BasicBlock*, Instruction*> bb_to_malloc_map;
+  std::unordered_map<BasicBlock*, GetElementPtrInst*> bb_to_gep_map;
+  
+  // Finding dominating tape instruction in each BB.
   for (auto i : forward_to_reverse_map) {
-    auto forward_inst = dyn_cast<Instruction>(i.first);
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
     auto reverse_inst = dyn_cast<Instruction>(i.second);
     auto reverse_bb = reverse_inst->getParent();
     auto forward_bb = reverseBlockToPrimal[reverse_bb];
 
-    if (forward_bb_writes_.count(forward_bb) == 0)
-      forward_bb_writes_[forward_bb] = 0;
+    GetElementPtrInst *gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    if (bb_to_gep_map.find(forward_bb) == bb_to_gep_map.end()) { 
+      bb_to_gep_map[forward_bb] = gep_inst;
+      continue;
+    }
+    if (DT.dominates(forward_inst, bb_to_gep_map[forward_bb])) {
+      bb_to_gep_map[forward_bb] = gep_inst;
+    }
+  }
 
+  // Assign the dominating GEP to all tape stores.
+  for (auto i : forward_to_reverse_map) {
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<Instruction>(i.second);
+    auto reverse_bb = reverse_inst->getParent();
+    auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+    GetElementPtrInst *original_gep = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    auto dominating_gep = bb_to_gep_map[forward_bb];
+    if (original_gep != dominating_gep) {
+      original_gep->getOperandList()[0] = dominating_gep->getOperand(0);
+    }
+  }
+
+  // Iterate over the blocks to count their tape reads and writes.
+  for (auto i : forward_to_reverse_map) {
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<Instruction>(i.second);
+    auto reverse_bb = reverse_inst->getParent();
+    auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+    if (forward_bb_writes_.count(forward_bb) == 0) {
+      forward_bb_writes_[forward_bb] = 0;
+      // GetElementPtrInst *gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+      // auto malloc_inst = dyn_cast<Instruction>(gep_inst->getOperand(0));
+      // // bb_to_gep_map[forward_bb] = gep_inst;
+    }
+    //  else {
+    //   if (DT.dominates(forward_inst, bb_to_gep_map[forward_bb])) {
+    //    errs() << *forward_inst << " dominates" << *bb_to_gep_map[forward_bb] << "\n";
+    //   } else {
+    //     errs() << *forward_inst << " does not dominate" << *bb_to_gep_map[forward_bb] << "\n";
+    //   }
+    //   auto current_gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    //   auto new_gep_inst = bb_to_gep_map[forward_bb];
+    //   current_gep_inst->getOperandList()[0] = new_gep_inst->getOperand(0);
+    //   auto index_operand = current_gep_inst->getOperand(1);
+    //   auto new_index_operand = new_gep_inst->getOperand(1);
+    //   index_operand = new_index_operand;
+      
+
+    //   auto cloned_gep = dyn_cast<GetElementPtrInst>(current_gep_inst)->clone();
+    //   cloned_gep->insertBefore(current_gep_inst);
+    //   // dyn_cast<Instruction>(index_operand)->eraseFromParent();
+    //   // index_operand->replaceAllUsesWith(new_index_operand);
+    //   auto new_store_inst = dyn_cast<StoreInst>(forward_inst->clone());
+    //   new_store_inst->insertBefore(forward_inst);
+    //   new_store_inst->getOperandList()[1] = cloned_gep;
+
+    //   auto cloned_inst = dyn_cast<Instruction>(index_operand)->clone();
+    //   cloned_inst->insertBefore(cloned_gep);
+    //   cloned_gep->getOperandList()[1] = cloned_inst;
+
+    // }
     if (reverse_bb_reads_.count(reverse_bb) == 0)
       forward_bb_writes_[forward_bb] = 0;
 
@@ -1586,6 +1650,10 @@ void GradientUtils::handleTapeValues() {
   }
   for (auto i : forward_index_map)
     setOperationMetadata(i.first, i.second, BIN_WRITE);
+  
+  // for (auto i : forward_index_map) {
+  //   setOperationMetadata(i.first, i.second, BIN_WRITE);
+  // }
 
   for (auto i : reverse_index_map)
     setOperationMetadata(i.first, i.second, BIN_READ);
@@ -1594,6 +1662,7 @@ void GradientUtils::handleTapeValues() {
 Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
                                           int idx, bool ignoreType,
                                           bool replace) {
+
   assert(malloc);
   assert(BuilderQ.GetInsertBlock()->getParent() == newFunc);
   assert(isOriginalBlock(*BuilderQ.GetInsertBlock()));
@@ -1989,8 +2058,7 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
             inversionAllocs, numThreads->getType(), malloc->getType(),
             byteSizeOfType, numThreads, nullptr,
             malloc->getName() + "_malloccache"));
-        errs() << "Allocated cache: " << *firstallocation << "\n";
-
+        errs() << "Allocated cache2: " << *firstallocation << "\n";
         if (firstallocation->getParent() == nullptr) {
           inversionAllocs->getInstList().push_back(firstallocation);
         }
@@ -2064,7 +2132,6 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
 Value *GradientUtils::cacheForReverse(IRBuilder<> &BuilderQ, Value *malloc,
                                       int idx, bool ignoreType, bool replace) {
   auto v = cacheForReverseOrig(BuilderQ, malloc, idx, ignoreType, replace);
-  errs() << "Cached: " << *v << "\n";
   return v;
 }
 /// Given an edge from BB to branchingBlock get the corresponding block to

@@ -133,7 +133,8 @@ public:
   llvm::DominatorTree DT;
 
   // Loop to malloc size map
-  std::map<llvm::BasicBlock *, int> loopMallocSizes;
+  // std::map<llvm::BasicBlock *, int> loopMallocSizes;
+  std::map<llvm::BasicBlock *, std::vector<std::tuple<llvm::Value *, llvm::Value *>>> loopMallocs;
   
 protected:
   llvm::LoopInfo LI;

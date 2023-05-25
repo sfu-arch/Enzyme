@@ -690,8 +690,6 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
               available[cl.first.var] = cl.first.var;
           }
         }
-        errs() << "es " << *extraSize << "\n";
-
         Value *es = unwrapM(extraSize, allocationBuilder, available,
                             UnwrapMode::AttemptFullUnwrapWithLookup);
         assert(es);
@@ -705,15 +703,23 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
         auto firstallocation = CallInst::CreateMalloc(
             &allocationBuilder.GetInsertBlock()->back(), size->getType(),
             myType, byteSizeOfType, size, nullptr, name + "_malloccache");
-            llvm::BasicBlock *header = containedloops.back().first.header;
-            errs() << "Allocated cache1: " << *firstallocation << "\n";
-            
+            // llvm::BasicBlock *front_header = containedloops.front().first.header;
+            // llvm::BasicBlock *front_preheader = containedloops.front().first.preheader;
+
+            // llvm::BasicBlock *back_header = containedloops.back().first.header;
+            // llvm::BasicBlock *back_preheader = containedloops.back().first.preheader;
+            // errs() << "front header: " << front_header->getName() << "\n";
+            // errs() << "front preheader: " << front_preheader->getName() << "\n";
+            // errs() << "back header: " << back_header->getName() << "\n";
+            // errs() << "back preheader: " << back_preheader->getName() << "\n";
+
+            // errs() << "Allocated cache1: " << *firstallocation << "\nloop: " << *(allocationBuilder.GetInsertBlock()->back().getParent()) << "\n";
         // Accumulate the size of the mallocs in the loop to generate a single large malloc
-        if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(size)) {
-          if (loopMallocSizes.find(header) == loopMallocSizes.end())
-                loopMallocSizes[header] = 0;
-          loopMallocSizes[header] += CI->getSExtValue();
-        }
+        // if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(size)) {
+        //   if (loopMallocSizes.find(header) == loopMallocSizes.end())
+        //         loopMallocSizes[header] = 0;
+        //   loopMallocSizes[header] += CI->getSExtValue();
+        // }
 
         CallInst *malloccall = dyn_cast<CallInst>(firstallocation);
         if (malloccall == nullptr) {
@@ -1043,8 +1049,6 @@ CacheUtility::SubLimitType CacheUtility::getSubLimits(bool inForwardPass,
       // allocation preheader. This is null if it was not legal to compute
       limitMinus1 = unwrapM(contexts[i].maxLimit, allocationBuilder, prevMap,
                             UnwrapMode::AttemptFullUnwrap);
-      errs() << "es \n";
-
       // We have a loop with static bounds, but whose limit is not available
       // to be computed at the current loop preheader (such as the innermost
       // loop of triangular iteration domain) Handle this case like a dynamic
@@ -1320,7 +1324,7 @@ Value *CacheUtility::getCachePointer(bool inForwardPass, IRBuilder<> &BuilderM,
                                      Value *extraSize) {
   assert(ctx.Block);
   assert(cache);
-
+  
   auto sublimits = getSubLimits(inForwardPass, &BuilderM, ctx, extraSize);
 
   ValueToValueMapTy available;
@@ -1395,7 +1399,14 @@ Value *CacheUtility::getCachePointer(bool inForwardPass, IRBuilder<> &BuilderM,
             cast<Instruction>(next));
     }
     assert(next->getType()->isPointerTy());
+    // auto *preheader = containedloops.front().header;
+    // if (loopMallocs.find(containedloops.front().header) == loopMallocs.end()) {
+    //   loopMallocs[preheader] = std::vector<std::tuple<llvm::Value*, llvm::Value*>>();
+    // }
+    // loopMallocs[preheader].push_back(std::make_tuple(next, cache));
+    // errs() << "Cache ptr = " << *next << "\n";
   }
+  
   return next;
 }
 

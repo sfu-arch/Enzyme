@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC -Wall -fPIC -fno-rtti  -W -Wno-undef  -Wl,-rpath-link,  -Wl,-O3 -Wl,--gc-sections -shared  -o BCPass-12.so CMakeFiles/BCPass-12.dir/BCLoader.cpp.o CMakeFiles/BCPass-12.dir/ClangBCLoader.cpp.o  -Wl,-rpath,"\$ORIGIN/../lib:/local-scratch/localhome/mha157/llvm-project/build/./lib" 

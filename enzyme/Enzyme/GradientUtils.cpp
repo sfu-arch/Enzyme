@@ -1507,6 +1507,21 @@ endCheck:
   return nullptr;
 }
 
+void GradientUtils::extendtTapeAllocation(StoreInst *store_inst, uint64_t scale) {
+  if (auto *gep_inst = dyn_cast<GetElementPtrInst>(store_inst->getPointerOperand())) {
+    if (auto *ptr = dyn_cast<Instruction>(gep_inst->getPointerOperand())) {
+      if (auto *alloca_inst = dyn_cast<AllocaInst>(ptr->getOperand(0))) {
+        if (alloca_to_malloc.find(alloca_inst) != alloca_to_malloc.end()) {
+          auto *call = dyn_cast<Instruction>(alloca_to_malloc[alloca_inst])->getOperand(0);
+          auto malloc_size = dyn_cast<Instruction>(call)->getOperand(0);
+          auto new_size = ConstantInt::get(malloc_size->getType(), dyn_cast<ConstantInt>(malloc_size)->getZExtValue() * scale);
+          dyn_cast<Instruction>(call)->setOperand(0, new_size);
+        }
+      }
+    }
+  }
+}
+
 void GradientUtils::handleTapeValues() {
   DominatorTree DT(*newFunc);
   std::map<Instruction *, int> forward_index_map;
@@ -1592,6 +1607,20 @@ void GradientUtils::handleTapeValues() {
     reverse_index_map[reverse_inst] = reverse_bb_reads_[reverse_bb];
     forward_bb_writes_[forward_bb]++;
     reverse_bb_reads_[reverse_bb]++;
+  }
+
+  // Increase malloc size if needed.
+  for (auto i : forward_to_reverse_map) {
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<Instruction>(i.second);
+    auto reverse_bb = reverse_inst->getParent();
+    auto forward_bb = reverseBlockToPrimal[reverse_bb];
+    
+    auto dominating_gep = bb_to_gep_map[forward_bb];
+    extendtTapeAllocation(forward_inst, forward_bb_writes_[forward_bb]);
+    // if (original_gep != dominating_gep) {
+    //   original_gep->getOperandList()[0] = dominating_gep->getOperand(0);
+    // }
   }
 
   // Define the boundries of the layers and break the blocks if needed.

@@ -674,7 +674,9 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
           &containedloops.back().first.preheader->back());
 
       Value *size = sublimits[i].first;
-      errs() << "size " << *size << "\n";
+      errs() << *alloc <<  ", size " << *size << "\n";
+      cache_to_size[alloc] = size;
+
       if (EfficientBoolCache && isi1 && i == 0) {
         size = allocationBuilder.CreateLShr(
             allocationBuilder.CreateAdd(
@@ -703,6 +705,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
         auto firstallocation = CallInst::CreateMalloc(
             &allocationBuilder.GetInsertBlock()->back(), size->getType(),
             myType, byteSizeOfType, size, nullptr, name + "_malloccache");
+            alloca_to_malloc[alloc] = firstallocation;
             // llvm::BasicBlock *front_header = containedloops.front().first.header;
             // llvm::BasicBlock *front_preheader = containedloops.front().first.preheader;
 

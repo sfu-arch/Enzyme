@@ -223,6 +223,9 @@ public:
                     MDString::get(inst->getContext(), std::to_string(index))));
   }
 
+  // Extends the malloc call for this tape store.
+  void extendtTapeAllocation(StoreInst *store_inst, uint64_t scale);
+
   // Iterates over the marked tape values, creates layers, and assigns indexes.
   void handleTapeValues();
 

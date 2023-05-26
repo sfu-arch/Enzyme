@@ -1507,16 +1507,14 @@ endCheck:
   return nullptr;
 }
 
-void GradientUtils::extendtTapeAllocation(StoreInst *store_inst, uint64_t scale) {
-  if (auto *gep_inst = dyn_cast<GetElementPtrInst>(store_inst->getPointerOperand())) {
-    if (auto *ptr = dyn_cast<Instruction>(gep_inst->getPointerOperand())) {
-      if (auto *alloca_inst = dyn_cast<AllocaInst>(ptr->getOperand(0))) {
-        if (alloca_to_malloc.find(alloca_inst) != alloca_to_malloc.end()) {
-          auto *call = dyn_cast<Instruction>(alloca_to_malloc[alloca_inst])->getOperand(0);
-          auto malloc_size = dyn_cast<Instruction>(call)->getOperand(0);
-          auto new_size = ConstantInt::get(malloc_size->getType(), dyn_cast<ConstantInt>(malloc_size)->getZExtValue() * scale);
-          dyn_cast<Instruction>(call)->setOperand(0, new_size);
-        }
+void GradientUtils::extendtTapeAllocation(GetElementPtrInst *gep_inst, uint64_t scale) {
+  if (auto *ptr = dyn_cast<Instruction>(gep_inst->getPointerOperand())) {
+    if (auto *alloca_inst = dyn_cast<AllocaInst>(ptr->getOperand(0))) {
+      if (alloca_to_malloc.find(alloca_inst) != alloca_to_malloc.end()) {
+        auto *call = dyn_cast<Instruction>(alloca_to_malloc[alloca_inst])->getOperand(0);
+        auto malloc_size = dyn_cast<Instruction>(call)->getOperand(0);
+        auto new_size = ConstantInt::get(malloc_size->getType(), dyn_cast<ConstantInt>(malloc_size)->getZExtValue() * scale);
+        dyn_cast<Instruction>(call)->setOperand(0, new_size);
       }
     }
   }
@@ -1569,37 +1567,8 @@ void GradientUtils::handleTapeValues() {
 
     if (forward_bb_writes_.count(forward_bb) == 0) {
       forward_bb_writes_[forward_bb] = 0;
-      // GetElementPtrInst *gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
-      // auto malloc_inst = dyn_cast<Instruction>(gep_inst->getOperand(0));
-      // // bb_to_gep_map[forward_bb] = gep_inst;
     }
-    //  else {
-    //   if (DT.dominates(forward_inst, bb_to_gep_map[forward_bb])) {
-    //    errs() << *forward_inst << " dominates" << *bb_to_gep_map[forward_bb] << "\n";
-    //   } else {
-    //     errs() << *forward_inst << " does not dominate" << *bb_to_gep_map[forward_bb] << "\n";
-    //   }
-    //   auto current_gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
-    //   auto new_gep_inst = bb_to_gep_map[forward_bb];
-    //   current_gep_inst->getOperandList()[0] = new_gep_inst->getOperand(0);
-    //   auto index_operand = current_gep_inst->getOperand(1);
-    //   auto new_index_operand = new_gep_inst->getOperand(1);
-    //   index_operand = new_index_operand;
-      
-
-    //   auto cloned_gep = dyn_cast<GetElementPtrInst>(current_gep_inst)->clone();
-    //   cloned_gep->insertBefore(current_gep_inst);
-    //   // dyn_cast<Instruction>(index_operand)->eraseFromParent();
-    //   // index_operand->replaceAllUsesWith(new_index_operand);
-    //   auto new_store_inst = dyn_cast<StoreInst>(forward_inst->clone());
-    //   new_store_inst->insertBefore(forward_inst);
-    //   new_store_inst->getOperandList()[1] = cloned_gep;
-
-    //   auto cloned_inst = dyn_cast<Instruction>(index_operand)->clone();
-    //   cloned_inst->insertBefore(cloned_gep);
-    //   cloned_gep->getOperandList()[1] = cloned_inst;
-
-    // }
+    
     if (reverse_bb_reads_.count(reverse_bb) == 0)
       forward_bb_writes_[forward_bb] = 0;
 
@@ -1610,17 +1579,22 @@ void GradientUtils::handleTapeValues() {
   }
 
   // Increase malloc size if needed.
+  for (auto &bb: bb_to_gep_map) {
+    auto dominating_gep = bb.second;
+    extendtTapeAllocation(dominating_gep, forward_bb_writes_[bb.first]);
+  }
+
+  // Update GEP: GEP.index = GEP.index * scale + index.
   for (auto i : forward_to_reverse_map) {
     auto forward_inst = dyn_cast<StoreInst>(i.first);
     auto reverse_inst = dyn_cast<Instruction>(i.second);
     auto reverse_bb = reverse_inst->getParent();
     auto forward_bb = reverseBlockToPrimal[reverse_bb];
-    
-    auto dominating_gep = bb_to_gep_map[forward_bb];
-    extendtTapeAllocation(forward_inst, forward_bb_writes_[forward_bb]);
-    // if (original_gep != dominating_gep) {
-    //   original_gep->getOperandList()[0] = dominating_gep->getOperand(0);
-    // }
+    auto gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    auto gep_index = gep_inst->getOperand(1);
+    auto mult_inst = BinaryOperator::Create(Instruction::Mul, gep_index, ConstantInt::get(gep_index->getType(), forward_bb_writes_[forward_bb]), "", gep_inst);
+    auto add_inst = BinaryOperator::Create(Instruction::Add, mult_inst, ConstantInt::get(gep_index->getType(), forward_index_map[forward_inst]), "", gep_inst);
+    gep_inst->setOperand(1, add_inst);
   }
 
   // Define the boundries of the layers and break the blocks if needed.

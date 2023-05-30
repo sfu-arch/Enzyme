@@ -14,17 +14,16 @@
 
 using namespace llvm;
 
-namespace instrumem
-{
+namespace instrumem {
 struct ForwardNodeInstPass : public llvm::FunctionPass,
-                        llvm::InstVisitor<ForwardNodeInstPass> {
-    public:
-        static char ID;
-        ForwardNodeInstPass();
-        bool runOnFunction(llvm::Function &f) override;
-        void visitInstruction(Instruction &I);
-    private:
+                             llvm::InstVisitor<ForwardNodeInstPass> {
+public:
+  static char ID;
+  ForwardNodeInstPass();
+  bool runOnFunction(llvm::Function &f) override;
+  void visitInstruction(Instruction &I);
 
+private:
 };
 
 } // namespace instrumem

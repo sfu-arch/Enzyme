@@ -117,13 +117,12 @@ cl::opt<bool>
 cl::opt<bool> LogMain("log-main", cl::init(false), cl::Hidden,
                       cl::desc("Instruments the main function as well."));
 
-cl::opt<bool>
-    EnableTF("tf-enable", cl::init(false), cl::Hidden,
-               cl::desc("Enable TapeFlow."));
+cl::opt<bool> EnableTF("tf-enable", cl::init(false), cl::Hidden,
+                       cl::desc("Enable TapeFlow."));
 cl::opt<bool>
     REORDER("tf-reorder", cl::init(false), cl::Hidden,
-               cl::desc("Enable reordering of tape layout to Array of Structs."));
-               
+            cl::desc("Enable reordering of tape layout to Array of Structs."));
+
 cl::opt<bool> MemOpRatioLog("memop-ratio", cl::init(false), cl::Hidden,
                             cl::desc("Log MemOps Ratio"));
 }
@@ -3782,7 +3781,6 @@ Function *EnzymeLogic::CreatePrimalAndGradient(
   if (EnableTF)
     gutils->handleTapeValues();
 
-  
   // gutils->performLevelAnalysis();
   // gutils->printLevelAnalysis();
   // gutils->setBins({3, 3, 10, 25, 100, 1000});

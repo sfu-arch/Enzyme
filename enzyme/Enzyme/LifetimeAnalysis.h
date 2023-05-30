@@ -14,60 +14,59 @@
 
 using namespace llvm;
 
-namespace life
-{
+namespace life {
 
-    struct LifetimePass : public llvm::FunctionPass,
-                           llvm::InstVisitor<LifetimePass>
-    {
-    
-    private:
-        std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
-        std::set<std::string> edges;
+struct LifetimePass : public llvm::FunctionPass,
+                      llvm::InstVisitor<LifetimePass> {
 
-        uint32_t getLevel(Value *V) {
-            if (!isa<Instruction>(*V))
-                return 0;
-            Instruction &I = cast<Instruction>(*V);
-            auto *N = I.getMetadata("level");
-            auto *S = dyn_cast<MDString>(N->getOperand(0));
-            return stoi(S->getString().str());
-        };
+private:
+  std::map<std::string, std::pair<uint32_t, uint32_t>> memOps;
+  std::set<std::string> edges;
 
-        uint32_t getTapeCost(Value *V) {
-            if (!isa<Instruction>(*V))
-                return 0;
-            Instruction &I = cast<Instruction>(*V);
-            auto *N = I.getMetadata("mode");
-            auto S = dyn_cast<MDString>(N->getOperand(0));
-            auto mode = S->getString().str();
-            if (mode == "forward")
-                return 1;
+  uint32_t getLevel(Value *V) {
+    if (!isa<Instruction>(*V))
+      return 0;
+    Instruction &I = cast<Instruction>(*V);
+    auto *N = I.getMetadata("level");
+    auto *S = dyn_cast<MDString>(N->getOperand(0));
+    return stoi(S->getString().str());
+  };
 
-            N = I.getMetadata("tapeCost");
-            S = dyn_cast<MDString>(N->getOperand(0));
-            return stoi(S->getString().str());
-        }
+  uint32_t getTapeCost(Value *V) {
+    if (!isa<Instruction>(*V))
+      return 0;
+    Instruction &I = cast<Instruction>(*V);
+    auto *N = I.getMetadata("mode");
+    auto S = dyn_cast<MDString>(N->getOperand(0));
+    auto mode = S->getString().str();
+    if (mode == "forward")
+      return 1;
 
-        uint32_t getCycle(Value *V) {
-            if (!isa<Instruction>(*V))
-                return 0;
-            Instruction &I = cast<Instruction>(*V);
-            auto *N = I.getMetadata("cycle");
-            auto *S = dyn_cast<MDString>(N->getOperand(0));
-            return stoi(S->getString().str());
-        };
-    public:
-        static char ID;
-        llvm::Function *F = nullptr;
+    N = I.getMetadata("tapeCost");
+    S = dyn_cast<MDString>(N->getOperand(0));
+    return stoi(S->getString().str());
+  }
 
-        LifetimePass();
+  uint32_t getCycle(Value *V) {
+    if (!isa<Instruction>(*V))
+      return 0;
+    Instruction &I = cast<Instruction>(*V);
+    auto *N = I.getMetadata("cycle");
+    auto *S = dyn_cast<MDString>(N->getOperand(0));
+    return stoi(S->getString().str());
+  };
 
-        bool runOnFunction(llvm::Function &f) override;
+public:
+  static char ID;
+  llvm::Function *F = nullptr;
 
-        void visitInstruction(Instruction &ins);
-    };
+  LifetimePass();
 
-} // namespace instrumem
+  bool runOnFunction(llvm::Function &f) override;
+
+  void visitInstruction(Instruction &ins);
+};
+
+} // namespace life
 
 #endif

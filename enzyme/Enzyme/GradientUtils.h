@@ -108,8 +108,7 @@ extern llvm::cl::opt<bool> EnzymeFreeInternalAllocations;
 // Creates a layer boundary operator before the given instruction.
 // The `size` indicates the values inside the layer. The command indicates
 // whether the operator is allocation or barrier.
-void setLayerBoundary(Instruction *target_inst, int size,
-                           std::string command);
+void setLayerBoundary(Instruction *target_inst, int size, std::string command);
 
 struct InvertedPointerConfig : ValueMapConfig<const llvm::Value *> {
   typedef GradientUtils *ExtraData;
@@ -214,8 +213,8 @@ public:
     return false;
   }
 
-  // Sets metadata for an instruction. `command` can be either "read" or "write" and `index` is the
-  // index of the value in the tape.
+  // Sets metadata for an instruction. `command` can be either "read" or "write"
+  // and `index` is the index of the value in the tape.
   void setOperationMetadata(Instruction *inst, int index, std::string command) {
     inst->setMetadata(
         command,
@@ -232,7 +231,8 @@ public:
   // Iterates over the marked tape values, creates layers, and assigns indexes.
   void handleTapeValues();
 
-  // This function records the original value in the FWD and the corresponding load in the REV.
+  // This function records the original value in the FWD and the corresponding
+  // load in the REV.
   void handleCachedValue(Value *original_value, Value *load) {
     if (checkUnused(original_value))
       return;

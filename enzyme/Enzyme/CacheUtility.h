@@ -134,8 +134,10 @@ public:
 
   // Loop to malloc size map
   // std::map<llvm::BasicBlock *, int> loopMallocSizes;
-  std::map<llvm::BasicBlock *, std::vector<std::tuple<llvm::Value *, llvm::Value *>>> loopMallocs;
-  
+  std::map<llvm::BasicBlock *,
+           std::vector<std::tuple<llvm::Value *, llvm::Value *>>>
+      loopMallocs;
+
 protected:
   llvm::LoopInfo LI;
   llvm::AssumptionCache AC;
@@ -147,10 +149,9 @@ public:
   llvm::BasicBlock *inversionAllocs;
   // Stores the size of the alloca insts used for caching.
   std::unordered_map<llvm::Value *, llvm::Value *> cache_to_size;
-  
+
   // Map from alloca inst to malloc.
   std::unordered_map<llvm::Value *, llvm::Value *> alloca_to_malloc;
-  
 
 protected:
   CacheUtility(llvm::TargetLibraryInfo &TLI, llvm::Function *newFunc)
@@ -330,8 +331,8 @@ public:
           llvm::BasicBlock *scope = nullptr, bool permitCache = true) = 0;
   virtual llvm::Value *
   unwrapMOrig(llvm::Value *const val, llvm::IRBuilder<> &BuilderM,
-          const llvm::ValueToValueMapTy &available, UnwrapMode mode,
-          llvm::BasicBlock *scope = nullptr, bool permitCache = true) = 0;
+              const llvm::ValueToValueMapTy &available, UnwrapMode mode,
+              llvm::BasicBlock *scope = nullptr, bool permitCache = true) = 0;
   /// High-level utility to get the value an instruction at a new location
   /// specified by BuilderM. Unlike unwrap, this function can never fail --
   /// falling back to creating a cache if necessary. This function is

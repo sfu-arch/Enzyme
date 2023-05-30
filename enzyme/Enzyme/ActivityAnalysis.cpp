@@ -601,7 +601,7 @@ bool ActivityAnalyzer::isConstantInstruction(TypeResults &TR, Instruction *I) {
 
   // Otherwise we must fall back and assume this instruction to be active.
   ActiveInstructions.insert(I);
-  
+
   active_inst_vec.push_back(I);
   if (EnzymePrintActivity)
     llvm::errs() << "couldnt decide fallback as nonconstant instruction("
@@ -879,7 +879,7 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
                 << "\n";
           ActiveValues.insert(Val);
           // errs() << "constant value " << *Val << " is not constant\n";
-          
+
           return false;
         }
       }
@@ -942,8 +942,7 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
             InsertConstantValue(TR, Val);
           } else {
             ActiveValues.insert(Val);
-    // errs() << "constant value " << *Val << " is not constant\n";
-
+            // errs() << "constant value " << *Val << " is not constant\n";
           }
           return res;
         }
@@ -1126,7 +1125,7 @@ bool ActivityAnalyzer::isConstantValue(TypeResults &TR, Value *Val) {
         llvm::errs() << " <Potential Pointer assumed active at "
                      << (int)directions << ">" << *Val << "\n";
       ActiveValues.insert(Val);
-    // errs() << "constant value " << *Val << " is not constant\n";
+      // errs() << "constant value " << *Val << " is not constant\n";
 
       return false;
     }
@@ -2182,7 +2181,7 @@ void ActivityAnalyzer::InsertConstantValue(TypeResults &TR, llvm::Value *V) {
       if (EnzymePrintActivity)
         // llvm::errs() << " re-evaluating activity of inst " << *toeval
         //              << " due to value " << *V << "\n";
-      isConstantInstruction(TR, toeval);
+        isConstantInstruction(TR, toeval);
     }
   }
 }

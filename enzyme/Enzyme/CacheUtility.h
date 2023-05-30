@@ -133,7 +133,8 @@ public:
   llvm::DominatorTree DT;
 
   // Loop to malloc size map
-  std::map<llvm::BasicBlock *, int> loopMallocSizes;
+  // std::map<llvm::BasicBlock *, int> loopMallocSizes;
+  std::map<llvm::BasicBlock *, std::vector<std::tuple<llvm::Value *, llvm::Value *>>> loopMallocs;
   
 protected:
   llvm::LoopInfo LI;
@@ -144,6 +145,12 @@ public:
   // Helper basicblock where all new allocations will be added to
   // This includes allocations for cache variables
   llvm::BasicBlock *inversionAllocs;
+  // Stores the size of the alloca insts used for caching.
+  std::unordered_map<llvm::Value *, llvm::Value *> cache_to_size;
+  
+  // Map from alloca inst to malloc.
+  std::unordered_map<llvm::Value *, llvm::Value *> alloca_to_malloc;
+  
 
 protected:
   CacheUtility(llvm::TargetLibraryInfo &TLI, llvm::Function *newFunc)

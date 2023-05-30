@@ -1,3 +1,0 @@
-repository='external project URL'
-module='/localhome/mha157/Enzyme/enzyme/benchmarks/ADFirstAidKit.tar'
-tag=''

@@ -1,3 +1,0 @@
-repository='https://github.com/rjhogan/Adept-2'
-module=''
-tag='origin'

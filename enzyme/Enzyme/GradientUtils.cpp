@@ -58,8 +58,8 @@ std::map<
     customCallHandlers;
 
 extern "C" {
-llvm::cl::opt<int> BIN_SIZE("bin-size", llvm::cl::init(1), llvm::cl::Hidden,
-                            llvm::cl::desc("Size of the Bin"));
+llvm::cl::opt<int> SPAD_SIZE("spad-size", llvm::cl::init(1), llvm::cl::Hidden,
+                            llvm::cl::desc("Size of the Spad"));
 llvm::cl::opt<bool> EnzymeNewCache(
     "enzyme-new-cache", cl::init(true), cl::Hidden,
     cl::desc("Use new cache decision algorithm"));
@@ -1507,32 +1507,159 @@ endCheck:
   return nullptr;
 }
 
-void GradientUtils::handleTapeValues() {
+void GradientUtils::extendtTapeAllocation(GetElementPtrInst *gep_inst, uint64_t scale) {
+  if (auto *ptr = dyn_cast<Instruction>(gep_inst->getPointerOperand())) {
+    if (auto *alloca_inst = dyn_cast<AllocaInst>(ptr->getOperand(0))) {
+      if (alloca_to_malloc.find(alloca_inst) != alloca_to_malloc.end()) {
+        auto *call = dyn_cast<Instruction>(alloca_to_malloc[alloca_inst])->getOperand(0);
+        auto malloc_size = dyn_cast<Instruction>(call)->getOperand(0);
+        auto new_size = ConstantInt::get(malloc_size->getType(), dyn_cast<ConstantInt>(malloc_size)->getZExtValue() * scale);
+        dyn_cast<Instruction>(call)->setOperand(0, new_size);
+      }
+    }
+  }
+}
+
+// Receives the GEP operand and updates its index to be AoS.
+void createAoSIndex(Value *operand, int scale, int offset) {
+  if (auto *gep_inst = dyn_cast<GetElementPtrInst>(operand)) {
+    auto gep_index = gep_inst->getOperand(1);
+    auto mult_inst = BinaryOperator::Create(Instruction::Mul, gep_index, ConstantInt::get(gep_index->getType(), scale), "", gep_inst);
+    auto add_inst = BinaryOperator::Create(Instruction::Add, mult_inst, ConstantInt::get(gep_index->getType(), offset), "", gep_inst);
+    gep_inst->setOperand(1, add_inst);
+  }
+}
+
+void GradientUtils::createAoS() {
+  DominatorTree DT(*newFunc);
   std::map<Instruction *, int> forward_index_map;
   std::map<Instruction *, int> reverse_index_map;
-
-  // Iterate over the blocks to count their tape reads and writes.
+  std::unordered_map<BasicBlock*, Instruction*> bb_to_malloc_map;
+  std::unordered_map<BasicBlock*, GetElementPtrInst*> fwd_bb_to_gep_map, rev_bb_to_gep_map;
+  
+  // Finding dominating tape instruction in each BB.
   for (auto i : forward_to_reverse_map) {
-    auto forward_inst = dyn_cast<Instruction>(i.first);
-    auto reverse_inst = dyn_cast<Instruction>(i.second);
+    if (!llvm::isa<StoreInst>(i.first))
+      continue;
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<LoadInst>(i.second);
     auto reverse_bb = reverse_inst->getParent();
     auto forward_bb = reverseBlockToPrimal[reverse_bb];
 
-    if (forward_bb_writes_.count(forward_bb) == 0)
-      forward_bb_writes_[forward_bb] = 0;
+    GetElementPtrInst *fwd_gep_inst = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    GetElementPtrInst *rev_gep_inst = dyn_cast<GetElementPtrInst>(reverse_inst->getPointerOperand());
+    if (fwd_bb_to_gep_map.find(forward_bb) == fwd_bb_to_gep_map.end()) { 
+      fwd_bb_to_gep_map[forward_bb] = fwd_gep_inst;
+    } else if (DT.dominates(forward_inst, fwd_bb_to_gep_map[forward_bb])) {
+      fwd_bb_to_gep_map[forward_bb] = fwd_gep_inst;
+    }
 
-    if (reverse_bb_reads_.count(reverse_bb) == 0)
-      forward_bb_writes_[forward_bb] = 0;
-
-    forward_index_map[forward_inst] = forward_bb_writes_[forward_bb];
-    reverse_index_map[reverse_inst] = reverse_bb_reads_[reverse_bb];
-    forward_bb_writes_[forward_bb]++;
-    reverse_bb_reads_[reverse_bb]++;
+    if (DT.dominates(fwd_bb_to_gep_map[forward_bb], reverse_inst)) {
+      rev_bb_to_gep_map[reverse_bb] = fwd_bb_to_gep_map[forward_bb];
+    } else if (rev_bb_to_gep_map.find(reverse_bb) == rev_bb_to_gep_map.end()) { 
+      rev_bb_to_gep_map[reverse_bb] = rev_gep_inst;
+    } else if (DT.dominates(reverse_inst, rev_bb_to_gep_map[reverse_bb])) {
+      rev_bb_to_gep_map[reverse_bb] = rev_gep_inst;
+    }
   }
 
+  // Assign the dominating GEP to all tape stores/loads.
+  for (auto i : forward_to_reverse_map) {
+    if (!llvm::isa<StoreInst>(i.first))
+      continue;
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<LoadInst>(i.second);
+    auto reverse_bb = reverse_inst->getParent();
+    auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+    GetElementPtrInst *fwd_gep = dyn_cast<GetElementPtrInst>(forward_inst->getPointerOperand());
+    GetElementPtrInst *rev_gep = dyn_cast<GetElementPtrInst>(reverse_inst->getPointerOperand());
+    auto fwd_dominating_gep = fwd_bb_to_gep_map[forward_bb];
+    auto rev_dominating_gep = rev_bb_to_gep_map[reverse_bb];
+
+    if (fwd_gep != fwd_dominating_gep) {
+      auto cast_inst = new BitCastInst(fwd_dominating_gep->getOperand(0), fwd_gep->getOperandList()[0]->getType(), "", fwd_gep);
+      fwd_gep->getOperandList()[0] = cast_inst;
+    }
+    if (rev_gep != rev_dominating_gep) {
+      auto cast_inst = new BitCastInst(rev_dominating_gep->getOperand(0), rev_gep->getOperandList()[0]->getType(), "", rev_gep);
+      rev_gep->getOperandList()[0] = cast_inst;
+    }
+  }
+
+  // Iterate over the blocks to count their tape reads and writes.
+  if (forward_index_map.size() == 0) {
+    for (auto i : forward_to_reverse_map) {
+      auto forward_inst = dyn_cast<Instruction>(i.first);
+      auto reverse_inst = dyn_cast<Instruction>(i.second);
+      auto reverse_bb = reverse_inst->getParent();
+      auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+      if (forward_bb_writes_.count(forward_bb) == 0) {
+        forward_bb_writes_[forward_bb] = 0;
+      }
+      
+      if (reverse_bb_reads_.count(reverse_bb) == 0)
+        forward_bb_writes_[forward_bb] = 0;
+
+      forward_index_map[forward_inst] = forward_bb_writes_[forward_bb];
+      reverse_index_map[reverse_inst] = reverse_bb_reads_[reverse_bb];
+      forward_bb_writes_[forward_bb]++;
+      reverse_bb_reads_[reverse_bb]++;
+    }
+  }
+
+  // Increase malloc size if needed.
+  for (auto &bb: fwd_bb_to_gep_map) {
+    auto dominating_gep = bb.second;
+    extendtTapeAllocation(dominating_gep, forward_bb_writes_[bb.first]);
+  }
+
+  // Update GEP: GEP.index = GEP.index * scale + index.
+  for (auto i : forward_to_reverse_map) {
+    if (!llvm::isa<StoreInst>(i.first))
+      continue;
+    auto forward_inst = dyn_cast<StoreInst>(i.first);
+    auto reverse_inst = dyn_cast<LoadInst>(i.second);
+    auto reverse_bb = reverse_inst->getParent();
+    auto forward_bb = reverseBlockToPrimal[reverse_bb];
+    createAoSIndex(forward_inst->getPointerOperand(), forward_bb_writes_[forward_bb], forward_index_map[forward_inst]);
+    createAoSIndex(reverse_inst->getPointerOperand(), forward_bb_writes_[forward_bb], forward_index_map[forward_inst]);
+  }
+}
+
+void GradientUtils::handleTapeValues() {
+  DominatorTree DT(*newFunc);
+  std::map<Instruction *, int> forward_index_map;
+  std::map<Instruction *, int> reverse_index_map;
+  std::unordered_map<BasicBlock*, Instruction*> bb_to_malloc_map;
+  std::unordered_map<BasicBlock*, GetElementPtrInst*> fwd_bb_to_gep_map, rev_bb_to_gep_map;
+
+  // Iterate over the blocks to count their tape reads and writes.
+  if (forward_index_map.size() == 0) {
+    for (auto i : forward_to_reverse_map) {
+      auto forward_inst = dyn_cast<Instruction>(i.first);
+      auto reverse_inst = dyn_cast<Instruction>(i.second);
+      auto reverse_bb = reverse_inst->getParent();
+      auto forward_bb = reverseBlockToPrimal[reverse_bb];
+
+      if (forward_bb_writes_.count(forward_bb) == 0) {
+        forward_bb_writes_[forward_bb] = 0;
+      }
+      
+      if (reverse_bb_reads_.count(reverse_bb) == 0)
+        forward_bb_writes_[forward_bb] = 0;
+
+      forward_index_map[forward_inst] = forward_bb_writes_[forward_bb];
+      reverse_index_map[reverse_inst] = reverse_bb_reads_[reverse_bb];
+      forward_bb_writes_[forward_bb]++;
+      reverse_bb_reads_[reverse_bb]++;
+    }
+  }
+  
   // Define the boundries of the layers and break the blocks if needed.
   for (auto bb : forward_bb_writes_) {
-    int remaining_capacity = BIN_SIZE;
+    int remaining_capacity = SPAD_SIZE;
     llvm::Instruction *first_inst = bb.first->getFirstNonPHI();
     for (auto &inst : bb.first->getInstList()) {
       if (isa<PHINode>(inst)) continue;
@@ -1541,28 +1668,28 @@ void GradientUtils::handleTapeValues() {
         if (remaining_capacity > 1) {
           remaining_capacity--;
         } else {
-          setLayerBoundary(first_inst, BIN_SIZE,
+          setLayerBoundary(first_inst, SPAD_SIZE,
                            tapeman::BoundaryType::kAllocation);
-          setLayerBoundary(inst.getNextNode(), BIN_SIZE,
+          setLayerBoundary(inst.getNextNode(), SPAD_SIZE,
                            tapeman::BoundaryType::kBarrier);
           first_inst = inst.getNextNode();
-          remaining_capacity = BIN_SIZE;
+          remaining_capacity = SPAD_SIZE;
         }
       }
     }
     // Handle the remaining tape values in the layer.
-    if (remaining_capacity != BIN_SIZE) {
-      setLayerBoundary(first_inst, BIN_SIZE - remaining_capacity,
+    if (remaining_capacity != SPAD_SIZE) {
+      setLayerBoundary(first_inst, SPAD_SIZE - remaining_capacity,
                        tapeman::BoundaryType::kAllocation);
 
-      setLayerBoundary(bb.first->getTerminator(), BIN_SIZE - remaining_capacity,
+      setLayerBoundary(bb.first->getTerminator(), SPAD_SIZE - remaining_capacity,
                        tapeman::BoundaryType::kBarrier);
     }
   }
 
   for (auto bb : reverse_bb_reads_) {
     llvm::Instruction *last_inst = &(*(bb.first->getInstList().rbegin()));
-    int remaining_capacity = BIN_SIZE;
+    int remaining_capacity = SPAD_SIZE;
     std::for_each(bb.first->getInstList().rbegin(),
                   bb.first->getInstList().rend(), [&](auto &inst) {
                     if (isa<PHINode>(inst)) return;
@@ -1571,22 +1698,22 @@ void GradientUtils::handleTapeValues() {
                       if (remaining_capacity > 1) {
                         remaining_capacity--;
                       } else {
-                        setLayerBoundary(&inst, BIN_SIZE, tapeman::BoundaryType::kAllocation);
-                        setLayerBoundary(last_inst, BIN_SIZE, tapeman::BoundaryType::kBarrier);
+                        setLayerBoundary(&inst, SPAD_SIZE, tapeman::BoundaryType::kAllocation);
+                        setLayerBoundary(last_inst, SPAD_SIZE, tapeman::BoundaryType::kBarrier);
                         last_inst = inst.getPrevNode();
-                        remaining_capacity = BIN_SIZE;
+                        remaining_capacity = SPAD_SIZE;
                       }
                     }
                   });
-    if (remaining_capacity != BIN_SIZE) {
-      setLayerBoundary(last_inst, BIN_SIZE - remaining_capacity, tapeman::BoundaryType::kBarrier);
+    if (remaining_capacity != SPAD_SIZE) {
+      setLayerBoundary(last_inst, SPAD_SIZE - remaining_capacity, tapeman::BoundaryType::kBarrier);
       setLayerBoundary(bb.first->getFirstNonPHI(),
-                       BIN_SIZE - remaining_capacity, tapeman::BoundaryType::kAllocation);
+                       SPAD_SIZE - remaining_capacity, tapeman::BoundaryType::kAllocation);
     }
   }
   for (auto i : forward_index_map)
     setOperationMetadata(i.first, i.second, BIN_WRITE);
-
+  
   for (auto i : reverse_index_map)
     setOperationMetadata(i.first, i.second, BIN_READ);
 }
@@ -1594,6 +1721,7 @@ void GradientUtils::handleTapeValues() {
 Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
                                           int idx, bool ignoreType,
                                           bool replace) {
+
   assert(malloc);
   assert(BuilderQ.GetInsertBlock()->getParent() == newFunc);
   assert(isOriginalBlock(*BuilderQ.GetInsertBlock()));
@@ -1989,8 +2117,7 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
             inversionAllocs, numThreads->getType(), malloc->getType(),
             byteSizeOfType, numThreads, nullptr,
             malloc->getName() + "_malloccache"));
-        errs() << "Allocated cache: " << *firstallocation << "\n";
-
+        errs() << "Allocated cache2: " << *firstallocation << "\n";
         if (firstallocation->getParent() == nullptr) {
           inversionAllocs->getInstList().push_back(firstallocation);
         }
@@ -2064,7 +2191,6 @@ Value *GradientUtils::cacheForReverseOrig(IRBuilder<> &BuilderQ, Value *malloc,
 Value *GradientUtils::cacheForReverse(IRBuilder<> &BuilderQ, Value *malloc,
                                       int idx, bool ignoreType, bool replace) {
   auto v = cacheForReverseOrig(BuilderQ, malloc, idx, ignoreType, replace);
-  errs() << "Cached: " << *v << "\n";
   return v;
 }
 /// Given an edge from BB to branchingBlock get the corresponding block to

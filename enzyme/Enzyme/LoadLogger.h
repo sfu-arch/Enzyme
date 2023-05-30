@@ -13,23 +13,20 @@
 
 using namespace llvm;
 
-namespace instrumem
-{
+namespace instrumem {
 
-    struct LoadLoggerPass : public llvm::FunctionPass,
-                           llvm::InstVisitor<LoadLoggerPass>
-    {
-    
-    public:
-        static char ID;
-        llvm::Function *F = nullptr;
+struct LoadLoggerPass : public llvm::FunctionPass,
+                        llvm::InstVisitor<LoadLoggerPass> {
 
-        LoadLoggerPass();
+public:
+  static char ID;
+  llvm::Function *F = nullptr;
 
-        bool runOnFunction(llvm::Function &f) override;
-        void visitInstruction(llvm::Instruction &ins);
+  LoadLoggerPass();
 
-    };
+  bool runOnFunction(llvm::Function &f) override;
+  void visitInstruction(llvm::Instruction &ins);
+};
 
 } // namespace instrumem
 

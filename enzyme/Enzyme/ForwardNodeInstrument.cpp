@@ -12,23 +12,24 @@
 //===----------------------------------------------------------------------===//
 
 #include "ForwardNodeInstrument.h"
-#include "llvm/IR/IRBuilder.h"
 #include "Utils.h"
+#include "llvm/IR/IRBuilder.h"
 
 using namespace instrumem;
 
-ForwardNodeInstPass::ForwardNodeInstPass() : FunctionPass(ID) {} // ForwardNodeInstPass
+ForwardNodeInstPass::ForwardNodeInstPass()
+    : FunctionPass(ID) {} // ForwardNodeInstPass
 
 bool ForwardNodeInstPass::runOnFunction(Function &f) {
-    visit(f);
-    return true;
+  visit(f);
+  return true;
 }
 
 void ForwardNodeInstPass::visitInstruction(Instruction &I) {
-    // if (I.hasMetadata("node"))
-    //     CallPrintf(&I, "Node\n", {});
+  // if (I.hasMetadata("node"))
+  //     CallPrintf(&I, "Node\n", {});
 }
 
-
 char ForwardNodeInstPass::ID = 0;
-static RegisterPass<ForwardNodeInstPass> X("forward_inst", "ForwardNodeInstPass");
+static RegisterPass<ForwardNodeInstPass> X("forward_inst",
+                                           "ForwardNodeInstPass");

@@ -10,9 +10,8 @@
 
 extern "C" {
 extern llvm::cl::opt<int> SPAD_SIZE;
-llvm::cl::opt<bool> Reorder("tapeman-reorder", cl::init(false),
-                                    cl::Hidden,
-                                    cl::desc("Reorder the tape operations."));
+llvm::cl::opt<bool> Reorder("tapeman-reorder", cl::init(false), cl::Hidden,
+                            cl::desc("Reorder the tape operations."));
 }
 
 using namespace llvm;
@@ -25,13 +24,13 @@ void CreateConditionalStreamCommand(Instruction *start_inst,
                                     std::string command) {
   int interval = SPAD_SIZE / tape_ops;
   auto Int64Ty = Type::getInt64Ty(ind_var->getContext());
-  auto mod_inst = BinaryOperator::Create(
-      BinaryOperator::URem, ind_var,
-      ConstantInt::get(Int64Ty, interval), "mod", start_inst);
+  auto mod_inst = BinaryOperator::Create(BinaryOperator::URem, ind_var,
+                                         ConstantInt::get(Int64Ty, interval),
+                                         "mod", start_inst);
 
-  auto icmp_inst = CmpInst::Create(
-      Instruction::ICmp, CmpInst::ICMP_EQ, mod_inst,
-      ConstantInt::get(Int64Ty, interval - 1), "cmp");
+  auto icmp_inst =
+      CmpInst::Create(Instruction::ICmp, CmpInst::ICMP_EQ, mod_inst,
+                      ConstantInt::get(Int64Ty, interval - 1), "cmp");
   icmp_inst->insertAfter(mod_inst);
 
   auto new_inst = SplitBlockAndInsertIfThen(icmp_inst, start_inst, false);
@@ -39,11 +38,13 @@ void CreateConditionalStreamCommand(Instruction *start_inst,
   // setLayerBoundary(new_inst, tape_ops * interval, command);
 }
 
-// Reorders the tape operations in the loop to store them to the consecutive elements in the memory.
-void ReorderTapeOps(SmallVector<Loop*, 4> loops, GradientUtils *gutils) {
+// Reorders the tape operations in the loop to store them to the consecutive
+// elements in the memory.
+void ReorderTapeOps(SmallVector<Loop *, 4> loops, GradientUtils *gutils) {
   // A map from loop header to the tape write instruction.
-  // std::unordered_map<BasicBlock *, std::vector<Instruction*>> header_to_inst_map;
-  // std::unordered_map<Instruction *, BasicBlock *> inst_to_header_map;
+  // std::unordered_map<BasicBlock *, std::vector<Instruction*>>
+  // header_to_inst_map; std::unordered_map<Instruction *, BasicBlock *>
+  // inst_to_header_map;
 
   // for (auto [key, value] : gutils->forward_to_reverse_map) {
   //   BasicBlock *fwd_bb = cast<Instruction>(key)->getParent();
@@ -64,10 +65,11 @@ void ReorderTapeOps(SmallVector<Loop*, 4> loops, GradientUtils *gutils) {
 
   // for (auto [bb, inst_vector]: header_to_inst_map) {
   //   LLVMContext &context = bb->getContext();
-  //   auto size = ConstantInt::get(Type::getInt64Ty(context), inst_vector.size());
-  //   auto malloc = CallInst::CreateMalloc(
+  //   auto size = ConstantInt::get(Type::getInt64Ty(context),
+  //   inst_vector.size()); auto malloc = CallInst::CreateMalloc(
   //           bb->getFirstNonPHI(), Type::getInt64Ty(context),
-  //           Type::getDoubleTy(context), size, nullptr, nullptr, "tapeman_malloc");
+  //           Type::getDoubleTy(context), size, nullptr, nullptr,
+  //           "tapeman_malloc");
   //   for (int i = 0; i < inst_vector.size(); i++) {
   //     auto gep = GetElementPtrInst::CreateInBounds(
   //             Type::getDoubleTy(context), malloc,
@@ -75,9 +77,11 @@ void ReorderTapeOps(SmallVector<Loop*, 4> loops, GradientUtils *gutils) {
   //             "tapeman_gep", inst_vector[i]);
   //     errs() << *gep << "\n";
   //     if (auto store_inst = dyn_cast<StoreInst>(inst_vector[i])) {
-  //       auto bitcast = new BitCastInst(store_inst->getValueOperand(), Type::getDoubleTy(context), "tapeman_bitcast", store_inst);
-  //       StoreInst* reordered_store = new StoreInst(bitcast, gep, false, store_inst);
-  //       reordered_store->setMetadata("tapeman_reorder", MDNode::get(context, {}));
+  //       auto bitcast = new BitCastInst(store_inst->getValueOperand(),
+  //       Type::getDoubleTy(context), "tapeman_bitcast", store_inst);
+  //       StoreInst* reordered_store = new StoreInst(bitcast, gep, false,
+  //       store_inst); reordered_store->setMetadata("tapeman_reorder",
+  //       MDNode::get(context, {}));
   //     } else {
   //       // TODO(@Milad): Handle Load instructions.
   //     }
@@ -85,7 +89,8 @@ void ReorderTapeOps(SmallVector<Loop*, 4> loops, GradientUtils *gutils) {
   //   // TODO(@Milad): handle the loads in the reverse.
   // }
   // for (auto [header, size]: gutils->loopMallocSizes) {
-  //   llvm::errs() << "Header: " << header->getName() << "size = " << size << "\n";
+  //   llvm::errs() << "Header: " << header->getName() << "size = " << size <<
+  //   "\n";
   // }
 }
 
@@ -135,8 +140,8 @@ bool LayerGenerator::runOnFunction(Function &f) {
                                    fwd_writes, BIN_PUSH);
     // Load the reverse's indvar.
     auto load =
-        new LoadInst(Type::getInt64Ty(fwd_indvar->getContext()),
-                           rev_indvar, "rev_indvar", rev_bb->getFirstNonPHI());
+        new LoadInst(Type::getInt64Ty(fwd_indvar->getContext()), rev_indvar,
+                     "rev_indvar", rev_bb->getFirstNonPHI());
     CreateConditionalStreamCommand(rev_bb->getFirstNonPHI(), load, rev_reads,
                                    BIN_POP);
 

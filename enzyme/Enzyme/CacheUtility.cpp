@@ -674,7 +674,7 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
           &containedloops.back().first.preheader->back());
 
       Value *size = sublimits[i].first;
-      errs() << *alloc <<  ", size " << *size << "\n";
+      errs() << *alloc << ", size " << *size << "\n";
       cache_to_size[alloc] = size;
 
       if (EfficientBoolCache && isi1 && i == 0) {
@@ -705,20 +705,24 @@ AllocaInst *CacheUtility::createCacheForScope(LimitContext ctx, Type *T,
         auto firstallocation = CallInst::CreateMalloc(
             &allocationBuilder.GetInsertBlock()->back(), size->getType(),
             myType, byteSizeOfType, size, nullptr, name + "_malloccache");
-            alloca_to_malloc[alloc] = firstallocation;
-            // llvm::BasicBlock *front_header = containedloops.front().first.header;
-            // llvm::BasicBlock *front_preheader = containedloops.front().first.preheader;
+        alloca_to_malloc[alloc] = firstallocation;
+        // llvm::BasicBlock *front_header = containedloops.front().first.header;
+        // llvm::BasicBlock *front_preheader =
+        // containedloops.front().first.preheader;
 
-            // llvm::BasicBlock *back_header = containedloops.back().first.header;
-            // llvm::BasicBlock *back_preheader = containedloops.back().first.preheader;
-            // errs() << "front header: " << front_header->getName() << "\n";
-            // errs() << "front preheader: " << front_preheader->getName() << "\n";
-            // errs() << "back header: " << back_header->getName() << "\n";
-            // errs() << "back preheader: " << back_preheader->getName() << "\n";
+        // llvm::BasicBlock *back_header = containedloops.back().first.header;
+        // llvm::BasicBlock *back_preheader =
+        // containedloops.back().first.preheader; errs() << "front header: " <<
+        // front_header->getName() << "\n"; errs() << "front preheader: " <<
+        // front_preheader->getName() << "\n"; errs() << "back header: " <<
+        // back_header->getName() << "\n"; errs() << "back preheader: " <<
+        // back_preheader->getName() << "\n";
 
-            // errs() << "Allocated cache1: " << *firstallocation << "\nloop: " << *(allocationBuilder.GetInsertBlock()->back().getParent()) << "\n";
-        // Accumulate the size of the mallocs in the loop to generate a single large malloc
-        // if (llvm::ConstantInt* CI = dyn_cast<llvm::ConstantInt>(size)) {
+        // errs() << "Allocated cache1: " << *firstallocation << "\nloop: " <<
+        // *(allocationBuilder.GetInsertBlock()->back().getParent()) << "\n";
+        // Accumulate the size of the mallocs in the loop to generate a single
+        // large malloc if (llvm::ConstantInt* CI =
+        // dyn_cast<llvm::ConstantInt>(size)) {
         //   if (loopMallocSizes.find(header) == loopMallocSizes.end())
         //         loopMallocSizes[header] = 0;
         //   loopMallocSizes[header] += CI->getSExtValue();
@@ -1327,7 +1331,7 @@ Value *CacheUtility::getCachePointer(bool inForwardPass, IRBuilder<> &BuilderM,
                                      Value *extraSize) {
   assert(ctx.Block);
   assert(cache);
-  
+
   auto sublimits = getSubLimits(inForwardPass, &BuilderM, ctx, extraSize);
 
   ValueToValueMapTy available;
@@ -1403,13 +1407,15 @@ Value *CacheUtility::getCachePointer(bool inForwardPass, IRBuilder<> &BuilderM,
     }
     assert(next->getType()->isPointerTy());
     // auto *preheader = containedloops.front().header;
-    // if (loopMallocs.find(containedloops.front().header) == loopMallocs.end()) {
-    //   loopMallocs[preheader] = std::vector<std::tuple<llvm::Value*, llvm::Value*>>();
+    // if (loopMallocs.find(containedloops.front().header) == loopMallocs.end())
+    // {
+    //   loopMallocs[preheader] = std::vector<std::tuple<llvm::Value*,
+    //   llvm::Value*>>();
     // }
     // loopMallocs[preheader].push_back(std::make_tuple(next, cache));
     // errs() << "Cache ptr = " << *next << "\n";
   }
-  
+
   return next;
 }
 

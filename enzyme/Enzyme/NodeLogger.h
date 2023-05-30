@@ -2,10 +2,10 @@
 #ifndef NODE_LOGGER_H
 #define NODE_LOGGER_H
 
+#include <fstream>
+#include <iostream>
 #include <map>
 #include <set>
-#include <iostream>
-#include <fstream>
 
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
@@ -17,24 +17,21 @@
 
 using namespace llvm;
 
-namespace instrumem
-{
-struct NodeLogger : public FunctionPass,
-                        InstVisitor<NodeLogger> {
-    public:
-        static char ID;
-        NodeLogger();
-        bool runOnFunction(Function &f) override;
+namespace instrumem {
+struct NodeLogger : public FunctionPass, InstVisitor<NodeLogger> {
+public:
+  static char ID;
+  NodeLogger();
+  bool runOnFunction(Function &f) override;
 
-        void visitLoadInst(LoadInst &inst);
-        void visitStoreInst(StoreInst &inst);
-        void visitInstruction(Instruction &inst);
-        void visitAllocaInst(AllocaInst &inst);
+  void visitLoadInst(LoadInst &inst);
+  void visitStoreInst(StoreInst &inst);
+  void visitInstruction(Instruction &inst);
+  void visitAllocaInst(AllocaInst &inst);
 
-    private:
-        std::map<Value*, unsigned> node_ids;
-        std::ofstream myfile;
-
+private:
+  std::map<Value *, unsigned> node_ids;
+  std::ofstream myfile;
 };
 
 } // namespace instrumem

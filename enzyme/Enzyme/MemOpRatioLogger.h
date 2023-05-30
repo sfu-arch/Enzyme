@@ -2,10 +2,10 @@
 #ifndef MEMOP_RATIO_LOGGER_H
 #define MEMOP_RATIO_LOGGER_H
 
+#include <fstream>
+#include <iostream>
 #include <map>
 #include <set>
-#include <iostream>
-#include <fstream>
 
 #include "llvm/IR/DataLayout.h"
 #include "llvm/IR/Function.h"
@@ -17,27 +17,25 @@
 
 using namespace llvm;
 
-namespace instrumem
-{
-struct MemOpRatioLogger : public FunctionPass,
-                        InstVisitor<MemOpRatioLogger> {
-    public:
-        static char ID;
-        MemOpRatioLogger();
-        bool runOnFunction(Function &f) override;
+namespace instrumem {
+struct MemOpRatioLogger : public FunctionPass, InstVisitor<MemOpRatioLogger> {
+public:
+  static char ID;
+  MemOpRatioLogger();
+  bool runOnFunction(Function &f) override;
 
-        void visitLoadInst(LoadInst &inst);
-        void visitStoreInst(StoreInst &inst);
-        void visitInstruction(Instruction &inst);
-        void visitReturnInst(ReturnInst &inst);
-        void visitBinaryOperator(BinaryOperator &inst);
+  void visitLoadInst(LoadInst &inst);
+  void visitStoreInst(StoreInst &inst);
+  void visitInstruction(Instruction &inst);
+  void visitReturnInst(ReturnInst &inst);
+  void visitBinaryOperator(BinaryOperator &inst);
 
-    private:
-        AllocaInst *input_count;
-        AllocaInst *output_count;
-        AllocaInst *intermediate_count;
-        std::vector<Value*> args;
-        std::set<Value*> inputs;
+private:
+  AllocaInst *input_count;
+  AllocaInst *output_count;
+  AllocaInst *intermediate_count;
+  std::vector<Value *> args;
+  std::set<Value *> inputs;
 };
 
 } // namespace instrumem

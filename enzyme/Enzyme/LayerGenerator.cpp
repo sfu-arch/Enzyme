@@ -9,7 +9,7 @@
 #include <set>
 
 extern "C" {
-extern llvm::cl::opt<int> BIN_SIZE;
+extern llvm::cl::opt<int> SPAD_SIZE;
 llvm::cl::opt<bool> Reorder("tapeman-reorder", cl::init(false),
                                     cl::Hidden,
                                     cl::desc("Reorder the tape operations."));
@@ -23,7 +23,7 @@ namespace {
 void CreateConditionalStreamCommand(Instruction *start_inst,
                                     Instruction *ind_var, int tape_ops,
                                     std::string command) {
-  int interval = BIN_SIZE / tape_ops;
+  int interval = SPAD_SIZE / tape_ops;
   auto Int64Ty = Type::getInt64Ty(ind_var->getContext());
   auto mod_inst = BinaryOperator::Create(
       BinaryOperator::URem, ind_var,
@@ -119,7 +119,7 @@ bool LayerGenerator::runOnFunction(Function &f) {
         gutils_->forward_bb_writes_.end())
       continue;
     int fwd_writes = gutils_->forward_bb_writes_[fwd_header];
-    if (fwd_writes > BIN_SIZE) // No need to instrument in this case.
+    if (fwd_writes > SPAD_SIZE) // No need to instrument in this case.
       continue;
 
     PHINode *fwd_indvar = lc.var;

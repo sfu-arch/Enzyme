@@ -226,6 +226,9 @@ public:
   // Extends the malloc call for this tape store.
   void extendtTapeAllocation(GetElementPtrInst *store_inst, uint64_t scale);
 
+  // Changes the tape layout to AoS.
+  void createAoS();
+
   // Iterates over the marked tape values, creates layers, and assigns indexes.
   void handleTapeValues();
 
